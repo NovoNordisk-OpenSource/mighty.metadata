@@ -1,0 +1,19 @@
+---
+title: "YAML Format for ADaM Metadata"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{YAML Format for ADaM Metadata}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(mighty.metadata)
+```
