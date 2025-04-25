@@ -1,0 +1,30 @@
+Package: mighty.metadata
+Title: CDISC ADaM Metadata Management in YAML Format
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "AIKP (Ari Siggaard Knoph)", role = c("aut", "cre"), email = "aikp@novonordisk.com")
+Description: Tools for working with CDISC ADaM metadata in YAML format. This package 
+    provides functions for extracting metadata from standard sources, building 
+    structured ADaM metadata, generating YAML files, and HTML visualization. 
+    It supports domain references tracking and maintains proper formatting for 
+    method fields in YAML output.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.0
+Imports:
+    dplyr,
+    yaml,
+    NNremote,
+    NNaccess,
+    htmltools,
+    stringr,
+    methods,
+    utils
+Suggests: 
+    knitr,
+    quarto,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: quarto, knitr
