@@ -1,5 +1,6 @@
 ---
 title: "mighty.metadata"
+subtitle: "CDISC ADaM Metadata Management in YAML Format"
 vignette: >
   %\VignetteIndexEntry{mighty.metadata}
   %\VignetteEngine{quarto::html}
@@ -14,3 +15,128 @@ knitr:
 #| label: setup
 library(mighty.metadata)
 ```
+
+## Introduction
+
+The `mighty.metadata` package provides tools for working with CDISC ADaM metadata in YAML format. This vignette demonstrates how to use the package to:
+
+1. Access standard CDISC libraries
+2. Extract and transform metadata 
+3. Build structured ADaM metadata
+4. Generate YAML files
+5. View metadata in HTML format
+
+## Accessing Standard Libraries
+
+The package provides functions to access CDISC standard libraries:
+
+```{r eval=FALSE}
+# Get the path to CDISC standards
+standard_path()
+
+# List available versions of a standard
+master_lookup("adam")
+
+# Read master metadata file (not run)
+# metadata <- read_master("adam", filename = "cst_adam_metadata_file.xlsx")
+```
+
+## Building ADaM Metadata
+
+Once you have source metadata, you can transform it into a structured ADaM metadata format:
+
+```{r eval=FALSE}
+# Assuming you have a metadata object with the required components:
+# - source_tables
+# - source_columns
+# - source_values
+
+# Transform raw metadata into structured ADaM metadata
+adam_metadata <- build_adam_metadata(metadata)
+```
+
+The `build_adam_metadata` function processes different types of columns:
+
+- **Predecessor variables**: Inherit metadata from parent datasets
+- **Derived variables**: Include method fields that describe derivation algorithms
+- **Assigned variables**: Include assignment information
+
+## Working with Domain References
+
+The package can analyze metadata to extract domain references:
+
+```{r eval=FALSE}
+# Extract references from method text
+references <- extract_domain_references("The variable is derived using ADSL.SEX and ADVS.AVAL")
+print(references)  # Should return c("ADSL", "ADVS")
+
+# Build referenced domains for a dataset
+referenced_domains <- build_referenced_domains(adam_metadata, "ADAE")
+```
+
+## Writing to YAML Format
+
+After building your metadata structure, you can write it to YAML files:
+
+```{r eval=FALSE}
+# Write a single domain's metadata to a YAML file
+yaml_file <- write_adam_domain_yaml(
+  domain_data = adam_metadata$ADAE,
+  domain_name = "ADAE",
+  output_dir = "metadata"
+)
+```
+
+The YAML output has several advantages:
+
+- Method fields are formatted as multiline strings for readability
+- Long text is automatically wrapped at word boundaries
+- NULL/NA fields are omitted for cleaner output
+
+## Viewing Metadata in HTML
+
+The package provides functions to view metadata in HTML format:
+
+```{r eval=FALSE}
+# View define metadata in HTML format
+view_define_html(adam_metadata$ADAE)
+```
+
+## Complete Workflow Example
+
+Here's a complete example workflow (not run):
+
+```{r eval=FALSE}
+# 1. Read master metadata
+metadata <- read_master("adam", filename = "cst_adam_metadata_file.xlsx")
+
+# 2. Build ADaM metadata structure
+adam_metadata <- build_adam_metadata(metadata)
+
+# 3. Output directory for YAML files
+output_dir <- "metadata/adam"
+
+# 4. Write all domains to YAML files
+for (domain_name in names(adam_metadata)) {
+  write_adam_domain_yaml(
+    domain_data = adam_metadata[[domain_name]],
+    domain_name = domain_name,
+    output_dir = output_dir
+  )
+}
+
+# 5. View a specific domain in HTML
+view_define_html(adam_metadata$ADAE)
+```
+
+## Summary
+
+The `mighty.metadata` package streamlines the process of working with CDISC ADaM metadata by:
+
+1. Providing access to standard libraries
+2. Transforming raw metadata into a clean, structured format
+3. Tracking domain references
+4. Generating well-formatted YAML files
+5. Offering HTML visualization
+
+This approach makes metadata more readable, version-controllable, and easier to maintain than traditional Excel-based approaches.

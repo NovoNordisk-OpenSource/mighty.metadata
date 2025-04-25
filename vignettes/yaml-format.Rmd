@@ -17,3 +17,213 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(mighty.metadata)
 ```
+
+## Introduction to YAML for Metadata
+
+YAML (YAML Ain't Markup Language) is a human-readable data serialization format that is particularly well-suited for representing hierarchical metadata structures. The `mighty.metadata` package uses YAML as the primary storage format for ADaM metadata due to several key advantages:
+
+1. **Human Readability**: YAML is easy to read and edit directly, unlike binary formats or Excel spreadsheets
+2. **Version Control**: YAML files can be effectively tracked in version control systems like Git
+3. **Hierarchical Structure**: YAML naturally represents the nested structure of metadata
+4. **Multiline Text Support**: Method descriptions and algorithms are cleanly represented
+
+## ADaM Metadata YAML Structure
+
+The mighty.metadata package organizes ADaM metadata in a structured YAML format following a defined schema that can be found in `inst/schema/adam_schema.yaml`. The main components are:
+
+### Dataset-level Metadata (table_metadata)
+
+```yaml
+table_metadata:
+  table: ADAE
+  label: "Adverse Events Analysis Dataset"
+  class: "BASIC DATA STRUCTURE"
+  subclass: "ADVERSE EVENT"
+  structure: "One record per adverse event per subject"
+  keys: [USUBJID, AESEQ]
+  comment: "Contains all adverse events reported during the study"
+```
+
+### Column-level Metadata (column_metadata)
+
+Column metadata is stored as a collection of objects under the `column_metadata` key:
+
+```yaml
+column_metadata:
+  - column: STUDYID
+    label: "Study Identifier"
+    
+  - column: USUBJID
+    label: "Unique Subject Identifier"
+    
+  - column: TRTP
+    label: "Planned Treatment"
+    source: ADSL.TRT01P
+    
+  - column: AVAL
+    label: "Analysis Value"
+    xmlcodelist: "AVALC"
+    method: |-
+      Derived as follows:
+      If AEPAIN='Y' then AVAL=1;
+      Else AVAL=0;
+```
+
+### Value-level Metadata (value_metadata)
+
+Value-level metadata (when needed) is stored under the `value_metadata` key:
+
+```yaml
+value_metadata:
+  - column: PARAMCD
+    whereclause: "PARAMCD='HR'"
+    label: "Heart Rate"
+    
+  - column: PARAMCD
+    whereclause: "PARAMCD='SBP'"
+    label: "Systolic Blood Pressure"
+    method: |-
+      Selected from ADVS where VSTEST='Systolic Blood Pressure'
+```
+
+### Referenced Domains (referenced_domains)
+
+The package automatically builds a `referenced_domains` section based on analysis of column sources and method text:
+
+```yaml
+referenced_domains:
+  ADSL:
+    domain: "ADSL"
+    variables:
+      - USUBJID
+      - TRT01P
+      - AGE
+  DM:
+    domain: "DM"
+    variables:
+      - SEX
+      - RACE
+```
+
+## YAML Formatting Features
+
+The `mighty.metadata` package implements several specific formatting features to enhance the readability and maintainability of the YAML metadata:
+
+### Method Field Formatting
+
+Method fields are treated as literal block scalar style (`|-`) to preserve formatting while ensuring clean YAML output:
+
+```yaml
+method: |-
+  The parameter is derived as follows:
+  
+  IF VISIT='BASELINE' THEN DO;
+    AVAL = BASE;
+    DTYPE = 'COPY';
+  END;
+  ELSE DO;
+    AVAL = VSSTRESN;
+  END;
+```
+
+### Text Wrapping
+
+Long text strings are automatically wrapped at word boundaries to improve readability:
+
+```yaml
+origindescription: |-
+  This is a long description that will be automatically wrapped 
+  at word boundaries to ensure that lines aren't excessively 
+  long in the YAML file.
+```
+
+### Null Value Handling
+
+The package automatically omits NULL or NA values from the YAML output to maintain a clean and focused structure:
+
+```yaml
+# Without NULL handling
+column: AVAL
+label: "Analysis Value"
+type: "Num"
+origin: ~
+predecessor: ~
+xmlcodelist: ~
+
+# With NULL handling (final output)
+column: AVAL
+label: "Analysis Value"
+type: "Num"
+```
+
+## Examples
+
+Here's an example of a complete YAML metadata file for a simple ADaM dataset following the schema:
+
+```yaml
+table_metadata:
+  table: ADVS
+  label: "Vital Signs Analysis Dataset"
+  class: "BASIC DATA STRUCTURE"
+  structure: "One record per vital sign parameter, per timepoint, per subject"
+  keys: [USUBJID, PARAMCD, AVISITN, ATPTN]
+  
+column_metadata:
+  - column: STUDYID
+    label: "Study Identifier"
+    
+  - column: USUBJID
+    label: "Unique Subject Identifier"
+    
+  - column: PARAMCD
+    label: "Parameter Code"
+    
+  - column: PARAM
+    label: "Parameter"
+    
+  - column: AVAL
+    label: "Analysis Value"
+    method: |-
+      Set to VSSTRESN from VS domain.
+      
+  - column: AVALU
+    label: "Analysis Value Units"
+    
+value_metadata:
+  - column: PARAMCD
+    whereclause: "PARAMCD='HR'"
+    label: "Heart Rate"
+    xmlcodelist: "HR"
+    
+  - column: PARAMCD
+    whereclause: "PARAMCD='SBP'"
+    label: "Systolic Blood Pressure"
+    xmlcodelist: "SBP"
+    method: |-
+      Selected from VS where VSTESTCD='SYSBP'
+    
+referenced_domains:
+  VS:
+    domain: "VS"
+    variables:
+      - USUBJID
+      - VSSEQ
+      - VSTESTCD
+      - VSSTRESN
+  ADSL:
+    domain: "ADSL"
+    variables:
+      - USUBJID
+      - TRT01P
+```
+
+## Conclusion
+
+The YAML format used by the `mighty.metadata` package provides a clean, readable, and maintainable representation of ADaM metadata that addresses many of the limitations of traditional Excel-based approaches. By storing metadata in YAML:
+
+1. Changes are easily tracked in version control
+2. Metadata becomes more readable and self-documenting
+3. Complex structures like algorithms are properly formatted
+4. Files can be programmatically generated and validated
+
+This approach aligns with modern software development practices while still maintaining compatibility with CDISC standards.
