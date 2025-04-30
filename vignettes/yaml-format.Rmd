@@ -18,6 +18,10 @@ knitr::opts_chunk$set(
 library(mighty.metadata)
 ```
 
+## Overview
+
+This vignette describes the YAML format used by the `mighty.metadata` package to store Analysis Data Model (ADaM) metadata. The package converts traditional metadata sources into a consistent, version-controllable YAML format that follows CDISC standards while improving readability and maintainability.
+
 ## Introduction to YAML for Metadata
 
 YAML (YAML Ain't Markup Language) is a human-readable data serialization format that is particularly well-suited for representing hierarchical metadata structures. The `mighty.metadata` package uses YAML as the primary storage format for ADaM metadata due to several key advantages:
@@ -27,39 +31,81 @@ YAML (YAML Ain't Markup Language) is a human-readable data serialization format 
 3. **Hierarchical Structure**: YAML naturally represents the nested structure of metadata
 4. **Multiline Text Support**: Method descriptions and algorithms are cleanly represented
 
+## ADaM Metadata Structure Processing
+
+The `mighty.metadata` package uses the `build_adam_metadata()` function to transform raw metadata components into a structured format suitable for YAML output. This function intelligently processes variables based on their origin type:
+
+### Variable Origin Type Processing
+
+1. **Predecessor Variables** (origin = "Predecessor"):
+   - **Simple predecessors** (e.g., "DM.USUBJID"): Only the column field is included, as these variables inherit metadata from their parent domain
+   - **Renamed predecessors** (e.g., column: AAGE, source: DM.AGE): Only column and source fields are included
+   - **Complex predecessors** (with filtering or additional processing): Automatically converted to derived variables with the origindescription as the method
+
+2. **Derived Variables** (origin = "Derived"):
+   - Includes column, label, xmlcodelist (if applicable), and method fields
+   - Method contains the detailed algorithm text
+
+3. **Assigned Variables** (origin = "Assigned"):
+   - Includes column, label, xmlcodelist (if applicable), and method fields
+   - Method is formatted as "Assigned: [comment]"
+
+### Automatic Domain Reference Detection
+
+The package automatically builds domain references by:
+
+1. **Analyzing direct predecessor references**:
+   - Identifying source domains from predecessor variable references (e.g., "DM.SEX" references the DM domain)
+   - Tracking renamed columns with their source domains
+
+2. **Analyzing method text**:
+   - Scanning algorithm descriptions for domain references using pattern matching
+   - Extracting domain names from references like "ADSL.AGE" in method text
+
+This automatic domain reference tracking helps maintain traceability between datasets, which is crucial for regulatory documentation.
+
 ## ADaM Metadata YAML Structure
 
 The mighty.metadata package organizes ADaM metadata in a structured YAML format following a defined schema that can be found in `inst/schema/adam_schema.yaml`. The main components are:
 
 ### Dataset-level Metadata (table_metadata)
 
+The table_metadata section contains information about the dataset as a whole:
+
 ```yaml
 table_metadata:
-  table: ADAE
-  label: "Adverse Events Analysis Dataset"
-  class: "BASIC DATA STRUCTURE"
-  subclass: "ADVERSE EVENT"
-  structure: "One record per adverse event per subject"
-  keys: [USUBJID, AESEQ]
-  comment: "Contains all adverse events reported during the study"
+  table: ADAE                              # Dataset name
+  label: "Adverse Events Analysis Dataset"  # Dataset label
+  class: "BASIC DATA STRUCTURE"            # CDISC ADaM class
+  subclass: "ADVERSE EVENT"                # Optional subclass for specific dataset types
+  structure: "One record per adverse event per subject"  # Dataset structure description
+  keys: [USUBJID, AESEQ]                   # Key variables that identify a unique record
+  comment: "Contains all adverse events reported during the study"  # Optional comment
 ```
+
+Valid classes include:
+- SUBJECT LEVEL ANALYSIS DATASET (for ADSL)
+- BASIC DATA STRUCTURE (for most parameter-based datasets)
+- OCCURRENCE DATA STRUCTURE (for event datasets)
+
+Valid subclasses include:
+- ADVERSE EVENT (for ADAE)
+- TIME-TO-EVENT (for ADTTE)
 
 ### Column-level Metadata (column_metadata)
 
-Column metadata is stored as a collection of objects under the `column_metadata` key:
+Column metadata is stored as a collection of objects under the `column_metadata` key. Different types of variables have different metadata requirements:
 
 ```yaml
 column_metadata:
-  - column: STUDYID
-    label: "Study Identifier"
+  # Simple predecessor (inherits metadata from source)
+  - column: DM.USUBJID
     
-  - column: USUBJID
-    label: "Unique Subject Identifier"
-    
+  # Renamed predecessor (only needs source reference)
   - column: TRTP
-    label: "Planned Treatment"
     source: ADSL.TRT01P
     
+  # Derived variable (needs full metadata)
   - column: AVAL
     label: "Analysis Value"
     xmlcodelist: "AVALC"
@@ -67,24 +113,41 @@ column_metadata:
       Derived as follows:
       If AEPAIN='Y' then AVAL=1;
       Else AVAL=0;
+      
+  # Assigned variable
+  - column: PARAMCD
+    label: "Parameter Code"
+    method: |-
+      Assigned: PARAMCD is set to 'WEIGHT'
 ```
+
+The different handling of variable types follows CDISC requirements:
+1. **Simple predecessors** contain only the column name with domain prefix
+2. **Renamed predecessors** include both column and source fields
+3. **Derived/assigned variables** include full metadata with method descriptions
 
 ### Value-level Metadata (value_metadata)
 
-Value-level metadata (when needed) is stored under the `value_metadata` key:
+Value-level metadata is stored under the `value_metadata` key and is used to provide specific metadata for different values of a parameter:
 
 ```yaml
 value_metadata:
+  # Heart Rate parameter
   - column: PARAMCD
     whereclause: "PARAMCD='HR'"
     label: "Heart Rate"
+    xmlcodelist: "HR"
     
+  # Systolic Blood Pressure parameter with derivation method
   - column: PARAMCD
     whereclause: "PARAMCD='SBP'"
     label: "Systolic Blood Pressure"
+    xmlcodelist: "SBP"
     method: |-
-      Selected from ADVS where VSTEST='Systolic Blood Pressure'
+      Selected from VS where VSTESTCD='SYSBP'
 ```
+
+Value-level metadata is particularly important for BDS (Basic Data Structure) datasets where the same column can have different meanings based on parameter values. The whereclause field determines which records the metadata applies to.
 
 ### Referenced Domains (referenced_domains)
 
@@ -92,18 +155,31 @@ The package automatically builds a `referenced_domains` section based on analysi
 
 ```yaml
 referenced_domains:
-  ADSL:
-    domain: "ADSL"
+  # First referenced domain with its variables
+  - domain: "ADSL"
     variables:
       - USUBJID
       - TRT01P
       - AGE
-  DM:
-    domain: "DM"
+      
+  # Second referenced domain with its variables
+  - domain: "VS"
     variables:
-      - SEX
-      - RACE
+      - VSTESTCD
+      - VSSTRESN
+      - VSORRESU
 ```
+
+This section is particularly valuable for:
+1. Documenting dataset dependencies
+2. Generating Define.xml with proper origins
+3. Maintaining traceability through the analysis data flow
+
+The package identifies references from both:
+- Direct predecessor variables (e.g., ADSL.TRT01P)
+- References in method text (e.g., "derived from VS.VSSTRESN")
+
+This eliminates the need to manually track these relationships.
 
 ## YAML Formatting Features
 
@@ -111,7 +187,7 @@ The `mighty.metadata` package implements several specific formatting features to
 
 ### Method Field Formatting
 
-Method fields are treated as literal block scalar style (`|-`) to preserve formatting while ensuring clean YAML output:
+The package treats method fields as literal block scalar style (`|-`) to preserve formatting while ensuring clean YAML output:
 
 ```yaml
 method: |-
@@ -126,23 +202,34 @@ method: |-
   END;
 ```
 
+This special formatting:
+1. Preserves line breaks and indentation in algorithm text
+2. Makes complex derivations more readable
+3. Allows for SAS code inclusion without escaping issues
+
 ### Text Wrapping
 
 Long text strings are automatically wrapped at word boundaries to improve readability:
 
 ```yaml
+# Before wrapping
+origindescription: "This is a long description that contains a substantial amount of text that would extend beyond the standard line width and become difficult to read in a YAML file."
+
+# After wrapping
 origindescription: |-
-  This is a long description that will be automatically wrapped 
-  at word boundaries to ensure that lines aren't excessively 
-  long in the YAML file.
+  This is a long description that contains a substantial amount of text
+  that would extend beyond the standard line width and become difficult
+  to read in a YAML file.
 ```
+
+The `write_adam_yaml()` function uses a configurable line width parameter (default: 80 characters) to control this behavior.
 
 ### Null Value Handling
 
-The package automatically omits NULL or NA values from the YAML output to maintain a clean and focused structure:
+The `build_adam_metadata()` function automatically removes NULL or NA values from the YAML output to maintain a clean and focused structure:
 
 ```yaml
-# Without NULL handling
+# Without NULL handling - cluttered with empty fields
 column: AVAL
 label: "Analysis Value"
 type: "Num"
@@ -150,15 +237,43 @@ origin: ~
 predecessor: ~
 xmlcodelist: ~
 
-# With NULL handling (final output)
+# With NULL handling - clean and focused
 column: AVAL
 label: "Analysis Value"
 type: "Num"
 ```
 
-## Examples
+This results in more readable files and smaller file sizes.
 
-Here's an example of a complete YAML metadata file for a simple ADaM dataset following the schema:
+## YAML File Generation
+
+The package provides functions to generate YAML files from the processed metadata:
+
+```r
+# Process raw metadata components
+adam_metadata <- build_adam_metadata(metadata)
+
+# Write all domains to separate YAML files
+yaml_files <- write_adam_yaml(adam_metadata, output_dir = "metadata/yaml")
+
+# Write a single domain to a YAML file
+advs_yaml <- write_adam_domain_yaml(
+  adam_metadata$ADVS, 
+  "ADVS", 
+  output_dir = "metadata/yaml",
+  line_width = 100  # Custom line width
+)
+```
+
+The generated YAML files:
+1. Have intuitive names based on the domain (e.g., `adsl.yaml`, `adae.yaml`)
+2. Maintain consistent formatting with proper indentation
+3. Include proper multi-line handling for method fields
+4. Follow the schema defined in `inst/schema/adam_schema.yaml`
+
+## Complete Example
+
+Here's an example of a complete YAML metadata file for a simple ADaM vital signs dataset:
 
 ```yaml
 table_metadata:
@@ -169,12 +284,16 @@ table_metadata:
   keys: [USUBJID, PARAMCD, AVISITN, ATPTN]
   
 column_metadata:
-  - column: STUDYID
-    label: "Study Identifier"
+  # Simple predecessor variables
+  - column: DM.STUDYID
+  
+  - column: DM.USUBJID
+  
+  # Renamed predecessor variable
+  - column: TRTP
+    source: ADSL.TRT01P
     
-  - column: USUBJID
-    label: "Unique Subject Identifier"
-    
+  # Derived variables
   - column: PARAMCD
     label: "Parameter Code"
     
@@ -188,6 +307,7 @@ column_metadata:
       
   - column: AVALU
     label: "Analysis Value Units"
+    source: VS.VSORRESU
     
 value_metadata:
   - column: PARAMCD
@@ -203,27 +323,52 @@ value_metadata:
       Selected from VS where VSTESTCD='SYSBP'
     
 referenced_domains:
-  VS:
-    domain: "VS"
+  - domain: "DM"
+    variables:
+      - STUDYID
+      - USUBJID
+  
+  - domain: "VS"
     variables:
       - USUBJID
       - VSSEQ
       - VSTESTCD
       - VSSTRESN
-  ADSL:
-    domain: "ADSL"
+      - VSORRESU
+  
+  - domain: "ADSL"
     variables:
       - USUBJID
       - TRT01P
 ```
 
-## Conclusion
+## Advantages of YAML for Metadata
 
-The YAML format used by the `mighty.metadata` package provides a clean, readable, and maintainable representation of ADaM metadata that addresses many of the limitations of traditional Excel-based approaches. By storing metadata in YAML:
+The YAML format used by the `mighty.metadata` package offers several key advantages over traditional Excel-based metadata:
 
-1. Changes are easily tracked in version control
-2. Metadata becomes more readable and self-documenting
-3. Complex structures like algorithms are properly formatted
-4. Files can be programmatically generated and validated
+1. **Version Control Integration**: 
+   - Changes can be tracked line-by-line in Git
+   - Pull requests can be used for metadata review
+   - Merge conflicts are manageable
 
-This approach aligns with modern software development practices while still maintaining compatibility with CDISC standards.
+2. **Improved Readability**:
+   - Hierarchical structure is visually apparent
+   - Algorithm text is properly formatted and preserved
+   - No truncation of long text fields
+
+3. **Programmatic Generation and Validation**:
+   - Metadata can be generated from existing code
+   - Schema validation ensures consistency
+   - Automated checks can be implemented
+
+4. **Integration with Other Tools**:
+   - YAML is a standard format supported by many languages
+   - Can be converted to JSON or other formats as needed
+   - Easy to integrate with CI/CD pipelines
+
+5. **Regulatory Compliance**:
+   - Maintains all required CDISC metadata elements
+   - Supports generation of Define.xml
+   - Provides better traceability through referenced domains
+
+By adopting a YAML-based approach to metadata management, organizations can improve the quality, consistency, and maintainability of their ADaM metadata, leading to more robust regulatory submissions and better analysis dataset documentation.
