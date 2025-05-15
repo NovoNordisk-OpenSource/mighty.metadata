@@ -37,7 +37,7 @@ process_table <- function(table_name,
   # Split keys if the column exists
   if ("keys" %in% names(table_meta)) {
     table_meta <-  table_meta |>
-      dplyr::mutate(keys = strsplit(keys, ","))
+      dplyr::mutate(keys = unlist(strsplit(keys, ",")))
   }
 
   # Convert to list and clean
@@ -91,7 +91,7 @@ process_table <- function(table_name,
       method = dplyr::case_when(
         is_complex_predecessor ~ paste0("Source: ", origindescription),
         is_predecessor ~ paste0("Predecessor: ", origindescription),
-        !is.na(origin) & tolower(origin) == "derived" & !is.na(algorithm) ~ algorithm,
+        !is.na(origin) & tolower(origin) == "derived" & !is.na(algorithm) ~ paste0("Derived: ", algorithm),
         !is.na(origin) & tolower(origin) == "assigned" & !is.na(comment) ~ paste0("Assigned: ", comment),
         TRUE ~ NA_character_
       ),
@@ -118,6 +118,10 @@ process_table <- function(table_name,
       }
     }
   }
+
+  # TODO: This can be cleaned up considerably
+  # TODO: If the variable is complex enough to get a label, it should get format info like:
+  # format: {format: date9., length: 8, type: N}
 
   # Create column metadata list with appropriate fields based on type
   col_meta <-  lapply(seq_len(nrow(col_data)), function(i) {
