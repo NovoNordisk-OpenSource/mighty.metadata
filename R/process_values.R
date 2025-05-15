@@ -1,0 +1,81 @@
+process_values <- function(val_filtered, table_name, verbose) {
+  if (nrow(val_filtered) > 0) {
+    # Process value-level metadata similar to column metadata
+    val_data <-  val_filtered |>
+      dplyr::mutate(
+        # Clean column names by removing trailing periods
+        column = gsub("\\s*\\.\\s*$", "", column),
+
+        # Clean whereclause
+        whereclause = gsub("\\s*\\.\\s*$", "", whereclause),
+
+        # Check if origindescription is complex
+        is_complex_predecessor = !is.na(origin) &
+          tolower(origin) == "predecessor" &
+          !is_simple_predecessor(origindescription),
+
+        # Create method field using the same logic as for columns
+        method = dplyr::case_when(
+          is_complex_predecessor ~ paste0("Source: ", origindescription),
+          !is.na(origin) & tolower(origin) == "predecessor" ~ paste0("Predecessor: ", origindescription),
+          !is.na(origin) & tolower(origin) == "derived" & !is.na(algorithm) ~ algorithm,
+          !is.na(origin) & tolower(origin) == "assigned" & !is.na(comment) ~ paste0("Assigned: ", comment),
+          TRUE ~ NA_character_
+        ),
+
+        # Set origin to derived for complex predecessors
+        origin_final = dplyr::case_when(
+          is_complex_predecessor ~ "derived",
+          TRUE ~ origin
+        )
+      )
+
+    # Print messages for complex predecessors in value metadata
+    if (verbose) {
+      complex_preds <-  val_data |>
+        dplyr::filter(is_complex_predecessor) |>
+        dplyr::select(column, whereclause, origindescription)
+
+      if (nrow(complex_preds) > 0) {
+        for (i in 1:nrow(complex_preds)) {
+          message(paste0("Converting value metadata for column '", complex_preds$column[i],
+                         "' with where clause '", complex_preds$whereclause[i],
+                         "' in table '", table_name,
+                         "' from predecessor to derived due to complex origindescription: '",
+                         complex_preds$origindescription[i], "'"))
+        }
+      }
+    }
+
+    val_meta <-  lapply(seq_len(nrow(val_data)), function(i) {
+      row <- val_data[i, ]
+
+      method_text <- row$method
+      if (!is.na(method_text)) {
+        # Standardize newlines
+        method_text <- gsub("\r\n", "\n", method_text)
+      }
+
+      result <- list(
+        column = row$column,
+        whereclause = row$whereclause,
+        method = method_text
+      )
+
+      # Add origin for complex predecessors
+      if (row$is_complex_predecessor) {
+        result$origin <- "derived"
+        result$derivation_type <- "assigned"
+      }
+
+      clean_list(result)
+    })
+  } else {
+    val_meta <- list() # Empty list if no value metadata exists
+    val_data <- data.frame(NULL)
+  }
+
+  return(list(val_meta, val_data))
+
+}
+

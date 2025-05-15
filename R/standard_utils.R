@@ -45,13 +45,16 @@ master_lookup <- function(standard) {
 read_master <- function(standard,
                         version = tail(master_lookup(standard), 1),
                         filename = NULL) {
+
+  masterdir <- file.path(standard_path(version), "metadata")
   # Check if filename is NULL before proceeding
   if (is.null(filename)) {
-    stop("Please provide a filename")
+    dirfiles <- list.files(masterdir, pattern = "^[^~].*\\.xlsx?$")
+    stop(paste("Please provide a filename, e.g.", paste(dirfiles, collapse = ", ")))
   }
 
   # Validate that the file exists
-  masterpath <- file.path(standard_path(version), "metadata", filename)
+  masterpath <- file.path(masterdir, filename)
   if (!file.exists(masterpath)) {
     stop("File not found: ", masterpath)
   }
