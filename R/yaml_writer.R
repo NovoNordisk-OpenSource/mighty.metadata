@@ -23,6 +23,9 @@ write_adam_domain_yaml <- function(domain_data, domain_name, output_dir = ".", l
   # Convert to YAML string
   yaml_content <- yaml::as.yaml(domain_data, indent.mapping.sequence = TRUE)
 
+  # Unquote flow-style dictionaries
+  yaml_content <- gsub("[\'\"](\\{.*?\\})[\'\"]", "\\1", yaml_content)
+
   # Write to file
   yaml_file <- file.path(output_dir, paste0(tolower(domain_name), ".yaml"))
   writeLines(yaml_content, yaml_file)

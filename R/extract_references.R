@@ -1,4 +1,4 @@
-extract_references <- function(col_data, val_data, val_filtered) {
+extract_references <- function(col_data, val_data, val_filtered, table_name) {
   # 1. Extract direct references from simple predecessors
   direct_refs <-  list()
 

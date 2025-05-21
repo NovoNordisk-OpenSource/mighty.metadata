@@ -101,7 +101,13 @@ process_table <- function(table_name,
         is_complex_predecessor ~ "derived",
         TRUE ~ origin
       )
-    )
+    ) |>
+    # Create a flow-style dictionary of formatting information.
+    dplyr::mutate(dtype = if_else(!is.na(type), paste0('type: "', type, '"'), NA_character_),
+                  dlength = if_else(!is.na(length), paste0('length: ', length), NA_character_),
+                  ddisplayformat = if_else(!is.na(displayformat), paste0('displayformat: "', displayformat, '"'), NA_character_)) |>
+    tidyr::unite(format, dtype, dlength, sep = ", ", ddisplayformat, na.rm = TRUE) |>
+    dplyr::mutate(format = paste0("{", format, "}"))
 
   # Print messages for complex predecessors converted to derived
   if (verbose) {
@@ -120,8 +126,7 @@ process_table <- function(table_name,
   }
 
   # TODO: This can be cleaned up considerably
-  # TODO: If the variable is complex enough to get a label, it should get format info like:
-  # format: {format: date9., length: 8, type: N}
+  # TODO: The listify-function could be pulled out.
 
   # Create column metadata list with appropriate fields based on type
   col_meta <-  lapply(seq_len(nrow(col_data)), function(i) {
@@ -141,12 +146,14 @@ process_table <- function(table_name,
       # For predecessor columns that aren't renamed, only include the column field
       # This follows CDISC requirements that predecessor columns inherit metadata from parent
       list(column = row$column_final,
-           label = row$label)
+           label = row$label,
+           format = row$format)
     } else if (row$is_renamed && !row$is_adam_predecessor) {
       # For renamed predecessor columns, include column and source
       list(
         column = row$column_final,
         label = row$label,
+        format = row$format,
         source = row$source
       )
     } else if (row$is_complex_predecessor) {
@@ -160,6 +167,7 @@ process_table <- function(table_name,
       list(
         column = row$column,
         label = row$label,
+        format = row$format,
         xmlcodelist = row$xmlcodelist,
         method = method_text
       ) |> clean_list()
@@ -174,6 +182,7 @@ process_table <- function(table_name,
       list(
         column = row$column_final,
         label = row$label,
+        format = row$format,
         xmlcodelist = row$xmlcodelist,
         method = method_text
       ) |> clean_list()
@@ -190,7 +199,7 @@ process_table <- function(table_name,
   # Build referenced_domains to track predecessor relationships
   # This helps with define.xml generation by documenting source domains
 
-  referenced_domains <- extract_references(col_data, val_data, val_filtered)
+  referenced_domains <- extract_references(col_data, val_data, val_filtered, table_name)
 
   # Return the complete table metadata structure
   result <- list(
