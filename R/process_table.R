@@ -103,9 +103,11 @@ process_table <- function(table_name,
       )
     ) |>
     # Create a flow-style dictionary of formatting information.
-    dplyr::mutate(dtype = if_else(!is.na(type), paste0('type: "', type, '"'), NA_character_),
-                  dlength = if_else(!is.na(length), paste0('length: ', length), NA_character_),
-                  ddisplayformat = if_else(!is.na(displayformat), paste0('displayformat: "', displayformat, '"'), NA_character_)) |>
+    dplyr::mutate(
+      dtype = ifelse(!is.na(type), paste0('type: "', type, '"'), NA_character_),
+      dlength = ifelse(!is.na(length), paste0('length: ', length), NA_character_),
+      ddisplayformat = ifelse(!is.na(displayformat), paste0('displayformat: "', displayformat, '"'), NA_character_)
+    ) |>
     tidyr::unite(format, dtype, dlength, sep = ", ", ddisplayformat, na.rm = TRUE) |>
     dplyr::mutate(format = paste0("{", format, "}"))
 
@@ -128,6 +130,7 @@ process_table <- function(table_name,
   # TODO: This can be cleaned up considerably
   # TODO: The listify-function could be pulled out.
 
+
   # Create column metadata list with appropriate fields based on type
   col_meta <-  lapply(seq_len(nrow(col_data)), function(i) {
     row <- col_data[i, ]
@@ -147,14 +150,16 @@ process_table <- function(table_name,
       # This follows CDISC requirements that predecessor columns inherit metadata from parent
       list(column = row$column_final,
            label = row$label,
-           format = row$format)
+           format = row$format,
+           corefl = row$corefl)
     } else if (row$is_renamed && !row$is_adam_predecessor) {
       # For renamed predecessor columns, include column and source
       list(
         column = row$column_final,
         label = row$label,
         format = row$format,
-        source = row$source
+        source = row$source,
+        corefl = row$corefl
       )
     } else if (row$is_complex_predecessor) {
       # For complex predecessors (now treated as derived)
@@ -169,8 +174,9 @@ process_table <- function(table_name,
         label = row$label,
         format = row$format,
         xmlcodelist = row$xmlcodelist,
-        method = method_text
-      ) |> clean_list()
+        method = method_text,
+        corefl = row$corefl
+      )
     } else {
       # For derived/assigned columns, include all relevant metadata
       method_text <-  row$method
@@ -184,10 +190,11 @@ process_table <- function(table_name,
         label = row$label,
         format = row$format,
         xmlcodelist = row$xmlcodelist,
-        method = method_text
-      ) |> clean_list()
+        method = method_text,
+        corefl = row$corefl
+      )
     }
-  })
+  }) |> clean_list()
 
   # Build value_metadata - only if data exists for this table
   val_filtered <- source_values |> dplyr::filter(table == table_name)

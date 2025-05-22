@@ -20,7 +20,9 @@ Imports:
     htmltools,
     stringr,
     methods,
-    utils
+    utils,
+    tidyr,
+    purrr
 Suggests: 
     knitr,
     quarto,
