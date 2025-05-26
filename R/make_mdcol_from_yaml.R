@@ -1,8 +1,60 @@
-
-make_mdcol_from_yaml <- function(metadata_directory,
-                                 db,
-                                 export_formats = c("parquet", "sas7bdat"),
-                                 export = TRUE) {
+#' Create ADaM Column Metadata from YAML Files
+#'
+#' @description
+#' Reads and processes YAML files containing table and column metadata information,
+#' combining them into a single ADaM column metadata dataset. The function processes source
+#' information, standardizes column names, and provides warnings for potential
+#' metadata issues.
+#'
+#' @param metadata_directory Character string specifying the directory path
+#'   containing the YAML metadata files.
+#'
+#' @return A tibble containing the processed metadata collection with the following
+#'   columns:
+#' \itemize{
+#'   \item TABLE - Name of the table
+#'   \item KEYS - Key columns for the table
+#'   \item TLABEL - Table label
+#'   \item COLUMN - Column name
+#'   \item LABEL - Column label
+#'   \item METHOD - Method or source description
+#'   \item TYPE - Data type
+#'   \item LENGTH - Field length
+#'   \item FORMAT - Display format
+#'   \item ORDER - Column order within the table
+#' }
+#'
+#' @details
+#' The function performs several steps:
+#' 1. Reads all YAML files from the specified directory
+#' 2. Extracts and combines table and column metadata
+#' 3. Processes source information and standardizes column names to upper case
+#' 4. Links source and target metadata information
+#' 5. Checks for and warns about potential metadata issues
+#'
+#' @note
+#' The function will generate warnings in two cases:
+#' * When duplicate columns are found in the metadata
+#' * When columns have missing label or formatting information
+#'
+#' @examples
+#' \dontrun{
+#' # Create metadata collection from YAML files in a directory
+#' metadata_col <- make_mdcol_from_yaml("path/to/yaml/files")
+#'
+#' # Check the resulting metadata collection
+#' head(metadata_col)
+#' }
+#'
+#' @importFrom purrr map map2 set_names flatten
+#' @importFrom dplyr bind_rows select mutate rename_with arrange left_join
+#'   distinct coalesce
+#' @importFrom tidyr expand_grid unnest_wider
+#' @importFrom stringr str_remove str_detect str_split
+#' @importFrom yaml read_yaml
+#'
+#' @export
+make_mdcol_from_yaml <- function(metadata_directory) {
 
   # Find all yaml files in metadata directory
   all_names <- list.files(metadata_directory) |>
@@ -46,31 +98,41 @@ make_mdcol_from_yaml <- function(metadata_directory,
 
   # Add label and format information where appropriate. NB: Not recursively.
   upd_tbl <- all_tbl |>
-    dplyr::filter(is.na(LABEL)) |>
-    dplyr::select(-LABEL, -TYPE, -LENGTH, -DISPLAYFORMAT) |>
     dplyr::left_join(all_tbl |>
-                       dplyr::filter(!is.na(LABEL)) |>
-                       dplyr::distinct(SCOLUMN = COLUMN, LABEL, STABLE = TABLE,
-                                       TYPE, LENGTH, DISPLAYFORMAT),
+                       dplyr::distinct(COLUMN, TABLE,
+                                       LABEL, TYPE, LENGTH, DISPLAYFORMAT) |>
+                       dplyr::rename_with(function(x) paste0("S", x)),
                      by = c("STABLE", "SCOLUMN")) |>
-    dplyr::bind_rows(all_tbl |>
-                       dplyr::filter(!is.na(LABEL))) |>
+    dplyr::mutate(LABEL = dplyr::coalesce(LABEL, SLABEL),
+                  TYPE = dplyr::coalesce(TYPE, STYPE),
+                  LENGTH = dplyr::coalesce(LENGTH, SLENGTH),
+                  DISPLAYFORMAT = dplyr::coalesce(DISPLAYFORMAT, SDISPLAYFORMAT),
+                  METHOD = ifelse(is.na(METHOD) & !is.na(STABLE) & !is.na(SCOLUMN),
+                                  paste0("Source: ", STABLE, ".", SCOLUMN), METHOD)) |>
     dplyr::arrange(TABLE, ORDER) |>
-    dplyr::select(-STABLE, -SCOLUMN) |>
+    dplyr::select(-matches("^S")) |>
     dplyr::rename(FORMAT = DISPLAYFORMAT)
 
-  # write to whale ------------------------------------------------------
-  if (export) {
-    purrr::walk(export_formats, function(format) {
-      db$metadata(
-        dataset_name = paste0("mdcol.", format),
-        dataset = upd_tbl,
-        ext = "derived"
-      )
-    })
+  duplicate_columns <- upd_tbl |>
+    dplyr::count(tabcol = paste0(TABLE, ".", COLUMN)) |>
+    dplyr::filter(n > 1) |>
+    dplyr::pull(tabcol)
+
+  if (length(duplicate_columns) > 0) {
+    warning(paste("Warning: Duplicate columns found:",
+                  paste(duplicate_columns, collapse = ", ")))
   }
 
-  invisible(upd_tbl)
+  missing_info_columns <- upd_tbl |>
+    dplyr::filter(dplyr::if_any(c("LABEL", "TYPE", "LENGTH"), is.na)) |>
+    dplyr::mutate(tabcol = paste0(TABLE, ".", COLUMN)) |>
+    dplyr::pull(tabcol)
+
+  if (length(missing_info_columns) > 0) {
+    warning(paste("Warning: Columns with missing label or formatting information found:",
+                  paste(missing_info_columns, collapse = ", ")))
+  }
+
+  return(upd_tbl)
 
 }
-

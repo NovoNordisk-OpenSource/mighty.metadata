@@ -143,6 +143,7 @@ process_table <- function(table_name,
       # For renamed predecessor columns, include column and source
       list(
         column = row$column_final,
+        label = row$label,
         source = row$source
       )
     } else if (row$is_predecessor && !row$is_renamed && !row$is_adam_predecessor) {
@@ -206,8 +207,6 @@ process_table <- function(table_name,
   # Build referenced_domains to track predecessor relationships
   # This helps with define.xml generation by documenting source domains
 
-  referenced_domains <- extract_references(col_data, val_data, val_filtered, table_name)
-
   # Return the complete table metadata structure
   result <- list(
     table_metadata = table_meta,
@@ -217,11 +216,6 @@ process_table <- function(table_name,
   # Add value_metadata only if it exists
   if (length(val_meta) > 0) {
     result$value_metadata <-  val_meta
-  }
-
-  # Add referenced_domains only if they exist
-  if (length(referenced_domains) > 0) {
-    result$referenced_domains <- referenced_domains
   }
 
   return(result)
