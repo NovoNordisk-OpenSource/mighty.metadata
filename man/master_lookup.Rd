@@ -7,7 +7,7 @@
 master_lookup(standard)
 }
 \arguments{
-\item{standard}{\character The standard to look up}
+\item{standard}{\code{character} The standard to look up}
 }
 \value{
 A list of files

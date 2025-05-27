@@ -7,7 +7,7 @@
 build_adam_metadata(metadata, verbose = TRUE)
 }
 \arguments{
-\item{metadata}{A list containing source_tables, source_columns, and source_values components}
+\item{metadata}{A list containing source_tables, source_columns, and (optionally) source_values components}
 
 \item{verbose}{Logical indicating whether to print messages about conversions (default: TRUE)}
 }

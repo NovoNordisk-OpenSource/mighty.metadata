@@ -1,4 +1,19 @@
-# Function to process a single table
+#' Process metadata for a single table
+#'
+#' @param table_name Character string specifying the table name to process
+#' @param source_tables Data frame containing table-level metadata
+#' @param source_columns Data frame containing column-level metadata
+#' @param source_values Data frame containing value-level metadata
+#' @param valid_classes Character vector of valid class names
+#' @param valid_subclasses Character vector of valid subclass names
+#' @param verbose Logical indicating whether to print processing messages
+#'
+#' @return A list containing processed metadata with components:
+#'   \item{table_metadata}{List of table-level metadata}
+#'   \item{column_metadata}{List of column-level metadata}
+#'   \item{value_metadata}{List of value-level metadata (if applicable)}
+#'
+#' @noRd
 process_table <- function(table_name,
                           source_tables,
                           source_columns,

@@ -1,7 +1,14 @@
+#' Extract method information from source_values when present
+#' @description Helper function for getting method information for values
+#' @param val_filtered A dataframe containing the value definitions for the relevant table
+#' @param table_name The name of the table whose methods are being considered
+#' @param verbose Logical indicating whether to print messages about conversions (default: TRUE)
+#' @return a list containing the method information from source_values as both a list and a dataframe.
+#' @keywords internal
 process_values <- function(val_filtered, table_name, verbose) {
   if (nrow(val_filtered) > 0) {
     # Process value-level metadata similar to column metadata
-    val_data <-  val_filtered |>
+    val_data <- val_filtered |>
       dplyr::mutate(
         # Clean column names by removing trailing periods
         column = gsub("\\s*\\.\\s*$", "", column),

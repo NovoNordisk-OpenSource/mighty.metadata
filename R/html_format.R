@@ -12,7 +12,7 @@ format_table_metadata_html <- function(table_metadata) {
   class <- table_metadata$class %||% ""
   subclass <- table_metadata$subclass %||% ""
   structure <- table_metadata$structure %||% ""
-  keys <- if(is.null(table_metadata$keys)) "" else paste(table_metadata$keys, collapse = ", ")
+  keys <- if (is.null(table_metadata$keys)) "" else paste(table_metadata$keys, collapse = ", ")
   comment <- table_metadata$comment %||% ""
 
   # Format class-subclass display

@@ -1,5 +1,9 @@
-# Helper function to remove NULL and NA values from a list
-# This ensures cleaner YAML output without empty/NA fields
+#' Cleaner function for recursively removing empty records from a list
+#' @description Helper function to remove NULL and NA values from a list.
+#' This ensures cleaner YAML output without empty/NA fields
+#' @param x A (nested) list containing NULL or missing records to be cleaned up
+#' @return The cleaned up list.
+#' @keywords internal
 clean_list <- function(x) {
   if (is.list(x)) {
     # Remove NULL or NA elements
@@ -13,8 +17,11 @@ clean_list <- function(x) {
   }
 }
 
-# Helper function to check if origindescription is a simple Dataset.Column format
-# Fixed to handle vectors properly
+#' Function to determine if a record's origin is a simple predecessor
+#' @description Helper function to check if origindescription is a simple Dataset.Column format
+#' @param desc a vector of origin descriptions
+#' @return A logical vector indicating if those descriptions are of simple precessor
+#' @keywords internal
 is_simple_predecessor <- function(desc) {
   # Pattern for simple predecessor: word.word with no additional text
   simple_pattern <- "^[A-Za-z0-9_]+\\.[A-Za-z0-9_]+$"
@@ -27,26 +34,4 @@ is_simple_predecessor <- function(desc) {
   result[!is_na] <- grepl(simple_pattern, trimws(desc[!is_na]))
 
   return(result)
-}
-
-# Helper function to extract domain references from text
-extract_domain_references <- function(text) {
-  if (is.null(text) || length(text) == 0 || all(is.na(text))) {
-    return(character(0))
-  }
-
-  # Combine all non-NA text elements
-  combined_text <- paste(text[!is.na(text)], collapse = " ")
-
-  # Pattern to match uppercase domain.column references
-  # This looks for uppercase letters/numbers followed by a period and more uppercase letters/numbers
-  pattern <-  "\\b([A-Z][A-Z0-9]*)\\.[A-Z][A-Z0-9]*\\b"
-
-  # Extract all matches
-  matches <- regmatches(combined_text, gregexpr(pattern, combined_text))[[1]]
-
-  # Extract just the domain part (before the period)
-  domains <- unique(sub("\\..*", "", matches))
-
-  return(domains)
 }

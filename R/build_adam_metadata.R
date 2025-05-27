@@ -29,7 +29,7 @@
 #'   from both direct references and method text
 #' - Method fields are formatted for multi-line text in YAML
 #' - Parameter value level metadata is properly processed and linked to parent variables
-#' @param metadata A list containing source_tables, source_columns, and source_values components
+#' @param metadata A list containing source_tables, source_columns, and (optionally) source_values components
 #' @param verbose Logical indicating whether to print messages about conversions (default: TRUE)
 #' @return A nested list structure containing ADaM metadata organized by dataset
 #' @export

@@ -17,12 +17,11 @@ Imports:
     yaml,
     NNremote,
     NNaccess,
-    htmltools,
     stringr,
-    methods,
     utils,
     tidyr,
-    purrr
+    purrr,
+    rstudioapi
 Suggests: 
     knitr,
     quarto,

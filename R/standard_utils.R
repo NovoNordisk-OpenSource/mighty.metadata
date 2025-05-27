@@ -2,7 +2,7 @@
 
 #' Path to the CDISC standards libraries
 #' @description Returns the file path to the CDISC standards libraries
-#' @param ... \character Additional path elements
+#' @param ... {character} Additional path elements
 #' @return A file path
 #' @export
 standard_path <- function(...) {
@@ -19,7 +19,7 @@ standard_path <- function(...) {
 
 #' Lookup available CDISC standard versions
 #' @description Returns a list of available versions for a specific CDISC standard
-#' @param standard \character The standard to look up
+#' @param standard \code{character} The standard to look up
 #' @return A list of files
 #' @export
 master_lookup <- function(standard) {

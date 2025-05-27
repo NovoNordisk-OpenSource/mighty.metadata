@@ -7,7 +7,7 @@
 standard_path(...)
 }
 \arguments{
-\item{...}{\character Additional path elements}
+\item{...}{{character} Additional path elements}
 }
 \value{
 A file path
