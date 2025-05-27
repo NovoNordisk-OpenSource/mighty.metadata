@@ -34,12 +34,12 @@ Converted to derived column with origindescription as origin
 \item For derived variables (origin = "Derived"):
 \itemize{
 \item Includes column, label, xmlcodelist (if applicable), and origin fields
-Origin is formatted as "Assigned: \link{algorithm}"
+Origin is formatted as "Derived: [algorithm]"
 }
 \item For assigned variables (origin = "Assigned"):
 \itemize{
 \item Includes column, label, xmlcodelist (if applicable), and origin fields
-\item Origin is formatted as "Assigned: \link{comment}"
+\item Origin is formatted as "Assigned: [comment]"
 }
 }
 

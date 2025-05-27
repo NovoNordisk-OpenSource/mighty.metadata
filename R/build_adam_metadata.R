@@ -16,11 +16,11 @@
 #'
 #' - For derived variables (origin = "Derived"):
 #'   - Includes column, label, xmlcodelist (if applicable), and origin fields
-#'   Origin is formatted as "Assigned: [algorithm]"
+#'   Origin is formatted as "Derived: \[algorithm\]"
 #'
 #' - For assigned variables (origin = "Assigned"):
 #'   - Includes column, label, xmlcodelist (if applicable), and origin fields
-#'   - Origin is formatted as "Assigned: [comment]"
+#'   - Origin is formatted as "Assigned: \[comment\]"
 #'
 #' Additional features:
 #' - NULL/NA fields are omitted from the output for cleaner YAML
