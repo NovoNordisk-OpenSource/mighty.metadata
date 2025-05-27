@@ -10,7 +10,7 @@ is_simple_predecessor(desc)
 \item{desc}{a vector of origin descriptions}
 }
 \value{
-A logical vector indicating if those descriptions are of simple precessor
+A logical vector indicating if those descriptions are of simple predecessor
 }
 \description{
 Helper function to check if origindescription is a simple Dataset.Column format
