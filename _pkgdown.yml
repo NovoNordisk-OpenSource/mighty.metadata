@@ -1,12 +1,4 @@
-url: https://nn-opensource.github.io/mighty.metadata
+url: https://refactored-doodle-rw3leey.pages.github.io/
 template:
   bootstrap: 5
-
-articles:
-- title: All vignettes
-  navbar: ~
-  contents:
-  - mighty.metadata
-  - yaml-format
-  - adam-metadata
 
