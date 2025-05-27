@@ -29,17 +29,17 @@ This follows CDISC requirements that predecessor columns inherit metadata from p
 \item If renamed: Only column and source fields are included
 Example: column: AAGE, source: DM.AGE
 \item If origindescription is complex (contains filtering or additional text):
-Converted to derived column with origindescription as method
+Converted to derived column with origindescription as origin
 }
 \item For derived variables (origin = "Derived"):
 \itemize{
-\item Includes column, label, xmlcodelist (if applicable), and method fields
-\item Method contains the algorithm text
+\item Includes column, label, xmlcodelist (if applicable), and origin fields
+Origin is formatted as "Assigned: \link{algorithm}"
 }
 \item For assigned variables (origin = "Assigned"):
 \itemize{
-\item Includes column, label, xmlcodelist (if applicable), and method fields
-\item Method is formatted as "Assigned: \link{comment}"
+\item Includes column, label, xmlcodelist (if applicable), and origin fields
+\item Origin is formatted as "Assigned: \link{comment}"
 }
 }
 
@@ -48,8 +48,8 @@ Additional features:
 \item NULL/NA fields are omitted from the output for cleaner YAML
 \item Value-level metadata is included only if available for the dataset
 \item Referenced domains are automatically created to track predecessor relationships
-from both direct references and method text
-\item Method fields are formatted for multi-line text in YAML
+from both direct references and origin text
+\item Origin fields are formatted for multi-line text in YAML
 \item Parameter value level metadata is properly processed and linked to parent variables
 }
 }

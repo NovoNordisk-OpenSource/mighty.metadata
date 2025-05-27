@@ -19,7 +19,7 @@ columns:
 \item TLABEL - Table label
 \item COLUMN - Column name
 \item LABEL - Column label
-\item METHOD - Method or source description
+\item ORIGIN - Origin or source description
 \item TYPE - Data type
 \item LENGTH - Field length
 \item FORMAT - Display format

@@ -2,7 +2,7 @@
 
 #' Write a single ADaM domain metadata to YAML file
 #' @description Writes a single ADaM domain metadata to a YAML file with proper formatting.
-#' Method fields are formatted as multiline strings with literal block scalar style (|-)
+#' Origin fields are formatted as multiline strings with literal block scalar style (|-)
 #' regardless of whether they contain actual line breaks. Long strings are wrapped
 #' at word boundaries to improve readability.
 #' @param domain_data The metadata for a single domain
@@ -17,8 +17,8 @@ write_adam_domain_yaml <- function(domain_data, domain_name, output_dir = ".", l
     dir.create(output_dir, recursive = TRUE)
   }
 
-  # Process method fields to ensure they're treated as multiline
-  domain_data <- format_method_fields(domain_data, line_width)
+  # Process origin fields to ensure they're treated as multiline
+  domain_data <- format_origin_fields(domain_data, line_width)
 
   # Convert to YAML string
   yaml_content <- yaml::as.yaml(domain_data, indent.mapping.sequence = TRUE)
@@ -33,13 +33,13 @@ write_adam_domain_yaml <- function(domain_data, domain_name, output_dir = ".", l
   return(yaml_file)
 }
 
-#' Format method fields to ensure they're treated as multiline strings
-#' @description Helper function to format all method fields in a domain metadata structure
+#' Format origin fields to ensure they're treated as multiline strings
+#' @description Helper function to format all origin fields in a domain metadata structure
 #' @param metadata A domain metadata structure
 #' @param line_width Maximum line width before wrapping text
-#' @return The metadata structure with method fields formatted for multiline output
+#' @return The metadata structure with origin fields formatted for multiline output
 #' @keywords internal
-format_method_fields <- function(metadata, line_width = 80) {
+format_origin_fields <- function(metadata, line_width = 80) {
   # Helper function to wrap text at word boundaries
   wrap_text <- function(text, width) {
     if (is.null(text) || is.na(text)) return(text)
@@ -95,44 +95,44 @@ format_method_fields <- function(metadata, line_width = 80) {
     return(result)
   }
 
-  # Process method fields in column_metadata
+  # Process origin fields in column_metadata
   if (!is.null(metadata$column_metadata)) {
     for (i in seq_along(metadata$column_metadata)) {
-      if (!is.null(metadata$column_metadata[[i]]$method)) {
-        # Format the method text
-        method_text <- metadata$column_metadata[[i]]$method
+      if (!is.null(metadata$column_metadata[[i]]$origin)) {
+        # Format the origin text
+        origin_text <- metadata$column_metadata[[i]]$origin
 
         # Wrap long lines
-        method_text <- wrap_text(method_text, line_width)
+        origin_text <- wrap_text(origin_text, line_width)
 
         # Ensure it has at least one newline to trigger multiline formatting
-        if (!grepl("\n", method_text)) {
-          method_text <- paste0(method_text, "\n")
+        if (!grepl("\n", origin_text)) {
+          origin_text <- paste0(origin_text, "\n")
         }
 
-        # Update the method field
-        metadata$column_metadata[[i]]$method <- method_text
+        # Update the origin field
+        metadata$column_metadata[[i]]$origin <- origin_text
       }
     }
   }
 
-  # Process method fields in value_metadata
+  # Process origin fields in value_metadata
   if (!is.null(metadata$value_metadata)) {
     for (i in seq_along(metadata$value_metadata)) {
-      if (!is.null(metadata$value_metadata[[i]]$method)) {
-        # Format the method text
-        method_text <- metadata$value_metadata[[i]]$method
+      if (!is.null(metadata$value_metadata[[i]]$origin)) {
+        # Format the origin text
+        origin_text <- metadata$value_metadata[[i]]$origin
 
         # Wrap long lines
-        method_text <- wrap_text(method_text, line_width)
+        origin_text <- wrap_text(origin_text, line_width)
 
         # Ensure it has at least one newline to trigger multiline formatting
-        if (!grepl("\n", method_text)) {
-          method_text <- paste0(method_text, "\n")
+        if (!grepl("\n", origin_text)) {
+          origin_text <- paste0(origin_text, "\n")
         }
 
-        # Update the method field
-        metadata$value_metadata[[i]]$method <- method_text
+        # Update the origin field
+        metadata$value_metadata[[i]]$origin <- origin_text
       }
     }
   }

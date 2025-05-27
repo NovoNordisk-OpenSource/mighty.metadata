@@ -102,8 +102,8 @@ process_table <- function(table_name,
         TRUE ~ NA_character_
       ),
 
-      # Create unified method field based on origin
-      method = dplyr::case_when(
+      # Create unified origin field based
+      unified_origin = dplyr::case_when(
         is_complex_predecessor ~ paste0("Source: ", origindescription),
         is_predecessor ~ paste0("Predecessor: ", origindescription),
         !is.na(origin) & tolower(origin) == "derived" & !is.na(algorithm) ~ paste0("Derived: ", algorithm),
@@ -179,10 +179,10 @@ process_table <- function(table_name,
       )
     } else if (row$is_complex_predecessor) {
       # For complex predecessors (now treated as derived)
-      method_text <- row$method
-      if (!is.na(method_text)) {
+      origin_text <- row$unified_origin
+      if (!is.na(origin_text)) {
         # Standardize newlines
-        method_text <- gsub("\r\n", "\n", method_text)
+        origin_text <- gsub("\r\n", "\n", origin_text)
       }
 
       list(
@@ -190,15 +190,15 @@ process_table <- function(table_name,
         label = row$label,
         format = row$format,
         xmlcodelist = row$xmlcodelist,
-        method = method_text,
+        origin = origin_text,
         corefl = row$corefl
       )
     } else {
       # For derived/assigned columns, include all relevant metadata
-      method_text <-  row$method
-      if (!is.na(method_text)) {
+      origin_text <-  row$unified_origin
+      if (!is.na(origin_text)) {
         # Standardize newlines
-        method_text <- gsub("\r\n", "\n", method_text)
+        origin_text <- gsub("\r\n", "\n", origin_text)
       }
 
       list(
@@ -206,7 +206,7 @@ process_table <- function(table_name,
         label = row$label,
         format = row$format,
         xmlcodelist = row$xmlcodelist,
-        method = method_text,
+        origin = origin_text,
         corefl = row$corefl
       )
     }

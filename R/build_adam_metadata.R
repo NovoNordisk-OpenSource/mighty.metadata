@@ -12,22 +12,22 @@
 #'   - If renamed: Only column and source fields are included
 #'     Example: column: AAGE, source: DM.AGE
 #'   - If origindescription is complex (contains filtering or additional text):
-#'     Converted to derived column with origindescription as method
+#'     Converted to derived column with origindescription as origin
 #'
 #' - For derived variables (origin = "Derived"):
-#'   - Includes column, label, xmlcodelist (if applicable), and method fields
-#'   - Method contains the algorithm text
+#'   - Includes column, label, xmlcodelist (if applicable), and origin fields
+#'   Origin is formatted as "Assigned: [algorithm]"
 #'
 #' - For assigned variables (origin = "Assigned"):
-#'   - Includes column, label, xmlcodelist (if applicable), and method fields
-#'   - Method is formatted as "Assigned: [comment]"
+#'   - Includes column, label, xmlcodelist (if applicable), and origin fields
+#'   - Origin is formatted as "Assigned: [comment]"
 #'
 #' Additional features:
 #' - NULL/NA fields are omitted from the output for cleaner YAML
 #' - Value-level metadata is included only if available for the dataset
 #' - Referenced domains are automatically created to track predecessor relationships
-#'   from both direct references and method text
-#' - Method fields are formatted for multi-line text in YAML
+#'   from both direct references and origin text
+#' - Origin fields are formatted for multi-line text in YAML
 #' - Parameter value level metadata is properly processed and linked to parent variables
 #' @param metadata A list containing source_tables, source_columns, and (optionally) source_values components
 #' @param verbose Logical indicating whether to print messages about conversions (default: TRUE)

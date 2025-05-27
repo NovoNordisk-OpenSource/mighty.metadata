@@ -43,7 +43,7 @@ master_lookup <- function(standard) {
 #' @return Metadata as read from file
 #' @export
 read_master <- function(standard,
-                        version = tail(master_lookup(standard), 1),
+                        version = utils::tail(master_lookup(standard), 1),
                         filename = NULL) {
 
   masterdir <- file.path(standard_path(version), "metadata")

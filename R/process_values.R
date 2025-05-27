@@ -1,9 +1,9 @@
-#' Extract method information from source_values when present
-#' @description Helper function for getting method information for values
+#' Extract origin information from source_values when present
+#' @description Helper function for getting origin information for values
 #' @param val_filtered A dataframe containing the value definitions for the relevant table
-#' @param table_name The name of the table whose methods are being considered
+#' @param table_name The name of the table whose origins are being considered
 #' @param verbose Logical indicating whether to print messages about conversions (default: TRUE)
-#' @return a list containing the method information from source_values as both a list and a dataframe.
+#' @return a list containing the origin information from source_values as both a list and a dataframe.
 #' @keywords internal
 process_values <- function(val_filtered, table_name, verbose) {
   if (nrow(val_filtered) > 0) {
@@ -21,8 +21,8 @@ process_values <- function(val_filtered, table_name, verbose) {
           tolower(origin) == "predecessor" &
           !is_simple_predecessor(origindescription),
 
-        # Create method field using the same logic as for columns
-        method = dplyr::case_when(
+        # Create origin field using the same logic as for columns
+        unified_origin = dplyr::case_when(
           is_complex_predecessor ~ paste0("Source: ", origindescription),
           !is.na(origin) & tolower(origin) == "predecessor" ~ paste0("Predecessor: ", origindescription),
           !is.na(origin) & tolower(origin) == "derived" & !is.na(algorithm) ~ algorithm,
@@ -57,16 +57,16 @@ process_values <- function(val_filtered, table_name, verbose) {
     val_meta <-  lapply(seq_len(nrow(val_data)), function(i) {
       row <- val_data[i, ]
 
-      method_text <- row$method
-      if (!is.na(method_text)) {
+      origin_text <- row$unified_origin
+      if (!is.na(origin_text)) {
         # Standardize newlines
-        method_text <- gsub("\r\n", "\n", method_text)
+        origin_text <- gsub("\r\n", "\n", origin_text)
       }
 
       result <- list(
         column = row$column,
         whereclause = row$whereclause,
-        method = method_text
+        origin = origin_text
       )
 
       # Add origin for complex predecessors

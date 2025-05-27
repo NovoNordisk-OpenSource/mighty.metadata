@@ -6,7 +6,7 @@
 \usage{
 read_master(
   standard,
-  version = tail(master_lookup(standard), 1),
+  version = utils::tail(master_lookup(standard), 1),
   filename = NULL
 )
 }

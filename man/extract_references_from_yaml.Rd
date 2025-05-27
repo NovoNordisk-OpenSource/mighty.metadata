@@ -18,19 +18,19 @@ A named list where:
 }
 \description{
 Analyzes a YAML metadata file to extract all domain and variable references from
-column sources and methods. This function helps track dependencies between
+column sources and origins. This function helps track dependencies between
 different domains and variables in the metadata structure.
 }
 \details{
 The function processes references from multiple sources:
 \enumerate{
 \item Direct references in column names or source attributes
-\item References embedded in method descriptions
+\item References embedded in origin descriptions
 \item References in value-level metadata
 }
 
 References are expected to be in the format "DOMAIN.VARIABLE" (e.g., "ADSL.USUBJID").
-The function handles both simple references and complex patterns within method
+The function handles both simple references and complex patterns within origin
 descriptions.
 
 Special handling includes:
@@ -41,7 +41,7 @@ Special handling includes:
 }
 }
 \note{
-The function will generate a warning if it encounters incomplete source or method
+The function will generate a warning if it encounters incomplete source or origin
 references (missing domain or variable components).
 }
 \examples{

@@ -2,21 +2,21 @@
 % Please edit documentation in R/process_values.R
 \name{process_values}
 \alias{process_values}
-\title{Extract method information from source_values when present}
+\title{Extract origin information from source_values when present}
 \usage{
 process_values(val_filtered, table_name, verbose)
 }
 \arguments{
 \item{val_filtered}{A dataframe containing the value definitions for the relevant table}
 
-\item{table_name}{The name of the table whose methods are being considered}
+\item{table_name}{The name of the table whose origins are being considered}
 
 \item{verbose}{Logical indicating whether to print messages about conversions (default: TRUE)}
 }
 \value{
-a list containing the method information from source_values as both a list and a dataframe.
+a list containing the origin information from source_values as both a list and a dataframe.
 }
 \description{
-Helper function for getting method information for values
+Helper function for getting origin information for values
 }
 \keyword{internal}

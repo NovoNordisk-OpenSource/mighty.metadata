@@ -131,18 +131,18 @@ format_column_metadata_html <- function(column_metadata, value_metadata = NULL) 
     }
 
     # Origin/Source/Method/Comment field
-    origin_method <- ""
+    origin_field <- ""
     if (is_predecessor) {
       # For direct predecessors (DM.USUBJID)
-      origin_method <- paste0("Predecessor: ", col$column)
+      origin_field <- paste0("Predecessor: ", col$column)
     } else if (is_renamed_predecessor) {
       # For renamed predecessors
-      origin_method <- paste0("Predecessor: ", col$source)
-    } else if (!is.null(col$method)) {
+      origin_field <- paste0("Predecessor: ", col$source)
+    } else if (!is.null(col$origin)) {
       # For derived/assigned variables
       # Remove the leading pipe character if present
-      method_text <- sub("^\\|\\s*", "", col$method)
-      origin_method <- paste0('<div class="method-code">', method_text, '</div>')
+      origin_text <- sub("^\\|\\s*", "", col$origin)
+      origin_field <- paste0('<div class="method-code">', origin_text, '</div>')
     }
 
     # Add VLM indicator if this column has value-level metadata
@@ -161,7 +161,7 @@ format_column_metadata_html <- function(column_metadata, value_metadata = NULL) 
       <td>Data driven</td>
       <td>Data driven</td>
       <td>', controlled_terms, '</td>
-      <td>', origin_method, '</td>
+      <td>', origin_field, '</td>
     </tr>')
 
     # Add VLM rows if they exist
@@ -175,11 +175,11 @@ format_column_metadata_html <- function(column_metadata, value_metadata = NULL) 
         # Get the where clause
         where_clause <- vlm$whereclause %||% ""
 
-        # Get the method
-        vlm_method <- ""
-        if (!is.null(vlm$method)) {
-          method_text <- sub("^\\|\\s*", "", vlm$method)
-          vlm_method <- paste0('<div class="method-code">', method_text, '</div>')
+        # Get the origin
+        vlm_origin <- ""
+        if (!is.null(vlm$origin)) {
+          origin_text <- sub("^\\|\\s*", "", vlm$origin)
+          vlm_origin <- paste0('<div class="method-code">', origin_text, '</div>')
         }
 
         # Add the VLM row
@@ -191,7 +191,7 @@ format_column_metadata_html <- function(column_metadata, value_metadata = NULL) 
           <td>Data driven</td>
           <td>Data driven</td>
           <td>', controlled_terms, '</td>
-          <td>', vlm_method, '</td>
+          <td>', vlm_origin, '</td>
         </tr>')
       }
     }

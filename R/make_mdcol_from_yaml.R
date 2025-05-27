@@ -17,7 +17,7 @@
 #'   \item TLABEL - Table label
 #'   \item COLUMN - Column name
 #'   \item LABEL - Column label
-#'   \item METHOD - Method or source description
+#'   \item ORIGIN - Origin or source description
 #'   \item TYPE - Data type
 #'   \item LENGTH - Field length
 #'   \item FORMAT - Display format
@@ -76,8 +76,8 @@ make_mdcol_from_yaml <- function(metadata_directory) {
     # Extract column information for each table and flatten format information
     column_tbl <- lapply(list$column_metadata, purrr::flatten) |>
       dplyr::bind_rows() |>
-      dplyr::select(any_of(c("column", "label", "source", "method", "type", "corefl",
-                             "length", "displayformat")))
+      dplyr::select(dplyr::any_of(c("column", "label", "source", "origin", "type",
+                                    "corefl", "length", "displayformat")))
 
     # Combine table and column information
     table_tbl |>
@@ -107,8 +107,8 @@ make_mdcol_from_yaml <- function(metadata_directory) {
                   TYPE = dplyr::coalesce(TYPE, STYPE),
                   LENGTH = dplyr::coalesce(LENGTH, SLENGTH),
                   DISPLAYFORMAT = dplyr::coalesce(DISPLAYFORMAT, SDISPLAYFORMAT),
-                  METHOD = ifelse(is.na(METHOD) & !is.na(STABLE) & !is.na(SCOLUMN),
-                                  paste0("Source: ", STABLE, ".", SCOLUMN), METHOD)) |>
+                  ORIGIN = ifelse(is.na(ORIGIN) & !is.na(STABLE) & !is.na(SCOLUMN),
+                                  paste0("Source: ", STABLE, ".", SCOLUMN), ORIGIN)) |>
     dplyr::arrange(TABLE, ORDER) |>
     dplyr::select(-matches("^S")) |>
     dplyr::rename(FORMAT = DISPLAYFORMAT)
