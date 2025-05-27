@@ -67,22 +67,21 @@ make_mdcol_from_yaml <- function(metadata_directory) {
     purrr::set_names(all_names)
 
 
-  all_tbl <- purrr::map2(all_lists, names(all_lists), \(list, name) {
+  all_table <- purrr::map2(all_lists, names(all_lists), \(list, name) {
 
     # Extract table information for each table
-    table_tbl <- dplyr::bind_rows(list$table_metadata) |>
+    table_table <- dplyr::bind_rows(list$table_metadata) |>
       dplyr::select(table, keys, tlabel = label)
 
     # Extract column information for each table and flatten format information
-    column_tbl <- lapply(list$column_metadata, purrr::flatten) |>
+    column_table <- lapply(list$column_metadata, purrr::flatten) |>
       dplyr::bind_rows() |>
       dplyr::select(dplyr::any_of(c("column", "label", "source", "origin", "type",
                                     "corefl", "length", "displayformat")))
 
     # Combine table and column information
-    table_tbl |>
-      tidyr::expand_grid(column_tbl) |>
-      dplyr::mutate(order = dplyr::row_number())
+    table_table |>
+      tidyr::expand_grid(column_table)
   }) |>
     # Combine information for all tables into a single dataframe
     dplyr::bind_rows() |>
@@ -97,8 +96,8 @@ make_mdcol_from_yaml <- function(metadata_directory) {
     dplyr::rename(STABLE = SOURCE_1, SCOLUMN = SOURCE_2)
 
   # Add label and format information where appropriate. NB: Not recursively.
-  upd_tbl <- all_tbl |>
-    dplyr::left_join(all_tbl |>
+  upd_table <- all_table |>
+    dplyr::left_join(all_table |>
                        dplyr::distinct(COLUMN, TABLE,
                                        LABEL, TYPE, LENGTH, DISPLAYFORMAT) |>
                        dplyr::rename_with(function(x) paste0("S", x)),
@@ -109,11 +108,26 @@ make_mdcol_from_yaml <- function(metadata_directory) {
                   DISPLAYFORMAT = dplyr::coalesce(DISPLAYFORMAT, SDISPLAYFORMAT),
                   ORIGIN = ifelse(is.na(ORIGIN) & !is.na(STABLE) & !is.na(SCOLUMN),
                                   paste0("Source: ", STABLE, ".", SCOLUMN), ORIGIN)) |>
-    dplyr::arrange(TABLE, ORDER) |>
     dplyr::select(-matches("^S")) |>
     dplyr::rename(FORMAT = DISPLAYFORMAT)
 
-  duplicate_columns <- upd_tbl |>
+  # Add core variables
+  core_table <- upd_table |>
+    dplyr::bind_rows(
+      upd_table |>
+        dplyr::filter(TABLE == "ADSL", COREFL == "Y") |>
+        dplyr::select(-TABLE, -COREFL) |>
+        tidyr::expand_grid(upd_table |>
+                             dplyr::filter(grepl("^AD", TABLE)) |>
+                             dplyr::distinct(TABLE)) |>
+        dplyr::anti_join(upd_table, by = c("COLUMN", "TABLE"))
+    ) |>
+    dplyr::group_by(TABLE) |>
+    dplyr::mutate(ORDER = dplyr::row_number()) |>
+    dplyr::ungroup() |>
+    dplyr::arrange(TABLE, ORDER)
+
+  duplicate_columns <- core_table |>
     dplyr::count(tabcol = paste0(TABLE, ".", COLUMN)) |>
     dplyr::filter(n > 1) |>
     dplyr::pull(tabcol)
@@ -123,7 +137,7 @@ make_mdcol_from_yaml <- function(metadata_directory) {
                   paste(duplicate_columns, collapse = ", ")))
   }
 
-  missing_info_columns <- upd_tbl |>
+  missing_info_columns <- core_table |>
     dplyr::filter(dplyr::if_any(c("LABEL", "TYPE", "LENGTH"), is.na)) |>
     dplyr::mutate(tabcol = paste0(TABLE, ".", COLUMN)) |>
     dplyr::pull(tabcol)
@@ -133,6 +147,6 @@ make_mdcol_from_yaml <- function(metadata_directory) {
                   paste(missing_info_columns, collapse = ", ")))
   }
 
-  return(upd_tbl)
+  return(core_table)
 
 }
