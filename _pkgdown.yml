@@ -1,23 +1,6 @@
+url: https://nn-opensource.github.io/mighty.metadata
 template:
   bootstrap: 5
-
-navbar:
-  type: inverse
-  right:
-  - icon: fab fa-r-project fa-lg
-    text: at Biostat
-    href: https://connect.bifrost-prd.corp.aws.novonordisk.com/r-doc/
-
-home:
-  links:
-  - text: RSPM (Production)
-    href: https://rspm.bifrost-prd.corp.aws.novonordisk.com/client/#/repos/2/packages/mighty.metadata
-  - text: pacman (dev)
-    href: https://pacman.bifrost-prd.corp.aws.novonordisk.com/client/#/repos/2/packages/mighty.metadata
-  - text: Source code
-    href: https://dev.azure.com/novonordiskit/BOS/_git/mighty.metadata
-  - text: Release Build
-    href: https://dev.azure.com/novonordiskit/BOS/_build/results?buildId=<<Build.BuildId>>
 
 articles:
 - title: All vignettes
