@@ -67,14 +67,14 @@ make_mdcol_from_yaml <- function(metadata_directory) {
     purrr::set_names(all_names)
 
 
-  all_table <- purrr::map2(all_lists, names(all_lists), \(list, name) {
+  all_table <- purrr::map2(all_lists, names(all_lists), \(table_list, name) {
 
     # Extract table information for each table
-    table_table <- dplyr::bind_rows(list$table_metadata) |>
+    table_table <- dplyr::bind_rows(table_list$table_metadata) |>
       dplyr::select(table, keys, tlabel = label)
 
     # Extract column information for each table and flatten format information
-    column_table <- lapply(list$column_metadata, purrr::flatten) |>
+    column_table <- lapply(table_list$column_metadata, purrr::flatten) |>
       dplyr::bind_rows() |>
       dplyr::select(dplyr::any_of(c("column", "label", "source", "origin", "type",
                                     "corefl", "length", "displayformat")))

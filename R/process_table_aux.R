@@ -20,7 +20,7 @@ clean_list <- function(x) {
 #' Function to determine if a record's origin is a simple predecessor
 #' @description Helper function to check if origindescription is a simple Dataset.Column format
 #' @param desc a vector of origin descriptions
-#' @return A logical vector indicating if those descriptions are of simple precessor
+#' @return A logical vector indicating if those descriptions are of simple predecessor
 #' @keywords internal
 is_simple_predecessor <- function(desc) {
   # Pattern for simple predecessor: word.word with no additional text

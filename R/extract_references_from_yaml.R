@@ -84,7 +84,7 @@ extract_references_from_yaml <- function(path) {
     dplyr::rename(domain = source2_1, variable = source2_2)
 
   # Extract domain-value pairs from references in column or value origin
-  origin_colums <- column_data |>
+  origin_columNs <- column_data |>
     bind_rows(value_data) |>
     dplyr::filter(!is.na(origin)) |>
     # Extract everything in origin that looks like a domain.variable reference
@@ -100,7 +100,7 @@ extract_references_from_yaml <- function(path) {
     dplyr::filter(!domain %in% c("SDTM", "ADM", "ADAM", "METADATA"))
 
   all_columns <- direct_columns |>
-    dplyr::bind_rows(origin_colums)
+    dplyr::bind_rows(origin_columNs)
 
   # Find
   incomplete_source <- all_columns |>
