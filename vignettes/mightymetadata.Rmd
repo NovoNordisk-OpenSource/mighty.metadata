@@ -1,9 +1,10 @@
 ---
 title: "mighty.metadata"
 subtitle: "CDISC ADaM Metadata Management in YAML Format"
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{mighty.metadata}
-  %\VignetteEngine{quarto::html}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 knitr:
   opts_chunk:
@@ -11,8 +12,7 @@ knitr:
     comment: '#>'
 ---
 
-```{r}
-#| label: setup
+```{r setup}
 library(mighty.metadata)
 ```
 
