@@ -16,7 +16,7 @@ jobs:
     name: Check current version
     uses: >-
       NovoNordisk-OpenSource/r.workflows/.github/workflows/check_current_version.yaml@main
-check-nn-version:
+  check-nn-version:
     name: Check NN version
     uses: >-
       ./.github/workflows/custom_nn_check.yaml
