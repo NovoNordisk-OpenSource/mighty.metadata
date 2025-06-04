@@ -1,4 +1,4 @@
-$schema: "http://json-schema.org/draft-07/schema#"
+$schema: "https://json-schema.org/draft-07/schema#"
 title: Common ADaM Dataset Schema
 description: A common schema for ADaM datasets including table, column, and value metadata
 type: object

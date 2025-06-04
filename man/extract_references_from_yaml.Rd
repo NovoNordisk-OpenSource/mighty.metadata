@@ -7,7 +7,8 @@
 extract_references_from_yaml(path)
 }
 \arguments{
-\item{path}{Character string specifying the file path to the YAML metadata file.}
+\item{path}{Character string specifying the file path to the YAML metadata
+file.}
 }
 \value{
 A named list where:
@@ -17,9 +18,9 @@ A named list where:
 }
 }
 \description{
-Analyzes a YAML metadata file to extract all domain and variable references from
-column sources and origins. This function helps track dependencies between
-different domains and variables in the metadata structure.
+Analyzes a YAML metadata file to extract all domain and variable references
+from column sources and origins. This function helps track dependencies
+between different domains and variables in the metadata structure.
 }
 \details{
 The function processes references from multiple sources:
@@ -29,9 +30,9 @@ The function processes references from multiple sources:
 \item References in value-level metadata
 }
 
-References are expected to be in the format "DOMAIN.VARIABLE" (e.g., "ADSL.USUBJID").
-The function handles both simple references and complex patterns within origin
-descriptions.
+References are expected to be in the format "DOMAIN.VARIABLE"
+(e.g., "ADSL.USUBJID"). The function handles both simple references and
+complex patterns within origin descriptions.
 
 Special handling includes:
 \itemize{
@@ -41,8 +42,8 @@ Special handling includes:
 }
 }
 \note{
-The function will generate a warning if it encounters incomplete source or origin
-references (missing domain or variable components).
+The function will generate a warning if it encounters incomplete source or
+origin references (missing domain or variable components).
 }
 \examples{
 \dontrun{

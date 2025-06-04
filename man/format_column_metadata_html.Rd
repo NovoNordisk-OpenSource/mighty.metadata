@@ -9,12 +9,14 @@ format_column_metadata_html(column_metadata, value_metadata = NULL)
 \arguments{
 \item{column_metadata}{The column_metadata section from the YAML file}
 
-\item{value_metadata}{The value_metadata section from the YAML file (optional)}
+\item{value_metadata}{(optional) The value_metadata section from the YAML
+file}
 }
 \value{
 HTML string containing the formatted table
 }
 \description{
-Creates an HTML table representation of the column_metadata section from ADaM YAML metadata,
-including value-level metadata where applicable
+Creates an HTML table representation of the column_metadata
+section from ADaM YAML metadata, including value-level metadata where
+applicable
 }

@@ -7,25 +7,30 @@
 build_adam_metadata(metadata, verbose = TRUE)
 }
 \arguments{
-\item{metadata}{A list containing source_tables, source_columns, and (optionally) source_values components}
+\item{metadata}{A list containing source_tables, source_columns, and
+(optionally) source_values components}
 
-\item{verbose}{Logical indicating whether to print messages about conversions (default: TRUE)}
+\item{verbose}{Logical indicating whether to print messages about conversions
+(default: TRUE)}
 }
 \value{
 A nested list structure containing ADaM metadata organized by dataset
 }
 \description{
-Transforms raw ADaM metadata components into a structured format suitable for YAML output.
+Transforms raw ADaM metadata components into a structured format
+suitable for YAML output.
 }
 \details{
-The function produces a clean YAML-compatible structure with the following behaviors:
+The function produces a clean YAML-compatible structure with the following
+behaviors:
 
 Column handling by type:
 \itemize{
 \item For predecessor variables (origin = "Predecessor"):
 \itemize{
 \item If not renamed: Only the column field is included (e.g., "DM.USUBJID")
-This follows CDISC requirements that predecessor columns inherit metadata from parent
+This follows CDISC requirements that predecessor columns inherit metadata
+from parent
 \item If renamed: Only column and source fields are included
 Example: column: AAGE, source: DM.AGE
 \item If origindescription is complex (contains filtering or additional text):
@@ -47,9 +52,11 @@ Additional features:
 \itemize{
 \item NULL/NA fields are omitted from the output for cleaner YAML
 \item Value-level metadata is included only if available for the dataset
-\item Referenced domains are automatically created to track predecessor relationships
+\item Referenced domains are automatically created to track predecessor
+relationships
 from both direct references and origin text
 \item Origin fields are formatted for multi-line text in YAML
-\item Parameter value level metadata is properly processed and linked to parent variables
+\item Parameter value level metadata is properly processed and linked to parent
+variables
 }
 }

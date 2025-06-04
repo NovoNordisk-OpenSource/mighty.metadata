@@ -1,7 +1,8 @@
 # Functions for HTML formatting and viewing
 
 #' Format table metadata as HTML table
-#' @description Creates an HTML table representation of the table_metadata section from ADaM YAML metadata
+#' @description Creates an HTML table representation of the table_metadata
+#' section from ADaM YAML metadata
 #' @param table_metadata The table_metadata section from the YAML file
 #' @return HTML string containing the formatted table
 #' @export
@@ -12,7 +13,10 @@ format_table_metadata_html <- function(table_metadata) {
   class <- table_metadata$class %||% ""
   subclass <- table_metadata$subclass %||% ""
   structure <- table_metadata$structure %||% ""
-  keys <- if (is.null(table_metadata$keys)) "" else paste(table_metadata$keys, collapse = ", ")
+  keys <- if (is.null(table_metadata$keys))
+    ""
+  else
+    paste(table_metadata$keys, collapse = ", ")
   comment <- table_metadata$comment %||% ""
 
   # Format class-subclass display
@@ -22,7 +26,8 @@ format_table_metadata_html <- function(table_metadata) {
   }
 
   # Create HTML table
-  html <- paste0('
+  html <- paste0(
+    '
   <table summary="Dataset Metadata">
     <caption>Dataset Metadata</caption>
     <tr class="header">
@@ -36,30 +41,48 @@ format_table_metadata_html <- function(table_metadata) {
       <th scope="col">Location</th>
     </tr>
     <tr>
-      <td>', dataset, '</td>
-      <td>', description, '</td>
-      <td>', class_display, '</td>
-      <td>', structure, '</td>
+      <td>',
+    dataset,
+    "</td>
+      <td>",
+    description,
+    "</td>
+      <td>",
+    class_display,
+    "</td>
+      <td>",
+    structure,
+    "</td>
       <td>Analysis</td>
-      <td>', keys, '</td>
-      <td>', comment, '</td>
+      <td>",
+    keys,
+    "</td>
+      <td>",
+    comment,
+    "</td>
       <td></td>
     </tr>
-  </table>')
+  </table>"
+  )
 
   return(html)
 }
 
 #' Format column metadata as HTML table with value-level metadata support
-#' @description Creates an HTML table representation of the column_metadata section from ADaM YAML metadata,
-#' including value-level metadata where applicable
+#' @description Creates an HTML table representation of the column_metadata
+#' section from ADaM YAML metadata, including value-level metadata where
+#' applicable
 #' @param column_metadata The column_metadata section from the YAML file
-#' @param value_metadata The value_metadata section from the YAML file (optional)
+#' @param value_metadata (optional) The value_metadata section from the YAML
+#' file
 #' @return HTML string containing the formatted table
 #' @export
-format_column_metadata_html <- function(column_metadata, value_metadata = NULL) {
+format_column_metadata_html <- function(column_metadata,
+                                        value_metadata = NULL) {
+
   # Start the HTML table
-  html <- paste0('
+  html <- paste0(
+    '
   <table summary="Variables">
     <caption>Variables</caption>
     <tr class="header">
@@ -70,7 +93,8 @@ format_column_metadata_html <- function(column_metadata, value_metadata = NULL) 
       <th scope="col">Length or Display Format</th>
       <th scope="col">Controlled Terms or ISO Format</th>
       <th scope="col">Origin / Source / Method / Comment</th>
-    </tr>')
+    </tr>'
+  )
 
   # Create a lookup for value-level metadata by column
   vlm_by_column <- list()
@@ -93,7 +117,8 @@ format_column_metadata_html <- function(column_metadata, value_metadata = NULL) 
 
     # Determine if this is a predecessor variable
     is_predecessor <- FALSE
-    if (length(col) == 1 && !is.null(col$column) && grepl("^[A-Z]+\\.[A-Z]+", col$column)) {
+    if (length(col) == 1 &&
+          !is.null(col$column) && grepl("^[A-Z]+\\.[A-Z]+", col$column)) {
       is_predecessor <- TRUE
     }
 
@@ -126,8 +151,10 @@ format_column_metadata_html <- function(column_metadata, value_metadata = NULL) 
     controlled_terms <- col$xmlcodelist %||% ""
     if (controlled_terms != "") {
       # Placeholder for future codelist lookup
-      controlled_terms <- paste0(controlled_terms,
-                                 '<div class="codelist-placeholder">(Codelist values will be displayed here)</div>')
+      controlled_terms <- paste0(
+        controlled_terms,
+        '<div class="codelist-placeholder">(Codelist will be shown here)</div>'
+      )
     }
 
     # Origin/Source/Method/Comment field
@@ -142,27 +169,48 @@ format_column_metadata_html <- function(column_metadata, value_metadata = NULL) 
       # For derived/assigned variables
       # Remove the leading pipe character if present
       origin_text <- sub("^\\|\\s*", "", col$origin)
-      origin_field <- paste0('<div class="method-code">', origin_text, '</div>')
+      origin_field <- paste0('<div class=
+                             "method-code">', origin_text, "</div>")
     }
 
     # Add VLM indicator if this column has value-level metadata
     vlm_indicator <- ""
     if (has_vlm) {
       vlm_id <- paste0("vlm-", gsub("[^a-zA-Z0-9]", "-", col$column))
-      vlm_indicator <- paste0(' <span class="valuelist-reference" onclick="toggleVLM(\'', vlm_id, '\')">VLM</span>')
+      vlm_indicator <- paste0(
+        ' <span class="valuelist-reference"
+        onclick="toggleVLM(\'',
+        vlm_id,
+        '\')">VLM
+        </span>'
+      )
     }
 
     # Add the row
-    html <- paste0(html, '
-    <tr class="tablerow', row_class, '">
-      <td>', var_name, vlm_indicator, '</td>
+    html <- paste0(
+      html,
+      '
+    <tr class="tablerow',
+      row_class,
+      '">
+      <td>',
+      var_name,
+      vlm_indicator,
+      "</td>
       <td></td>
-      <td>', var_label, '</td>
+      <td>",
+      var_label,
+      "</td>
       <td>Data driven</td>
       <td>Data driven</td>
-      <td>', controlled_terms, '</td>
-      <td>', origin_field, '</td>
-    </tr>')
+      <td>",
+      controlled_terms,
+      "</td>
+      <td>",
+      origin_field,
+      "</td>
+    </tr>"
+    )
 
     # Add VLM rows if they exist
     if (has_vlm) {
@@ -179,37 +227,55 @@ format_column_metadata_html <- function(column_metadata, value_metadata = NULL) 
         vlm_origin <- ""
         if (!is.null(vlm$origin)) {
           origin_text <- sub("^\\|\\s*", "", vlm$origin)
-          vlm_origin <- paste0('<div class="method-code">', origin_text, '</div>')
+          vlm_origin <- paste0('<div class="method-code">',
+                               origin_text,
+                               "</div>")
         }
 
         # Add the VLM row
-        html <- paste0(html, '
-        <tr class="vlm ', vlm_id, '" style="display:none;">
+        html <- paste0(
+          html,
+          '
+        <tr class="vlm ',
+          vlm_id,
+          '" style="display:none;">
           <td><div class="qval-indent">&#x27A4;</div></td>
-          <td>', where_clause, '</td>
-          <td>', var_label, '</td>
+          <td>',
+          where_clause,
+          "</td>
+          <td>",
+          var_label,
+          "</td>
           <td>Data driven</td>
           <td>Data driven</td>
-          <td>', controlled_terms, '</td>
-          <td>', vlm_origin, '</td>
-        </tr>')
+          <td>",
+          controlled_terms,
+          "</td>
+          <td>",
+          vlm_origin,
+          "</td>
+        </tr>"
+        )
       }
     }
   }
 
   # Close the table
-  html <- paste0(html, '
-  </table>')
+  html <- paste0(html, "
+  </table>")
 
   return(html)
 }
 
 #' Create a Define-HTML view from ADaM metadata YAML file
-#' @description Converts a dataset-level YAML metadata file into an HTML representation
-#' similar to Define-XML, displaying it in the RStudio viewer or browser.
+#' @description Converts a dataset-level YAML metadata file into an HTML
+#' representation similar to Define-XML, displaying it in the RStudio viewer or
+#' browser.
 #' @param yaml_file Path to the YAML metadata file
-#' @param output_file Optional path for the HTML output file. If NULL, a temporary file is used.
-#' @param open Whether to open the HTML file in the viewer (TRUE) or just return the path (FALSE)
+#' @param output_file Optional path for the HTML output file. If NULL, a
+#' temporary file is used.
+#' @param open Whether to open the HTML file in the viewer (TRUE) or just
+#' return the path (FALSE)
 #' @return Path to the generated HTML file
 #' @export
 #' @examples
@@ -238,7 +304,8 @@ view_define_html <- function(yaml_file, output_file = NULL, open = TRUE) {
 
   # Create HTML content
   html_content <- paste0('
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+  "https://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -446,7 +513,8 @@ view_define_html <- function(yaml_file, output_file = NULL, open = TRUE) {
     function toggleVLM(id) {
       var rows = document.getElementsByClassName(id);
       for (var i = 0; i < rows.length; i++) {
-        rows[i].style.display = rows[i].style.display === "none" ? "table-row" : "none";
+        rows[i].style.display = rows[i].style.display === "none" ?
+          "table-row" : "none";
       }
     }
 
@@ -476,12 +544,14 @@ view_define_html <- function(yaml_file, output_file = NULL, open = TRUE) {
     // Set initial theme based on user preference or localStorage
     document.addEventListener("DOMContentLoaded", function() {
       const savedTheme = localStorage.getItem("theme");
-      const prefersDark = window.matchMedia &&
-                          window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const prefersDark =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
 
       if (savedTheme) {
         document.documentElement.setAttribute("data-theme", savedTheme);
-        document.getElementById("theme-toggle").checked = (savedTheme === "dark");
+        document.getElementById("theme-toggle").checked =
+        (savedTheme === "dark");
       } else if (prefersDark) {
         document.documentElement.setAttribute("data-theme", "dark");
         document.getElementById("theme-toggle").checked = true;
@@ -515,11 +585,12 @@ view_define_html <- function(yaml_file, output_file = NULL, open = TRUE) {
 
     <!-- Variables Table -->
     <div class="containerbox">
-      ', format_column_metadata_html(metadata$column_metadata, metadata$value_metadata), '
+      ', format_column_metadata_html(metadata$column_metadata,
+                                     metadata$value_metadata), "
     </div>
   </div>
 </body>
-</html>')
+</html>")
 
   # Write the HTML file
   writeLines(html_content, output_file)
@@ -527,7 +598,8 @@ view_define_html <- function(yaml_file, output_file = NULL, open = TRUE) {
   # Open in viewer if requested
   if (open) {
     if (interactive()) {
-      if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
+      if (requireNamespace("rstudioapi", quietly = TRUE) &&
+            rstudioapi::isAvailable()) {
         rstudioapi::viewer(output_file)
       } else {
         utils::browseURL(output_file)

@@ -13,5 +13,6 @@ format_table_metadata_html(table_metadata)
 HTML string containing the formatted table
 }
 \description{
-Creates an HTML table representation of the table_metadata section from ADaM YAML metadata
+Creates an HTML table representation of the table_metadata
+section from ADaM YAML metadata
 }

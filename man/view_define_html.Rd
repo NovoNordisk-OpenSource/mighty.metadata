@@ -9,16 +9,19 @@ view_define_html(yaml_file, output_file = NULL, open = TRUE)
 \arguments{
 \item{yaml_file}{Path to the YAML metadata file}
 
-\item{output_file}{Optional path for the HTML output file. If NULL, a temporary file is used.}
+\item{output_file}{Optional path for the HTML output file. If NULL, a
+temporary file is used.}
 
-\item{open}{Whether to open the HTML file in the viewer (TRUE) or just return the path (FALSE)}
+\item{open}{Whether to open the HTML file in the viewer (TRUE) or just
+return the path (FALSE)}
 }
 \value{
 Path to the generated HTML file
 }
 \description{
-Converts a dataset-level YAML metadata file into an HTML representation
-similar to Define-XML, displaying it in the RStudio viewer or browser.
+Converts a dataset-level YAML metadata file into an HTML
+representation similar to Define-XML, displaying it in the RStudio viewer or
+browser.
 }
 \examples{
 # view_define_html("path/to/adsl_metadata.yaml")
