@@ -19,6 +19,7 @@ Imports:
     dplyr,
     yaml,
     stringr,
+    rlang,
     utils,
     tidyr,
     purrr,
