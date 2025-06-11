@@ -19,9 +19,7 @@ jobs:
   check-nn-version:
     name: Check NN version
     uses: >-
-      ./.github/workflows/custom_nn_check.yaml
-    with:
-      use_local_setup_action: false
+      NovoNordisk-OpenSource/r.workflows/.github/workflows/check_nn_versions.yaml@main
   pkgdown:
     name: Pkgdown site
     uses: NovoNordisk-OpenSource/r.workflows/.github/workflows/pkgdown.yaml@main
