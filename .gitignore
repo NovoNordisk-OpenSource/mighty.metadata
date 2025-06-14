@@ -3,3 +3,7 @@
 docs
 inst/doc
 **/.quarto/
+
+# MegaLinter files and reports
+megalinter-reports/
+.mega-linter-r-only.yml
