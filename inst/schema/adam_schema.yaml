@@ -1,95 +1,102 @@
+---
 $schema: "https://json-schema.org/draft-07/schema#"
 title: Common ADaM Dataset Schema
 description: A common schema for ADaM datasets including table, column, and value metadata
 type: object
 properties:
   table_metadata:
-  type: object
-properties:
-  table:
-  type: string
-description: Name of the dataset (e.g., ADSL, ADAE)
-label:
-  type: string
-description: Label for the dataset
-class:
-  type: string
-enum: [SUBJECT LEVEL ANALYSIS DATASET, BASIC DATA STRUCTURE, OCCURRENCE DATA STRUCTURE, ADAM OTHER]
-description: Class of the dataset (e.g., SUBJECT LEVEL ANALYSIS DATASET, BASIC DATA STRUCTURE)
-subclass:
-  type: string
-enum: [ADVERSE EVENT, TIME-TO-EVENT]
-description: Subclass of the dataset, if applicable
-structure:
-  type: string
-description: Structure of the dataset
-keys:
-  type: [string, array]
-items:
-  type: string
-description: Key variables for the dataset
-comment:
-  type: string
-description: Additional comments about the dataset
-pattern: "^[\\s\\S]*$" # Allow any characters, including line breaks
-chkalias:
-  type: string
-description: Check alias for the dataset
-required: [table, label, class, structure, keys]
+    type: object
+    properties:
+      table:
+        type: string
+        description: Name of the dataset (e.g., ADSL, ADAE)
+      label:
+        type: string
+        description: Label for the dataset
+      class:
+        type: string
+        enum:
+          [
+            SUBJECT LEVEL ANALYSIS DATASET,
+            BASIC DATA STRUCTURE,
+            OCCURRENCE DATA STRUCTURE,
+            ADAM OTHER,
+          ]
+        description: Class of the dataset (e.g., SUBJECT LEVEL ANALYSIS DATASET, BASIC DATA STRUCTURE)
+      subclass:
+        type: string
+        enum: [ADVERSE EVENT, TIME-TO-EVENT]
+        description: Subclass of the dataset, if applicable
+      structure:
+        type: string
+        description: Structure of the dataset
+      keys:
+        type: [string, array]
+        items:
+          type: string
+        description: Key variables for the dataset
+      comment:
+        type: string
+        description: Additional comments about the dataset
+        pattern: "^[\\s\\S]*$" # Allow any characters, including line breaks
+      chkalias:
+        type: string
+        description: Check alias for the dataset
+    required: [table, label, class, structure, keys]
 
-column_metadata:
-  type: object
-additionalProperties:
-  type: object
-properties:
-  column:
-  type: string
-description: Column name
-source:
-  type: string
-description: Source of the column data [Utilized for source columns that are renamed]
-label:
-  type: string
-description: Label for the column
-xmlcodelist:
-  type: string
-description: XML codelist reference, if applicable
-method:
-  type: string
-description: Method used to derive or populate the column
-pattern: "^[\\s\\S]*$" # Allow any characters, including line breaks
-required: [column]
+  column_metadata:
+    type: object
+    additionalProperties:
+      type: object
+      properties:
+        column:
+          type: string
+          description: Column name
+        source:
+          type: string
+          description: Source of the column data [Utilized for source columns that are renamed]
+        label:
+          type: string
+          description: Label for the column
+        xmlcodelist:
+          type: string
+          description: XML codelist reference, if applicable
+        method:
+          type: string
+          description: Method used to derive or populate the column
+          pattern: "^[\\s\\S]*$" # Allow any characters, including line breaks
+      required: [column]
 
-value_metadata:
-  type: object
-additionalProperties:
-  type: object
-properties:
-  column:
-  type: string
-description: Column name
-whereclause:
-  type: string
-description: Where clause for value-level metadata
-method:
-  type: string
-description: Method used to derive or populate specific values
-pattern: "^[\\s\\S]*$" # Allow any characters, including line breaks
-required: [column, whereclause, method]
+  value_metadata:
+    type: object
+    additionalProperties:
+      type: object
+      properties:
+        column:
+          type: string
+          description: Column name
+        whereclause:
+          type: string
+          description: Where clause for value-level metadata
+        method:
+          type: string
+          description: Method used to derive or populate specific values
+          pattern: "^[\\s\\S]*$" # Allow any characters, including line breaks
+      required: [column, whereclause, method]
 
-referenced_domains:
-  type: object
-additionalProperties:
-  type: object
-properties:
-  domain:
-  type: string
-description: Referenced domain name
-variables:
-  type: array
-items:
-  type: string
-description: Variables referenced from the domain
-required: [domain, variables]
+  referenced_domains:
+    type: object
+    additionalProperties:
+      type: object
+      properties:
+        domain:
+          type: string
+          description: Referenced domain name
+        variables:
+          type: array
+          items:
+            type: string
+          description: Variables referenced from the domain
+      required: [domain, variables]
 
 required: [table_metadata, column_metadata]
