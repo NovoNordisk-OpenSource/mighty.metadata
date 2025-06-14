@@ -50,9 +50,9 @@ format_origin_fields <- function(metadata, line_width = 80) {
       wrapped_lines <- sapply(lines, function(line) {
         wrap_text_line(line, width)
       })
-      return(paste(wrapped_lines, collapse = "\n"))
+      paste(wrapped_lines, collapse = "\n")
     } else {
-      return(wrap_text_line(text, width))
+      wrap_text_line(text, width)
     }
   }
 
@@ -92,7 +92,7 @@ format_origin_fields <- function(metadata, line_width = 80) {
       }
     }
 
-    return(result)
+    result
   }
 
   # Process origin fields in column_metadata

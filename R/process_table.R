@@ -120,7 +120,7 @@ process_table <- function(table_name,
     # Create a flow-style dictionary of formatting information.
     dplyr::mutate(
       dtype = ifelse(!is.na(type), paste0('type: "', type, '"'), NA_character_),
-      dlength = ifelse(!is.na(length), paste0('length: ', length), NA_character_),
+      dlength = ifelse(!is.na(length), paste0("length: ", length), NA_character_),
       ddisplayformat = ifelse(!is.na(displayformat), paste0('displayformat: "', displayformat, '"'), NA_character_)
     ) |>
     tidyr::unite(format, dtype, dlength, sep = ", ", ddisplayformat, na.rm = TRUE) |>
@@ -133,7 +133,7 @@ process_table <- function(table_name,
       dplyr::select(column, origindescription)
 
     if (nrow(complex_preds) > 0) {
-      for (i in 1:nrow(complex_preds)) {
+      for (i in seq_len(nrow(complex_preds))) {
         message(paste0("Converting column '", complex_preds$column[i],
                        "' in table '", table_name,
                        "' from predecessor to derived due to complex origindescription: '",
@@ -217,7 +217,6 @@ process_table <- function(table_name,
 
   val_list <- process_values(val_filtered, table_name, verbose)
   val_meta <- val_list[[1]]
-  val_data <- val_list[[2]]
 
   # Build referenced_domains to track predecessor relationships
   # This helps with define.xml generation by documenting source domains
@@ -233,5 +232,5 @@ process_table <- function(table_name,
     result$value_metadata <-  val_meta
   }
 
-  return(result)
+  result
 }

@@ -65,7 +65,7 @@ format_table_metadata_html <- function(table_metadata) {
   </table>"
   )
 
-  return(html)
+  html
 }
 
 #' Format column metadata as HTML table with value-level metadata support

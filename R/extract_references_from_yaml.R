@@ -45,13 +45,7 @@
 #' # )
 #' }
 #'
-#' @importFrom yaml read_yaml
-#' @importFrom dplyr bind_rows mutate filter rename distinct group_by summarise
-#' @importFrom tidyr unnest_wider unnest_longer
-#' @importFrom stringr str_extract str_extract_all str_split
-#' @importFrom purrr flatten set_names
 #' @importFrom rlang .data
-#'
 #' @export
 extract_references_from_yaml <- function(path) {
 
@@ -70,7 +64,7 @@ extract_references_from_yaml <- function(path) {
   if ("column" %in% colnames(value_data) &&
         "whereclause" %in% colnames(value_data)) {
     value_data <- value_data |>
-      mutate(column = paste0(.data$column, " (", .data$whereclause, ")"))
+      dplyr::mutate(column = paste0(.data$column, " (", .data$whereclause, ")"))
   }
 
   # Pattern to match uppercase domain.column references
@@ -90,7 +84,7 @@ extract_references_from_yaml <- function(path) {
 
   # Extract domain-value pairs from references in column or value origin
   origin_columns <- column_data |>
-    bind_rows(value_data) |>
+    dplyr::bind_rows(value_data) |>
     dplyr::filter(!is.na(.data$origin)) |>
     # Extract everything in origin that looks like a domain.variable reference
     dplyr::mutate(origin_source =
@@ -136,5 +130,5 @@ extract_references_from_yaml <- function(path) {
   referenced_domains <- domain_variable$variable |>
     purrr::set_names(domain_variable$domain)
 
-  return(referenced_domains)
+  referenced_domains
 }

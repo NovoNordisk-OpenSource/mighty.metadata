@@ -4,6 +4,7 @@
 #' @param x A (nested) list containing NULL or missing records to be cleaned up
 #' @return The cleaned up list.
 #' @keywords internal
+#' @noRd
 clean_list <- function(x) {
   if (is.list(x)) {
     # Remove NULL or NA elements
@@ -11,9 +12,9 @@ clean_list <- function(x) {
     # Recursively clean nested lists
     x <- lapply(x, clean_list)
     if (length(x) == 0) return(NULL)
-    return(x)
+    x
   } else {
-    return(x)
+    x
   }
 }
 
@@ -22,6 +23,7 @@ clean_list <- function(x) {
 #' @param desc a vector of origin descriptions
 #' @return A logical vector indicating if those descriptions are of simple predecessor
 #' @keywords internal
+#' @noRd
 is_simple_predecessor <- function(desc) {
   # Pattern for simple predecessor: word.word with no additional text
   simple_pattern <- "^[A-Za-z0-9_]+\\.[A-Za-z0-9_]+$"
@@ -33,5 +35,5 @@ is_simple_predecessor <- function(desc) {
   result <- rep(TRUE, length(desc))  # Default to TRUE
   result[!is_na] <- grepl(simple_pattern, trimws(desc[!is_na]))
 
-  return(result)
+  result
 }

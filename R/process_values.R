@@ -5,6 +5,7 @@
 #' @param verbose Logical indicating whether to print messages about conversions (default: TRUE)
 #' @return a list containing the origin information from source_values as both a list and a dataframe.
 #' @keywords internal
+#' @noRd
 process_values <- function(val_filtered, table_name, verbose) {
   if (nrow(val_filtered) > 0) {
     # Process value-level metadata similar to column metadata
@@ -44,7 +45,7 @@ process_values <- function(val_filtered, table_name, verbose) {
         dplyr::select(column, whereclause, origindescription)
 
       if (nrow(complex_preds) > 0) {
-        for (i in 1:nrow(complex_preds)) {
+        for (i in seq_len(nrow(complex_preds))) {
           message(paste0("Converting value metadata for column '", complex_preds$column[i],
                          "' with where clause '", complex_preds$whereclause[i],
                          "' in table '", table_name,
@@ -82,7 +83,5 @@ process_values <- function(val_filtered, table_name, verbose) {
     val_data <- data.frame(NULL)
   }
 
-  return(list(val_meta, val_data))
-
+  list(val_meta, val_data)
 }
-

@@ -46,13 +46,6 @@
 #' head(metadata_col)
 #' }
 #'
-#' @importFrom purrr map map2 set_names flatten
-#' @importFrom dplyr bind_rows select mutate rename_with arrange left_join
-#'   distinct coalesce
-#' @importFrom tidyr expand_grid unnest_wider
-#' @importFrom stringr str_remove str_detect str_split
-#' @importFrom yaml read_yaml
-#'
 #' @export
 make_mdcol_from_yaml <- function(metadata_directory) {
 
@@ -108,7 +101,7 @@ make_mdcol_from_yaml <- function(metadata_directory) {
                   DISPLAYFORMAT = dplyr::coalesce(DISPLAYFORMAT, SDISPLAYFORMAT),
                   ORIGIN = ifelse(is.na(ORIGIN) & !is.na(STABLE) & !is.na(SCOLUMN),
                                   paste0("Source: ", STABLE, ".", SCOLUMN), ORIGIN)) |>
-    dplyr::select(-matches("^S")) |>
+    dplyr::select(-dplyr::matches("^S")) |>
     dplyr::rename(FORMAT = DISPLAYFORMAT)
 
   # Add core variables
@@ -147,6 +140,6 @@ make_mdcol_from_yaml <- function(metadata_directory) {
                   paste(missing_info_columns, collapse = ", ")))
   }
 
-  return(core_table)
+  core_table
 
 }
