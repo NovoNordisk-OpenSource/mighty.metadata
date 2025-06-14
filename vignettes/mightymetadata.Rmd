@@ -38,7 +38,7 @@ standard_path()
 master_lookup("adam")
 
 # Read master metadata file (not run)
-# metadata <- read_master("adam", filename = "cst_adam_metadata_file.xlsx")
+metadata <- read_master("adam", filename = "cst_adam_metadata_file.xlsx")
 ```
 
 ## Building ADaM Metadata
@@ -67,11 +67,11 @@ The package can analyze metadata to extract domain references:
 
 ```{r eval=FALSE}
 # Extract references from method text
-# references <- extract_domain_references("The variable is derived using ADSL.SEX and ADVS.AVAL")
-# print(references)  # Should return c("ADSL", "ADVS")
+references <- extract_domain_references("The variable is derived using ADSL.SEX and ADVS.AVAL")
+print(references)  # Should return c("ADSL", "ADVS")
 
 # Build referenced domains for a dataset
-# referenced_domains <- build_referenced_domains(adam_metadata, "ADAE")
+referenced_domains <- build_referenced_domains(adam_metadata, "ADAE")
 ```
 
 ## Writing to YAML Format

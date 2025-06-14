@@ -65,7 +65,7 @@ list(
 
 # Example of renamed predecessor variable
 list(
-  column = "TRTP", 
+  column = "TRTP",
   label = "Planned Treatment",
   type = "Char",
   source = "ADSL.TRT01P"
@@ -189,8 +189,8 @@ Domain references are built in two ways:
 
 ```{r eval=FALSE}
 # Extract domain references from method text
-# references <- extract_domain_references("The variable is derived using ADSL.SEX and ADVS.AVAL")
-# print(references)  # Returns c("ADSL", "ADVS")
+references <- extract_domain_references("The variable is derived using ADSL.SEX and ADVS.AVAL")
+print(references)  # Returns c("ADSL", "ADVS")
 ```
 
 ## Example ADaM Datasets
