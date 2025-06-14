@@ -4,129 +4,171 @@ A package for managing CDISC ADaM metadata in YAML format.
 
 ## Introduction
 
-The `mighty.metadata` package provides tools for working with CDISC ADaM metadata in YAML format. It facilitates the extraction, transformation, and management of metadata for clinical trial analysis datasets, making it easier to maintain, version, and document ADaM specifications.
+The `mighty.metadata` package provides tools for working with CDISC ADaM
+metadata in YAML format. It facilitates the extraction, transformation, and
+management of metadata for clinical trial analysis datasets, making it easier
+to maintain, version, and document ADaM specifications.
 
 Key features:
-- Extract metadata from standard sources
-- Build structured ADaM metadata
+
+- Transform raw metadata into structured ADaM format
 - Generate YAML files with proper formatting
-- Track domain references
-- View metadata in HTML format
+- Create column metadata datasets from YAML files
+- Track domain references across datasets
+- View metadata in interactive HTML format
+- Support for predecessor, derived, and assigned variables
 
-## Getting Started
-
-### Installation
-
-To install the development version from Azure DevOps:
+## Installation
 
 ```r
-# Install from private Novo Nordisk repository
-# Requires authentication and access to the BOS project
-remotes::install_git(
-  "https://dev.azure.com/novonordiskit/BOS/_git/mighty.metadata",
-  credentials = git2r::cred_token()
-)
+# Install from GitHub (development version)
+# devtools::install_github("your-org/mighty.metadata")
+library(mighty.metadata)
 ```
 
-### Dependencies
-
-This package requires:
-- R (>= 4.0.0)
-- dplyr
-- yaml
-- htmltools
-- NNremote
-- NNaccess
-
-## Usage
-
-### Basic Workflow
+## Quick Start
 
 ```r
-library(mighty.metadata)
-
-# 1. Read master metadata
-metadata <- read_master("adam", filename = "cst_adam_metadata_file.xlsx")
-
-# 2. Build ADaM metadata structure
+# Build ADaM metadata from source components
 adam_metadata <- build_adam_metadata(metadata)
 
-# 3. Write to YAML files
-output_dir <- "metadata/adam"
-write_adam_domain_yaml(
-  domain_data = adam_metadata$ADAE,
-  domain_name = "ADAE",
-  output_dir = output_dir
-)
+# Write to YAML files
+yaml_files <- write_adam_yaml(adam_metadata, output_dir = "yaml_output")
 
-# 4. View metadata in HTML
-view_define_html(adam_metadata$ADAE)
+# Create column metadata dataset from YAML files
+col_metadata <- make_mdcol_from_yaml("yaml_output")
+
+# View in HTML format
+view_define_html("yaml_output/adsl.yaml")
+
+# Extract domain references
+references <- extract_references_from_yaml("yaml_output/adae.yaml")
 ```
 
-### Working with Selected Datasets
+## Main Functions
 
-You can select specific domains to work with using standard R list manipulation:
+### Metadata Processing
 
-```r
-# Filter to only keep selected domains
-selected_domains <- c("ADSL", "ADAE", "ADVS")
-filtered_metadata <- adam_metadata[selected_domains]
+- `build_adam_metadata()` - Transform raw metadata into structured ADaM format
+- `make_mdcol_from_yaml()` - Create column metadata from YAML files
 
-# Or remove unwanted domains
-domains_to_remove <- c("ADQS", "ADPP")
-filtered_metadata <- adam_metadata[!names(adam_metadata) %in% domains_to_remove]
+### YAML Operations
+
+- `write_adam_domain_yaml()` - Write single domain to YAML file
+- `write_adam_yaml()` - Write all domains to YAML files
+
+### Reference Analysis
+
+- `extract_references_from_yaml()` - Extract domain references from YAML files
+
+### HTML Visualization
+
+- `view_define_html()` - View metadata in interactive HTML format
+- `format_table_metadata_html()` - Format table metadata as HTML
+- `format_column_metadata_html()` - Format column metadata as HTML
+
+## Variable Types
+
+The package handles three types of ADaM variables according to CDISC standards:
+
+### 1. Predecessor Variables
+
+Inherit metadata from source datasets:
+
+```yaml
+USUBJID:
+  column: DM.USUBJID  # Simple reference
 ```
 
-### Writing Multiple Domains
+### 2. Derived Variables
 
-To write multiple domains at once:
+Include derivation methods:
 
-```r
-# Write all domains to YAML files
-output_dir <- "metadata/adam"
-
-# Option 1: Using a loop
-for (domain_name in names(adam_metadata)) {
-  write_adam_domain_yaml(
-    domain_data = adam_metadata[[domain_name]],
-    domain_name = domain_name,
-    output_dir = output_dir
-  )
-}
-
-# Option 2: Using lapply for more concise code
-yaml_files <- mapply(
-  write_adam_domain_yaml,
-  domain_data = adam_metadata,
-  domain_name = names(adam_metadata),
-  MoreArgs = list(output_dir = output_dir)
-)
+```yaml
+AAGE:
+  column: AAGE
+  label: Analysis Age
+  type: integer
+  origin: |
+    Derived from DM.AGE using the following algorithm:
+    - Convert age to integer
+    - Apply study-specific rules
 ```
 
-## Package Structure
+### 3. Assigned Variables
 
-The package is organized into several modules:
+Include assignment information:
 
-- **Standard Utilities**: Functions for accessing CDISC standard libraries
-- **Domain References**: Tools for tracking references between domains
-- **Metadata Building**: Functions to transform raw metadata into structured format
-- **YAML Handling**: Tools for reading and writing YAML files
-- **HTML Formatting**: Functions for viewing metadata in HTML format
+```yaml
+PARAMCD:
+  column: PARAMCD
+  label: Parameter Code
+  origin: "Assigned: Fixed value based on parameter"
+```
+
+## YAML Structure
+
+Generated YAML files follow this structure:
+
+```yaml
+table_metadata:
+  table: ADSL
+  label: Subject Level Analysis Dataset
+  class: SUBJECT LEVEL ANALYSIS DATASET
+  structure: One record per subject
+  keys: [STUDYID, USUBJID]
+
+column_metadata:
+  USUBJID:
+    column: DM.USUBJID
+  AAGE:
+    column: AAGE
+    label: Analysis Age
+    type: integer
+    origin: |
+      Derivation algorithm here
+
+value_metadata:
+  PARAMCD:
+    "WEIGHT":
+      column: PARAMCD
+      whereclause: PARAMCD = "WEIGHT"
+      origin: "Assigned: Weight parameter"
+```
+
+## HTML Features
+
+Interactive HTML visualization includes:
+
+- Sortable and filterable tables
+- Expandable value-level metadata (VLM)
+- Dark/light theme toggle
+- Professional documentation styling
+- Cross-references between domains
+
+## Dependencies
+
+- `dplyr` - Data manipulation
+- `yaml` - YAML file operations
+- `stringr` - String processing
+- `tidyr` - Data tidying
+- `purrr` - Functional programming
+- `rstudioapi` - RStudio integration
 
 ## Documentation
 
 For more detailed information, see the package vignettes:
 
-- `vignette("mightymetadata")`: Main usage documentation
-- `vignette("yaml-format")`: Details on YAML format structure
-- `vignette("adam-metadata")`: Information about ADaM metadata concepts
+- `vignette("mightymetadata")` - Main usage documentation
+- `vignette("yaml-format")` - YAML format structure details
+- `vignette("adam-metadata")` - ADaM metadata concepts
 
 ## Contributing
 
-This package is currently under development. Contributions are welcome through:
+We welcome contributions through:
 
 1. Reporting issues
-2. Suggesting enhancements
+2. Suggesting enhancements  
 3. Creating pull requests
 
 Please contact the BOS team for guidance on contributing.
@@ -134,12 +176,3 @@ Please contact the BOS team for guidance on contributing.
 ## License
 
 MIT License, Copyright (c) Novo Nordisk A/S
-TODO: Describe and show how to build your code and run the tests. 
-
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
