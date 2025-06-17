@@ -1,7 +1,15 @@
+#' Extract origin information from source_values when present
+#' @description Helper function for getting origin information for values
+#' @param val_filtered A dataframe containing the value definitions for the relevant table
+#' @param table_name The name of the table whose origins are being considered
+#' @param verbose Logical indicating whether to print messages about conversions (default: TRUE)
+#' @return a list containing the origin information from source_values as both a list and a dataframe.
+#' @keywords internal
+#' @noRd
 process_values <- function(val_filtered, table_name, verbose) {
   if (nrow(val_filtered) > 0) {
     # Process value-level metadata similar to column metadata
-    val_data <-  val_filtered |>
+    val_data <- val_filtered |>
       dplyr::mutate(
         # Clean column names by removing trailing periods
         column = gsub("\\s*\\.\\s*$", "", column),
@@ -14,8 +22,8 @@ process_values <- function(val_filtered, table_name, verbose) {
           tolower(origin) == "predecessor" &
           !is_simple_predecessor(origindescription),
 
-        # Create method field using the same logic as for columns
-        method = dplyr::case_when(
+        # Create origin field using the same logic as for columns
+        unified_origin = dplyr::case_when(
           is_complex_predecessor ~ paste0("Source: ", origindescription),
           !is.na(origin) & tolower(origin) == "predecessor" ~ paste0("Predecessor: ", origindescription),
           !is.na(origin) & tolower(origin) == "derived" & !is.na(algorithm) ~ algorithm,
@@ -37,7 +45,7 @@ process_values <- function(val_filtered, table_name, verbose) {
         dplyr::select(column, whereclause, origindescription)
 
       if (nrow(complex_preds) > 0) {
-        for (i in 1:nrow(complex_preds)) {
+        for (i in seq_len(nrow(complex_preds))) {
           message(paste0("Converting value metadata for column '", complex_preds$column[i],
                          "' with where clause '", complex_preds$whereclause[i],
                          "' in table '", table_name,
@@ -50,16 +58,16 @@ process_values <- function(val_filtered, table_name, verbose) {
     val_meta <-  lapply(seq_len(nrow(val_data)), function(i) {
       row <- val_data[i, ]
 
-      method_text <- row$method
-      if (!is.na(method_text)) {
+      origin_text <- row$unified_origin
+      if (!is.na(origin_text)) {
         # Standardize newlines
-        method_text <- gsub("\r\n", "\n", method_text)
+        origin_text <- gsub("\r\n", "\n", origin_text)
       }
 
       result <- list(
         column = row$column,
         whereclause = row$whereclause,
-        method = method_text
+        origin = origin_text
       )
 
       # Add origin for complex predecessors
@@ -75,7 +83,5 @@ process_values <- function(val_filtered, table_name, verbose) {
     val_data <- data.frame(NULL)
   }
 
-  return(list(val_meta, val_data))
-
+  list(val_meta, val_data)
 }
-

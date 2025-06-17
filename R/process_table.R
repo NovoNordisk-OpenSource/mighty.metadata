@@ -1,4 +1,19 @@
-# Function to process a single table
+#' Process metadata for a single table
+#'
+#' @param table_name Character string specifying the table name to process
+#' @param source_tables Data frame containing table-level metadata
+#' @param source_columns Data frame containing column-level metadata
+#' @param source_values Data frame containing value-level metadata
+#' @param valid_classes Character vector of valid class names
+#' @param valid_subclasses Character vector of valid subclass names
+#' @param verbose Logical indicating whether to print processing messages
+#'
+#' @return A list containing processed metadata with components:
+#'   \item{table_metadata}{List of table-level metadata}
+#'   \item{column_metadata}{List of column-level metadata}
+#'   \item{value_metadata}{List of value-level metadata (if applicable)}
+#'
+#' @noRd
 process_table <- function(table_name,
                           source_tables,
                           source_columns,
@@ -87,8 +102,8 @@ process_table <- function(table_name,
         TRUE ~ NA_character_
       ),
 
-      # Create unified method field based on origin
-      method = dplyr::case_when(
+      # Create unified origin field based
+      unified_origin = dplyr::case_when(
         is_complex_predecessor ~ paste0("Source: ", origindescription),
         is_predecessor ~ paste0("Predecessor: ", origindescription),
         !is.na(origin) & tolower(origin) == "derived" & !is.na(algorithm) ~ paste0("Derived: ", algorithm),
@@ -105,7 +120,7 @@ process_table <- function(table_name,
     # Create a flow-style dictionary of formatting information.
     dplyr::mutate(
       dtype = ifelse(!is.na(type), paste0('type: "', type, '"'), NA_character_),
-      dlength = ifelse(!is.na(length), paste0('length: ', length), NA_character_),
+      dlength = ifelse(!is.na(length), paste0("length: ", length), NA_character_),
       ddisplayformat = ifelse(!is.na(displayformat), paste0('displayformat: "', displayformat, '"'), NA_character_)
     ) |>
     tidyr::unite(format, dtype, dlength, sep = ", ", ddisplayformat, na.rm = TRUE) |>
@@ -118,7 +133,7 @@ process_table <- function(table_name,
       dplyr::select(column, origindescription)
 
     if (nrow(complex_preds) > 0) {
-      for (i in 1:nrow(complex_preds)) {
+      for (i in seq_len(nrow(complex_preds))) {
         message(paste0("Converting column '", complex_preds$column[i],
                        "' in table '", table_name,
                        "' from predecessor to derived due to complex origindescription: '",
@@ -143,6 +158,7 @@ process_table <- function(table_name,
       # For renamed predecessor columns, include column and source
       list(
         column = row$column_final,
+        label = row$label,
         source = row$source
       )
     } else if (row$is_predecessor && !row$is_renamed && !row$is_adam_predecessor) {
@@ -163,10 +179,10 @@ process_table <- function(table_name,
       )
     } else if (row$is_complex_predecessor) {
       # For complex predecessors (now treated as derived)
-      method_text <- row$method
-      if (!is.na(method_text)) {
+      origin_text <- row$unified_origin
+      if (!is.na(origin_text)) {
         # Standardize newlines
-        method_text <- gsub("\r\n", "\n", method_text)
+        origin_text <- gsub("\r\n", "\n", origin_text)
       }
 
       list(
@@ -174,15 +190,15 @@ process_table <- function(table_name,
         label = row$label,
         format = row$format,
         xmlcodelist = row$xmlcodelist,
-        method = method_text,
+        origin = origin_text,
         corefl = row$corefl
       )
     } else {
       # For derived/assigned columns, include all relevant metadata
-      method_text <-  row$method
-      if (!is.na(method_text)) {
+      origin_text <-  row$unified_origin
+      if (!is.na(origin_text)) {
         # Standardize newlines
-        method_text <- gsub("\r\n", "\n", method_text)
+        origin_text <- gsub("\r\n", "\n", origin_text)
       }
 
       list(
@@ -190,7 +206,7 @@ process_table <- function(table_name,
         label = row$label,
         format = row$format,
         xmlcodelist = row$xmlcodelist,
-        method = method_text,
+        origin = origin_text,
         corefl = row$corefl
       )
     }
@@ -201,12 +217,9 @@ process_table <- function(table_name,
 
   val_list <- process_values(val_filtered, table_name, verbose)
   val_meta <- val_list[[1]]
-  val_data <- val_list[[2]]
 
   # Build referenced_domains to track predecessor relationships
   # This helps with define.xml generation by documenting source domains
-
-  referenced_domains <- extract_references(col_data, val_data, val_filtered, table_name)
 
   # Return the complete table metadata structure
   result <- list(
@@ -219,10 +232,5 @@ process_table <- function(table_name,
     result$value_metadata <-  val_meta
   }
 
-  # Add referenced_domains only if they exist
-  if (length(referenced_domains) > 0) {
-    result$referenced_domains <- referenced_domains
-  }
-
-  return(result)
+  result
 }

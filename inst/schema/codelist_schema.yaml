@@ -1,4 +1,5 @@
-$schema: "http://json-schema.org/draft-07/schema#"
+---
+$schema: "https://json-schema.org/draft-07/schema#"
 title: Codelist Schema
 description: Schema for codelists in clinical trial metadata
 type: object
@@ -32,4 +33,5 @@ properties:
           description: Decoded text or label for the coded value
       required: [codedvaluechar, decodetext]
     description: Array of code-decode pairs
-required: [xmlcodelist, codelistname, codelistdescription, codelistdatatype, codes]
+required:
+  [xmlcodelist, codelistname, codelistdescription, codelistdatatype, codes]

@@ -1,8 +1,11 @@
 Package: mighty.metadata
 Title: CDISC ADaM Metadata Management in YAML Format
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "AIKP (Ari Siggaard Knoph)", role = c("aut", "cre"), email = "aikp@novonordisk.com")
+Authors@R: c(
+    person("Ari", "Siggaard Knoph", email = "aikp@novonordisk.com", role = c("aut", "cre")),
+    person("Esben","Tore Moelgaard", email = "ebtm@novonordisk.com", role = c("aut")),
+    person("Novo Nordisk A/S", role = c("cph"))
+  )
 Description: Tools for working with CDISC ADaM metadata in YAML format. This package 
     provides functions for extracting metadata from standard sources, building 
     structured ADaM metadata, generating YAML files, and HTML visualization. 
@@ -11,18 +14,16 @@ Description: Tools for working with CDISC ADaM metadata in YAML format. This pac
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.0
+RoxygenNote: 7.3.2
 Imports:
     dplyr,
     yaml,
-    NNremote,
-    NNaccess,
-    htmltools,
     stringr,
-    methods,
+    rlang,
     utils,
     tidyr,
-    purrr
+    purrr,
+    rstudioapi
 Suggests: 
     knitr,
     quarto,
@@ -30,3 +31,6 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: quarto, knitr
+URL: https://refactored-doodle-rw3leey.pages.github.io/
+SystemRequirements: Quarto command line tool
+    (<https://github.com/quarto-dev/quarto-cli>).

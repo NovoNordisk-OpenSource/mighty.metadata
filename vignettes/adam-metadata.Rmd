@@ -1,9 +1,10 @@
 ---
 title: "Working with ADaM Metadata"
 subtitle: "Understanding CDISC ADaM Metadata Structure"
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Working with ADaM Metadata}
-  %\VignetteEngine{quarto::html}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 knitr:
   opts_chunk:
@@ -11,8 +12,7 @@ knitr:
     comment: '#>'
 ---
 
-```{r}
-#| label: setup
+```{r setup}
 library(mighty.metadata)
 ```
 
@@ -65,7 +65,7 @@ list(
 
 # Example of renamed predecessor variable
 list(
-  column = "TRTP", 
+  column = "TRTP",
   label = "Planned Treatment",
   type = "Char",
   source = "ADSL.TRT01P"
