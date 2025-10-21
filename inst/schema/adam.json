@@ -1,0 +1,347 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/NN-OpenSource/mighty.metadata/refs/heads/main/inst/schema/adam.json",
+  "title": "Mighty Metadata ADaM specification",
+  "description": "Common schema for ADaM dataset specification in the mightyverse",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Name of the ADaM dataset",
+      "type": "string"
+    },
+    "label": {
+      "description": "Label of the ADaM dataset",
+      "type": "string"
+    },
+    "class": {
+      "description": "CDISC class of the dataset",
+      "$ref": "#/definitions/cdisc/class"
+    },
+    "subclass": {
+      "description": "CDISC subclass of the dataset",
+      "$ref": "#/definitions/cdisc/subclass"
+    },
+    "structure": {
+      "description": "Text description of the structure of the dataset",
+      "type": "string"
+    },
+    "keys": {
+      "description": "Key variables for the dataset",
+      "$ref": "#/definitions/keys"
+    },
+    "comment": {
+      "description": "Comment to the dataset",
+      "type": "string"
+    },
+    "population": {
+      "description": "Population and base domain used to create the dataset",
+      "$ref": "#/definitions/mighty/population"
+    },
+    "columns": {
+      "description": "Columns in the dataset",
+      "$ref": "#/definitions/columns"
+    },
+    "rows": {
+      "description": "Row deriviations for mighty",
+      "$ref": "#/definitions/rows"
+    },
+    "parameters": {
+      "description": "Parameters in a BDS dataset",
+      "$ref": "#/definitions/parameters"
+    }
+  },
+  "required": [
+    "id",
+    "label",
+    "class",
+    "structure",
+    "keys",
+    "columns"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "keys": {
+      "description": "Keys are always unique and of minimum length 1",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "columns": {
+      "description": "List of column specifications",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/column"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "column": {
+      "description": "Specification of a single column",
+      "type": "object",
+      "properties": {
+          "id": {
+            "description": "Name of the column",
+            "type": "string"
+          },
+          "label": {
+            "description": "Label of the column",
+            "type": "string"
+          },
+          "method": {
+            "description": "How to derive the column (free text)",
+            "type": "string"
+          },
+          "origin": {
+            "description": "Origin type of the column",
+            "$ref": "#/definitions/cdisc/origin"
+          },
+          "codelist": {
+            "description": "Codelist of possible values of the column",
+            "type": "string"
+          },
+          "format": {
+            "description": "Data format of the column",
+            "$ref": "#/definitions/standard/dataformat"
+          },
+          "component": {
+            "description": "Mighty component to create the column",
+            "$ref": "#/definitions/mighty/component"
+          },
+          "depends": {
+            "description": "dependencies required to create the column",
+            "$ref": "#/definitions/mighty/depends"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+    },
+    "rows": {
+      "description": "List of row action specifications. Typically used when adding additional rows to the data.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/row"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "row": {
+      "description": "Specification of a single row action",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Unique identifier of the action. Used to reference in other places, e.g. as a dependency.",
+          "type": "string"
+        },
+        "method": {
+          "description": "How to derive the row action (free text)",
+          "type": "string"
+        },
+        "component": {
+          "description": "Mighty component to do the row action",
+          "$ref": "#/definitions/mighty/component"
+        },
+        "depends": {
+          "description": "Dependencies needed before the action can be carried out",
+          "$ref": "#/definitions/mighty/depends"
+        }
+      },
+      "required": [
+        "id",
+        "method"
+      ],
+      "additionalProperties": false
+    },
+    "parameters": {
+      "description": "Specification of parameters in a BDS dataset",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/parameter"
+      }
+    },
+    "parameter": {
+      "type": "object",
+      "description": "Specification of a single BDS parameter",
+      "properties": {
+        "id": {
+          "description": "Parameter id (PARAMCD)",
+          "type": "string"
+        },
+        "label": {
+          "description": "Parameter label (PARAM)",
+          "type": "string"
+        },
+        "columns": {
+          "description": "Additional columns to derive for the parameter, e.g. AVAL and AVALC",
+          "$ref": "#/definitions/columns"
+        },
+        "component": {
+          "description": "Mighty component used to derive the parameter and all relevant columns",
+          "$ref": "#/definitions/mighty/component"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "columns"
+      ],
+      "additionalProperties": false
+    },
+    "standard": {
+      "description": "Additional definitions used for e.g. define.xml",
+      "dataformat": {
+        "description": "Format used to display the data",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Data type",
+            "type": "string",
+            "enum": [
+              "numeric",
+              "character",
+              "date",
+              "datetime"
+            ]
+          },
+          "length": {
+            "description": "Maximum length of content",
+            "type": "integer",
+            "minimum": 1
+          },
+          "display": {
+            "description": "SAS display format",
+            "type": "string",
+            "pattern": "\\.$"
+          }
+        },
+        "required": [
+          "type",
+          "length"
+        ]
+      }
+    },
+    "cdisc": {
+      "description": "Definitions from CDISC standards",
+      "class": {
+        "description": "Subset of CDISC controlled terminology C103329",
+        "type": "string",
+        "enum": [
+          "SUBJECT LEVEL ANALYSIS DATASET",
+          "BASIC DATA STRUCTURE",
+          "OCCURRENCE DATA STRUCTURE",
+          "ADAM OTHER"
+        ]
+      },
+      "subclass": {
+        "description": "Union of CDISC controlled terminology C165635 and C176227",
+        "type": "string",
+        "enum": [
+          "TIME-TO-EVENT",
+          "NON-COMPARTMENTAL ANALYSIS",
+          "POPULATION PHARMACOKINETIC ANALYSIS",
+          "ADVERSE EVENT"
+        ]
+      },
+      "origin": {
+        "description": "Controlled terminology C170449",
+        "type": "string",
+        "enum": [
+          "Assigned",
+          "Collected",
+          "Derived",
+          "Not Available",
+          "Other",
+          "Predecessor",
+          "Protocol"
+        ]
+      }
+    },
+    "mighty": {
+      "description": "Definitions only relevant when using mighty to generate code",
+      "population": {
+        "description": "mighty - specification of the base domain(s) and any global filters to apply",
+        "type": "object",
+        "properties": {
+          "base": {
+            "description": "mighty - domains to filter and combine to create initial dataset",
+            "$ref": "#/definitions/mighty/input_list"
+          },
+          "global": {
+            "description": "mighty - global filters to apply after combining base datasets",
+            "$ref": "#/definitions/mighty/input_list"
+          }
+        },
+        "required": [
+          "base"
+        ]
+      },
+      "input_list": {
+        "description": "mighty - list of input datasets",
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/mighty/input"
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      },
+      "input": {
+        "description": "mighty - single input dataset with filters",
+        "type": "object",
+        "properties": {
+          "domain": {
+            "description": "Name of the dataset to use",
+            "type": "string"
+          },
+          "depends": {
+            "description": "Which columns in the dataset the filter depends on",
+            "$ref": "#/definitions/mighty/depends"
+          },
+          "filter": {
+            "description": "How to filter the dataset. Must be an R expression that can be evaluated.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "domain",
+          "depends",
+          "filter"
+        ],
+        "additionalProperties": false
+      },
+      "depends": {
+        "description": "List of dependencies needed before the component code can be evaluated",
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      },
+      "component": {
+        "description": "mighty component used to carry out the desired deriviation",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ID of the component. Either name of standard or file path to local component.",
+            "type": "string"
+          },
+          "with": {
+            "description": "named list of input arguments needed to render component",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

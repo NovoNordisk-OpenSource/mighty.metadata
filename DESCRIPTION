@@ -2,35 +2,40 @@ Package: mighty.metadata
 Title: CDISC ADaM Metadata Management in YAML Format
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Ari", "Siggaard Knoph", email = "aikp@novonordisk.com", role = c("aut", "cre")),
-    person("Esben","Tore Moelgaard", email = "ebtm@novonordisk.com", role = c("aut")),
-    person("Novo Nordisk A/S", role = c("cph"))
+    person("Ari", "Siggaard Knoph", , "aikp@novonordisk.com", role = c("aut", "cre")),
+    person("Esben", "Tore Moelgaard", , "ebtm@novonordisk.com", role = "aut"),
+    person("Aksel", "Thomsen", , "oath@novonordisk.com", role = "aut"),
+    person("Novo Nordisk A/S", role = "cph")
   )
-Description: Tools for working with CDISC ADaM metadata in YAML format. This package 
-    provides functions for extracting metadata from standard sources, building 
-    structured ADaM metadata, generating YAML files, and HTML visualization. 
-    It supports domain references tracking and maintains proper formatting for 
-    method fields in YAML output.
+Description: Tools for working with CDISC ADaM metadata in YAML format.
+    This package provides functions for extracting metadata from standard
+    sources, building structured ADaM metadata, generating YAML files, and
+    HTML visualization.  It supports domain references tracking and
+    maintains proper formatting for method fields in YAML output.
 License: MIT + file LICENSE
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+URL: https://refactored-doodle-rw3leey.pages.github.io/
+Depends: 
+    R (>= 4.1)
 Imports:
     dplyr,
-    yaml,
-    stringr,
-    rlang,
-    utils,
-    tidyr,
     purrr,
-    rstudioapi
+    rlang,
+    rstudioapi,
+    stringr,
+    tidyr,
+    utils,
+    yaml
 Suggests: 
     knitr,
     quarto,
     rmarkdown,
     testthat (>= 3.0.0)
+VignetteBuilder: 
+    knitr,
+    quarto
 Config/testthat/edition: 3
-VignetteBuilder: quarto, knitr
-URL: https://refactored-doodle-rw3leey.pages.github.io/
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
 SystemRequirements: Quarto command line tool
     (<https://github.com/quarto-dev/quarto-cli>).
