@@ -182,6 +182,10 @@
         "component": {
           "description": "Mighty component used to derive the parameter and all relevant columns",
           "$ref": "#/definitions/mighty/component"
+        },
+        "depends": {
+          "description": "Dependencies required to create the parameter",
+          "$ref": "#/definitions/mighty/depends"
         }
       },
       "required": [

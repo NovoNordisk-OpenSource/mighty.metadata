@@ -33,8 +33,6 @@ columns:
       length: 2
       display: "2."
     origin: Predecessor
-    depends:
-      - VS.STUDYID
     codelist: id of codelist
     method: VS.STUDYID
 
@@ -123,8 +121,8 @@ columns:
     label: BMI Group at baseline
     method: AVALC where PARAMCD = "BMIGRP" for the baseline visit
     depends:
-      - imputations.baseline
-      - parameters.bmigrp # Either explicit or from component
+      - rows.baseline
+      - parameters.BMIGRP # Either explicit or from component
     component:
       id: bds_copy_param
       with:
@@ -155,6 +153,7 @@ parameters: # Only additional parameters to be cacluated not coming from base do
     
   - id: BMIGRP
     label: Body Mass Index Group
+    depends: parameters.BMI
     columns:
       - id: AVALC
         method: BMI grouped in <20, 20-<25, 25-<30, 30+
