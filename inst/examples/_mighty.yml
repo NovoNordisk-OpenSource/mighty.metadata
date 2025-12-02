@@ -11,19 +11,15 @@ population:
     - domain: lb
       depends:
         - lbtestcd
-      filter:
-        - lbtestcd == "B"
+      filter: lbtestcd == "B"
     - domain: eg
       depends:
         - egtestcd
-      filter:
-        - egtestcd == "A"
+      filter: egtestcd == "A"
   global:
-    - domain: ADSL
+    - filter: SAFFL == "Y"
       depends:
        - SAFFL
-      filter:
-       - SAFFL = "Y"
     
 columns:
   - id: STUDYID

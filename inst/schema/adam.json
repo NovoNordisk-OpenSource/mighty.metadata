@@ -280,28 +280,28 @@
         "properties": {
           "base": {
             "description": "mighty - domains to filter and combine to create initial dataset",
-            "$ref": "#/definitions/mighty/input_list"
+            "$ref": "#/definitions/mighty/base_input_list"
           },
           "global": {
             "description": "mighty - global filters to apply after combining base datasets",
-            "$ref": "#/definitions/mighty/input_list"
+            "$ref": "#/definitions/mighty/global_input_list"
           }
         },
         "required": [
           "base"
         ]
       },
-      "input_list": {
-        "description": "mighty - list of input datasets",
+      "base_input_list": {
+        "description": "mighty - list of base input datasets",
         "type": "array",
         "items": {
-          "$ref": "#/definitions/mighty/input"
+          "$ref": "#/definitions/mighty/base_input"
         },
         "minItems": 1,
         "uniqueItems": true
       },
-      "input": {
-        "description": "mighty - single input dataset with filters",
+      "base_input": {
+        "description": "mighty - single base input dataset with filters",
         "type": "object",
         "properties": {
           "domain": {
@@ -313,17 +313,40 @@
             "$ref": "#/definitions/mighty/depends"
           },
           "filter": {
-            "description": "How to filter the dataset. Must be an R expression that can be evaluated.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "$ref": "#/definitions/mighty/filter"
           }
         },
         "required": [
           "domain",
           "depends",
           "filter"
+        ],
+        "additionalProperties": false
+      },
+      "global_input_list": {
+        "description": "mighty - list of global filters",
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/mighty/global_input"
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      },
+      "global_input": {
+        "description": "mighty - single global filter",
+        "type": "object",
+        "properties": {
+          "filter": {
+            "$ref": "#/definitions/mighty/filter"
+          },
+          "depends": {
+            "description": "Which columns the filter depends on",
+            "$ref": "#/definitions/mighty/depends"
+          }
+        },
+        "required": [
+          "filter",
+          "depends"
         ],
         "additionalProperties": false
       },
@@ -335,6 +358,10 @@
         },
         "minItems": 1,
         "uniqueItems": true
+      },
+      "filter": {
+        "description": "Filter specification. Must be an R expression that can be evaluated.",
+        "type": "string"
       },
       "component": {
         "description": "mighty component used to carry out the desired deriviation",
