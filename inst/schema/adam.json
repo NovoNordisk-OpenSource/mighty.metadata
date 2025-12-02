@@ -62,12 +62,19 @@
   "definitions": {
     "keys": {
       "description": "Keys are always unique and of minimum length 1",
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "minItems": 1,
-      "uniqueItems": true
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        {
+          "type": "string"
+        }
+      ]
     },
     "columns": {
       "description": "List of column specifications",
@@ -227,7 +234,7 @@
           "display": {
             "description": "SAS display format",
             "type": "string",
-            "pattern": "\\.$"
+            "pattern": "\\."
           }
         },
         "required": [
@@ -352,12 +359,19 @@
       },
       "depends": {
         "description": "List of dependencies needed before the component code can be evaluated",
-        "type": "array",
-        "items": {
-          "type": "string"
-        },
-        "minItems": 1,
-        "uniqueItems": true
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          {
+            "type": "string"
+          }
+        ]
       },
       "filter": {
         "description": "Filter specification. Must be an R expression that can be evaluated.",

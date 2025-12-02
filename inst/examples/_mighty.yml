@@ -25,7 +25,7 @@ columns:
   - id: STUDYID
     label: Study Identifier
     format: 
-      type: numeric
+      type: integer
       length: 2
       display: "2."
     origin: Predecessor

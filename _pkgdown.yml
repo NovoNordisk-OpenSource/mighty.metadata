@@ -1,4 +1,27 @@
----
-url: https://refactored-doodle-rw3leey.pages.github.io/
+url: https://nn-opensource.github.io/mighty.metadata
+
 template:
   bootstrap: 5
+
+reference:
+  - title: Mighty metadata
+    description: |
+      Work with ADaM metadata.
+    contents:
+    - mighty_metadata
+    - columns
+    - rows
+    - parameters
+  - title: Utilities
+    description: |
+      Utilities to convert Excel documentation to the new yaml format.
+    contents:
+    - extract_references_from_yaml
+    - format_column_metadata_html
+    - format_table_metadata_html
+    - make_mdcol_from_yaml
+    - view_define_html
+    - write_adam_domain_yaml
+    - write_adam_yaml
+    - build_adam_metadata
+    - reexports
