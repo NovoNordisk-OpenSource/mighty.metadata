@@ -16,7 +16,6 @@ reference:
     description: |
       Utilities to convert Excel documentation to the new yaml format.
     contents:
-    - extract_references_from_yaml
     - format_column_metadata_html
     - format_table_metadata_html
     - make_mdcol_from_yaml

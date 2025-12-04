@@ -8,6 +8,7 @@
 #' @noRd
 process_values <- function(val_filtered, table_name, verbose) {
   if (nrow(val_filtered) > 0) {
+
     # Process value-level metadata similar to column metadata
     val_data <- val_filtered |>
       dplyr::mutate(
@@ -55,26 +56,21 @@ process_values <- function(val_filtered, table_name, verbose) {
       }
     }
 
-    val_meta <-  lapply(seq_len(nrow(val_data)), function(i) {
-      row <- val_data[i, ]
+    # Group columns with same parameter
+    val_grouped <- val_data |>
+      dplyr::group_by(.data$paramcd, .data$endpoint) |>
+      dplyr::summarise(column = list(.data$column),
+                       method_text = list(gsub("\r\n", "\n", .data$unified_origin)))
 
-      origin_text <- row$unified_origin
-      if (!is.na(origin_text)) {
-        # Standardize newlines
-        origin_text <- gsub("\r\n", "\n", origin_text)
-      }
+    val_meta <- lapply(seq_len(nrow(val_grouped)), function(i) {
+      row <- val_grouped[i, ]
 
       result <- list(
-        column = row$column,
-        whereclause = row$whereclause,
-        origin = origin_text
+        id = row$paramcd,
+        label = row$endpoint,
+        columns = purrr::map2(unlist(row$column), unlist(row$method_text),
+                              \(id, method) list(id = id, method = method))
       )
-
-      # Add origin for complex predecessors
-      if (row$is_complex_predecessor) {
-        result$origin <- "derived"
-        result$derivation_type <- "assigned"
-      }
 
       clean_list(result)
     })

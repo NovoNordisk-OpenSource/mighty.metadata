@@ -25,7 +25,7 @@ The path to the created YAML file
 }
 \description{
 Writes a single ADaM domain metadata to a YAML file with proper formatting.
-Origin fields are formatted as multiline strings with literal block scalar style (|-)
+Method fields are formatted as multiline strings with literal block scalar style (|-)
 regardless of whether they contain actual line breaks. Long strings are wrapped
 at word boundaries to improve readability.
 }

@@ -20,11 +20,11 @@ population:
     - filter: SAFFL == "Y"
       depends:
        - SAFFL
-    
+
 columns:
   - id: STUDYID
     label: Study Identifier
-    format: 
+    format:
       type: integer
       length: 2
       display: "2."
@@ -45,7 +45,7 @@ columns:
         source: ADSL
         variable: SAFFL
         by: USUBJID
-  
+
   - id: TRTP
     label: Planned Treatment
     method: ADSL.TRT01P
@@ -73,7 +73,7 @@ columns:
       with:
         input: VISITNUM
         variable: AVISITN
-  
+
   - id: AVISIT
     label: Analysis Visit
     method: VISIT converted to title case
@@ -82,7 +82,7 @@ columns:
       with:
         input: VISIT
         variable: AVISIT
-  
+
   - id: PARAMCD
     label: Parameter Code
     method: For readings in VS set to VS.VSTESTCD. Otherwise see parameters.
@@ -91,7 +91,7 @@ columns:
       with:
         input: VSTESTCD
         variable: PARAMCD
-  
+
   - id: PARAM
     label: Parameter
     method: For readings in VS set to VS.VSTEST. Otherwise see parameters.
@@ -100,7 +100,7 @@ columns:
       with:
         input: VSTEST
         variable: PARAM
-  
+
   - id: AVAL
     label: Analysis Value
     method: For readings in VS set to VS.VSSTRESN. Otherwise see parameters.
@@ -109,7 +109,7 @@ columns:
       with:
         input: VSSTRESN
         variable: AVAL
-  
+
   - id: AVALC
     label: Analysis Value (C)
 
@@ -146,7 +146,7 @@ parameters: # Only additional parameters to be cacluated not coming from base do
         height: HEIGHT
         weight: WEIGHT
         by: [USUBJID, AVISITN]
-    
+
   - id: BMIGRP
     label: Body Mass Index Group
     depends: parameters.BMI

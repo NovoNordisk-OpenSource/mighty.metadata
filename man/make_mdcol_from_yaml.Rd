@@ -4,11 +4,22 @@
 \alias{make_mdcol_from_yaml}
 \title{Create ADaM Column Metadata from YAML Files}
 \usage{
-make_mdcol_from_yaml(metadata_directory)
+make_mdcol_from_yaml(
+  metadata_directory,
+  sdtm_columns = NULL,
+  max_recursion = 5
+)
 }
 \arguments{
 \item{metadata_directory}{Character string specifying the directory path
 containing the YAML metadata files.}
+
+\item{sdtm_columns}{Data frame containing sdtm metadata information.
+Expected columns are table, column, label, type, length.
+Can be found in dm/sdtm_map/submit_columns.sas7bdat.}
+
+\item{max_recursion}{Numeric specifying maximum recursion depth when tracing
+column metadata information.}
 }
 \value{
 A tibble containing the processed metadata collection with the following
@@ -19,7 +30,7 @@ columns:
 \item TLABEL - Table label
 \item COLUMN - Column name
 \item LABEL - Column label
-\item ORIGIN - Origin or source description
+\item METHOD - Method or source description
 \item TYPE - Data type
 \item LENGTH - Field length
 \item FORMAT - Display format
@@ -28,7 +39,8 @@ columns:
 }
 \description{
 Reads and processes YAML files containing table and column metadata information,
-combining them into a single ADaM column metadata dataset. The function processes source
+combining them into a single ADaM column metadata dataset. The function also
+resolves source references (including inherited core columns that have sources)
 information, standardizes column names, and provides warnings for potential
 metadata issues.
 }

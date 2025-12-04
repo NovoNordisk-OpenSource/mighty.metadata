@@ -1,6 +1,6 @@
 Package: mighty.metadata
 Title: CDISC ADaM Metadata Management in YAML Format
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: c(
     person("Ari", "Siggaard Knoph", , "aikp@novonordisk.com", role = c("aut", "cre")),
     person("Esben", "Tore Moelgaard", , "ebtm@novonordisk.com", role = "aut"),
@@ -30,9 +30,11 @@ Imports:
     yaml
 Suggests: 
     knitr,
+    openxlsx,
     quarto,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 VignetteBuilder: 
     knitr,
     quarto

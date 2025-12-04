@@ -2,7 +2,7 @@
 
 #' Write a single ADaM domain metadata to YAML file
 #' @description Writes a single ADaM domain metadata to a YAML file with proper formatting.
-#' Origin fields are formatted as multiline strings with literal block scalar style (|-)
+#' Method fields are formatted as multiline strings with literal block scalar style (|-)
 #' regardless of whether they contain actual line breaks. Long strings are wrapped
 #' at word boundaries to improve readability.
 #' @param domain_data The metadata for a single domain
@@ -17,29 +17,37 @@ write_adam_domain_yaml <- function(domain_data, domain_name, output_dir = ".", l
     dir.create(output_dir, recursive = TRUE)
   }
 
-  # Process origin fields to ensure they're treated as multiline
-  domain_data <- format_origin_fields(domain_data, line_width)
+  # Process method fields to ensure they're treated as multiline
+  domain_data <- format_method_fields(domain_data, line_width)
+
+  # Format list for export as yaml
+  domain_out <- domain_data$table_metadata
+  domain_out$columns <- domain_data$column_metadata
+
+  if ("value_metadata" %in% names(domain_data)) {
+    domain_out$parameters <- domain_data$value_metadata
+  }
 
   # Convert to YAML string
-  yaml_content <- yaml::as.yaml(domain_data, indent.mapping.sequence = TRUE)
+  yaml_content <- yaml::as.yaml(domain_out, indent.mapping.sequence = TRUE)
 
   # Unquote flow-style dictionaries
-  yaml_content <- gsub("[\'\"](\\{.*?\\})[\'\"]", "\\1", yaml_content)
+  yaml_content <- gsub("[\'\"](\\{.*?\\}|\\[.*?\\])[\'\"]", "\\1", yaml_content)
 
   # Write to file
   yaml_file <- file.path(output_dir, paste0(tolower(domain_name), ".yaml"))
   writeLines(yaml_content, yaml_file)
 
-  return(yaml_file)
+  yaml_file
 }
 
-#' Format origin fields to ensure they're treated as multiline strings
-#' @description Helper function to format all origin fields in a domain metadata structure
+#' Format method fields to ensure they're treated as multiline strings
+#' @description Helper function to format all method fields in a domain metadata structure
 #' @param metadata A domain metadata structure
 #' @param line_width Maximum line width before wrapping text
-#' @return The metadata structure with origin fields formatted for multiline output
+#' @return The metadata structure with method fields formatted for multiline output
 #' @keywords internal
-format_origin_fields <- function(metadata, line_width = 80) {
+format_method_fields <- function(metadata, line_width = 80) {
   # Helper function to wrap text at word boundaries
   wrap_text <- function(text, width) {
     if (is.null(text) || is.na(text)) return(text)
@@ -95,49 +103,49 @@ format_origin_fields <- function(metadata, line_width = 80) {
     result
   }
 
-  # Process origin fields in column_metadata
+  # Process method fields in column_metadata
   if (!is.null(metadata$column_metadata)) {
     for (i in seq_along(metadata$column_metadata)) {
-      if (!is.null(metadata$column_metadata[[i]]$origin)) {
-        # Format the origin text
-        origin_text <- metadata$column_metadata[[i]]$origin
+      if (!is.null(metadata$column_metadata[[i]]$method)) {
+        # Format the method text
+        method_text <- metadata$column_metadata[[i]]$method
 
         # Wrap long lines
-        origin_text <- wrap_text(origin_text, line_width)
+        method_text <- wrap_text(method_text, line_width)
 
         # Ensure it has at least one newline to trigger multiline formatting
-        if (!grepl("\n", origin_text)) {
-          origin_text <- paste0(origin_text, "\n")
+        if (!grepl("\n", method_text)) {
+          method_text <- paste0(method_text, "\n")
         }
 
-        # Update the origin field
-        metadata$column_metadata[[i]]$origin <- origin_text
+        # Update the method field
+        metadata$column_metadata[[i]]$method <- method_text
       }
     }
   }
 
-  # Process origin fields in value_metadata
+  # Process method fields in value_metadata
   if (!is.null(metadata$value_metadata)) {
     for (i in seq_along(metadata$value_metadata)) {
-      if (!is.null(metadata$value_metadata[[i]]$origin)) {
-        # Format the origin text
-        origin_text <- metadata$value_metadata[[i]]$origin
+      if (!is.null(metadata$value_metadata[[i]]$method)) {
+        # Format the method text
+        method_text <- metadata$value_metadata[[i]]$method
 
         # Wrap long lines
-        origin_text <- wrap_text(origin_text, line_width)
+        method_text <- wrap_text(method_text, line_width)
 
         # Ensure it has at least one newline to trigger multiline formatting
-        if (!grepl("\n", origin_text)) {
-          origin_text <- paste0(origin_text, "\n")
+        if (!grepl("\n", method_text)) {
+          method_text <- paste0(method_text, "\n")
         }
 
-        # Update the origin field
-        metadata$value_metadata[[i]]$origin <- origin_text
+        # Update the method field
+        metadata$value_metadata[[i]]$method <- method_text
       }
     }
   }
 
-  return(metadata)
+  metadata
 }
 
 #' Write all ADaM metadata domains to YAML files
@@ -159,5 +167,5 @@ write_adam_yaml <- function(adam_metadata, output_dir = ".", line_width = 80) {
   })
 
   message("Created ", length(yaml_files), " YAML files in ", output_dir)
-  return(yaml_files)
+  yaml_files
 }

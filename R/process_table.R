@@ -23,40 +23,38 @@ process_table <- function(table_name,
                           verbose) {
   # Build table_metadata - check for column existence before selecting
   available_cols <- names(source_tables)
-  table_cols <- c("table", "label", "class", "structure", "keys", "comment", "chkalias")
+  table_cols <- c("table", "label", "class", "structure", "keys", "comment")
 
   # Add subclass only if it exists
   if ("subclass" %in% available_cols) {
     table_cols <- c(table_cols, "subclass")
   }
 
-  # Only select columns that exist
-  select_cols <- intersect(table_cols, available_cols)
-
   table_meta <- source_tables |>
     dplyr::filter(table == table_name) |>
-    dplyr::select(dplyr::all_of(select_cols))
+    dplyr::select(dplyr::any_of(table_cols)) |>
+    dplyr::rename(id = table)
 
   # Add class handling
   if ("class" %in% names(table_meta)) {
-    table_meta <-  table_meta |>
+    table_meta <- table_meta |>
       dplyr::mutate(class = dplyr::if_else(class %in% valid_classes, class, "ADAM OTHER"))
   }
 
   # Add subclass handling only if it exists
   if ("subclass" %in% names(table_meta)) {
-    table_meta <-  table_meta |>
+    table_meta <- table_meta |>
       dplyr::mutate(subclass = dplyr::if_else(subclass %in% valid_subclasses, subclass, NA_character_))
   }
 
-  # Split keys if the column exists
+  # Format keys as [KEY1, KEY2, ...] if the column exists
   if ("keys" %in% names(table_meta)) {
-    table_meta <-  table_meta |>
-      dplyr::mutate(keys = unlist(strsplit(keys, ",")))
+    table_meta <- table_meta |>
+      dplyr::mutate(keys = paste0("[", gsub("[, ] *", ", ", keys), "]"))
   }
 
   # Convert to list and clean
-  table_meta <-  table_meta |>
+  table_meta <- table_meta |>
     as.list() |>
     clean_list()
 
@@ -117,11 +115,39 @@ process_table <- function(table_name,
         TRUE ~ origin
       )
     ) |>
+    # Get rid of floating point issue with displayformat decimals
+    dplyr::mutate(
+      ndigits = nchar(gsub("^\\d+\\.", "", displayformat)),
+      displayformatn = dplyr::case_when(grepl("^\\d+", displayformat) ~ displayformat,
+                                        TRUE ~ "0"),
+      displayformatn = as.double(.data$displayformatn),
+      displayformatr = dplyr::case_when(
+        grepl("^\\d+\\.\\d+$", displayformatn) ~ round(displayformatn, ndigits - 1),
+        TRUE ~ displayformatn
+      )
+    ) |>
+    dplyr::rowwise() |>
+    dplyr::mutate(
+      displayformatf = dplyr::case_when(
+        grepl("^\\d+", displayformat) & isTRUE(all.equal(displayformatn, displayformatr)) ~
+          as.character(displayformatr),
+        TRUE ~ displayformat
+      )
+    ) |>
+    dplyr::ungroup() |>
     # Create a flow-style dictionary of formatting information.
     dplyr::mutate(
+      type = dplyr::case_when(type == "C" ~ "text",
+                              type == "N" & grepl("^datetime", displayformat) ~ "datetime",
+                              type == "N" & grepl("^date", displayformat) ~ "date",
+                              type == "N" & grepl("^time", displayformat) ~ "time",
+                              type == "N" ~ "float",
+                              TRUE ~ type),
       dtype = ifelse(!is.na(type), paste0('type: "', type, '"'), NA_character_),
       dlength = ifelse(!is.na(length), paste0("length: ", length), NA_character_),
-      ddisplayformat = ifelse(!is.na(displayformat), paste0('displayformat: "', displayformat, '"'), NA_character_)
+      ddisplayformat = ifelse(!is.na(displayformat),
+                              paste0('displayformat: "', .data$displayformatf, '"'),
+                              NA_character_)
     ) |>
     tidyr::unite(format, dtype, dlength, sep = ", ", ddisplayformat, na.rm = TRUE) |>
     dplyr::mutate(format = paste0("{", format, "}"))
@@ -145,72 +171,68 @@ process_table <- function(table_name,
   # TODO: This can be cleaned up considerably
   # TODO: The listify-function could be pulled out.
 
-
   # Create column metadata list with appropriate fields based on type
   col_meta <-  lapply(seq_len(nrow(col_data)), function(i) {
     row <- col_data[i, ]
 
+    method_text <- row$unified_origin
+    if (!is.na(method_text)) {
+      # Standardize newlines
+      method_text <- gsub("\r\n", "\n", method_text)
+    }
+
     if (row$is_predecessor && !row$is_renamed && row$is_adam_predecessor) {
       # For predecessor columns that aren't renamed, only include the column field
       # This follows CDISC requirements that predecessor columns inherit metadata from parent
-      list(column = row$column_final)
+      list(id = row$column,
+           method = method_text)
     } else if (row$is_renamed && row$is_adam_predecessor) {
       # For renamed predecessor columns, include column and source
       list(
-        column = row$column_final,
+        id = row$column,
         label = row$label,
-        source = row$source
+        method = method_text
       )
     } else if (row$is_predecessor && !row$is_renamed && !row$is_adam_predecessor) {
       # For predecessor columns that aren't renamed, only include the column field
       # This follows CDISC requirements that predecessor columns inherit metadata from parent
-      list(column = row$column_final,
+      list(id = row$column,
            label = row$label,
            format = row$format,
-           corefl = row$corefl)
+           method = method_text,
+           core = row$corefl == "Y")
     } else if (row$is_renamed && !row$is_adam_predecessor) {
       # For renamed predecessor columns, include column and source
       list(
-        column = row$column_final,
+        id = row$column,
         label = row$label,
         format = row$format,
-        source = row$source,
-        corefl = row$corefl
+        method = method_text,
+        core = row$corefl == "Y"
       )
     } else if (row$is_complex_predecessor) {
       # For complex predecessors (now treated as derived)
-      origin_text <- row$unified_origin
-      if (!is.na(origin_text)) {
-        # Standardize newlines
-        origin_text <- gsub("\r\n", "\n", origin_text)
-      }
-
       list(
-        column = row$column,
+        id = row$column,
         label = row$label,
         format = row$format,
-        xmlcodelist = row$xmlcodelist,
-        origin = origin_text,
-        corefl = row$corefl
+        codelist = row$xmlcodelist,
+        method = method_text,
+        core = row$corefl == "Y"
       )
     } else {
       # For derived/assigned columns, include all relevant metadata
-      origin_text <-  row$unified_origin
-      if (!is.na(origin_text)) {
-        # Standardize newlines
-        origin_text <- gsub("\r\n", "\n", origin_text)
-      }
-
       list(
-        column = row$column_final,
+        id = row$column,
         label = row$label,
         format = row$format,
-        xmlcodelist = row$xmlcodelist,
-        origin = origin_text,
-        corefl = row$corefl
+        codelist = row$xmlcodelist,
+        method = method_text,
+        core = row$corefl == "Y"
       )
     }
-  }) |> clean_list()
+  }) |>
+    clean_list()
 
   # Build value_metadata - only if data exists for this table
   val_filtered <- source_values |> dplyr::filter(table == table_name)

@@ -40,9 +40,6 @@ col_metadata <- make_mdcol_from_yaml("yaml_output")
 
 # View in HTML format
 view_define_html("yaml_output/adsl.yaml")
-
-# Extract domain references
-references <- extract_references_from_yaml("yaml_output/adae.yaml")
 ```
 
 ## Main Functions
@@ -56,10 +53,6 @@ references <- extract_references_from_yaml("yaml_output/adae.yaml")
 
 - `write_adam_domain_yaml()` - Write single domain to YAML file
 - `write_adam_yaml()` - Write all domains to YAML files
-
-### Reference Analysis
-
-- `extract_references_from_yaml()` - Extract domain references from YAML files
 
 ### HTML Visualization
 

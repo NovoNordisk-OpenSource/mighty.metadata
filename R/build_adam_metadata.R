@@ -78,12 +78,46 @@ build_adam_metadata <-  function(metadata, verbose = TRUE) {
             paste(absent_components, collapse = ", "))
     source_values <- dplyr::tibble(table = character(0))
   } else {
-    source_values <-  tryCatch(
-      metadata$source_values |> dplyr::rename_all(tolower),
-      error = function(e) {
-        stop("Error processing source_values: ", e$message)
-      }
+    source_values <- tryCatch({
+      metadata$source_values |> dplyr::rename_all(tolower)
+    }, error = function(e) {
+      stop("Error processing source_values: ", e$message)
+    }
     )
+  }
+
+  # Pre-process source_values if applicable
+  if (nrow(source_values) > 0) {
+    if (!"whereclause" %in% names(source_values)) {
+      stop("WHERECLAUSE column not found in source_values tab.")
+    }
+
+    if (!"paramcd" %in% names(source_values)) {
+      if (verbose) {
+        message("PARAMCD column not found in source_values tab. A best guess ",
+                "will be inferred from WHERECLAUSE column.")
+      }
+
+      source_values <- source_values |>
+        dplyr::mutate(paramcd = ifelse(grepl("(EQ|=)", .data$whereclause),
+                                       gsub(".*(EQ|=) +", "", .data$whereclause),
+                                       NA_character_),
+                      paramcd = gsub("[^A-Z0-9]", "", .data$paramcd))
+
+    }
+
+    source_values_empty <- source_values |>
+      dplyr::filter(is.na(.data$paramcd))
+
+    if (nrow(source_values_empty) > 0) {
+      warning("PARAMCD could not be found for all rows in source_values. ",
+              "Values without a valid PARAMCD will not be included in yaml files.\n",
+              paste(utils::capture.output(print(source_values_empty)), collapse = "\n"))
+    }
+
+    source_values <- source_values |>
+      dplyr::filter(!is.na(.data$paramcd))
+
   }
 
   # Process all tables
@@ -99,5 +133,5 @@ build_adam_metadata <-  function(metadata, verbose = TRUE) {
   })
   names(result) <- tables
 
-  return(result)
+  result
 }
