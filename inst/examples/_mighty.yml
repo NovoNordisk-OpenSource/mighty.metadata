@@ -5,6 +5,8 @@ structure: One record per vital sign parameter, per visit, per subject
 keys: [USUBJID, PARAMCD, AVISITN]
 comment: |
   This is an example comment with extra information
+metadata:
+  something: important for my data set
 
 population:
   base:
