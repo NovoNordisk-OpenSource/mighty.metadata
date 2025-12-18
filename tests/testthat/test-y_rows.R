@@ -12,7 +12,7 @@ test_that("remove_rows()", {
   x <- mighty_metadata(
     file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
   ) |>
-    add_row(id = "NEW", method = "To be deleted")
+    add_row(id = "NEW")
 
   x |>
     list_rows() |>
@@ -40,7 +40,6 @@ test_that("add_row()", {
   rows <- x |>
     add_row(
       id = "NEW",
-      method = "My new row",
       .pos = 1
     ) |>
     list_rows()

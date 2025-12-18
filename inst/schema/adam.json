@@ -162,8 +162,7 @@
         }
       },
       "required": [
-        "id",
-        "method"
+        "id"
       ],
       "additionalProperties": false
     },
@@ -200,9 +199,7 @@
         }
       },
       "required": [
-        "id",
-        "label",
-        "columns"
+        "id"
       ],
       "additionalProperties": false
     },

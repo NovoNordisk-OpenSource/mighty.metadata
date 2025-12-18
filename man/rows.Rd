@@ -12,7 +12,7 @@ list_rows(x)
 
 remove_rows(x, id)
 
-add_row(x, id, method, ..., .pos = length(x[["rows"]]) + 1L)
+add_row(x, id, ..., .pos = length(x[["rows"]]) + 1L)
 
 move_row(x, id, .pos = length(x[["rows"]]))
 }
@@ -20,8 +20,6 @@ move_row(x, id, .pos = length(x[["rows"]]))
 \item{x}{\code{mighty_metadata()} Object to manipulate.}
 
 \item{id}{\code{character()} Id of the row(s) to remove, add, or move.}
-
-\item{method}{\code{character(1)} How to derive the row.}
 
 \item{...}{Additional properties to add for the row, e.g. a \code{label = "my row"}.}
 
@@ -45,7 +43,7 @@ list_rows(x)
 
 # Add a new row
 y <- x |>
-  add_row(id = "NEW",  method = "My new method")
+  add_row(id = "NEW")
 
 list_rows(y)
 

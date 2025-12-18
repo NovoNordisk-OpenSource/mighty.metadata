@@ -5,7 +5,6 @@
 #'
 #' @param x `mighty_metadata()` Object to manipulate.
 #' @param id `character()` Id of the row(s) to remove, add, or move.
-#' @param method `character(1)` How to derive the row.
 #' @param ... Additional properties to add for the row, e.g. a `label = "my row"`.
 #' @param .pos `integer(1)` Position to put or move the row to. Default places the row as the last.
 #' @returns `invisible(x)`
@@ -20,7 +19,7 @@
 #'
 #' # Add a new row
 #' y <- x |>
-#'   add_row(id = "NEW",  method = "My new method")
+#'   add_row(id = "NEW")
 #'
 #' list_rows(y)
 #'
@@ -67,7 +66,7 @@ S7::method(remove_rows, mighty_metadata) <- function(x, id) {
 add_row <- S7::new_generic(
   name = "add_row",
   dispatch_args = c("x"),
-  fun = \(x, id, method, ..., .pos = length(x[["rows"]]) + 1L) {
+  fun = \(x, id, ..., .pos = length(x[["rows"]]) + 1L) {
     S7::S7_dispatch()
   }
 )
@@ -76,11 +75,10 @@ add_row <- S7::new_generic(
 S7::method(add_row, mighty_metadata) <- function(
   x,
   id,
-  method,
   ...,
   .pos = length(x[["rows"]]) + 1L
 ) {
-  row_add(x, id, method, ..., .pos = .pos)
+  row_add(x, id, ..., .pos = .pos)
 }
 
 #' @rdname rows
@@ -117,10 +115,9 @@ row_remove <- function(x, id) {
 }
 
 #' @noRd
-row_add <- function(x, id, method, ..., .pos) {
+row_add <- function(x, id, ..., .pos) {
   row <- c(
     id = id,
-    method = method,
     rlang::list2(...)
   )
 
