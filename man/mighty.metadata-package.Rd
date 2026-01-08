@@ -6,7 +6,7 @@
 \alias{mighty.metadata-package}
 \title{mighty.metadata: CDISC ADaM Metadata Management in YAML Format}
 \description{
-Tools for working with CDISC ADaM metadata in YAML format. This package provides functions for extracting metadata from standard sources, building structured ADaM metadata, generating YAML files, and HTML visualization. It supports domain references tracking and maintains proper formatting for method fields in YAML output.
+Tools for working with CDISC ADaM metadata in YAML format. This package provides functions for extracting metadata from standard sources, building structured ADaM metadata, generating YAML files. It supports domain references tracking and maintains proper formatting for method fields in YAML output.
 }
 \seealso{
 Useful links:

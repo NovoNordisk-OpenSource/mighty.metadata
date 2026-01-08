@@ -24,7 +24,6 @@ The `mighty.metadata` package provides tools for working with CDISC ADaM metadat
 2. Extract and transform metadata 
 3. Build structured ADaM metadata
 4. Generate YAML files
-5. View metadata in HTML format
 
 ## Accessing Standard Libraries
 
@@ -93,15 +92,6 @@ The YAML output has several advantages:
 - Long text is automatically wrapped at word boundaries
 - NULL/NA fields are omitted for cleaner output
 
-## Viewing Metadata in HTML
-
-The package provides functions to view metadata in HTML format:
-
-```{r eval=FALSE}
-# View define metadata in HTML format
-view_define_html(adam_metadata$ADAE)
-```
-
 ## Complete Workflow Example
 
 Here's a complete example workflow (not run):
@@ -124,9 +114,6 @@ for (domain_name in names(adam_metadata)) {
     output_dir = output_dir
   )
 }
-
-# 5. View a specific domain in HTML
-view_define_html(adam_metadata$ADAE)
 ```
 
 ## Summary
@@ -137,6 +124,5 @@ The `mighty.metadata` package streamlines the process of working with CDISC ADaM
 2. Transforming raw metadata into a clean, structured format
 3. Tracking domain references
 4. Generating well-formatted YAML files
-5. Offering HTML visualization
 
 This approach makes metadata more readable, version-controllable, and easier to maintain than traditional Excel-based approaches.

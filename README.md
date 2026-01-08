@@ -15,7 +15,6 @@ Key features:
 - Generate YAML files with proper formatting
 - Create column metadata datasets from YAML files
 - Track domain references across datasets
-- View metadata in interactive HTML format
 - Support for predecessor, derived, and assigned variables
 
 ## Installation
@@ -37,9 +36,6 @@ yaml_files <- write_adam_yaml(adam_metadata, output_dir = "yaml_output")
 
 # Create column metadata dataset from YAML files
 col_metadata <- make_mdcol_from_yaml("yaml_output")
-
-# View in HTML format
-view_define_html("yaml_output/adsl.yaml")
 ```
 
 ## Main Functions
@@ -53,12 +49,6 @@ view_define_html("yaml_output/adsl.yaml")
 
 - `write_adam_domain_yaml()` - Write single domain to YAML file
 - `write_adam_yaml()` - Write all domains to YAML files
-
-### HTML Visualization
-
-- `view_define_html()` - View metadata in interactive HTML format
-- `format_table_metadata_html()` - Format table metadata as HTML
-- `format_column_metadata_html()` - Format column metadata as HTML
 
 ## Variable Types
 
@@ -129,16 +119,6 @@ value_metadata:
       origin: "Assigned: Weight parameter"
 ```
 
-## HTML Features
-
-Interactive HTML visualization includes:
-
-- Sortable and filterable tables
-- Expandable value-level metadata (VLM)
-- Dark/light theme toggle
-- Professional documentation styling
-- Cross-references between domains
-
 ## Dependencies
 
 - `dplyr` - Data manipulation
@@ -146,7 +126,6 @@ Interactive HTML visualization includes:
 - `stringr` - String processing
 - `tidyr` - Data tidying
 - `purrr` - Functional programming
-- `rstudioapi` - RStudio integration
 
 ## Documentation
 
