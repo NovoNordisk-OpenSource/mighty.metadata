@@ -10,3 +10,4 @@
 ^\.lintr$
 ^\.markdownlint.json$
 ^\.mega-linter.yml$
+^vignettes/articles$
