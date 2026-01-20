@@ -32,6 +32,17 @@ list_ids <- function(x) {
   )
 }
 
+#' Helper function to get all `cores`s as a logical value`
+#' from all elements in a list.
+#' @noRd
+list_cores <- function(x) {
+  vapply(
+    X = x,
+    FUN = \(x) ifelse("core" %in% names(x), x[["core"]], FALSE),
+    FUN.VALUE = logical(1)
+  )
+}
+
 #' Helper function to get the index of entries
 #' with certain id value(s)
 #' @noRd

@@ -113,6 +113,10 @@
             "description": "Codelist of possible values of the column",
             "type": "string"
           },
+          "core": {
+            "description": "Flag for designating a core variables in subject level datasets",
+            "type": "boolean"
+          },
           "format": {
             "description": "Data format of the column",
             "$ref": "#/definitions/standard/dataformat"

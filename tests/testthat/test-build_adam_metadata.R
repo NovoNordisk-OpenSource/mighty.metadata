@@ -60,4 +60,24 @@ describe("build_adam_metadata", {
            MDMQ = c("table_metadata", "column_metadata"))
     )
   })
+
+  it("Builds ADaM metadata structure with column information missing", {
+    metadata <- load_test_metadata_components(
+      table_filter = table %in% c("ADSL", "ADAE"),
+      column_filter = table == "ADSL",
+      value_filter = table == "ADSL")
+
+    expect_no_error({
+      adam_metadata <- suppressWarnings(build_adam_metadata(metadata, verbose = FALSE))
+    })
+
+    expect_warning({
+      adam_metadata <- build_adam_metadata(metadata, verbose = FALSE)
+    })
+
+    expect_message({
+      adam_metadata <- suppressWarnings(build_adam_metadata(metadata))
+    })
+
+  })
 })

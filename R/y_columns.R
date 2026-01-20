@@ -5,7 +5,7 @@
 #'
 #' @param x `mighty_metadata()` Object to manipulate.
 #' @param id `character()` Id of the column(s) to remove, add, or move.
-#' @param ... Additional properties to add for the colum, e.g. a `label = "my label"`.
+#' @param ... Additional properties to add for the column, e.g. a `label = "my label"`.
 #' @param .pos `integer(1)` Position to put or move the column to. Default places the column as the last.
 #' @returns `invisible(x)`
 #' @examples
@@ -85,10 +85,10 @@ add_column <- S7::new_generic(
 
 #' @noRd
 S7::method(add_column, mighty_metadata) <- function(
-  x,
-  id,
-  ...,
-  .pos = length(x[["columns"]]) + 1L
+    x,
+    id,
+    ...,
+    .pos = length(x[["columns"]]) + 1L
 ) {
   col_add(x, id, ..., .pos = .pos)
 }
@@ -110,6 +110,21 @@ S7::method(move_column, mighty_metadata) <- function(
   .pos = length(x[["columns"]])
 ) {
   col_move(x, id, .pos = .pos)
+}
+
+#' @rdname columns
+#' @export
+select_column <- S7::new_generic(
+  name = "select_column",
+  dispatch_args = "x",
+  fun = \(x, id) {
+    S7::S7_dispatch()
+  }
+)
+
+#' @noRd
+S7::method(select_column, mighty_metadata) <- function(x, id) {
+  col_select(x, id)
 }
 
 #' @noRd
@@ -159,3 +174,9 @@ col_move <- function(x, id, .pos) {
     args = args
   )
 }
+
+#' @noRd
+col_select <- function(x, id) {
+  x[["columns"]][[which_ids(x = x[["columns"]], id = id)]]
+}
+

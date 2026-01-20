@@ -6,6 +6,7 @@
 \alias{remove_columns}
 \alias{add_column}
 \alias{move_column}
+\alias{select_column}
 \title{Update columns in your metadata}
 \usage{
 list_columns(x)
@@ -15,13 +16,15 @@ remove_columns(x, id)
 add_column(x, id, ..., .pos = length(x[["columns"]]) + 1L)
 
 move_column(x, id, .pos = length(x[["columns"]]))
+
+select_column(x, id)
 }
 \arguments{
 \item{x}{\code{mighty_metadata()} Object to manipulate.}
 
 \item{id}{\code{character()} Id of the column(s) to remove, add, or move.}
 
-\item{...}{Additional properties to add for the colum, e.g. a \code{label = "my label"}.}
+\item{...}{Additional properties to add for the column, e.g. a \code{label = "my label"}.}
 
 \item{.pos}{\code{integer(1)} Position to put or move the column to. Default places the column as the last.}
 }

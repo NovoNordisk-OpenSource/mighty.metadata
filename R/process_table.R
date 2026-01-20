@@ -24,6 +24,7 @@ process_table <- function(table_name,
   # Build table_metadata - check for column existence before selecting
   available_cols <- names(source_tables)
   table_cols <- c("table", "label", "class", "structure", "keys", "comment")
+  meta_cols <- c("usecore")
 
   # Add subclass only if it exists
   if ("subclass" %in% available_cols) {
@@ -34,6 +35,18 @@ process_table <- function(table_name,
     dplyr::filter(table == table_name) |>
     dplyr::select(dplyr::any_of(table_cols)) |>
     dplyr::rename(id = table)
+
+  # Look for table metadata columns
+  meta_list <- source_tables |>
+    dplyr::filter(table == table_name) |>
+    dplyr::select(dplyr::where(~!is.na(.))) |>
+    dplyr::select(dplyr::any_of(meta_cols)) |>
+    as.list()
+
+  if (length(meta_list) > 0) {
+    table_meta <- table_meta |>
+      dplyr::mutate(metadata = meta_list)
+  }
 
   # Add class handling
   if ("class" %in% names(table_meta)) {
@@ -59,98 +72,105 @@ process_table <- function(table_name,
     clean_list()
 
   # Process column metadata
-
   col_data <-  source_columns |>
-    dplyr::filter(table == table_name) |>
-    dplyr::mutate(
-      # Clean column names by removing trailing periods
-      column = gsub("\\s*\\.\\s*$", "", column),
+    dplyr::filter(table == table_name)
 
-      # Clean origindescription by removing trailing periods
-      origindescription = gsub("\\s*\\.\\s*$", "", origindescription),
+  if (nrow(col_data) > 0) {
+    col_data <- col_data |>
+      dplyr::mutate(
+        # Clean column names by removing trailing periods
+        column = gsub("\\s*\\.\\s*$", "", column),
 
-      # Check if origindescription is complex (not a simple Dataset.Column format)
-      is_complex_predecessor = !is.na(origin) &
-        tolower(origin) == "predecessor" &
-        !is_simple_predecessor(origindescription),
+        # Clean origindescription by removing trailing periods
+        origindescription = gsub("\\s*\\.\\s*$", "", origindescription),
 
-      # Flag for predecessor columns (only simple ones now)
-      is_predecessor = !is.na(origin) &
-        tolower(origin) == "predecessor" &
-        !is_complex_predecessor,
+        # Check if origindescription is complex (not a simple Dataset.Column format)
+        is_complex_predecessor = !is.na(origin) &
+          tolower(origin) == "predecessor" &
+          !is_simple_predecessor(origindescription),
 
-      # Flag for renamed predecessor columns (when source column name differs from target)
-      is_renamed = is_predecessor &
-        grepl("^[A-Z]+\\.[A-Z]+", origindescription) &
-        column != sub("^[A-Z]+\\.", "", origindescription),
+        # Flag for predecessor columns (only simple ones now)
+        is_predecessor = !is.na(origin) &
+          tolower(origin) == "predecessor" &
+          !is_complex_predecessor,
 
-      # Flag for ADaM predecessor columns
-      is_adam_predecessor = is_predecessor &
-        grepl("^AD[A-Z][A-Z0-9]+\\.[A-Za-z0-9_]+", origindescription),
+        # Flag for renamed predecessor columns (when source column name differs from target)
+        is_renamed = is_predecessor &
+          grepl("^[A-Z]+\\.[A-Z]+", origindescription) &
+          column != sub("^[A-Z]+\\.", "", origindescription),
 
-      # For predecessor variables, use the full domain.variable reference if available
-      column_final = dplyr::case_when(
-        is_predecessor & !is_renamed & grepl("^[A-Z]+\\.[A-Z]+", origindescription) ~ origindescription,
-        TRUE ~ column
-      ),
+        # Flag for ADaM predecessor columns
+        is_adam_predecessor = is_predecessor &
+          grepl("^AD[A-Z][A-Z0-9]+\\.[A-Za-z0-9_]+", origindescription),
 
-      # Only include source for renamed predecessor columns
-      source = dplyr::case_when(
-        is_renamed ~ origindescription,
-        TRUE ~ NA_character_
-      ),
+        # For predecessor variables, use the full domain.variable reference if available
+        column_final = dplyr::case_when(
+          is_predecessor & !is_renamed & grepl("^[A-Z]+\\.[A-Z]+", origindescription) ~ origindescription,
+          TRUE ~ column
+        ),
 
-      # Create unified origin field based
-      unified_origin = dplyr::case_when(
-        is_complex_predecessor ~ paste0("Source: ", origindescription),
-        is_predecessor ~ paste0("Predecessor: ", origindescription),
-        !is.na(origin) & tolower(origin) == "derived" & !is.na(algorithm) ~ paste0("Derived: ", algorithm),
-        !is.na(origin) & tolower(origin) == "assigned" & !is.na(comment) ~ paste0("Assigned: ", comment),
-        TRUE ~ NA_character_
-      ),
+        # Only include source for renamed predecessor columns
+        source = dplyr::case_when(
+          is_renamed ~ origindescription,
+          TRUE ~ NA_character_
+        ),
 
-      # Set origin to derived for complex predecessors
-      origin_final = dplyr::case_when(
-        is_complex_predecessor ~ "derived",
-        TRUE ~ origin
-      )
-    ) |>
-    # Get rid of floating point issue with displayformat decimals
-    dplyr::mutate(
-      ndigits = nchar(gsub("^\\d+\\.", "", displayformat)),
-      displayformatn = dplyr::case_when(grepl("^\\d+", displayformat) ~ displayformat,
-                                        TRUE ~ "0"),
-      displayformatn = as.double(.data$displayformatn),
-      displayformatr = dplyr::case_when(
-        grepl("^\\d+\\.\\d+$", displayformatn) ~ round(displayformatn, ndigits - 1),
-        TRUE ~ displayformatn
-      )
-    ) |>
-    dplyr::rowwise() |>
-    dplyr::mutate(
-      displayformatf = dplyr::case_when(
-        grepl("^\\d+", displayformat) & isTRUE(all.equal(displayformatn, displayformatr)) ~
-          as.character(displayformatr),
-        TRUE ~ displayformat
-      )
-    ) |>
-    dplyr::ungroup() |>
-    # Create a flow-style dictionary of formatting information.
-    dplyr::mutate(
-      type = dplyr::case_when(type == "C" ~ "text",
-                              type == "N" & grepl("^datetime", displayformat) ~ "datetime",
-                              type == "N" & grepl("^date", displayformat) ~ "date",
-                              type == "N" & grepl("^time", displayformat) ~ "time",
-                              type == "N" ~ "float",
-                              TRUE ~ type),
-      dtype = ifelse(!is.na(type), paste0('type: "', type, '"'), NA_character_),
-      dlength = ifelse(!is.na(length), paste0("length: ", length), NA_character_),
-      ddisplayformat = ifelse(!is.na(displayformat),
-                              paste0('displayformat: "', .data$displayformatf, '"'),
-                              NA_character_)
-    ) |>
-    tidyr::unite(format, dtype, dlength, sep = ", ", ddisplayformat, na.rm = TRUE) |>
-    dplyr::mutate(format = paste0("{", format, "}"))
+        # Create unified origin field based
+        unified_origin = dplyr::case_when(
+          is_complex_predecessor ~ paste0("Source: ", origindescription),
+          is_predecessor ~ paste0("Predecessor: ", origindescription),
+          !is.na(origin) & tolower(origin) == "derived" & !is.na(algorithm) ~ paste0("Derived: ", algorithm),
+          !is.na(origin) & tolower(origin) == "assigned" & !is.na(comment) ~ paste0("Assigned: ", comment),
+          TRUE ~ NA_character_
+        ),
+
+        # Set origin to derived for complex predecessors
+        origin_final = dplyr::case_when(
+          is_complex_predecessor ~ "derived",
+          TRUE ~ origin
+        )
+      ) |>
+      # Get rid of floating point issue with displayformat decimals
+      dplyr::mutate(
+        ndigits = nchar(gsub("^\\d+\\.", "", displayformat)),
+        displayformatn = dplyr::case_when(grepl("^\\d+", displayformat) ~ displayformat,
+                                          TRUE ~ "0"),
+        displayformatn = as.double(.data$displayformatn),
+        displayformatr = dplyr::case_when(
+          grepl("^\\d+\\.\\d+$", displayformatn) ~ round(displayformatn, ndigits - 1),
+          TRUE ~ displayformatn
+        )
+      ) |>
+      dplyr::rowwise() |>
+      dplyr::mutate(
+        displayformatf = dplyr::case_when(
+          grepl("^\\d+", displayformat) & isTRUE(all.equal(displayformatn, displayformatr)) ~
+            as.character(displayformatr),
+          TRUE ~ displayformat
+        )
+      ) |>
+      dplyr::ungroup() |>
+      # Create a flow-style dictionary of formatting information.
+      dplyr::mutate(
+        type = dplyr::case_when(type == "C" ~ "text",
+                                type == "N" & grepl("^datetime", displayformat) ~ "datetime",
+                                type == "N" & grepl("^date", displayformat) ~ "date",
+                                type == "N" & grepl("^time", displayformat) ~ "time",
+                                type == "N" ~ "float",
+                                TRUE ~ type),
+        dtype = ifelse(!is.na(type), paste0('type: "', type, '"'), NA_character_),
+        dlength = ifelse(!is.na(length), paste0("length: ", length), NA_character_),
+        ddisplayformat = ifelse(!is.na(displayformat),
+                                paste0('displayformat: "', .data$displayformatf, '"'),
+                                NA_character_)
+      ) |>
+      tidyr::unite(format, dtype, dlength, sep = ", ", ddisplayformat, na.rm = TRUE) |>
+      dplyr::mutate(format = ifelse(format == "", NA_character_, paste0("{", format, "}")))
+  } else {
+    warning("no column information for ", table_name)
+    col_data <- col_data |>
+      dplyr::mutate(is_complex_predecessor = logical(0))
+  }
 
   # Print messages for complex predecessors converted to derived
   if (verbose) {
