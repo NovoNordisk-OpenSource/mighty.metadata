@@ -1,0 +1,33 @@
+---
+title: "ADaM specifications"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ADaM specifications}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`mighty.metadata` uses YAML files to specify Analysis Data Model (ADaM) datasets.
+Each YAML file follows a fixed structure with defines properties and entries.
+
+This structure is defined in a [JSON-schema](https://json-schema.org) that you can access with:
+
+```r
+system.file("schema", "adam.json", package = "mighty.metadata")
+```
+
+Below you can find a detailed description of the structure.
+
+```{r echo=FALSE}
+S7schema::document_schema(
+  x = system.file("schema", "adam.json", package = "mighty.metadata"),
+  header_start_level = 1
+)
+```
