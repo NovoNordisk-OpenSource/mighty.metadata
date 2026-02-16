@@ -3,7 +3,7 @@
 #' @description
 #' `mighty_metadata()` provides a robust way of working with ADaM metadata in the `{mighty}` framework.
 #'
-#' A new object is initialised by supplying an existing yaml metadata file.
+#' A new object is initialized by supplying an existing yaml metadata file.
 #' This package provides helpers to update column, parameter, and row entries.
 #' See the references below for help:
 #'

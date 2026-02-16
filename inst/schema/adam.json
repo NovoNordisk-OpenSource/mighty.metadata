@@ -46,7 +46,7 @@
       "$ref": "#/definitions/columns"
     },
     "rows": {
-      "description": "Row deriviations for mighty",
+      "description": "Row derivations for mighty",
       "$ref": "#/definitions/rows"
     },
     "parameters": {
@@ -383,7 +383,7 @@
         "type": "string"
       },
       "component": {
-        "description": "mighty component used to carry out the desired deriviation",
+        "description": "mighty component used to carry out the desired derivation",
         "type": "object",
         "properties": {
           "id": {

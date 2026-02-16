@@ -11,3 +11,4 @@
 ^\.markdownlint.json$
 ^\.mega-linter.yml$
 ^vignettes/articles$
+^tools$

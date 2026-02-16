@@ -73,7 +73,7 @@ update_predecessor <- function(x, source) {
     missing_source_columns <- setdiff(expected_source_columns, colnames(source))
 
     if (length(missing_source_columns) > 0) {
-      stop("The suppied `source` data.frame does not contain the ",
+      stop("The supplied `source` data.frame does not contain the ",
            "expected column(s): ", paste(missing_source_columns, collapse = ", "))
     }
 

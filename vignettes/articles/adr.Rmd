@@ -27,7 +27,7 @@ metadata that are stored in tabular form generally known as CST files.
 
 The specification of ADaM datasets in mighty.metadata has a dual purpose of equal importance:
 
-1. Full specification in a machine readable format that can be utilised for automation and limit existing manual coding workflows.
+1. Full specification in a machine readable format that can be utilized for automation and limit existing manual coding workflows.
 2. Automatic generation of ADaM scripts using the complete mighty framework. 
 
 In order to achieve this we need agreement on the aspects below.
@@ -96,7 +96,7 @@ In order to achieve this we need agreement on the aspects below.
 ### 7. Open-Source
 
 > mighty.metadata will be developed sufficiently generic to be suitable as a publicly available R package.
-> To be hosted on NovoNordisk-OpenSource GitHub organisation, and will be submitted to CRAN.
+> To be hosted on NovoNordisk-OpenSource GitHub organization, and will be submitted to CRAN.
 8. CDISC Standards support
 
 The aim is for mighty.metadata and its schema to be compatible:

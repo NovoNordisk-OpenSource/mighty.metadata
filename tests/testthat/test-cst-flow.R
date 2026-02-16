@@ -118,7 +118,7 @@ describe("CST - yaml - mdcol - workflow", {
 
   })
 
-  it("Runs entire flow with predessors", {
+  it("Runs entire flow with predecessors", {
     output_dir <- withr::local_tempdir()
 
     metadata <- load_test_metadata_components(usesdtm = TRUE)

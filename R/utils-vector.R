@@ -1,5 +1,5 @@
 #' Inserts element into existing vector.
-#' Default behaviour inserts `y` as the last element.
+#' Default behavior inserts `y` as the last element.
 #' Position is changed with pos argument.
 #' @noRd
 insert_in_vector <- function(x, y, pos = length(x) + 1L) {

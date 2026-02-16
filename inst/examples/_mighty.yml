@@ -136,7 +136,7 @@ rows:
       with:
         first_treatment_visit: n
 
-parameters: # Only additional parameters to be cacluated not coming from base domain
+parameters: # Only additional parameters to be calculated not coming from base domain
   - id: BMI
     label: Body Mass Index (kg/m^2)
     columns:
