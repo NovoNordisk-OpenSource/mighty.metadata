@@ -98,11 +98,46 @@ build_adam_metadata <-  function(metadata, verbose = TRUE) {
                 "will be inferred from WHERECLAUSE column.")
       }
 
+      comparator_symbol <- "\\b(EQ|LT|LE|GT|GE|NE|IN|NOTIN)\\b"
+
+      if (any(is.na(source_values$whereclause))) {
+        stop("WHERECLAUSE column in source_values tab contains missing values.")
+      }
+
       source_values <- source_values |>
-        dplyr::mutate(paramcd = ifelse(grepl("(EQ|=)", .data$whereclause),
-                                       gsub(".*(EQ|=) +", "", .data$whereclause),
-                                       NA_character_),
-                      paramcd = gsub("[^A-Z0-9]", "", .data$paramcd))
+        dplyr::mutate(
+          post = purrr::map(.data$whereclause, \(x) stringr::str_split_1(x, comparator_symbol)[-1]),
+          comparator = stringr::str_extract_all(.data$whereclause, comparator_symbol)
+        ) |>
+        tidyr::unnest(c(.data$post, .data$comparator)) |>
+        dplyr::rowwise() |>
+        dplyr::mutate(
+          joiner = stringr::str_extract(.data$post, "\\b(AND|OR)\\b"),
+          post = stringr::str_remove_all(.data$post, paste0("\\b", joiner, "\\b.*")),
+          paramcd = paste(unlist(stringr::str_extract_all(.data$post, "[A-Z0-9_]+")), collapse = "_"),
+          paramcd = ifelse(.data$comparator == "EQ", .data$paramcd, paste0(.data$comparator, "_", .data$paramcd)),
+          paramcd = ifelse(is.na(.data$joiner), .data$paramcd, paste0(.data$paramcd, "_", .data$joiner))
+        ) |>
+        dplyr::group_by(dplyr::across(
+          c("include_in_trial", "table", "endpoint", "column", "whereclause",
+            "origin", "origindescription", "algorithm", "comment", "order")
+        )) |>
+        dplyr::summarise(paramcd = paste(.data$paramcd, collapse = "_")) |>
+        dplyr::ungroup()
+
+      source_values_missing <- source_values |>
+        dplyr::filter(is.na(paramcd))
+
+      if (nrow(source_values_missing) > 0) {
+        source_values_missing_string <- source_values_missing |>
+          dplyr::count(table) |>
+          dplyr::mutate(count_string = paste0(table, ": ", n)) |>
+          dplyr::pull(count_string) |> paste(collapse = ", ")
+
+
+        stop("PARAMCD could not be determined for some records in source_values: ",
+             source_values_missing_string)
+      }
 
     }
 

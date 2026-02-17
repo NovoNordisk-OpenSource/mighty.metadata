@@ -188,9 +188,13 @@ process_table <- function(table_name,
     }
   }
 
+  # Sort column data
+  col_data <- col_data |>
+    dplyr::mutate(colorder = dplyr::row_number()) |>
+    dplyr::arrange(dplyr::across(dplyr::any_of(c("orderblock", "sortorder", "colorder"))))
+
   # TODO: This can be cleaned up considerably
   # TODO: The listify-function could be pulled out.
-
   # Create column metadata list with appropriate fields based on type
   col_meta <-  lapply(seq_len(nrow(col_data)), function(i) {
     row <- col_data[i, ]
