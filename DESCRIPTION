@@ -23,15 +23,17 @@ Imports:
     rlang,
     S7,
     S7schema (>= 0.0.0.9006),
-    stringr,
+    tibble,
     tidyr,
     utils,
-    yaml
+    yaml,
+    zephyr
 Suggests: 
     knitr,
     openxlsx,
     quarto,
     rmarkdown,
+    stringr,
     testthat (>= 3.0.0),
     withr
 VignetteBuilder: 

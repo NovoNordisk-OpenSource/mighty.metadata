@@ -1,0 +1,58 @@
+id: ADAE
+label: Adverse Events Analysis Dataset
+class: OCCURRENCE DATA STRUCTURE
+subclass: ADVERSE EVENT
+structure: One record per adverse event per subject
+keys: [USUBJID, AESEQ]
+
+metadata:
+  usecore: true
+
+columns:
+  - id: STUDYID
+    label: Study Identifier
+    method: AE.STUDYID
+
+  - id: USUBJID
+    label: Unique Subject Identifier
+    method: AE.USUBJID
+
+  - id: AESEQ
+    label: Sequence Number
+    method: AE.AESEQ
+
+  - id: AETERM
+    label: Reported Term for the Adverse Event
+    method: AE.AETERM
+
+  - id: AEDECOD
+    label: Dictionary-Derived Term
+    method: AE.AEDECOD
+
+  - id: AEBODSYS
+    label: Body System or Organ Class
+    method: AE.AEBODSYS
+    codelist: FANCY_CDISC_CODELIST
+
+  - id: ASTDT
+    label: Analysis Start Date
+    method: Derived from AE.AESTDTC
+    format:
+      type: date
+      length: 8
+      display: date9.
+
+  - id: AENDT
+    label: Analysis End Date
+    method: Derived from AE.AEENDTC
+    format:
+      type: date
+      length: 8
+      display: date9.
+
+  - id: TRTEMFL
+    label: Treatment Emergent Flag
+    method: Derived based on treatment period
+    format:
+      type: text
+      length: 1

@@ -1,4 +1,4 @@
-#' Mighty metadata
+#' Mighty Metadata
 #'
 #' @description
 #' `mighty_metadata()` provides a robust way of working with ADaM metadata in the `{mighty}` framework.
@@ -21,7 +21,7 @@
 #' @param file `character(1)` path to a yaml file defining a ADaM dataset.
 #' @examples
 #' x <- mighty_metadata(
-#'   file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+#'   file = system.file("examples", "advs.yml", package = "mighty.metadata")
 #' )
 #'
 #' # Custom print method gives a small overview

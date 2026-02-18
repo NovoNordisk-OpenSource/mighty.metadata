@@ -6,7 +6,7 @@ describe("CST - yaml - mdcol - workflow", {
     adam_metadata <- build_adam_metadata(metadata, verbose = FALSE)
 
     expect_no_error({
-      all_yaml <- lapply(names(adam_metadata), function(domain)  {
+      all_yaml <- lapply(names(adam_metadata), function(domain) {
         write_adam_domain_yaml(
           domain_data = adam_metadata[[domain]],
           domain_name = domain,
@@ -20,26 +20,17 @@ describe("CST - yaml - mdcol - workflow", {
       lapply(all_yaml, mighty_metadata)
     })
 
-    expect_equal(
-      list.files(output_dir),
-      c("adadj.yaml", "adae.yaml", "adcgm.yaml", "adcgmen.yaml", "adcm.yaml",
-        "adec.yaml", "adecen.yaml", "adeg.yaml", "adhypo.yaml", "adhypoen.yaml",
-        "adlb.yaml", "admh.yaml", "adpe.yaml", "adqsdpem.yaml", "adqsdtsq.yaml",
-        "adqsipq.yaml", "adresp.yaml", "adsl.yaml", "adsmpg.yaml", "adsmpgen.yaml",
-        "advs.yaml", "mdcntry.yaml", "mdcol.yaml", "mdflow.yaml", "mdmq.yaml",
-        "mdnr.yaml", "mdparam.yaml", "mdsymbol.yaml", "mdunitcv.yaml",
-        "mdvisit.yaml")
-    )
-
+    list.files(output_dir) |>
+      cat(sep = "\n") |>
+      expect_snapshot()
   })
 
   it("Builds mdcol", {
-    mighty_metadata_list <- lapply(list.files(output_dir, full.names = TRUE), mighty_metadata)
-    mighty_metadata_list <- setNames(mighty_metadata_list, lapply(mighty_metadata_list, \(x) x$id))
+    study <- mighty_study(output_dir)
 
     # Populate internal references
     expect_no_error({
-      updated_metadata_internal <- mighty_metadata_list |> populate_sparse()
+      updated_metadata_internal <- study |> populate_sparse()
     })
 
     # Produce mdcol
@@ -48,24 +39,33 @@ describe("CST - yaml - mdcol - workflow", {
     })
 
     # Test shape of mdcol
-    expect_equal(dim(mdcol), c(1605, 11))
+    expect_equal(dim(mdcol), c(1605, 13))
 
     # Test names of mdcol
-    expect_equal(names(mdcol),
-                 c("TABLE", "KEYS", "TLABEL", "COLUMN", "LABEL", "METHOD", "TYPE",
-                   "LENGTH", "FORMAT", "CORE", "ORDER"))
+    expect_equal(
+      names(mdcol),
+      c(
+        "table_id",
+        "table_label",
+        "order",
+        "id",
+        "label",
+        "origin",
+        "key",
+        "core",
+        "method",
+        "codelist",
+        "format_type",
+        "format_length",
+        "format_display"
+      )
+    )
 
-    # Test number of record for each table within mdcol
-    expect_equal(mdcol |> dplyr::count(TABLE) |> as.list(),
-                 list(TABLE = c("ADADJ", "ADAE", "ADCGM", "ADCGMEN", "ADCM", "ADEC",
-                                "ADECEN", "ADEG", "ADHYPO", "ADHYPOEN", "ADLB", "ADMH", "ADPE",
-                                "ADQSDPEM", "ADQSDTSQ", "ADQSIPQ", "ADRESP", "ADSL", "ADSMPG",
-                                "ADSMPGEN", "ADVS", "MDCNTRY", "MDCOL", "MDFLOW", "MDMQ", "MDNR",
-                                "MDPARAM", "MDSYMBOL", "MDUNITCV", "MDVISIT"),
-                      n = c(76L, 102L, 64L, 54L, 91L, 54L, 56L, 63L, 72L, 49L,
-                            83L, 79L, 64L, 77L, 77L, 77L, 49L, 117L, 73L, 56L,
-                            74L, 2L, 11L, 8L, 16L, 16L, 19L, 6L, 8L, 12L)))
-
+    # Test number of records for each table within mdcol
+    res <- dplyr::count(mdcol, table_id)
+    paste(res$table_id, res$n, sep = " - ") |>
+      cat(sep = "\n") |>
+      expect_snapshot()
   })
 
   it("Runs entire flow with core variables", {
@@ -75,7 +75,7 @@ describe("CST - yaml - mdcol - workflow", {
     adam_metadata <- build_adam_metadata(metadata, verbose = FALSE)
 
     expect_no_error({
-      all_yaml <- lapply(names(adam_metadata), function(domain)  {
+      all_yaml <- lapply(names(adam_metadata), function(domain) {
         write_adam_domain_yaml(
           domain_data = adam_metadata[[domain]],
           domain_name = domain,
@@ -86,13 +86,12 @@ describe("CST - yaml - mdcol - workflow", {
 
     # Test that the yaml's live up to the mighty.metadata schema
     expect_no_error({
-      mighty_metadata_list <- lapply(all_yaml, mighty_metadata)
-      mighty_metadata_list <- setNames(mighty_metadata_list, lapply(mighty_metadata_list, \(x) x$id))
+      lapply(all_yaml, mighty_metadata)
     })
 
-    # Populate core variables
+    # Load as mighty_study and populate core variables
     expect_no_error({
-      updated_metadata <- mighty_metadata_list |> populate_core()
+      updated_metadata <- mighty_study(output_dir) |> populate_core()
     })
 
     # Populate internal references
@@ -105,17 +104,11 @@ describe("CST - yaml - mdcol - workflow", {
       mdcol <- updated_metadata_internal |> create_md_col()
     })
 
-    # Test number of record for each table within mdcol
-    expect_equal(mdcol |> dplyr::count(TABLE) |> as.list(),
-                 list(TABLE = c("ADADJ", "ADAE", "ADCGM", "ADCGMEN", "ADCM", "ADEC",
-                                "ADECEN", "ADEG", "ADHYPO", "ADHYPOEN", "ADLB", "ADMH", "ADPE",
-                                "ADQSDPEM", "ADQSDTSQ", "ADQSIPQ", "ADRESP", "ADSL", "ADSMPG",
-                                "ADSMPGEN", "ADVS", "MDCNTRY", "MDCOL", "MDFLOW", "MDMQ", "MDNR",
-                                "MDPARAM", "MDSYMBOL", "MDUNITCV", "MDVISIT"),
-                      n = c(83L, 109L, 72L, 62L, 98L, 75L, 65L, 70L, 79L, 57L, 90L,
-                            86L, 71L, 84L, 84L, 84L, 57L, 117L, 81L, 64L, 81L, 2L,
-                            11L, 8L, 16L, 16L, 19L, 6L, 8L, 12L)))
-
+    # Test number of records for each table within mdcol
+    res <- dplyr::count(mdcol, table_id)
+    paste(res$table_id, res$n, sep = " - ") |>
+      cat(sep = "\n") |>
+      expect_snapshot()
   })
 
   it("Runs entire flow with predecessors", {
@@ -127,7 +120,7 @@ describe("CST - yaml - mdcol - workflow", {
     adam_metadata <- build_adam_metadata(metadata, verbose = FALSE)
 
     expect_no_error({
-      all_yaml <- lapply(names(adam_metadata), function(domain)  {
+      all_yaml <- lapply(names(adam_metadata), function(domain) {
         write_adam_domain_yaml(
           domain_data = adam_metadata[[domain]],
           domain_name = domain,
@@ -138,18 +131,13 @@ describe("CST - yaml - mdcol - workflow", {
 
     # Test that the yaml's live up to the mighty.metadata schema
     expect_no_error({
-      mighty_metadata_list <- lapply(all_yaml, mighty_metadata)
-      mighty_metadata_list <- setNames(mighty_metadata_list, lapply(mighty_metadata_list, \(x) x$id))
+      lapply(all_yaml, mighty_metadata)
     })
 
-    # Populate external variables (from sdtm)
+    # Load as mighty_study and populate sparse references
     expect_no_error({
-      updated_metadata_external <- mighty_metadata_list |> populate_sparse(source = sdtm_columns)
-    })
-
-    # Populate internal references
-    expect_no_error({
-      updated_metadata_internal <- updated_metadata_external |> populate_sparse()
+      updated_metadata_internal <- mighty_study(output_dir) |>
+        populate_sparse()
     })
 
     # Produce mdcol
@@ -157,17 +145,10 @@ describe("CST - yaml - mdcol - workflow", {
       mdcol <- updated_metadata_internal |> create_md_col()
     })
 
-    # Test number of record for each table within mdcol
-    expect_equal(mdcol |> dplyr::count(TABLE) |> as.list(),
-                 list(TABLE = c("ADADJ", "ADAE", "ADCGM", "ADCGMEN", "ADCM", "ADEC",
-                                "ADECEN", "ADEG", "ADHYPO", "ADHYPOEN", "ADLB", "ADMH", "ADPE",
-                                "ADQSDPEM", "ADQSDTSQ", "ADQSIPQ", "ADRESP", "ADSL", "ADSMPG",
-                                "ADSMPGEN", "ADVS", "MDCNTRY", "MDCOL", "MDFLOW", "MDMQ", "MDNR",
-                                "MDPARAM", "MDSYMBOL", "MDUNITCV", "MDVISIT"),
-                      n = c(76L, 102L, 64L, 54L, 91L, 54L, 56L, 63L, 72L, 49L,
-                            83L, 79L, 64L, 77L, 77L, 77L, 49L, 117L, 73L, 56L,
-                            74L, 2L, 11L, 8L, 16L, 16L, 19L, 6L, 8L, 12L)))
-
+    # Test number of records for each table within mdcol
+    res <- dplyr::count(mdcol, table_id)
+    paste(res$table_id, res$n, sep = " - ") |>
+      cat(sep = "\n") |>
+      expect_snapshot()
   })
-
 })

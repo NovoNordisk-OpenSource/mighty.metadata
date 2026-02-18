@@ -131,15 +131,18 @@ ECSCAT
 ECSEQ
 EGSEQ
 egtestcd
+Esben
 imap
 INTRSDT
 jsonvalidate
 jsonvalidator
 keymatch
 knitr
+Knoph
 LBREASND
 LBSTAT
 LBSTRESN
+mapequal
 LBSTRESU
 lbtestcd
 listify
@@ -182,6 +185,7 @@ MHSOCCD
 MHSTDTC
 MHTERM
 mightyverse
+Moelgaard
 ndigits
 nocov
 Nordisk
@@ -212,6 +216,8 @@ SCOLUMN
 scriptname
 SDISPLAYFORMAT
 sdtm
+seealso
+Siggaard
 SITEID
 SLABEL
 SLENGTH

@@ -1,6 +1,6 @@
 test_that("list_parameters()", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
   list_parameters(x) |>
@@ -10,7 +10,7 @@ test_that("list_parameters()", {
 
 test_that("remove_parameters()", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
   x |>
@@ -26,7 +26,7 @@ test_that("remove_parameters()", {
 
 test_that("add_parameter()", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
   x |>
@@ -60,7 +60,7 @@ test_that("add_parameter()", {
 
 test_that("move_parameter()", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   ) |>
     add_parameter(
       id = "NEW",

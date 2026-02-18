@@ -1,6 +1,6 @@
 test_that("list_rows()", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
   list_rows(x) |>
@@ -10,7 +10,7 @@ test_that("list_rows()", {
 
 test_that("remove_rows()", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   ) |>
     add_row(id = "NEW")
 
@@ -26,7 +26,7 @@ test_that("remove_rows()", {
 
 test_that("add_row()", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
   x |>
@@ -49,7 +49,7 @@ test_that("add_row()", {
 
 test_that("move_row()", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   ) |>
     add_row(
       id = "NEW",

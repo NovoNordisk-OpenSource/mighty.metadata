@@ -2,7 +2,7 @@
 % Please edit documentation in R/mighty_metadata.R
 \name{mighty_metadata}
 \alias{mighty_metadata}
-\title{Mighty metadata}
+\title{Mighty Metadata}
 \usage{
 mighty_metadata(file)
 }
@@ -12,7 +12,7 @@ mighty_metadata(file)
 \description{
 \code{mighty_metadata()} provides a robust way of working with ADaM metadata in the \code{{mighty}} framework.
 
-A new object is initialised by supplying an existing yaml metadata file.
+A new object is initialized by supplying an existing yaml metadata file.
 This package provides helpers to update column, parameter, and row entries.
 See the references below for help:
 \itemize{
@@ -30,7 +30,7 @@ You can at anytime validate an object by calling \code{validate()} and use
 }
 \examples{
 x <- mighty_metadata(
-  file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+  file = system.file("examples", "advs.yml", package = "mighty.metadata")
 )
 
 # Custom print method gives a small overview

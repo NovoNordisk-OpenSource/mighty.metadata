@@ -4,9 +4,17 @@ template:
   bootstrap: 5
 
 reference:
-  - title: Mighty metadata
+  - title: Study level metadata
     description: |
-      Work with ADaM metadata.
+      Work with ADaM metadata for an entire study.
+    contents:
+    - mighty_study
+    - populate_core
+    - populate_sparse
+    - create_md_col
+  - title: Domain level metadata
+    description: |
+      Work with metadata for a single ADaM data set.
     contents:
     - mighty_metadata
     - columns
@@ -16,9 +24,6 @@ reference:
     description: |
       Utilities to convert Excel documentation to the new yaml format.
     contents:
-    - create_md_col
-    - populate_core
-    - populate_sparse
     - write_adam_domain_yaml
     - write_adam_yaml
     - build_adam_metadata

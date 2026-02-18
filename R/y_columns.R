@@ -11,7 +11,7 @@
 #' @examples
 #' # Load example configuration
 #' x <- mighty_metadata(
-#'   file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+#'   file = system.file("examples", "advs.yml", package = "mighty.metadata")
 #' )
 #'
 #' # List all columns defined
@@ -85,10 +85,10 @@ add_column <- S7::new_generic(
 
 #' @noRd
 S7::method(add_column, mighty_metadata) <- function(
-    x,
-    id,
-    ...,
-    .pos = length(x[["columns"]]) + 1L
+  x,
+  id,
+  ...,
+  .pos = length(x[["columns"]]) + 1L
 ) {
   col_add(x, id, ..., .pos = .pos)
 }
@@ -179,4 +179,3 @@ col_move <- function(x, id, .pos) {
 col_select <- function(x, id) {
   x[["columns"]][[which_ids(x = x[["columns"]], id = id)]]
 }
-

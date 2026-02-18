@@ -1,6 +1,6 @@
 test_that("list_columns()", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
   list_columns(x) |>
@@ -10,7 +10,7 @@ test_that("list_columns()", {
 
 test_that("remove_columns()", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
   x |>
@@ -26,7 +26,7 @@ test_that("remove_columns()", {
 
 test_that("add_column()", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
   x |>
@@ -52,7 +52,7 @@ test_that("add_column()", {
 
 test_that("move_column()", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   ) |>
     add_column(id = "NEW", label = "test") |>
     move_column(id = "NEW", .pos = 7)

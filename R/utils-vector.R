@@ -32,15 +32,38 @@ list_ids <- function(x) {
   )
 }
 
-#' Helper function to get all `cores`s as a logical value`
-#' from all elements in a list.
+#' Helper function to list all `core` columns
 #' @noRd
 list_cores <- function(x) {
   vapply(
-    X = x,
-    FUN = \(x) ifelse("core" %in% names(x), x[["core"]], FALSE),
-    FUN.VALUE = logical(1)
+    X = x[["columns"]],
+    FUN = \(x) list(x[["id"]][isTRUE(x[["core"]])]),
+    FUN.VALUE = list(1)
+  ) |>
+    unlist()
+}
+
+# Helper to check if a columns is a predecessor
+#' @noRd
+is_predecessor <- function(col) {
+  has_predecessor_origin <- isTRUE(col[["origin"]] == "Predecessor")
+
+  has_method_reference <- isTRUE(
+    grepl(
+      pattern = "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$",
+      x = col[["method"]]
+    )
   )
+
+  has_predecessor_origin || has_method_reference
+}
+
+# Helper to list all predecessor columns
+#' @noRd
+list_predecessors <- function(x) {
+  cols <- x[["columns"]]
+  is_pred <- vapply(X = cols, FUN = is_predecessor, FUN.VALUE = logical(1))
+  list_ids(cols[is_pred])
 }
 
 #' Helper function to get the index of entries

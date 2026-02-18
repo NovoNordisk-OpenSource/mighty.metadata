@@ -11,7 +11,7 @@
 #' @examples
 #' # Load example configuration
 #' x <- mighty_metadata(
-#'   file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+#'   file = system.file("examples", "advs.yml", package = "mighty.metadata")
 #' )
 #'
 #' # List all rows defined

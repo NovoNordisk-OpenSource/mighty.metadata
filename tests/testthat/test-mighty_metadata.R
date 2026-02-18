@@ -1,6 +1,6 @@
 test_that("mighty_metadata works", {
   x <- mighty_metadata(
-    file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
   ) |>
     expect_no_condition()
 
