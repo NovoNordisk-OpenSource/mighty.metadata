@@ -18,30 +18,13 @@ npx \
   --no-update-notifier \
   --yes \
   --quiet \
-cspell@9.4.0 lint \
+cspell@9.4.0 lint . \
   --config "$TEMP_CSPELL_CONFIG" \
   --words-only \
   --unique \
   --no-progress \
   --no-exit-code \
-  --exclude "sample_toolbox_inputs/*" \
-  "./**/*.md" \
-  "./**/*.mdx" \
-  "./**/*.markdown" \
-  "./**/*.html" \
-  "./**/*.htm" \
-  "./**/*.rst" \
-  "./**/*.txt" \
-  "./**/*.json" \
-  "./**/*.jsonc" \
-  "./**/*.json5" \
-  "./**/*.yaml" \
-  "./**/*.yml" \
-  "./**/*.qmd" \
-  "./**/*.R" \
-  "./**/*.r" \
-  "./**/*.Rmd" \
-  "./**/*.rmd" > "$TEMP_FILE"
+  --exclude "sample_toolbox_inputs/*" > "$TEMP_FILE"
 
 
 echo "Updating inst/WORDLIST..."
