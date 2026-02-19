@@ -100,7 +100,7 @@ build_adam_metadata <-  function(metadata, verbose = TRUE) {
 
       comparator_symbol <- "\\b(EQ|LT|LE|GT|GE|NE|IN|NOTIN)\\b"
 
-      if (any(is.na(source_values$whereclause))) {
+      if (anyNA(source_values$whereclause)) {
         stop("WHERECLAUSE column in source_values tab contains missing values.")
       }
 
@@ -109,7 +109,7 @@ build_adam_metadata <-  function(metadata, verbose = TRUE) {
           post = purrr::map(.data$whereclause, \(x) stringr::str_split_1(x, comparator_symbol)[-1]),
           comparator = stringr::str_extract_all(.data$whereclause, comparator_symbol)
         ) |>
-        tidyr::unnest(c(.data$post, .data$comparator)) |>
+        tidyr::unnest(c("post", "comparator")) |>
         dplyr::rowwise() |>
         dplyr::mutate(
           joiner = stringr::str_extract(.data$post, "\\b(AND|OR)\\b"),

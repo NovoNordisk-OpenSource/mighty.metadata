@@ -71,7 +71,7 @@ construct_mighty_study <- function(path) {
 
   if (length(properties) == 0) {
     zephyr::msg_debug("No _mighty.yml file found")
-    properties = list()
+    properties <- list()
   } else {
     properties <- yaml::read_yaml(properties)
   }
