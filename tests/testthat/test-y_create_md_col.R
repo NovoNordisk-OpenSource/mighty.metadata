@@ -19,6 +19,7 @@ test_that("create_md_col()", {
       "label",
       "origin",
       "key",
+      "is_core",
       "core",
       "method",
       "codelist",

@@ -69,7 +69,7 @@ populate_sparse_domain <- function(domain, study) {
 update_predecessor <- function(
   column,
   study,
-  discard = c("id", "core", "method", "origin", "component", "depends")
+  discard = c("id", "is_core", "method", "origin", "component", "depends")
 ) {
   predecessor_pattern <- "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$"
   if (!isTRUE(grepl(pattern = predecessor_pattern, x = column$method))) {

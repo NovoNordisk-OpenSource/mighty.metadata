@@ -40,7 +40,7 @@ test_that("populate_core() throws error when column already exists", {
     mighty_study()
 
   i <- which_ids(x = study$ADSL$columns, id = "STUDYID")
-  study$ADSL$columns[[i]][["core"]] <- TRUE
+  study$ADSL$columns[[i]][["is_core"]] <- TRUE
 
   populate_core(study) |>
     expect_error(
@@ -68,7 +68,7 @@ test_that("populate_core() throws error with non-ADSL core variables", {
   study$ADSL2 <- remove_columns(study$ADSL2, c("SEX", "RACE"))
 
   i <- which(list_columns(study$ADSL2) %in% "AGE")
-  study$ADSL2$columns[[i]][["core"]] <- TRUE
+  study$ADSL2$columns[[i]][["is_core"]] <- TRUE
 
   populate_core(study) |>
     expect_error(

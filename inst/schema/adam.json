@@ -113,7 +113,7 @@
             "description": "Codelist of possible values of the column",
             "type": "string"
           },
-          "core": {
+          "is_core": {
             "description": "Flag for designating a core variables in subject level datasets",
             "type": "boolean"
           },
@@ -128,6 +128,10 @@
           "depends": {
             "description": "dependencies required to create the column",
             "$ref": "#/definitions/mighty/depends"
+          },
+          "core": {
+            "description": "Describes whether a variable is required (Req), conditionally required (Cond) or permissible (Perm)",
+            "$ref": "#/definitions/cdisc/core"
           }
         },
         "required": [
@@ -282,6 +286,11 @@
           "Predecessor",
           "Protocol"
         ]
+      },
+      "core": {
+        "description": "Indicator of whether a variable is required (Req), conditionally required (Cond), or permissible (Perm) in the dataset",
+        "type": "string",
+        "enum": ["Cond", "Perm", "Req"]
       }
     },
     "mighty": {

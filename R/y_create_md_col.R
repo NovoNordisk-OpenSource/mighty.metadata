@@ -15,7 +15,8 @@
 #'   \item{label}{Column label}
 #'   \item{origin}{Origin type (e.g., "Predecessor", "Derived")}
 #'   \item{key}{Logical, whether column is a key}
-#'   \item{core}{Logical, whether column is a core variable}
+#'   \item{is_core}{Logical, whether column is a core variable}
+#'   \item{core}{String, whether a column is Req, Cond or Perm}
 #'   \item{method}{Derivation method}
 #'   \item{codelist}{Codelist reference}
 #'   \item{format_type}{Data type ("C" or "N")}
@@ -86,7 +87,8 @@ mdcol_template <- tibble::tibble(
   label = character(),
   origin = character(),
   key = logical(),
-  core = logical(),
+  is_core = logical(),
+  core = character(),
   method = character(),
   codelist = character(),
   format_type = character(),

@@ -37,7 +37,7 @@ list_ids <- function(x) {
 list_cores <- function(x) {
   vapply(
     X = x[["columns"]],
-    FUN = \(x) list(x[["id"]][isTRUE(x[["core"]])]),
+    FUN = \(x) list(x[["id"]][isTRUE(x[["is_core"]])]),
     FUN.VALUE = list(1)
   ) |>
     unlist()

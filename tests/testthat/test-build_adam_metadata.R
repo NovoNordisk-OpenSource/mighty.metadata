@@ -2,6 +2,8 @@ describe("build_adam_metadata", {
   it("Builds ADaM metadata structure", {
     # Read test metadata
     metadata <- load_test_metadata_components()
+    metadata$source_columns <- metadata$source_columns |>
+      dplyr::filter(!is.na(.data$core))
 
     expect_no_error({
       adam_metadata <- build_adam_metadata(metadata, verbose = FALSE)
@@ -79,5 +81,19 @@ describe("build_adam_metadata", {
       adam_metadata <- suppressWarnings(build_adam_metadata(metadata))
     })
 
+  })
+
+  it("builds ADaM metadata including 'core' column", {
+    metadata <- load_test_metadata_components(
+      table_filter = table == "ADSL",
+      column_filter = table == "ADSL",
+      value_filter = table == "ADSL"
+    )
+
+    adam_metadata <- build_adam_metadata(metadata, verbose = FALSE)
+
+    column_metadata <- adam_metadata$ADSL$column_metadata
+    have_core <- purrr::map_lgl(column_metadata, \(x) "core" %in% names(x))
+    expect_true(all(have_core))
   })
 })

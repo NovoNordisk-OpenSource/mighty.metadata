@@ -198,6 +198,11 @@ process_table <- function(table_name,
   # Create column metadata list with appropriate fields based on type
   col_meta <-  lapply(seq_len(nrow(col_data)), function(i) {
     row <- col_data[i, ]
+    result <- list()
+
+    if ("core" %in% colnames(row)) {
+      result <- append(result, list(core = row$core))
+    }
 
     method_text <- row$unified_origin
     if (!is.na(method_text)) {
@@ -208,51 +213,73 @@ process_table <- function(table_name,
     if (row$is_predecessor && !row$is_renamed && row$is_adam_predecessor) {
       # For predecessor columns that aren't renamed, only include the column field
       # This follows CDISC requirements that predecessor columns inherit metadata from parent
-      list(id = row$column,
-           method = method_text)
+      append(
+        result,
+        list(
+          id = row$column,
+          method = method_text
+        )
+      )
     } else if (row$is_renamed && row$is_adam_predecessor) {
       # For renamed predecessor columns, include column and source
-      list(
-        id = row$column,
-        label = row$label,
-        method = method_text
+      append(
+        result,
+        list(
+          id = row$column,
+          label = row$label,
+          method = method_text
+        )
       )
     } else if (row$is_predecessor && !row$is_renamed && !row$is_adam_predecessor) {
       # For predecessor columns that aren't renamed, only include the column field
       # This follows CDISC requirements that predecessor columns inherit metadata from parent
-      list(id = row$column,
-           label = row$label,
-           format = row$format,
-           method = method_text,
-           core = row$corefl == "Y")
+      append(
+        result,
+        list(
+          id = row$column,
+          label = row$label,
+          format = row$format,
+          method = method_text,
+          is_core = row$corefl == "Y"
+        )
+      )
     } else if (row$is_renamed && !row$is_adam_predecessor) {
       # For renamed predecessor columns, include column and source
-      list(
-        id = row$column,
-        label = row$label,
-        format = row$format,
-        method = method_text,
-        core = row$corefl == "Y"
+      append(
+        result,
+        list(
+          id = row$column,
+          label = row$label,
+          format = row$format,
+          method = method_text,
+          is_core = row$corefl == "Y"
+        )
       )
     } else if (row$is_complex_predecessor) {
       # For complex predecessors (now treated as derived)
-      list(
-        id = row$column,
-        label = row$label,
-        format = row$format,
-        codelist = row$xmlcodelist,
-        method = method_text,
-        core = row$corefl == "Y"
+      append(
+        result,
+        list(
+          id = row$column,
+          label = row$label,
+          format = row$format,
+          codelist = row$xmlcodelist,
+          method = method_text,
+          is_core = row$corefl == "Y"
+        )
       )
     } else {
       # For derived/assigned columns, include all relevant metadata
-      list(
-        id = row$column,
-        label = row$label,
-        format = row$format,
-        codelist = row$xmlcodelist,
-        method = method_text,
-        core = row$corefl == "Y"
+      append(
+        result,
+        list(
+          id = row$column,
+          label = row$label,
+          format = row$format,
+          codelist = row$xmlcodelist,
+          method = method_text,
+          is_core = row$corefl == "Y"
+        )
       )
     }
   }) |>

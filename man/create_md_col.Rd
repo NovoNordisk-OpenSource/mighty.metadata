@@ -19,7 +19,8 @@ A tibble with one row per column containing:
 \item{label}{Column label}
 \item{origin}{Origin type (e.g., "Predecessor", "Derived")}
 \item{key}{Logical, whether column is a key}
-\item{core}{Logical, whether column is a core variable}
+\item{is_core}{Logical, whether column is a core variable}
+\item{core}{String, whether a column is Req, Cond or Perm}
 \item{method}{Derivation method}
 \item{codelist}{Codelist reference}
 \item{format_type}{Data type ("C" or "N")}

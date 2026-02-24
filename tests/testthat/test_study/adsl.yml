@@ -8,33 +8,41 @@ columns:
   - id: STUDYID
     label: Study Identifier
     method: DM.STUDYID
+    core: Req
 
   - id: USUBJID
     label: Unique Subject Identifier
     method: DM.USUBJID
+    core: Req
 
   - id: SUBJID
     label: Subject Identifier for the Study
     method: DM.SUBJID
+    core: Req
 
   - id: SITEID
     label: Study Site Identifier
     method: DM.SITEID
+    core: Req
 
   - id: AGE
     label: Age
     method: DM.AGE
+    core: Req
 
   - id: AGEU
     label: Age Units
     method: DM.AGEU
+    core: Req
 
   - id: SEX
     label: Sex
     method: DM.SEX
-    core: true
+    is_core: true
+    core: Req
 
   - id: RACE
     label: Race
     method: DM.RACE
-    core: true
+    is_core: true
+    core: Req

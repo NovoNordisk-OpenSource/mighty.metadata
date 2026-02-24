@@ -12,27 +12,33 @@ columns:
   - id: STUDYID
     label: Study Identifier
     method: AE.STUDYID
+    core: Req
 
   - id: USUBJID
     label: Unique Subject Identifier
     method: AE.USUBJID
+    core: Req
 
   - id: AESEQ
     label: Sequence Number
     method: AE.AESEQ
+    core: Cond
 
   - id: AETERM
     label: Reported Term for the Adverse Event
     method: AE.AETERM
+    core: Req
 
   - id: AEDECOD
     label: Dictionary-Derived Term
     method: AE.AEDECOD
+    core: Cond
 
   - id: AEBODSYS
     label: Body System or Organ Class
     method: AE.AEBODSYS
     codelist: FANCY_CDISC_CODELIST
+    core: Cond
 
   - id: ASTDT
     label: Analysis Start Date
@@ -41,6 +47,7 @@ columns:
       type: date
       length: 8
       display: date9.
+    core: Cond
 
   - id: AENDT
     label: Analysis End Date
@@ -49,6 +56,7 @@ columns:
       type: date
       length: 8
       display: date9.
+    core: Cond
 
   - id: TRTEMFL
     label: Treatment Emergent Flag
@@ -56,3 +64,4 @@ columns:
     format:
       type: text
       length: 1
+    core: Cond

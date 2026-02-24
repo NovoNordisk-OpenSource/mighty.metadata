@@ -6,7 +6,7 @@
         "names": {
           "type": "character",
           "attributes": {},
-          "value": ["table_id", "table_label", "order", "id", "label", "origin", "key", "core", "method", "codelist", "format_type", "format_length", "format_display"]
+          "value": ["table_id", "table_label", "order", "id", "label", "origin", "key", "is_core", "core", "method", "codelist", "format_type", "format_length", "format_display"]
         },
         "row.names": {
           "type": "integer",
@@ -59,6 +59,11 @@
           "type": "logical",
           "attributes": {},
           "value": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, true, true]
+        },
+        {
+          "type": "character",
+          "attributes": {},
+          "value": ["Req", "Req", "Cond", "Req", "Cond", "Cond", "Cond", "Cond", "Cond", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req"]
         },
         {
           "type": "character",
