@@ -7,6 +7,7 @@
 \alias{add_column}
 \alias{move_column}
 \alias{select_column}
+\alias{update_column}
 \title{Update columns in your metadata}
 \usage{
 list_columns(x)
@@ -18,13 +19,15 @@ add_column(x, id, ..., .pos = length(x[["columns"]]) + 1L)
 move_column(x, id, .pos = length(x[["columns"]]))
 
 select_column(x, id)
+
+update_column(x, id, ...)
 }
 \arguments{
 \item{x}{\code{mighty_metadata()} Object to manipulate.}
 
 \item{id}{\code{character()} Id of the column(s) to remove, add, or move.}
 
-\item{...}{Additional properties to add for the column, e.g. a \code{label = "my label"}.}
+\item{...}{Additional properties to add/update for the column, e.g. a \code{label = "my label"}.}
 
 \item{.pos}{\code{integer(1)} Position to put or move the column to. Default places the column as the last.}
 }
@@ -32,7 +35,7 @@ select_column(x, id)
 \code{invisible(x)}
 }
 \description{
-Functions to list, remove, add, and move columns in
+Functions to list, select, remove, add, update, and move columns in
 your \code{mighty_metadata()} objects.
 }
 \examples{
@@ -66,5 +69,14 @@ str(y[["columns"]][[1]])
 x |>
   move_column(id = "STUDYID", .pos = 3) |>
   list_columns()
+
+# Update an existing column
+x |>
+  update_column(id = "STUDYID", label = "Updated Label") |>
+  select_column(id = "STUDYID") |>
+  str()
+
+# Select a specific column
+select_column(x, id = "STUDYID")
 
 }

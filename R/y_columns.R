@@ -1,11 +1,11 @@
 #' Update columns in your metadata
 #'
-#' Functions to list, remove, add, and move columns in
+#' Functions to list, select, remove, add, update, and move columns in
 #' your `mighty_metadata()` objects.
 #'
 #' @param x `mighty_metadata()` Object to manipulate.
 #' @param id `character()` Id of the column(s) to remove, add, or move.
-#' @param ... Additional properties to add for the column, e.g. a `label = "my label"`.
+#' @param ... Additional properties to add/update for the column, e.g. a `label = "my label"`.
 #' @param .pos `integer(1)` Position to put or move the column to. Default places the column as the last.
 #' @returns `invisible(x)`
 #' @examples
@@ -39,6 +39,15 @@
 #' x |>
 #'   move_column(id = "STUDYID", .pos = 3) |>
 #'   list_columns()
+#'
+#' # Update an existing column
+#' x |>
+#'   update_column(id = "STUDYID", label = "Updated Label") |>
+#'   select_column(id = "STUDYID") |>
+#'   str()
+#'
+#' # Select a specific column
+#' select_column(x, id = "STUDYID")
 #'
 #' @name columns
 NULL
@@ -127,6 +136,21 @@ S7::method(select_column, mighty_metadata) <- function(x, id) {
   col_select(x, id)
 }
 
+#' @rdname columns
+#' @export
+update_column <- S7::new_generic(
+  name = "update_column",
+  dispatch_args = "x",
+  fun = \(x, id, ...) {
+    S7::S7_dispatch()
+  }
+)
+
+#' @noRd
+S7::method(update_column, mighty_metadata) <- function(x, id, ...) {
+  col_update(x, id, ...)
+}
+
 #' @noRd
 col_list <- function(x) {
   list_ids(x = x[["columns"]])
@@ -177,5 +201,14 @@ col_move <- function(x, id, .pos) {
 
 #' @noRd
 col_select <- function(x, id) {
-  x[["columns"]][[which_ids(x = x[["columns"]], id = id)]]
+  get_id(x = x[["columns"]], id = id)
+}
+
+#' @noRd
+col_update <- function(x, id, ...) {
+  idx <- which_ids(x = x[["columns"]], id = id)
+  updates <- rlang::list2(...)
+  x[["columns"]][[idx]][names(updates)] <- updates
+
+  validate(x)
 }

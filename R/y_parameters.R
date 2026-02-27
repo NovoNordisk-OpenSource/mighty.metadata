@@ -1,6 +1,6 @@
 #' Update parameters in your metadata
 #'
-#' Functions to list, remove, add, and move parameters in
+#' Functions to list, select, remove, add, update, and move parameters in
 #' your `mighty_metadata()` objects.
 #'
 #' @param x `mighty_metadata()` Object to manipulate.
@@ -37,6 +37,15 @@
 #' x |>
 #'   move_parameter(id = "BMIGRP", .pos = 1) |>
 #'   list_parameters()
+#'
+#' # Update an existing parameter
+#' x |>
+#'   update_parameter(id = "BMI", label = "Updated BMI Label") |>
+#'   select_parameter(id = "BMI") |>
+#'   str()
+#'
+#' # Select a specific parameter
+#' select_parameter(x, id = "BMI")
 #'
 #' @name parameters
 NULL
@@ -112,6 +121,36 @@ S7::method(move_parameter, mighty_metadata) <- function(
   param_move(x, id, .pos = .pos)
 }
 
+#' @rdname parameters
+#' @export
+update_parameter <- S7::new_generic(
+  name = "update_parameter",
+  dispatch_args = "x",
+  fun = \(x, id, ...) {
+    S7::S7_dispatch()
+  }
+)
+
+#' @noRd
+S7::method(update_parameter, mighty_metadata) <- function(x, id, ...) {
+  param_update(x, id, ...)
+}
+
+#' @rdname parameters
+#' @export
+select_parameter <- S7::new_generic(
+  name = "select_parameter",
+  dispatch_args = "x",
+  fun = \(x, id) {
+    S7::S7_dispatch()
+  }
+)
+
+#' @noRd
+S7::method(select_parameter, mighty_metadata) <- function(x, id) {
+  param_select(x, id)
+}
+
 #' @noRd
 param_list <- function(x) {
   list_ids(x = x[["parameters"]])
@@ -160,4 +199,18 @@ param_move <- function(x, id, .pos) {
     what = add_parameter,
     args = args
   )
+}
+
+#' @noRd
+param_update <- function(x, id, ...) {
+  idx <- which_ids(x = x[["parameters"]], id = id)
+  updates <- rlang::list2(...)
+  x[["parameters"]][[idx]][names(updates)] <- updates
+
+  validate(x)
+}
+
+#' @noRd
+param_select <- function(x, id) {
+  get_id(x = x[["parameters"]], id = id)
 }

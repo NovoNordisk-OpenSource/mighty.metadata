@@ -18,6 +18,12 @@ insert_in_vector <- function(x, y, pos = length(x) + 1L) {
 #' Helper function to retrieve entry with a certain id
 #' @noRd
 get_id <- function(x, id) {
+  idx <- which_ids(x = x, id = id)
+
+  if (length(idx) == 0L) {
+    cli::cli_abort("Id {.code {id}} does not exist")
+  }
+
   x[[which_ids(x = x, id = id)]]
 }
 

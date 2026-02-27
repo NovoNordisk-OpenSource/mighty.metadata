@@ -48,33 +48,34 @@ populate_sparse_study <- function(study) {
 
 #' @noRd
 populate_sparse_domain <- function(domain, study) {
-  predecessors <- which_ids(
-    x = domain[["columns"]],
-    id = list_predecessors(domain)
+  Reduce(
+    f = \(init, x) {
+      update_predecessor(
+        x = init,
+        id = x,
+        study = study
+      )
+    },
+    x = list_predecessors(domain),
+    init = domain
   )
-
-  domain[["columns"]][predecessors] <- lapply(
-    X = domain[["columns"]][predecessors],
-    FUN = \(x) {
-      update_predecessor(column = x, study = study)
-    }
-  )
-
-  domain
 }
 
 #' Helper function to updated a single column list entry with its predecessor information.
 #' For consistency it does not change the properties in `discard`.
 #' @noRd
 update_predecessor <- function(
-  column,
+  x,
+  id,
   study,
   discard = c("id", "is_core", "method", "origin", "component", "depends")
 ) {
+  column <- select_column(x = x, id = id)
+
   predecessor_pattern <- "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$"
   if (!isTRUE(grepl(pattern = predecessor_pattern, x = column$method))) {
     cli::cli_abort(
-      "{column$id}: Non standard predecessor method {.code {column$method}}.
+      "{id}: Non standard predecessor method {.code {column$method}}.
       Must be in the {.code {{domain}}.{{column}}} format."
     )
   }
@@ -82,13 +83,17 @@ update_predecessor <- function(
   pred_table <- gsub(pattern = "\\..*$", replacement = "", x = column$method)
   pred_column <- gsub(pattern = "^.*\\.", replacement = "", x = column$method)
 
-  column$origin <- "Predecessor"
-
   if (!pred_table %in% names(study)) {
     zephyr::msg_debug(
       "{column$id}: Predecessor domain {.code {pred_table}} not found in study"
     )
-    return(column)
+    return(
+      update_column(
+        x = x,
+        id = id,
+        origin = "Predecessor"
+      )
+    )
   }
 
   if (!pred_column %in% list_columns(x = study[[pred_table]])) {
@@ -104,7 +109,13 @@ update_predecessor <- function(
     setdiff(y = discard) |>
     setdiff(y = names(column))
 
-  column[updated_values] <- pred[updated_values]
-
-  column
+  do.call(
+    what = update_column,
+    args = c(
+      x = list(x),
+      id = list(id),
+      origin = list("Predecessor"),
+      pred[updated_values]
+    )
+  )
 }

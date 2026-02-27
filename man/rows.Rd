@@ -6,6 +6,8 @@
 \alias{remove_rows}
 \alias{add_row}
 \alias{move_row}
+\alias{update_row}
+\alias{select_row}
 \title{Update rows in your metadata}
 \usage{
 list_rows(x)
@@ -15,6 +17,10 @@ remove_rows(x, id)
 add_row(x, id, ..., .pos = length(x[["rows"]]) + 1L)
 
 move_row(x, id, .pos = length(x[["rows"]]))
+
+update_row(x, id, ...)
+
+select_row(x, id)
 }
 \arguments{
 \item{x}{\code{mighty_metadata()} Object to manipulate.}
@@ -29,7 +35,7 @@ move_row(x, id, .pos = length(x[["rows"]]))
 \code{invisible(x)}
 }
 \description{
-Functions to list, remove, add, and move row operations in
+Functions to list, select, remove, add, update, and move row operations in
 your \code{mighty_metadata()} objects.
 }
 \examples{
@@ -51,5 +57,14 @@ list_rows(y)
 y |>
   remove_rows("NEW") |>
   list_rows()
+
+# Update an existing row
+x |>
+  update_row(id = "baseline", method = "Updated method") |>
+  select_row(id = "baseline") |>
+  str()
+
+# Select a specific row
+select_row(x, id = "baseline")
 
 }

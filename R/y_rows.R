@@ -1,6 +1,6 @@
 #' Update rows in your metadata
 #'
-#' Functions to list, remove, add, and move row operations in
+#' Functions to list, select, remove, add, update, and move row operations in
 #' your `mighty_metadata()` objects.
 #'
 #' @param x `mighty_metadata()` Object to manipulate.
@@ -27,6 +27,15 @@
 #' y |>
 #'   remove_rows("NEW") |>
 #'   list_rows()
+#'
+#' # Update an existing row
+#' x |>
+#'   update_row(id = "baseline", method = "Updated method") |>
+#'   select_row(id = "baseline") |>
+#'   str()
+#'
+#' # Select a specific row
+#' select_row(x, id = "baseline")
 #'
 #' @name rows
 NULL
@@ -100,6 +109,36 @@ S7::method(move_row, mighty_metadata) <- function(
   row_move(x, id, .pos = .pos)
 }
 
+#' @rdname rows
+#' @export
+update_row <- S7::new_generic(
+  name = "update_row",
+  dispatch_args = "x",
+  fun = \(x, id, ...) {
+    S7::S7_dispatch()
+  }
+)
+
+#' @noRd
+S7::method(update_row, mighty_metadata) <- function(x, id, ...) {
+  row_update(x, id, ...)
+}
+
+#' @rdname rows
+#' @export
+select_row <- S7::new_generic(
+  name = "select_row",
+  dispatch_args = "x",
+  fun = \(x, id) {
+    S7::S7_dispatch()
+  }
+)
+
+#' @noRd
+S7::method(select_row, mighty_metadata) <- function(x, id) {
+  row_select(x, id)
+}
+
 #' @noRd
 row_list <- function(x) {
   list_ids(x = x[["rows"]])
@@ -146,4 +185,18 @@ row_move <- function(x, id, .pos) {
     what = add_row,
     args = args
   )
+}
+
+#' @noRd
+row_update <- function(x, id, ...) {
+  idx <- which_ids(x = x[["rows"]], id = id)
+  updates <- rlang::list2(...)
+  x[["rows"]][[idx]][names(updates)] <- updates
+
+  validate(x)
+}
+
+#' @noRd
+row_select <- function(x, id) {
+  get_id(x = x[["rows"]], id = id)
 }

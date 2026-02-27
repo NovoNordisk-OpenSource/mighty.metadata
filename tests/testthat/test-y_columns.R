@@ -44,7 +44,7 @@ test_that("add_column()", {
     add_column(id = "NEW", label = "My new column") |>
     expect_no_condition()
 
-  y[["columns"]][[length(y[["columns"]])]] |>
+  select_column(y, "NEW") |>
     expect_equal(
       list(id = "NEW", label = "My new column")
     )
@@ -60,6 +60,49 @@ test_that("move_column()", {
   list_columns(x)[[7]] |>
     expect_equal("NEW")
 
-  x[["columns"]][[7]][["label"]] |>
+  select_column(x, "NEW")[["label"]] |>
     expect_equal("test")
+})
+
+test_that("update_column() updates existing properties", {
+  x <- mighty_metadata(
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
+  )
+
+  original_label <- x[["columns"]][[1]][["label"]]
+
+  y <- x |>
+    update_column(id = "STUDYID", label = "Updated Label")
+
+  select_column(y, "STUDYID")[["label"]] |>
+    expect_equal("Updated Label")
+
+  list_columns(y)[[1]] |>
+    expect_equal("STUDYID")
+})
+
+test_that("update_column() adds new properties", {
+  x <- mighty_metadata(
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
+  )
+
+  y <- x |>
+    update_column(id = "STUDYID", method = "New method value")
+
+  select_column(y, "STUDYID")[["method"]] |>
+    expect_equal("New method value")
+})
+
+test_that("update_column() preserves position", {
+  x <- mighty_metadata(
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
+  )
+
+  original_columns <- list_columns(x)
+
+  y <- x |>
+    update_column(id = "USUBJID", label = "Updated USUBJID")
+
+  list_columns(y) |>
+    expect_equal(original_columns)
 })

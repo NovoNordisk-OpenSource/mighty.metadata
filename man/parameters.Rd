@@ -6,6 +6,8 @@
 \alias{remove_parameters}
 \alias{add_parameter}
 \alias{move_parameter}
+\alias{update_parameter}
+\alias{select_parameter}
 \title{Update parameters in your metadata}
 \usage{
 list_parameters(x)
@@ -22,6 +24,10 @@ add_parameter(
 )
 
 move_parameter(x, id, .pos = length(x[["parameters"]]))
+
+update_parameter(x, id, ...)
+
+select_parameter(x, id)
 }
 \arguments{
 \item{x}{\code{mighty_metadata()} Object to manipulate.}
@@ -40,7 +46,7 @@ move_parameter(x, id, .pos = length(x[["parameters"]]))
 \code{invisible(x)}
 }
 \description{
-Functions to list, remove, add, and move parameters in
+Functions to list, select, remove, add, update, and move parameters in
 your \code{mighty_metadata()} objects.
 }
 \examples{
@@ -70,5 +76,14 @@ x |>
 x |>
   move_parameter(id = "BMIGRP", .pos = 1) |>
   list_parameters()
+
+# Update an existing parameter
+x |>
+  update_parameter(id = "BMI", label = "Updated BMI Label") |>
+  select_parameter(id = "BMI") |>
+  str()
+
+# Select a specific parameter
+select_parameter(x, id = "BMI")
 
 }

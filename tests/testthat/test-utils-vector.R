@@ -53,3 +53,21 @@ test_that("which_ids", {
   which_ids(x, c("b", "c")) |>
     expect_equal(2:3)
 })
+
+test_that("get_id()", {
+  x <- list(
+    list(id = "a", value = 1),
+    list(id = "b", value = 2),
+    list(id = "c", value = 3)
+  )
+
+  expect_equal(
+    object = get_id(x, "b"),
+    expected = list(id = "b", value = 2)
+  )
+
+  expect_error(
+    object = get_id(x, "d"),
+    regexp = "Id `d` does not exist"
+  )
+})

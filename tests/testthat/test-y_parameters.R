@@ -76,6 +76,42 @@ test_that("move_parameter()", {
   list_parameters(x)[[1]] |>
     expect_equal("NEW")
 
-  x[["parameters"]][[1]][["label"]] |>
+  select_parameter(x, "NEW")[["label"]] |>
     expect_equal("My new parameter")
+})
+
+test_that("update_parameter() updates existing properties", {
+  x <- mighty_metadata(
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
+  )
+
+  y <- x |>
+    update_parameter(id = "BMI", label = "Updated BMI Label")
+
+  select_parameter(y, "BMI")[["label"]] |>
+    expect_equal("Updated BMI Label")
+})
+
+test_that("update_parameter() updates columns property", {
+  x <- mighty_metadata(
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
+  )
+
+  new_columns <- list(list(id = "AVAL", label = "New AVAL"))
+
+  y <- x |>
+    update_parameter(id = "BMI", columns = new_columns)
+
+  select_parameter(y, "BMI")[["columns"]] |>
+    expect_equal(new_columns)
+})
+
+test_that("select_parameter()", {
+  x <- mighty_metadata(
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
+  )
+
+  parameter <- select_parameter(x, id = "BMI")
+  expect_type(parameter, "list")
+  expect_equal(parameter[["id"]], "BMI")
 })

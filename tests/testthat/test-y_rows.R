@@ -60,6 +60,40 @@ test_that("move_row()", {
   list_rows(x)[[1]] |>
     expect_equal("NEW")
 
-  x[["rows"]][[1]][["method"]] |>
+  select_row(x, "NEW")[["method"]] |>
     expect_equal("My new row")
+})
+
+test_that("update_row() updates existing properties", {
+  x <- mighty_metadata(
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
+  )
+
+  y <- x |>
+    update_row(id = "baseline", method = "Updated method")
+
+  select_row(y, "baseline")[["method"]] |>
+    expect_equal("Updated method")
+})
+
+test_that("update_row() adds new properties", {
+  x <- mighty_metadata(
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
+  )
+
+  y <- x |>
+    update_row(id = "baseline", depends = "USUBJID")
+
+  select_row(y, "baseline")[["depends"]] |>
+    expect_equal("USUBJID")
+})
+
+test_that("select_row()", {
+  x <- mighty_metadata(
+    file = system.file("examples", "advs.yml", package = "mighty.metadata")
+  )
+
+  row <- select_row(x, id = "baseline")
+  expect_type(row, "list")
+  expect_equal(row[["id"]], "baseline")
 })
