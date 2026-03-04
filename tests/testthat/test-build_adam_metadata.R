@@ -27,60 +27,39 @@ describe("build_adam_metadata", {
         "MDUNITCV", "MDCOL", "MDCNTRY", "MDMQ")
     )
 
-    # Check that names of elements are correct
-    expect_equal(
-      lapply(adam_metadata, names),
-      list(ADSL = c("table_metadata", "column_metadata"),
-           ADADJ = c("table_metadata", "column_metadata"),
-           ADAE = c("table_metadata", "column_metadata"),
-           ADCM = c("table_metadata", "column_metadata"),
-           ADHYPO = c("table_metadata", "column_metadata"),
-           ADMH = c("table_metadata", "column_metadata"),
-           ADEG = c("table_metadata", "column_metadata"),
-           ADEC = c("table_metadata", "column_metadata"),
-           ADECEN = c("table_metadata", "column_metadata", "value_metadata"),
-           ADLB = c("table_metadata", "column_metadata", "value_metadata"),
-           ADPE = c("table_metadata", "column_metadata"),
-           ADRESP = c("table_metadata", "column_metadata", "value_metadata"),
-           ADSMPG = c("table_metadata", "column_metadata"),
-           ADSMPGEN = c("table_metadata", "column_metadata", "value_metadata"),
-           ADCGM = c("table_metadata", "column_metadata"),
-           ADCGMEN = c("table_metadata", "column_metadata", "value_metadata"),
-           ADVS = c("table_metadata", "column_metadata", "value_metadata"),
-           ADHYPOEN = c("table_metadata", "column_metadata", "value_metadata"),
-           ADQSDPEM = c("table_metadata", "column_metadata"),
-           ADQSIPQ = c("table_metadata", "column_metadata"),
-           ADQSDTSQ = c("table_metadata", "column_metadata", "value_metadata"),
-           MDFLOW = c("table_metadata", "column_metadata"),
-           MDPARAM = c("table_metadata", "column_metadata"),
-           MDVISIT = c("table_metadata", "column_metadata"),
-           MDNR = c("table_metadata", "column_metadata"),
-           MDSYMBOL = c("table_metadata", "column_metadata"),
-           MDUNITCV = c("table_metadata", "column_metadata"),
-           MDCOL = c("table_metadata", "column_metadata"),
-           MDCNTRY = c("table_metadata", "column_metadata"),
-           MDMQ = c("table_metadata", "column_metadata"))
+    # Check that schema-compliant keys are present per domain
+    schema_keys_base <- c(
+      "id", "label", "class", "structure", "keys", "columns"
     )
+    schema_keys_params <- c(schema_keys_base, "parameters")
+
+    domains_with_params <- c("ADECEN", "ADLB", "ADRESP", "ADSMPGEN",
+                             "ADCGMEN", "ADVS", "ADHYPOEN", "ADQSDTSQ")
+
+    for (domain in names(adam_metadata)) {
+      if (domain %in% domains_with_params) {
+        expect_true(all(schema_keys_params %in% names(adam_metadata[[domain]])),
+                    info = paste("Missing schema keys in", domain))
+      } else {
+        expect_true(all(schema_keys_base %in% names(adam_metadata[[domain]])),
+                    info = paste("Missing schema keys in", domain))
+      }
+    }
   })
 
   it("Builds ADaM metadata structure with column information missing", {
     metadata <- load_test_metadata_components(
       table_filter = table %in% c("ADSL", "ADAE"),
       column_filter = table == "ADSL",
-      value_filter = table == "ADSL")
+      value_filter = table == "ADSL"
+    )
 
-    expect_no_error({
-      adam_metadata <- suppressWarnings(build_adam_metadata(metadata, verbose = FALSE))
-    })
+    expect_warning(
+      adam_metadata <- build_adam_metadata(metadata, verbose = FALSE),
+      "no column information for ADAE; domain dropped from output"
+    )
 
-    expect_warning({
-      adam_metadata <- build_adam_metadata(metadata, verbose = FALSE)
-    })
-
-    expect_message({
-      adam_metadata <- suppressWarnings(build_adam_metadata(metadata))
-    })
-
+    expect_equal(names(adam_metadata), "ADSL")
   })
 
   it("builds ADaM metadata including 'core' column", {
@@ -92,7 +71,7 @@ describe("build_adam_metadata", {
 
     adam_metadata <- build_adam_metadata(metadata, verbose = FALSE)
 
-    column_metadata <- adam_metadata$ADSL$column_metadata
+    column_metadata <- adam_metadata$ADSL$columns
     have_core <- purrr::map_lgl(column_metadata, \(x) "core" %in% names(x))
     expect_true(all(have_core))
   })

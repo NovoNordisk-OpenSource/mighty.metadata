@@ -1,6 +1,6 @@
 Package: mighty.metadata
 Title: CDISC ADaM Metadata Management in YAML Format
-Version: 0.0.0.9011
+Version: 0.0.0.9012
 Authors@R: c(
     person("Ari", "Siggaard Knoph", , "aikp@novonordisk.com", role = c("aut", "cre")),
     person("Esben", "Tore Moelgaard", , "ebtm@novonordisk.com", role = "aut"),
@@ -9,9 +9,7 @@ Authors@R: c(
   )
 Description: Tools for working with CDISC ADaM metadata in YAML format.
     This package provides functions for extracting metadata from standard
-    sources, building structured ADaM metadata, generating YAML files.  It
-    supports domain references tracking and maintains proper formatting
-    for method fields in YAML output.
+    sources and building schema-compliant ADaM metadata structures.
 License: MIT + file LICENSE
 URL: https://nn-opensource.github.io/mighty.metadata
 Depends: 

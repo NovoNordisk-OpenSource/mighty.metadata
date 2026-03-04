@@ -14,7 +14,7 @@ build_adam_metadata(metadata, verbose = TRUE)
 (default: TRUE)}
 }
 \value{
-A nested list structure containing ADaM metadata organized by dataset
+A named list of domain metadata.
 }
 \description{
 Transforms raw ADaM metadata components into a structured format

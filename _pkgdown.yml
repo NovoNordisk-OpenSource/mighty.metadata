@@ -22,9 +22,7 @@ reference:
     - parameters
   - title: Utilities
     description: |
-      Utilities to convert Excel documentation to the new yaml format.
+      Utilities for building ADaM metadata from source data.
     contents:
-    - write_adam_domain_yaml
-    - write_adam_yaml
     - build_adam_metadata
     - reexports

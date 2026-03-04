@@ -15,8 +15,7 @@ utils::globalVariables(c(
   "whereclause", "length",
 
   # Processed/derived columns
-  "is_complex_predecessor", "is_predecessor", "dtype", "dlength",
-  "ddisplayformat",
+  "is_complex_predecessor", "is_predecessor",
 
   # Source data columns (uppercase naming convention)
   "SOURCE", "SOURCE_1", "SOURCE_2", "COLUMN", "TABLE", "LABEL", "TYPE",

@@ -41,7 +41,7 @@
 #'   (optionally) source_values components
 #' @param verbose Logical indicating whether to print messages about conversions
 #'   (default: TRUE)
-#' @return A nested list structure containing ADaM metadata organized by dataset
+#' @return A named list of domain metadata.
 #' @export
 build_adam_metadata <-  function(metadata, verbose = TRUE) {
 
@@ -113,7 +113,7 @@ build_adam_metadata <-  function(metadata, verbose = TRUE) {
         dplyr::rowwise() |>
         dplyr::mutate(
           joiner = stringr::str_extract(.data$post, "\\b(AND|OR)\\b"),
-          post = stringr::str_remove_all(.data$post, paste0("\\b", joiner, "\\b.*")),
+          post = stringr::str_remove_all(.data$post, paste0("\\b", .data$joiner, "\\b.*")),
           paramcd = paste(unlist(stringr::str_extract_all(.data$post, "[A-Z0-9_]+")), collapse = "_"),
           paramcd = ifelse(.data$comparator == "EQ", .data$paramcd, paste0(.data$comparator, "_", .data$paramcd)),
           paramcd = ifelse(is.na(.data$joiner), .data$paramcd, paste0(.data$paramcd, "_", .data$joiner))
@@ -126,13 +126,14 @@ build_adam_metadata <-  function(metadata, verbose = TRUE) {
         dplyr::ungroup()
 
       source_values_missing <- source_values |>
-        dplyr::filter(is.na(paramcd))
+        dplyr::filter(is.na(.data$paramcd))
 
       if (nrow(source_values_missing) > 0) {
         source_values_missing_string <- source_values_missing |>
           dplyr::count(table) |>
           dplyr::mutate(count_string = paste0(table, ": ", n)) |>
-          dplyr::pull(count_string) |> paste(collapse = ", ")
+          dplyr::pull(.data$count_string) |>
+          paste(collapse = ", ")
 
 
         stop("PARAMCD could not be determined for some records in source_values: ",
@@ -167,6 +168,14 @@ build_adam_metadata <-  function(metadata, verbose = TRUE) {
                   verbose)
   })
   names(result) <- tables
+
+  # Drop domains without column data (already warned by process_table)
+  result <- Filter(function(x) !is.null(x$columns), result)
+
+  schema <- system.file("schema", "adam.json", package = "mighty.metadata")
+  for (domain_name in names(result)) {
+    S7schema::validate_list(result[[domain_name]], schema)
+  }
 
   result
 }

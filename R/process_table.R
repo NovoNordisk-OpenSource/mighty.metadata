@@ -8,10 +8,7 @@
 #' @param valid_subclasses Character vector of valid subclass names
 #' @param verbose Logical indicating whether to print processing messages
 #'
-#' @return A list containing processed metadata with components:
-#'   \item{table_metadata}{List of table-level metadata}
-#'   \item{column_metadata}{List of column-level metadata}
-#'   \item{value_metadata}{List of value-level metadata (if applicable)}
+#' @return A list of domain metadata.
 #'
 #' @noRd
 process_table <- function(table_name,
@@ -60,10 +57,10 @@ process_table <- function(table_name,
       dplyr::mutate(subclass = dplyr::if_else(subclass %in% valid_subclasses, subclass, NA_character_))
   }
 
-  # Format keys as [KEY1, KEY2, ...] if the column exists
+  # Format keys as character vector if the column exists
   if ("keys" %in% names(table_meta)) {
     table_meta <- table_meta |>
-      dplyr::mutate(keys = paste0("[", gsub("[, ] *", ", ", keys), "]"))
+      dplyr::mutate(keys = list(strsplit(gsub("[\\[\\] ]", "", keys), ",")[[1]]))
   }
 
   # Convert to list and clean
@@ -150,24 +147,17 @@ process_table <- function(table_name,
         )
       ) |>
       dplyr::ungroup() |>
-      # Create a flow-style dictionary of formatting information.
+      # Map type codes to schema-compliant type names
       dplyr::mutate(
         type = dplyr::case_when(type == "C" ~ "text",
                                 type == "N" & grepl("^datetime", displayformat) ~ "datetime",
                                 type == "N" & grepl("^date", displayformat) ~ "date",
                                 type == "N" & grepl("^time", displayformat) ~ "time",
                                 type == "N" ~ "float",
-                                TRUE ~ type),
-        dtype = ifelse(!is.na(type), paste0('type: "', type, '"'), NA_character_),
-        dlength = ifelse(!is.na(length), paste0("length: ", length), NA_character_),
-        ddisplayformat = ifelse(!is.na(displayformat),
-                                paste0('displayformat: "', .data$displayformatf, '"'),
-                                NA_character_)
-      ) |>
-      tidyr::unite(format, dtype, dlength, sep = ", ", ddisplayformat, na.rm = TRUE) |>
-      dplyr::mutate(format = ifelse(format == "", NA_character_, paste0("{", format, "}")))
+                                TRUE ~ type)
+      )
   } else {
-    warning("no column information for ", table_name)
+    warning("no column information for ", table_name, "; domain dropped from output")
     col_data <- col_data |>
       dplyr::mutate(is_complex_predecessor = logical(0))
   }
@@ -210,6 +200,15 @@ process_table <- function(table_name,
       method_text <- gsub("\r\n", "\n", method_text)
     }
 
+    # Build format as a list object
+    fmt <- list(
+      type = if (!is.na(row$type)) row$type,
+      length = if (!is.na(row$length)) as.integer(row$length),
+      display = if (!is.na(row$displayformat)) row$displayformatf
+    )
+    fmt <- Filter(Negate(is.null), fmt)
+    if (length(fmt) == 0) fmt <- NULL
+
     if (row$is_predecessor && !row$is_renamed && row$is_adam_predecessor) {
       # For predecessor columns that aren't renamed, only include the column field
       # This follows CDISC requirements that predecessor columns inherit metadata from parent
@@ -238,7 +237,7 @@ process_table <- function(table_name,
         list(
           id = row$column,
           label = row$label,
-          format = row$format,
+          format = fmt,
           method = method_text,
           is_core = row$corefl == "Y"
         )
@@ -250,7 +249,7 @@ process_table <- function(table_name,
         list(
           id = row$column,
           label = row$label,
-          format = row$format,
+          format = fmt,
           method = method_text,
           is_core = row$corefl == "Y"
         )
@@ -262,7 +261,7 @@ process_table <- function(table_name,
         list(
           id = row$column,
           label = row$label,
-          format = row$format,
+          format = fmt,
           codelist = row$xmlcodelist,
           method = method_text,
           is_core = row$corefl == "Y"
@@ -275,7 +274,7 @@ process_table <- function(table_name,
         list(
           id = row$column,
           label = row$label,
-          format = row$format,
+          format = fmt,
           codelist = row$xmlcodelist,
           method = method_text,
           is_core = row$corefl == "Y"
@@ -291,18 +290,13 @@ process_table <- function(table_name,
   val_list <- process_values(val_filtered, table_name, verbose)
   val_meta <- val_list[[1]]
 
-  # Build referenced_domains to track predecessor relationships
-  # This helps with define.xml generation by documenting source domains
+  # Return schema-compliant structure
+  result <- table_meta
+  result$columns <- col_meta
 
-  # Return the complete table metadata structure
-  result <- list(
-    table_metadata = table_meta,
-    column_metadata = col_meta
-  )
-
-  # Add value_metadata only if it exists
+  # Add parameters only if value metadata exists
   if (length(val_meta) > 0) {
-    result$value_metadata <-  val_meta
+    result$parameters <- val_meta
   }
 
   result
