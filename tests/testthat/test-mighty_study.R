@@ -7,7 +7,7 @@ test_that("mighty_study()", {
   study |>
     lapply(
       FUN = expect_s7_class,
-      class = mighty_metadata
+      class = mighty_domain
     ) |>
     names() |>
     expect_equal(c("ADAE", "ADSL"))

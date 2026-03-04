@@ -23,7 +23,7 @@ select_column(x, id)
 update_column(x, id, ...)
 }
 \arguments{
-\item{x}{\code{mighty_metadata()} Object to manipulate.}
+\item{x}{\code{mighty_domain()} Object to manipulate.}
 
 \item{id}{\code{character()} Id of the column(s) to remove, add, or move.}
 
@@ -36,11 +36,11 @@ update_column(x, id, ...)
 }
 \description{
 Functions to list, select, remove, add, update, and move columns in
-your \code{mighty_metadata()} objects.
+your \code{mighty_domain()} objects.
 }
 \examples{
 # Load example configuration
-x <- mighty_metadata(
+x <- mighty_domain(
   file = system.file("examples", "advs.yml", package = "mighty.metadata")
 )
 

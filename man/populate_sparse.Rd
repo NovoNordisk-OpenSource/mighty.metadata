@@ -7,12 +7,12 @@
 populate_sparse(x, ...)
 }
 \arguments{
-\item{x}{A \link{mighty_study} or \link{mighty_metadata} object.}
+\item{x}{A \link{mighty_study} or \link{mighty_domain} object.}
 
 \item{...}{Additional arguments passed to methods.}
 }
 \value{
-A modified \link{mighty_study} or \link{mighty_metadata} with predecessor
+A modified \link{mighty_study} or \link{mighty_domain} with predecessor
 column metadata populated.
 }
 \description{

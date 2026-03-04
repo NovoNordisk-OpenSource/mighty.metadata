@@ -1,5 +1,5 @@
 test_that("list_rows()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -9,7 +9,7 @@ test_that("list_rows()", {
 })
 
 test_that("remove_rows()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   ) |>
     add_row(id = "NEW")
@@ -25,7 +25,7 @@ test_that("remove_rows()", {
 })
 
 test_that("add_row()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -48,7 +48,7 @@ test_that("add_row()", {
 })
 
 test_that("move_row()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   ) |>
     add_row(
@@ -65,7 +65,7 @@ test_that("move_row()", {
 })
 
 test_that("update_row() updates existing properties", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -77,7 +77,7 @@ test_that("update_row() updates existing properties", {
 })
 
 test_that("update_row() adds new properties", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -89,7 +89,7 @@ test_that("update_row() adds new properties", {
 })
 
 test_that("select_row()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 

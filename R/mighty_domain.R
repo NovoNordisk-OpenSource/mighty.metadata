@@ -1,7 +1,7 @@
-#' Mighty Metadata
+#' Mighty Domain
 #'
 #' @description
-#' `mighty_metadata()` provides a robust way of working with ADaM metadata in the `{mighty}` framework.
+#' `mighty_domain()` provides a robust way of working with ADaM metadata in the `{mighty}` framework.
 #'
 #' A new object is initialized by supplying an existing yaml metadata file.
 #' This package provides helpers to update column, parameter, and row entries.
@@ -11,7 +11,7 @@
 #' * `help("parameters")`
 #' * `help("rows")`
 #'
-#' `mighty_metadata()` inherits from `S7schema::S7schema()` and the yaml file is
+#' `mighty_domain()` inherits from `S7schema::S7schema()` and the yaml file is
 #' automatically validated when loaded. The helper functions above also always validates
 #' the new configuration before returning.
 #'
@@ -20,7 +20,7 @@
 #'
 #' @param file `character(1)` path to a yaml file defining a ADaM dataset.
 #' @examples
-#' x <- mighty_metadata(
+#' x <- mighty_domain(
 #'   file = system.file("examples", "advs.yml", package = "mighty.metadata")
 #' )
 #'
@@ -30,11 +30,11 @@
 #' # Underlying object is a `list`
 #' str(x)
 #'
-#' @name mighty_metadata
+#' @name mighty_domain
 NULL
 
 #' @noRd
-construct_mighty_metadata <- function(file) {
+construct_mighty_domain <- function(file) {
   S7::new_object(
     .parent = S7schema::S7schema(
       file = file,
@@ -43,21 +43,21 @@ construct_mighty_metadata <- function(file) {
   )
 }
 
-#' @rdname mighty_metadata
+#' @rdname mighty_domain
 #' @export
-mighty_metadata <- S7::new_class(
-  name = "mighty_metadata",
+mighty_domain <- S7::new_class(
+  name = "mighty_domain",
   parent = S7schema::S7schema,
-  constructor = construct_mighty_metadata
+  constructor = construct_mighty_domain
 )
 
 #' @noRd
-S7::method(print, mighty_metadata) <- function(x, ...) {
-  print_mighty_metadata(x)
+S7::method(print, mighty_domain) <- function(x, ...) {
+  print_mighty_domain(x)
 }
 
 #' @noRd
-print_mighty_metadata <- function(x, ...) {
+print_mighty_domain <- function(x, ...) {
   cli::cli_bullets(
     text = c(
       "{.cls {class(x)[[1]]}}",

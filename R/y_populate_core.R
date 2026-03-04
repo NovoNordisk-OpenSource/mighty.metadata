@@ -6,10 +6,10 @@
 #'
 #' Note: Currently only accepts core variables from ADSL.
 #'
-#' @param x A [mighty_study] or [mighty_metadata] object.
+#' @param x A [mighty_study] or [mighty_domain] object.
 #' @param ... Additional arguments passed to methods.
 #'
-#' @return A modified [mighty_study] or [mighty_metadata] with core variables
+#' @return A modified [mighty_study] or [mighty_domain] with core variables
 #'   added as predecessor columns.
 #'
 #' @seealso [mighty_study], [populate_sparse()], [create_md_col()]
@@ -32,7 +32,7 @@ S7::method(populate_core, mighty_study) <- function(x) {
 }
 
 #' @noRd
-S7::method(populate_core, mighty_metadata) <- function(x, study) {
+S7::method(populate_core, mighty_domain) <- function(x, study) {
   populate_core_domain(domain = x, study = study)
 }
 

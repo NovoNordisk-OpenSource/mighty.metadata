@@ -69,10 +69,10 @@ In order to achieve this we need agreement on the aspects below.
 
 ### 4. Main classes
 
-> The package will define two main classes: `mighty_study()` and `mighty_metadata()`.
-> `mighty_metadata()` is a list of metadata regarding a single ADaM domain. A new
+> The package will define two main classes: `mighty_study()` and `mighty_domain()`^[Originally named `mighty_metadata()`.].
+> `mighty_domain()` is a list of metadata regarding a single ADaM domain. A new
 > instance will be created based on the YAML specification.
-> `mighty_study()` is a named list of `mighty_metadata()` objects. New instance to be created
+> `mighty_study()` is a named list of `mighty_domain()` objects. New instance to be created
 > based on a path to a folder of YAML specifications.
 
 ### 5. Business logic handling
@@ -81,8 +81,8 @@ In order to achieve this we need agreement on the aspects below.
 > Initially this will include inheritance of core variables, conditional filtering of specifications
 > (e.g. subsetting a pooled specification to only include columns relevant for a single trial),
 > and fully populate specifications (e.g. reusing label and format information from a predecessor).
-> These utilities will ingest and return `mighty_study()` and/or `mighty_metadata()` objects as applicable.
-> Often a method for `mighty_study()` will call the generic on each `mighty_metadata()` entry.
+> These utilities will ingest and return `mighty_study()` and/or `mighty_domain()` objects as applicable.
+> Often a method for `mighty_study()` will call the generic on each `mighty_domain()` entry.
 
 ### 6. Process integration
 
@@ -91,7 +91,7 @@ In order to achieve this we need agreement on the aspects below.
 > to create metadata in tabular format. Metadata will concern domains, columns, and parameters specified
 > in `mighty_study()` and will be returned as `data.frame()`/`tibble`.
 > Similarly, the package will also contain utility functions to do the reverse; creating a `mighty_study()`
-> and `mighty_metadata()` objects from the same tabular format.
+> and `mighty_domain()` objects from the same tabular format.
 
 ### 7. Open-Source
 
@@ -121,7 +121,7 @@ The aim is for mighty.metadata and its schema to be compatible:
 
 ### 1. Work only directly with YAML files
 - **Pros**: Simplifies technical implementation if we just read/write YAML files directly
-instead of defining new `mighty_metadata()` and `mighty_study()` classes.
+instead of defining new `mighty_domain()` and `mighty_study()` classes.
 - **Cons**: Lose the ability to work with the specifications in memory (suited for e.g. a later Shiny editor app).
 - **R-specific considerations**: Validation without using parent S7schema class (or similar) would require significant development,
 that is out of scope for this package.
@@ -153,11 +153,11 @@ The serializer in jsonvalidator looked really promising, but when tested it was 
 
 ### Key Functions
 
-* `mighty_metadata()`: Metadata object for a single ADaM domain. Inherits from `S7schema::S7schema()`.
-* `mighty_study()`: Metadata object for a study. Named list of `mighty_metadata()` objects.
-* Utility functions to manipulate columns, rows, and parameters in a `mighty_metadata()` object.
+* `mighty_domain()`: Metadata object for a single ADaM domain. Inherits from `S7schema::S7schema()`.
+* `mighty_study()`: Metadata object for a study. Named list of `mighty_domain()` objects.
+* Utility functions to manipulate columns, rows, and parameters in a `mighty_domain()` object.
 * Utility functions to create tabular representations of `mighty_study()` metadata.
-* Function to add core variables (e.g. from ADSL) as predecessors in another `mighty_metadata()` domain.
+* Function to add core variables (e.g. from ADSL) as predecessors in another `mighty_domain()` domain.
 * Function to conditionally filter specifications suitable for subsetting a pooled study specification.
 * Function to fully specify a domain when sparse information was provided.
 E.g. defining the format of a predecessor column based on the format of the origin column.
@@ -169,7 +169,7 @@ Below is an example workflow. Note that function names are stand-ins unless they
 explicitly specified above:
 
 ```r
-mighty_study("path/to/specs") |> # --> List `mighty_metadata()` specs
+mighty_study("path/to/specs") |> # --> List `mighty_domain()` specs
   filter_with_metadata() |> # --> Remove e.g. columns from a pooled spec that are not relevant for study A
   populate_core() |> # --> adds core variables as predecessors 
   populate_sparse() |> # --> all info filled out and still returning a `mighty_study()` object

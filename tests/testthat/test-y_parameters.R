@@ -1,5 +1,5 @@
 test_that("list_parameters()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -9,7 +9,7 @@ test_that("list_parameters()", {
 })
 
 test_that("remove_parameters()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -25,7 +25,7 @@ test_that("remove_parameters()", {
 })
 
 test_that("add_parameter()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -59,7 +59,7 @@ test_that("add_parameter()", {
 })
 
 test_that("move_parameter()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   ) |>
     add_parameter(
@@ -81,7 +81,7 @@ test_that("move_parameter()", {
 })
 
 test_that("update_parameter() updates existing properties", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -93,7 +93,7 @@ test_that("update_parameter() updates existing properties", {
 })
 
 test_that("update_parameter() updates columns property", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -107,7 +107,7 @@ test_that("update_parameter() updates columns property", {
 })
 
 test_that("select_parameter()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 

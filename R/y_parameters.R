@@ -1,9 +1,9 @@
 #' Update parameters in your metadata
 #'
 #' Functions to list, select, remove, add, update, and move parameters in
-#' your `mighty_metadata()` objects.
+#' your `mighty_domain()` objects.
 #'
-#' @param x `mighty_metadata()` Object to manipulate.
+#' @param x `mighty_domain()` Object to manipulate.
 #' @param id `character()` Id of the parameter(s) to remove, add, or move.
 #' @param label `character(1)` Parameter label.
 #' @param columns `list()` Columns to set for the parameter.
@@ -12,7 +12,7 @@
 #' @returns `invisible(x)`
 #' @examples
 #' # Load example configuration
-#' x <- mighty_metadata(
+#' x <- mighty_domain(
 #'   file = system.file("examples", "advs.yml", package = "mighty.metadata")
 #' )
 #'
@@ -61,7 +61,7 @@ list_parameters <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(list_parameters, mighty_metadata) <- function(x) {
+S7::method(list_parameters, mighty_domain) <- function(x) {
   param_list(x)
 }
 
@@ -76,7 +76,7 @@ remove_parameters <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(remove_parameters, mighty_metadata) <- function(x, id) {
+S7::method(remove_parameters, mighty_domain) <- function(x, id) {
   param_remove(x, id)
 }
 
@@ -91,7 +91,7 @@ add_parameter <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(add_parameter, mighty_metadata) <- function(
+S7::method(add_parameter, mighty_domain) <- function(
   x,
   id,
   label,
@@ -113,7 +113,7 @@ move_parameter <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(move_parameter, mighty_metadata) <- function(
+S7::method(move_parameter, mighty_domain) <- function(
   x,
   id,
   .pos = length(x[["parameters"]])
@@ -132,7 +132,7 @@ update_parameter <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(update_parameter, mighty_metadata) <- function(x, id, ...) {
+S7::method(update_parameter, mighty_domain) <- function(x, id, ...) {
   param_update(x, id, ...)
 }
 
@@ -147,7 +147,7 @@ select_parameter <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(select_parameter, mighty_metadata) <- function(x, id) {
+S7::method(select_parameter, mighty_domain) <- function(x, id) {
   param_select(x, id)
 }
 

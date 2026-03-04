@@ -1,5 +1,5 @@
-test_that("mighty_metadata works", {
-  x <- mighty_metadata(
+test_that("mighty_domain works", {
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   ) |>
     expect_no_condition()
@@ -9,8 +9,8 @@ test_that("mighty_metadata works", {
       transform = \(x) {
         # Inconsistency between S7 versions
         sub(
-          pattern = "<mighty.metadata::mighty_metadata>",
-          replacement = "<mighty_metadata>",
+          pattern = "<mighty.metadata::mighty_domain>",
+          replacement = "<mighty_domain>",
           x = x
         )
       }

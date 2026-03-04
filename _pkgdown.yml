@@ -16,7 +16,7 @@ reference:
     description: |
       Work with metadata for a single ADaM data set.
     contents:
-    - mighty_metadata
+    - mighty_domain
     - columns
     - rows
     - parameters

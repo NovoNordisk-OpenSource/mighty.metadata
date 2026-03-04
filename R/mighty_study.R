@@ -3,14 +3,14 @@
 #' @description
 #' Creates a `mighty_study` object by loading all YAML metadata files from a
 #' directory. Each YAML file (except `_mighty.yaml`) is parsed as a
-#' [mighty_metadata] object. The optional `_mighty.yaml` file provides
+#' [mighty_domain] object. The optional `_mighty.yaml` file provides
 #' study-level properties.
 #'
 #' @param path `character(1)` path to a directory containing YAML metadata files.
 #'
 #' @return A `mighty_study` S7 object extending `list`:
 #' \describe{
-#'   \item{List elements}{[mighty_metadata] objects, named by their `id` field.
+#'   \item{List elements}{[mighty_domain] objects, named by their `id` field.
 #'     Access via e.g. `study$adsl`.}
 #'   \item{`@info`}{Study-level properties from `_mighty.yaml`, or empty list
 #'     if no properties file exists.}
@@ -19,10 +19,10 @@
 #' @details
 #' The function scans the directory for files matching `*.yaml` or `*.yml`:
 #' - Files named `_mighty.yaml` or `_mighty.yml` are treated as study properties
-#' - All other YAML files are loaded as [mighty_metadata] objects
+#' - All other YAML files are loaded as [mighty_domain] objects
 #' - Only one `_mighty.yaml` file is allowed per directory
 #'
-#' @seealso [mighty_metadata], [populate_sparse()], [populate_core()], [create_md_col()]
+#' @seealso [mighty_domain], [populate_sparse()], [populate_core()], [create_md_col()]
 #'
 #' @examples
 #' # Load example study
@@ -61,7 +61,7 @@ construct_mighty_study <- function(path) {
   ) |>
     setdiff(properties)
 
-  entries <- lapply(X = entries, FUN = mighty_metadata)
+  entries <- lapply(X = entries, FUN = mighty_domain)
 
   names(entries) <- vapply(
     X = entries,

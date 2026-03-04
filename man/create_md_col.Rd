@@ -7,7 +7,7 @@
 create_md_col(x)
 }
 \arguments{
-\item{x}{A \link{mighty_study} or \link{mighty_metadata} object.}
+\item{x}{A \link{mighty_study} or \link{mighty_domain} object.}
 }
 \value{
 A tibble with one row per column containing:
@@ -29,7 +29,7 @@ A tibble with one row per column containing:
 }
 }
 \description{
-Converts a \link{mighty_study} or \link{mighty_metadata} object into a flat dataframe
+Converts a \link{mighty_study} or \link{mighty_domain} object into a flat dataframe
 of column definitions.
 }
 \examples{

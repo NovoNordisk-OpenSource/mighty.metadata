@@ -1,16 +1,16 @@
 #' Update columns in your metadata
 #'
 #' Functions to list, select, remove, add, update, and move columns in
-#' your `mighty_metadata()` objects.
+#' your `mighty_domain()` objects.
 #'
-#' @param x `mighty_metadata()` Object to manipulate.
+#' @param x `mighty_domain()` Object to manipulate.
 #' @param id `character()` Id of the column(s) to remove, add, or move.
 #' @param ... Additional properties to add/update for the column, e.g. a `label = "my label"`.
 #' @param .pos `integer(1)` Position to put or move the column to. Default places the column as the last.
 #' @returns `invisible(x)`
 #' @examples
 #' # Load example configuration
-#' x <- mighty_metadata(
+#' x <- mighty_domain(
 #'   file = system.file("examples", "advs.yml", package = "mighty.metadata")
 #' )
 #'
@@ -63,7 +63,7 @@ list_columns <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(list_columns, mighty_metadata) <- function(x) {
+S7::method(list_columns, mighty_domain) <- function(x) {
   col_list(x)
 }
 
@@ -78,7 +78,7 @@ remove_columns <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(remove_columns, mighty_metadata) <- function(x, id) {
+S7::method(remove_columns, mighty_domain) <- function(x, id) {
   col_remove(x, id)
 }
 
@@ -93,7 +93,7 @@ add_column <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(add_column, mighty_metadata) <- function(
+S7::method(add_column, mighty_domain) <- function(
   x,
   id,
   ...,
@@ -113,7 +113,7 @@ move_column <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(move_column, mighty_metadata) <- function(
+S7::method(move_column, mighty_domain) <- function(
   x,
   id,
   .pos = length(x[["columns"]])
@@ -132,7 +132,7 @@ select_column <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(select_column, mighty_metadata) <- function(x, id) {
+S7::method(select_column, mighty_domain) <- function(x, id) {
   col_select(x, id)
 }
 
@@ -147,7 +147,7 @@ update_column <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(update_column, mighty_metadata) <- function(x, id, ...) {
+S7::method(update_column, mighty_domain) <- function(x, id, ...) {
   col_update(x, id, ...)
 }
 

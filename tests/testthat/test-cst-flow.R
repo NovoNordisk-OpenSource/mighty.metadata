@@ -15,7 +15,7 @@ describe("CST - yaml - mdcol - workflow", {
 
     # Test that the yaml's live up to the mighty.metadata schema
     expect_no_error({
-      lapply(all_yaml, mighty_metadata)
+      lapply(all_yaml, mighty_domain)
     })
 
     list.files(output_dir) |>
@@ -83,7 +83,7 @@ describe("CST - yaml - mdcol - workflow", {
 
     # Test that the yaml's live up to the mighty.metadata schema
     expect_no_error({
-      lapply(all_yaml, mighty_metadata)
+      lapply(all_yaml, mighty_domain)
     })
 
     # Load as mighty_study and populate core variables
@@ -126,7 +126,7 @@ describe("CST - yaml - mdcol - workflow", {
 
     # Test that the yaml's live up to the mighty.metadata schema
     expect_no_error({
-      lapply(all_yaml, mighty_metadata)
+      lapply(all_yaml, mighty_domain)
     })
 
     # Load as mighty_study and populate sparse references

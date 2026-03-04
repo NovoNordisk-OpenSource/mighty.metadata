@@ -1,10 +1,10 @@
 #' Create Metadata Column Table
 #'
 #' @description
-#' Converts a [mighty_study] or [mighty_metadata] object into a flat dataframe
+#' Converts a [mighty_study] or [mighty_domain] object into a flat dataframe
 #' of column definitions.
 #'
-#' @param x A [mighty_study] or [mighty_metadata] object.
+#' @param x A [mighty_study] or [mighty_domain] object.
 #'
 #' @return A tibble with one row per column containing:
 #' \describe{
@@ -45,7 +45,7 @@ S7::method(create_md_col, mighty_study) <- function(x) {
 }
 
 #' @noRd
-S7::method(create_md_col, mighty_metadata) <- function(x) {
+S7::method(create_md_col, mighty_domain) <- function(x) {
   create_md_col_domain(domain = x)
 }
 

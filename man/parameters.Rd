@@ -30,7 +30,7 @@ update_parameter(x, id, ...)
 select_parameter(x, id)
 }
 \arguments{
-\item{x}{\code{mighty_metadata()} Object to manipulate.}
+\item{x}{\code{mighty_domain()} Object to manipulate.}
 
 \item{id}{\code{character()} Id of the parameter(s) to remove, add, or move.}
 
@@ -47,11 +47,11 @@ select_parameter(x, id)
 }
 \description{
 Functions to list, select, remove, add, update, and move parameters in
-your \code{mighty_metadata()} objects.
+your \code{mighty_domain()} objects.
 }
 \examples{
 # Load example configuration
-x <- mighty_metadata(
+x <- mighty_domain(
   file = system.file("examples", "advs.yml", package = "mighty.metadata")
 )
 

@@ -7,12 +7,12 @@
 populate_core(x, ...)
 }
 \arguments{
-\item{x}{A \link{mighty_study} or \link{mighty_metadata} object.}
+\item{x}{A \link{mighty_study} or \link{mighty_domain} object.}
 
 \item{...}{Additional arguments passed to methods.}
 }
 \value{
-A modified \link{mighty_study} or \link{mighty_metadata} with core variables
+A modified \link{mighty_study} or \link{mighty_domain} with core variables
 added as predecessor columns.
 }
 \description{

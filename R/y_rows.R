@@ -1,16 +1,16 @@
 #' Update rows in your metadata
 #'
 #' Functions to list, select, remove, add, update, and move row operations in
-#' your `mighty_metadata()` objects.
+#' your `mighty_domain()` objects.
 #'
-#' @param x `mighty_metadata()` Object to manipulate.
+#' @param x `mighty_domain()` Object to manipulate.
 #' @param id `character()` Id of the row(s) to remove, add, or move.
 #' @param ... Additional properties to add for the row, e.g. a `label = "my row"`.
 #' @param .pos `integer(1)` Position to put or move the row to. Default places the row as the last.
 #' @returns `invisible(x)`
 #' @examples
 #' # Load example configuration
-#' x <- mighty_metadata(
+#' x <- mighty_domain(
 #'   file = system.file("examples", "advs.yml", package = "mighty.metadata")
 #' )
 #'
@@ -51,7 +51,7 @@ list_rows <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(list_rows, mighty_metadata) <- function(x) {
+S7::method(list_rows, mighty_domain) <- function(x) {
   row_list(x)
 }
 
@@ -66,7 +66,7 @@ remove_rows <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(remove_rows, mighty_metadata) <- function(x, id) {
+S7::method(remove_rows, mighty_domain) <- function(x, id) {
   row_remove(x, id)
 }
 
@@ -81,7 +81,7 @@ add_row <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(add_row, mighty_metadata) <- function(
+S7::method(add_row, mighty_domain) <- function(
   x,
   id,
   ...,
@@ -101,7 +101,7 @@ move_row <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(move_row, mighty_metadata) <- function(
+S7::method(move_row, mighty_domain) <- function(
   x,
   id,
   .pos = length(x[["rows"]])
@@ -120,7 +120,7 @@ update_row <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(update_row, mighty_metadata) <- function(x, id, ...) {
+S7::method(update_row, mighty_domain) <- function(x, id, ...) {
   row_update(x, id, ...)
 }
 
@@ -135,7 +135,7 @@ select_row <- S7::new_generic(
 )
 
 #' @noRd
-S7::method(select_row, mighty_metadata) <- function(x, id) {
+S7::method(select_row, mighty_domain) <- function(x, id) {
   row_select(x, id)
 }
 

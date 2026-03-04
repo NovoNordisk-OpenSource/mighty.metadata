@@ -1,5 +1,5 @@
 test_that("list_columns()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -9,7 +9,7 @@ test_that("list_columns()", {
 })
 
 test_that("remove_columns()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -25,7 +25,7 @@ test_that("remove_columns()", {
 })
 
 test_that("add_column()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -51,7 +51,7 @@ test_that("add_column()", {
 })
 
 test_that("move_column()", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   ) |>
     add_column(id = "NEW", label = "test") |>
@@ -65,7 +65,7 @@ test_that("move_column()", {
 })
 
 test_that("update_column() updates existing properties", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -82,7 +82,7 @@ test_that("update_column() updates existing properties", {
 })
 
 test_that("update_column() adds new properties", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
@@ -94,7 +94,7 @@ test_that("update_column() adds new properties", {
 })
 
 test_that("update_column() preserves position", {
-  x <- mighty_metadata(
+  x <- mighty_domain(
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 

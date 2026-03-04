@@ -5,6 +5,6 @@
     Message
       <mighty_study/list/S7_object>
       @ info: `study_id`
-      $ ADAE: <mighty_metadata>
-      $ ADSL: <mighty_metadata>
+      $ ADAE: <mighty_domain>
+      $ ADSL: <mighty_domain>
 

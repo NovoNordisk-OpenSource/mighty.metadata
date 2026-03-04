@@ -5,10 +5,10 @@
 #' `method` in the format `domain.column` (e.g., `ADSL.USUBJID`) inherit
 #' metadata from the referenced predecessor.
 #'
-#' @param x A [mighty_study] or [mighty_metadata] object.
+#' @param x A [mighty_study] or [mighty_domain] object.
 #' @param ... Additional arguments passed to methods.
 #'
-#' @return A modified [mighty_study] or [mighty_metadata] with predecessor
+#' @return A modified [mighty_study] or [mighty_domain] with predecessor
 #'   column metadata populated.
 #'
 #' @seealso [mighty_study], [populate_core()], [create_md_col()]
@@ -31,7 +31,7 @@ S7::method(populate_sparse, mighty_study) <- function(x) {
 }
 
 #' @noRd
-S7::method(populate_sparse, mighty_metadata) <- function(x, study) {
+S7::method(populate_sparse, mighty_domain) <- function(x, study) {
   populate_sparse_domain(domain = x, study = study)
 }
 

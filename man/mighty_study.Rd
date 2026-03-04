@@ -12,7 +12,7 @@ mighty_study(path)
 \value{
 A \code{mighty_study} S7 object extending \code{list}:
 \describe{
-\item{List elements}{\link{mighty_metadata} objects, named by their \code{id} field.
+\item{List elements}{\link{mighty_domain} objects, named by their \code{id} field.
 Access via e.g. \code{study$adsl}.}
 \item{\verb{@info}}{Study-level properties from \verb{_mighty.yaml}, or empty list
 if no properties file exists.}
@@ -21,14 +21,14 @@ if no properties file exists.}
 \description{
 Creates a \code{mighty_study} object by loading all YAML metadata files from a
 directory. Each YAML file (except \verb{_mighty.yaml}) is parsed as a
-\link{mighty_metadata} object. The optional \verb{_mighty.yaml} file provides
+\link{mighty_domain} object. The optional \verb{_mighty.yaml} file provides
 study-level properties.
 }
 \details{
 The function scans the directory for files matching \verb{*.yaml} or \verb{*.yml}:
 \itemize{
 \item Files named \verb{_mighty.yaml} or \verb{_mighty.yml} are treated as study properties
-\item All other YAML files are loaded as \link{mighty_metadata} objects
+\item All other YAML files are loaded as \link{mighty_domain} objects
 \item Only one \verb{_mighty.yaml} file is allowed per directory
 }
 }
@@ -49,5 +49,5 @@ study@info
 
 }
 \seealso{
-\link{mighty_metadata}, \code{\link[=populate_sparse]{populate_sparse()}}, \code{\link[=populate_core]{populate_core()}}, \code{\link[=create_md_col]{create_md_col()}}
+\link{mighty_domain}, \code{\link[=populate_sparse]{populate_sparse()}}, \code{\link[=populate_core]{populate_core()}}, \code{\link[=create_md_col]{create_md_col()}}
 }
