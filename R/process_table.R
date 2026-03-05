@@ -21,8 +21,6 @@ process_table <- function(table_name,
   # Build table_metadata - check for column existence before selecting
   available_cols <- names(source_tables)
   table_cols <- c("table", "label", "class", "structure", "keys", "comment")
-  meta_cols <- c("usecore")
-
   # Add subclass only if it exists
   if ("subclass" %in% available_cols) {
     table_cols <- c(table_cols, "subclass")
@@ -33,16 +31,16 @@ process_table <- function(table_name,
     dplyr::select(dplyr::any_of(table_cols)) |>
     dplyr::rename(id = table)
 
-  # Look for table metadata columns
-  meta_list <- source_tables |>
-    dplyr::filter(table == table_name) |>
-    dplyr::select(dplyr::where(~!is.na(.))) |>
-    dplyr::select(dplyr::any_of(meta_cols)) |>
-    as.list()
+  # Add usecore if present
+  if ("usecore" %in% available_cols) {
+    usecore_val <- source_tables |>
+      dplyr::filter(table == table_name) |>
+      dplyr::pull(.data$usecore)
 
-  if (length(meta_list) > 0) {
-    table_meta <- table_meta |>
-      dplyr::mutate(metadata = meta_list)
+    if (length(usecore_val) == 1 && isTRUE(usecore_val)) {
+      table_meta <- table_meta |>
+        dplyr::mutate(usecore = TRUE)
+    }
   }
 
   # Add class handling

@@ -53,7 +53,7 @@ populate_core_study <- function(study) {
 #' just remove the check.
 #' @noRd
 populate_core_domain <- function(domain, study) {
-  if (!isTRUE(domain$metadata$usecore)) {
+  if (!isTRUE(domain$usecore)) {
     return(domain)
   }
 

@@ -33,9 +33,9 @@
       "description": "Comment to the dataset",
       "type": "string"
     },
-    "metadata": {
-      "description": "Additional metadata supplied as named objects",
-      "type": "object"
+    "usecore": {
+      "description": "Flag to populate with core variables from ADSL",
+      "type": "boolean"
     },
     "population": {
       "description": "Population and base domain used to create the dataset",

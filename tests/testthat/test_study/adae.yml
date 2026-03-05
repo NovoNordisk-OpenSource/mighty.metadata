@@ -5,8 +5,7 @@ subclass: ADVERSE EVENT
 structure: One record per adverse event per subject
 keys: [USUBJID, AESEQ]
 
-metadata:
-  usecore: true
+usecore: true
 
 columns:
   - id: STUDYID
