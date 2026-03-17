@@ -8,8 +8,7 @@ describe("CST - yaml - mdcol - workflow", {
     expect_no_error({
       all_yaml <- lapply(names(adam_metadata), function(domain) {
         path <- file.path(output_dir, paste0(tolower(domain), ".yaml"))
-        yaml::write_yaml(adam_metadata[[domain]], path)
-        path
+        write_safe_yaml(adam_metadata[[domain]], path)
       })
     })
 
@@ -76,8 +75,7 @@ describe("CST - yaml - mdcol - workflow", {
     expect_no_error({
       all_yaml <- lapply(names(adam_metadata), function(domain) {
         path <- file.path(output_dir, paste0(tolower(domain), ".yaml"))
-        yaml::write_yaml(adam_metadata[[domain]], path)
-        path
+        write_safe_yaml(adam_metadata[[domain]], path)
       })
     })
 
@@ -119,8 +117,7 @@ describe("CST - yaml - mdcol - workflow", {
     expect_no_error({
       all_yaml <- lapply(names(adam_metadata), function(domain) {
         path <- file.path(output_dir, paste0(tolower(domain), ".yaml"))
-        yaml::write_yaml(adam_metadata[[domain]], path)
-        path
+        write_safe_yaml(adam_metadata[[domain]], path)
       })
     })
 

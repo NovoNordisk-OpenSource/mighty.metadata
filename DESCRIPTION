@@ -1,6 +1,6 @@
 Package: mighty.metadata
 Title: CDISC ADaM Metadata Management in YAML Format
-Version: 0.0.0.9014
+Version: 0.0.0.9015
 Authors@R: c(
     person("Ari", "Siggaard Knoph", , "aikp@novonordisk.com", role = c("aut", "cre")),
     person("Esben", "Tore Moelgaard", , "ebtm@novonordisk.com", role = "aut"),
@@ -20,7 +20,7 @@ Imports:
     purrr,
     rlang,
     S7,
-    S7schema (>= 0.0.0.9006),
+    S7schema,
     tibble,
     tidyr,
     utils,
@@ -37,8 +37,6 @@ Suggests:
 VignetteBuilder: 
     knitr,
     quarto
-Remotes: 
-    NovoNordisk-OpenSource/S7schema
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
