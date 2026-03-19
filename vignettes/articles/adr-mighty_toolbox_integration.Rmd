@@ -1,6 +1,6 @@
 ---
 title: "Architecture Decision Record - mighty.toolbox integration"
-date: "2026-02-09"
+date: "2026-03-11"
 author: 
   - "Aksel Thomsen"
   - "Ryszard Szymanski"
@@ -12,7 +12,7 @@ author:
 |-------------|------------------------------------------------------------------|
 | Package     | mighty.metadata                                                  |
 | Status      | Approved                                                         |
-| Version     | 0.2.0                                                            |
+| Version     | 0.2.1                                                            |
 | Description | ADR for how mighty.metadata should integrate with mighty.toolbox |
 
 ## Success criteria
@@ -103,7 +103,49 @@ Cons:
 * If define.xml requirements change it might impact the CST format (so we are updating 2 formats at once) - deal-breaker
 
 ## Implementation Details
-See [Decisions]
+See [Decisions] for general interface.
+
+### On parameters and Whereclauses
+
+* `mighty.metadata` will support only 'EQ'-like whereclauses
+* All logic supporting different comparators will be removed
+* Parameters are identified only via id
+* If multiple conditions apply they need to be all listed as EQ clauses
+* The variable for comparison is always `PARAMCD`
+
+Given the following example:
+
+```yaml
+parameters:
+   - id: BMIDER
+     label: "Body mass index"
+     columns:
+      - id: AVAL
+        origin: Derived
+        method: "Derivation Method"
+```
+
+`mighty.toolbox` will interpret the `id: BMIDER` as the whereclause `PARAMCD EQ 'BMIDER'`. Multiple whereclauses are
+listed like this:
+
+```yaml
+parameters:
+  - id: A
+    label: "A"
+    columns:
+    - id: AVAL
+      origin: Derived
+      method: "Derivation method A"
+  - id: B
+    label: "B"
+    columns:
+    - id: AVAL
+      origin: Derived
+      method: "Derivation method B"
+```
+
+Due to mentioned restrictions, logical `AND` is not supported - whereclauses in the form 
+`PARAMCD EQ 'A' AND PARAMCD EQ 'B'` would always resolve to `FALSE`.
 
 ## Testing Strategy
 
