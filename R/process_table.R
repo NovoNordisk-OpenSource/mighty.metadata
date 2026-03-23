@@ -112,7 +112,7 @@ process_table <- function(table_name,
 
         # Create unified origin field based
         unified_origin = dplyr::case_when(
-          is_complex_predecessor ~ paste0("Source: ", origindescription),
+          is_complex_predecessor ~ paste0("Derived: ", origindescription),
           is_predecessor ~ paste0("Predecessor: ", origindescription),
           !is.na(origin) & tolower(origin) == "derived" & !is.na(algorithm) ~ paste0("Derived: ", algorithm),
           !is.na(origin) & tolower(origin) == "assigned" & !is.na(comment) ~ paste0("Assigned: ", comment),
