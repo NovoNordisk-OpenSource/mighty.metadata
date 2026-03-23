@@ -5,7 +5,7 @@ test_that("list_rows()", {
 
   list_rows(x) |>
     expect_type("character") |>
-    expect_contains("baseline")
+    expect_contains("BASELINE")
 })
 
 test_that("remove_rows()", {
@@ -70,9 +70,9 @@ test_that("update_row() updates existing properties", {
   )
 
   y <- x |>
-    update_row(id = "baseline", method = "Updated method")
+    update_row(id = "BASELINE", method = "Updated method")
 
-  select_row(y, "baseline")[["method"]] |>
+  select_row(y, "BASELINE")[["method"]] |>
     expect_equal("Updated method")
 })
 
@@ -82,9 +82,9 @@ test_that("update_row() adds new properties", {
   )
 
   y <- x |>
-    update_row(id = "baseline", depends = "USUBJID")
+    update_row(id = "BASELINE", depends = "USUBJID")
 
-  select_row(y, "baseline")[["depends"]] |>
+  select_row(y, "BASELINE")[["depends"]] |>
     expect_equal("USUBJID")
 })
 
@@ -93,7 +93,7 @@ test_that("select_row()", {
     file = system.file("examples", "advs.yml", package = "mighty.metadata")
   )
 
-  row <- select_row(x, id = "baseline")
+  row <- select_row(x, id = "BASELINE")
   expect_type(row, "list")
-  expect_equal(row[["id"]], "baseline")
+  expect_equal(row[["id"]], "BASELINE")
 })

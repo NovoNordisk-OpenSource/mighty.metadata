@@ -11,13 +11,15 @@
 #' @return A list of domain metadata.
 #'
 #' @noRd
-process_table <- function(table_name,
-                          source_tables,
-                          source_columns,
-                          source_values,
-                          valid_classes,
-                          valid_subclasses,
-                          verbose) {
+process_table <- function(
+  table_name,
+  source_tables,
+  source_columns,
+  source_values,
+  valid_classes,
+  valid_subclasses,
+  verbose
+) {
   # Build table_metadata - check for column existence before selecting
   available_cols <- names(source_tables)
   table_cols <- c("table", "label", "class", "structure", "keys", "comment")
@@ -46,19 +48,29 @@ process_table <- function(table_name,
   # Add class handling
   if ("class" %in% names(table_meta)) {
     table_meta <- table_meta |>
-      dplyr::mutate(class = dplyr::if_else(class %in% valid_classes, class, "ADAM OTHER"))
+      dplyr::mutate(
+        class = dplyr::if_else(class %in% valid_classes, class, "ADAM OTHER")
+      )
   }
 
   # Add subclass handling only if it exists
   if ("subclass" %in% names(table_meta)) {
     table_meta <- table_meta |>
-      dplyr::mutate(subclass = dplyr::if_else(subclass %in% valid_subclasses, subclass, NA_character_))
+      dplyr::mutate(
+        subclass = dplyr::if_else(
+          subclass %in% valid_subclasses,
+          subclass,
+          NA_character_
+        )
+      )
   }
 
   # Format keys as character vector if the column exists
   if ("keys" %in% names(table_meta)) {
     table_meta <- table_meta |>
-      dplyr::mutate(keys = list(strsplit(gsub("[\\[\\] ]", "", keys), ",")[[1]]))
+      dplyr::mutate(
+        keys = list(strsplit(trimws(gsub("[][]", "", keys)), "[, ]+")[[1]])
+      )
   }
 
   # Convert to list and clean
@@ -66,8 +78,12 @@ process_table <- function(table_name,
     as.list() |>
     clean_list()
 
+  if (!is.null(table_meta$keys) && is.list(table_meta$keys)) {
+    table_meta$keys <- table_meta$keys[[1]]
+  }
+
   # Process column metadata
-  col_data <-  source_columns |>
+  col_data <- source_columns |>
     dplyr::filter(table == table_name)
 
   if (nrow(col_data) > 0) {
@@ -100,7 +116,9 @@ process_table <- function(table_name,
 
         # For predecessor variables, use the full domain.variable reference if available
         column_final = dplyr::case_when(
-          is_predecessor & !is_renamed & grepl("^[A-Z]+\\.[A-Z]+", origindescription) ~ origindescription,
+          is_predecessor &
+            !is_renamed &
+            grepl("^[A-Z]+\\.[A-Z]+", origindescription) ~ origindescription,
           TRUE ~ column
         ),
 
@@ -114,8 +132,12 @@ process_table <- function(table_name,
         unified_origin = dplyr::case_when(
           is_complex_predecessor ~ paste0("Derived: ", origindescription),
           is_predecessor ~ paste0("Predecessor: ", origindescription),
-          !is.na(origin) & tolower(origin) == "derived" & !is.na(algorithm) ~ paste0("Derived: ", algorithm),
-          !is.na(origin) & tolower(origin) == "assigned" & !is.na(comment) ~ paste0("Assigned: ", comment),
+          !is.na(origin) &
+            tolower(origin) == "derived" &
+            !is.na(algorithm) ~ paste0("Derived: ", algorithm),
+          !is.na(origin) &
+            tolower(origin) == "assigned" &
+            !is.na(comment) ~ paste0("Assigned: ", comment),
           TRUE ~ NA_character_
         ),
 
@@ -128,18 +150,24 @@ process_table <- function(table_name,
       # Get rid of floating point issue with displayformat decimals
       dplyr::mutate(
         ndigits = nchar(gsub("^\\d+\\.", "", displayformat)),
-        displayformatn = dplyr::case_when(grepl("^\\d+", displayformat) ~ displayformat,
-                                          TRUE ~ "0"),
+        displayformatn = dplyr::case_when(
+          grepl("^\\d+", displayformat) ~ displayformat,
+          TRUE ~ "0"
+        ),
         displayformatn = as.double(.data$displayformatn),
         displayformatr = dplyr::case_when(
-          grepl("^\\d+\\.\\d+$", displayformatn) ~ round(displayformatn, ndigits - 1),
+          grepl("^\\d+\\.\\d+$", displayformatn) ~ round(
+            displayformatn,
+            ndigits - 1
+          ),
           TRUE ~ displayformatn
         )
       ) |>
       dplyr::rowwise() |>
       dplyr::mutate(
         displayformatf = dplyr::case_when(
-          grepl("^\\d+", displayformat) & isTRUE(all.equal(displayformatn, displayformatr)) ~
+          grepl("^\\d+", displayformat) &
+            isTRUE(all.equal(displayformatn, displayformatr)) ~
             as.character(displayformatr),
           TRUE ~ displayformat
         )
@@ -147,31 +175,42 @@ process_table <- function(table_name,
       dplyr::ungroup() |>
       # Map type codes to schema-compliant type names
       dplyr::mutate(
-        type = dplyr::case_when(type == "C" ~ "text",
-                                type == "N" & grepl("^datetime", displayformat) ~ "datetime",
-                                type == "N" & grepl("^date", displayformat) ~ "date",
-                                type == "N" & grepl("^time", displayformat) ~ "time",
-                                type == "N" ~ "float",
-                                TRUE ~ type)
+        type = dplyr::case_when(
+          type == "C" ~ "text",
+          type == "N" & grepl("^datetime", displayformat) ~ "datetime",
+          type == "N" & grepl("^date", displayformat) ~ "date",
+          type == "N" & grepl("^time", displayformat) ~ "time",
+          type == "N" ~ "float",
+          TRUE ~ type
+        )
       )
   } else {
-    warning("no column information for ", table_name, "; domain dropped from output")
+    warning(
+      "no column information for ",
+      table_name,
+      "; domain dropped from output"
+    )
     col_data <- col_data |>
       dplyr::mutate(is_complex_predecessor = logical(0))
   }
 
   # Print messages for complex predecessors converted to derived
   if (verbose) {
-    complex_preds <-  col_data |>
+    complex_preds <- col_data |>
       dplyr::filter(is_complex_predecessor) |>
       dplyr::select(column, origindescription)
 
     if (nrow(complex_preds) > 0) {
       for (i in seq_len(nrow(complex_preds))) {
-        message(paste0("Converting column '", complex_preds$column[i],
-                       "' in table '", table_name,
-                       "' from predecessor to derived due to complex origindescription: '",
-                       complex_preds$origindescription[i], "'"))
+        message(paste0(
+          "Converting column '",
+          complex_preds$column[i],
+          "' in table '",
+          table_name,
+          "' from predecessor to derived due to complex origindescription: '",
+          complex_preds$origindescription[i],
+          "'"
+        ))
       }
     }
   }
@@ -179,12 +218,16 @@ process_table <- function(table_name,
   # Sort column data
   col_data <- col_data |>
     dplyr::mutate(colorder = dplyr::row_number()) |>
-    dplyr::arrange(dplyr::across(dplyr::any_of(c("orderblock", "sortorder", "colorder"))))
+    dplyr::arrange(dplyr::across(dplyr::any_of(c(
+      "orderblock",
+      "sortorder",
+      "colorder"
+    ))))
 
   # TODO: This can be cleaned up considerably
   # TODO: The listify-function could be pulled out.
   # Create column metadata list with appropriate fields based on type
-  col_meta <-  lapply(seq_len(nrow(col_data)), function(i) {
+  col_meta <- lapply(seq_len(nrow(col_data)), function(i) {
     row <- col_data[i, ]
     result <- list()
 
@@ -205,7 +248,9 @@ process_table <- function(table_name,
       display = if (!is.na(row$displayformat)) row$displayformatf
     )
     fmt <- Filter(Negate(is.null), fmt)
-    if (length(fmt) == 0) fmt <- NULL
+    if (length(fmt) == 0) {
+      fmt <- NULL
+    }
 
     if (row$is_predecessor && !row$is_renamed && row$is_adam_predecessor) {
       # For predecessor columns that aren't renamed, only include the column field
@@ -227,7 +272,9 @@ process_table <- function(table_name,
           method = method_text
         )
       )
-    } else if (row$is_predecessor && !row$is_renamed && !row$is_adam_predecessor) {
+    } else if (
+      row$is_predecessor && !row$is_renamed && !row$is_adam_predecessor
+    ) {
       # For predecessor columns that aren't renamed, only include the column field
       # This follows CDISC requirements that predecessor columns inherit metadata from parent
       append(

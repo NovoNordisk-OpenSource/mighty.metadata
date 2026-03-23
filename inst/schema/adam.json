@@ -7,7 +7,7 @@
   "properties": {
     "id": {
       "description": "Name of the ADaM dataset",
-      "type": "string"
+      "$ref": "#/definitions/cdisc/name"
     },
     "label": {
       "description": "Label of the ADaM dataset",
@@ -70,13 +70,13 @@
         {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/cdisc/name"
           },
           "minItems": 1,
           "uniqueItems": true
         },
         {
-          "type": "string"
+          "$ref": "#/definitions/cdisc/name"
         }
       ]
     },
@@ -93,55 +93,55 @@
       "description": "Specification of a single column",
       "type": "object",
       "properties": {
-          "id": {
-            "description": "Name of the column",
-            "type": "string"
-          },
-          "include": {
-            "description": "Conditional expression to include the column",
-            "$ref": "#/definitions/mighty/include"
-          },
-          "label": {
-            "description": "Label of the column",
-            "type": "string"
-          },
-          "method": {
-            "description": "How to derive the column (free text)",
-            "type": "string"
-          },
-          "origin": {
-            "description": "Origin type of the column",
-            "$ref": "#/definitions/cdisc/origin"
-          },
-          "codelist": {
-            "description": "Codelist of possible values of the column",
-            "type": "string"
-          },
-          "is_core": {
-            "description": "Flag for designating a core variables in subject level datasets",
-            "type": "boolean"
-          },
-          "format": {
-            "description": "Data format of the column",
-            "$ref": "#/definitions/standard/dataformat"
-          },
-          "component": {
-            "description": "Mighty component to create the column",
-            "$ref": "#/definitions/mighty/component"
-          },
-          "depends": {
-            "description": "dependencies required to create the column",
-            "$ref": "#/definitions/mighty/depends"
-          },
-          "core": {
-            "description": "Describes whether a variable is required (Req), conditionally required (Cond) or permissible (Perm)",
-            "$ref": "#/definitions/cdisc/core"
-          }
+        "id": {
+          "description": "Name of the column",
+          "$ref": "#/definitions/cdisc/name"
         },
-        "required": [
-          "id"
-        ],
-        "additionalProperties": false
+        "include": {
+          "description": "Conditional expression to include the column",
+          "$ref": "#/definitions/mighty/include"
+        },
+        "label": {
+          "description": "Label of the column",
+          "type": "string"
+        },
+        "method": {
+          "description": "How to derive the column (free text)",
+          "type": "string"
+        },
+        "origin": {
+          "description": "Origin type of the column",
+          "$ref": "#/definitions/cdisc/origin"
+        },
+        "codelist": {
+          "description": "Codelist of possible values of the column",
+          "type": "string"
+        },
+        "is_core": {
+          "description": "Flag for designating a core variables in subject level datasets",
+          "type": "boolean"
+        },
+        "format": {
+          "description": "Data format of the column",
+          "$ref": "#/definitions/standard/dataformat"
+        },
+        "component": {
+          "description": "Mighty component to create the column",
+          "$ref": "#/definitions/mighty/component"
+        },
+        "depends": {
+          "description": "dependencies required to create the column",
+          "$ref": "#/definitions/mighty/depends"
+        },
+        "core": {
+          "description": "Describes whether a variable is required (Req), conditionally required (Cond) or permissible (Perm)",
+          "$ref": "#/definitions/cdisc/core"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false
     },
     "rows": {
       "description": "List of row action specifications. Typically used when adding additional rows to the data.",
@@ -158,7 +158,7 @@
       "properties": {
         "id": {
           "description": "Unique identifier of the action. Used to reference in other places, e.g. as a dependency.",
-          "type": "string"
+          "$ref": "#/definitions/cdisc/name"
         },
         "include": {
           "description": "Conditional expression to include the row",
@@ -195,7 +195,7 @@
       "properties": {
         "id": {
           "description": "Parameter id (PARAMCD)",
-          "type": "string"
+          "$ref": "#/definitions/cdisc/name"
         },
         "include": {
           "description": "Conditional expression to include the parameter",
@@ -266,6 +266,11 @@
     },
     "cdisc": {
       "description": "Definitions from CDISC standards",
+      "name": {
+        "description": "Uppercase identifier",
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_]*$"
+      },
       "class": {
         "description": "Subset of CDISC controlled terminology C103329",
         "type": "string",
@@ -302,7 +307,11 @@
       "core": {
         "description": "Indicator of whether a variable is required (Req), conditionally required (Cond), or permissible (Perm) in the dataset",
         "type": "string",
-        "enum": ["Cond", "Perm", "Req"]
+        "enum": [
+          "Cond",
+          "Perm",
+          "Req"
+        ]
       }
     },
     "mighty": {
@@ -339,7 +348,7 @@
         "properties": {
           "domain": {
             "description": "Name of the dataset to use",
-            "type": "string"
+            "$ref": "#/definitions/cdisc/name"
           },
           "depends": {
             "description": "Which columns in the dataset the filter depends on",
@@ -383,19 +392,24 @@
         ],
         "additionalProperties": false
       },
+      "depends_string": {
+        "description": "A single dependency: COLUMN, DOMAIN.COLUMN, rows.ID, or parameters.ID",
+        "type": "string",
+        "pattern": "^([A-Z][A-Z0-9_]*(\\.[A-Z][A-Z0-9_]*)?)$|^(rows|parameters)\\.[A-Z][A-Z0-9_]*$"
+      },
       "depends": {
         "description": "List of dependencies needed before the component code can be evaluated",
         "oneOf": [
           {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/definitions/mighty/depends_string"
             },
             "minItems": 1,
             "uniqueItems": true
           },
           {
-            "type": "string"
+            "$ref": "#/definitions/mighty/depends_string"
           }
         ]
       },

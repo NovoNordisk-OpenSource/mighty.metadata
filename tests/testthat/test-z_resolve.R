@@ -66,7 +66,7 @@ test_that("resolve_includes() - study - complex", {
 
   study$ADVS <- study$ADVS |>
     update_row(
-      id = "baseline",
+      id = "BASELINE",
       include = "{impute_baseline_row}"
     ) |>
     add_parameter(

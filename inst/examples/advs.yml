@@ -9,14 +9,14 @@ comment: |
 
 population:
   base:
-    - domain: lb
+    - domain: LB
       depends:
-        - lbtestcd
-      filter: lbtestcd == "B"
-    - domain: eg
+        - LBTESTCD
+      filter: LBTESTCD == "B"
+    - domain: EG
       depends:
-        - egtestcd
-      filter: egtestcd == "A"
+        - EGTESTCD
+      filter: EGTESTCD == "A"
   global:
     - filter: SAFFL == "Y"
       depends:
@@ -118,7 +118,7 @@ columns:
     label: BMI Group at baseline
     method: AVALC where PARAMCD = "BMIGRP" for the baseline visit
     depends:
-      - rows.baseline
+      - rows.BASELINE
       - parameters.BMIGRP # Either explicit or from component
     component:
       id: bds_copy_param
@@ -128,7 +128,7 @@ columns:
         input: AVALCs
 
 rows:
-  - id: baseline
+  - id: BASELINE
     method: Add baseline visit as a new row
     component:
       id: add_baseline_visit # To be made

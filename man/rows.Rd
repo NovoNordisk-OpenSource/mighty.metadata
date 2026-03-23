@@ -60,11 +60,11 @@ y |>
 
 # Update an existing row
 x |>
-  update_row(id = "baseline", method = "Updated method") |>
-  select_row(id = "baseline") |>
+  update_row(id = "BASELINE", method = "Updated method") |>
+  select_row(id = "BASELINE") |>
   str()
 
 # Select a specific row
-select_row(x, id = "baseline")
+select_row(x, id = "BASELINE")
 
 }
