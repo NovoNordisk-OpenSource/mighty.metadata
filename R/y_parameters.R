@@ -153,15 +153,12 @@ S7::method(select_parameter, mighty_domain) <- function(x, id) {
 
 #' @noRd
 param_list <- function(x) {
-  list_ids(x = x[["parameters"]])
+  list_ids(x[["parameters"]])
 }
 
 #' @noRd
 param_remove <- function(x, id) {
-  for (i in rev(which_ids(x = x[["parameters"]], id = id))) {
-    x[["parameters"]][i] <- NULL
-  }
-
+  x[["parameters"]] <- remove_ids(x[["parameters"]], id)
   validate(x)
 }
 
@@ -173,44 +170,27 @@ param_add <- function(x, id, label, columns, ..., .pos) {
     columns = list(columns),
     rlang::list2(...)
   )
-
   x[["parameters"]] <- insert_in_vector(
-    x = x[["parameters"]],
-    y = parameter,
+    x[["parameters"]],
+    parameter,
     pos = .pos
   )
-
   validate(x)
 }
 
 #' @noRd
 param_move <- function(x, id, .pos) {
-  parameter <- get_id(x = x[["parameters"]], id = id)
-
-  x <- remove_parameters(x = x, id = id)
-
-  args <- c(
-    list(x = x),
-    parameter,
-    list(.pos = .pos)
-  )
-
-  do.call(
-    what = add_parameter,
-    args = args
-  )
+  x[["parameters"]] <- move_id(x[["parameters"]], id, .pos)
+  validate(x)
 }
 
 #' @noRd
 param_update <- function(x, id, ...) {
-  idx <- which_ids(x = x[["parameters"]], id = id)
-  updates <- rlang::list2(...)
-  x[["parameters"]][[idx]][names(updates)] <- updates
-
+  x[["parameters"]] <- update_ids(x[["parameters"]], id, ...)
   validate(x)
 }
 
 #' @noRd
 param_select <- function(x, id) {
-  get_id(x = x[["parameters"]], id = id)
+  get_id(x[["parameters"]], id)
 }

@@ -10,7 +10,7 @@ test_that("mighty_study()", {
       class = mighty_domain
     ) |>
     names() |>
-    expect_equal(c("ADAE", "ADSL"))
+    expect_equal(c("ADAE", "ADSL", "ADVS"))
 
   S7::prop_names(study) |>
     expect_equal("info")

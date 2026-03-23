@@ -26,7 +26,9 @@ test_that("get_id()", {
     expect_equal(list(id = "b", value = 2))
 
   get_id(x, "d") |>
-    expect_error()
+    expect_error(
+      regexp = "Id `d` does not exist"
+    )
 })
 
 test_that("list_ids", {
@@ -38,6 +40,9 @@ test_that("list_ids", {
 
   list_ids(x) |>
     expect_equal(c("a", "b", "c"))
+
+  list_ids(list()) |>
+    expect_equal(character(0))
 })
 
 test_that("which_ids", {
@@ -52,22 +57,44 @@ test_that("which_ids", {
 
   which_ids(x, c("b", "c")) |>
     expect_equal(2:3)
+
+  which_ids(list(), "a") |>
+    expect_equal(integer(0))
 })
 
-test_that("get_id()", {
+test_that("remove_ids()", {
+  x <- list(list(id = "a"), list(id = "b"))
+
+  remove_ids(x, character()) |>
+    expect_equal(x)
+
+  remove_ids(x, "a") |>
+    expect_length(1L)
+
+  remove_ids(x, c("a", "b")) |>
+    expect_null()
+})
+
+test_that("update_ids()", {
+  x <- list(list(id = "a", value = 1), list(id = "b", value = 2))
+
+  update_ids(x, "a", value = 10) |>
+    getElement(1) |>
+    expect_equal(list(id = "a", value = 10))
+
+  update_ids(x, character(), value = 10) |>
+    expect_equal(x)
+})
+
+test_that("list_includes()", {
   x <- list(
-    list(id = "a", value = 1),
-    list(id = "b", value = 2),
-    list(id = "c", value = 3)
+    list(id = "a", include = "other"),
+    list(id = "b", value = 1)
   )
 
-  expect_equal(
-    object = get_id(x, "b"),
-    expected = list(id = "b", value = 2)
-  )
+  list_includes(x) |>
+    expect_equal("a")
 
-  expect_error(
-    object = get_id(x, "d"),
-    regexp = "Id `d` does not exist"
-  )
+  list_includes(list()) |>
+    expect_equal(character(0))
 })

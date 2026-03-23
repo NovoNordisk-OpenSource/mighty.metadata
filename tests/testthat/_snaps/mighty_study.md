@@ -7,4 +7,5 @@
       @ info: `study_id`
       $ ADAE: <mighty_domain>
       $ ADSL: <mighty_domain>
+      $ ADVS: <mighty_domain>
 

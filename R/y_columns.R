@@ -153,62 +153,35 @@ S7::method(update_column, mighty_domain) <- function(x, id, ...) {
 
 #' @noRd
 col_list <- function(x) {
-  list_ids(x = x[["columns"]])
+  list_ids(x[["columns"]])
 }
 
 #' @noRd
 col_remove <- function(x, id) {
-  for (i in rev(which_ids(x = x[["columns"]], id = id))) {
-    x[["columns"]][i] <- NULL
-  }
-
+  x[["columns"]] <- remove_ids(x[["columns"]], id)
   validate(x)
 }
 
 #' @noRd
 col_add <- function(x, id, ..., .pos) {
-  column <- c(
-    id = id,
-    rlang::list2(...)
-  )
-
-  x[["columns"]] <- insert_in_vector(
-    x = x[["columns"]],
-    y = column,
-    pos = .pos
-  )
-
+  column <- c(id = id, rlang::list2(...))
+  x[["columns"]] <- insert_in_vector(x[["columns"]], column, pos = .pos)
   validate(x)
 }
 
 #' @noRd
 col_move <- function(x, id, .pos) {
-  column <- get_id(x = x[["columns"]], id = id)
-
-  x <- remove_columns(x = x, id = id)
-
-  args <- c(
-    list(x = x),
-    column,
-    list(.pos = .pos)
-  )
-
-  do.call(
-    what = add_column,
-    args = args
-  )
+  x[["columns"]] <- move_id(x[["columns"]], id, .pos)
+  validate(x)
 }
 
 #' @noRd
 col_select <- function(x, id) {
-  get_id(x = x[["columns"]], id = id)
+  get_id(x[["columns"]], id)
 }
 
 #' @noRd
 col_update <- function(x, id, ...) {
-  idx <- which_ids(x = x[["columns"]], id = id)
-  updates <- rlang::list2(...)
-  x[["columns"]][[idx]][names(updates)] <- updates
-
+  x[["columns"]] <- update_ids(x[["columns"]], id, ...)
   validate(x)
 }

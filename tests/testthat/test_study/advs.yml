@@ -1,0 +1,47 @@
+id: ADVS
+label: Vital Signs Analysis Dataset
+class: BASIC DATA STRUCTURE
+structure: One record per vital sign parameter, per visit, per subject
+keys: [USUBJID, PARAMCD, AVISITN]
+
+columns:
+  - id: STUDYID
+    label: Study Identifier
+    method: VS.STUDYID
+    core: Req
+
+  - id: USUBJID
+    label: Unique Subject Identifier
+    method: VS.USUBJID
+    core: Req
+
+  - id: PARAMCD
+    label: Parameter Code
+    method: VS.VSTESTCD
+    core: Req
+
+  - id: PARAM
+    label: Parameter
+    method: VS.VSTEST
+    core: Req
+
+  - id: AVAL
+    label: Analysis Value
+    method: VS.VSSTRESN
+    core: Req
+
+  - id: AVISITN
+    label: Analysis Visit (N)
+    method: VS.VISITNUM
+    core: Req
+
+rows:
+  - id: baseline
+    method: Add baseline visit as a new row
+
+parameters:
+  - id: BMI
+    label: Body Mass Index (kg/m^2)
+    columns:
+      - id: AVAL
+        method: Derived from height and weight

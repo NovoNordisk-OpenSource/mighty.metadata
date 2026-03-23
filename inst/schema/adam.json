@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
   "$id": "https://raw.githubusercontent.com/NN-OpenSource/mighty.metadata/refs/heads/main/inst/schema/adam.json",
-  "title": "Mighty Metadata ADaM specification",
+  "title": "Mighty Metadata ADaM Domain Specification",
   "description": "Common schema for ADaM dataset specification in the mightyverse",
   "type": "object",
   "properties": {
@@ -97,6 +97,10 @@
             "description": "Name of the column",
             "type": "string"
           },
+          "include": {
+            "description": "Conditional expression to include the column",
+            "$ref": "#/definitions/mighty/include"
+          },
           "label": {
             "description": "Label of the column",
             "type": "string"
@@ -156,6 +160,10 @@
           "description": "Unique identifier of the action. Used to reference in other places, e.g. as a dependency.",
           "type": "string"
         },
+        "include": {
+          "description": "Conditional expression to include the row",
+          "$ref": "#/definitions/mighty/include"
+        },
         "method": {
           "description": "How to derive the row action (free text)",
           "type": "string"
@@ -188,6 +196,10 @@
         "id": {
           "description": "Parameter id (PARAMCD)",
           "type": "string"
+        },
+        "include": {
+          "description": "Conditional expression to include the parameter",
+          "$ref": "#/definitions/mighty/include"
         },
         "label": {
           "description": "Parameter label (PARAM)",
@@ -384,6 +396,18 @@
           },
           {
             "type": "string"
+          }
+        ]
+      },
+      "include": {
+        "description": "Glue expression that evaluates to TRUE or FALSE",
+        "oneOf": [
+          {
+            "type": "string",
+            "pattern": "^\\{.*\\}$"
+          },
+          {
+            "type": "boolean"
           }
         ]
       },
