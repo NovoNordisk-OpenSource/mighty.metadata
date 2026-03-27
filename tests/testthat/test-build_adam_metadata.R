@@ -75,4 +75,46 @@ describe("build_adam_metadata", {
     have_core <- purrr::map_lgl(column_metadata, \(x) "core" %in% names(x))
     expect_true(all(have_core))
   })
+
+  it("builds ADaM metadata including 'comment' field at column level", {
+    metadata <- load_test_metadata_components(
+      table_filter = table == "ADAE",
+      column_filter = table == "ADAE",
+      value_filter = table == "ADAE"
+    )
+
+    source_columns_with_comment <- metadata$source_columns |>
+      dplyr::filter(!is.na(comment)) |>
+      dplyr::pull(column)
+
+    has_columns_with_comment <- length(source_columns_with_comment) > 0
+    if (!has_columns_with_comment) {
+      stop("source_columns should have at least one column with a comment")
+    }
+
+    adam_metadata <- build_adam_metadata(metadata, verbose = FALSE)
+    column_metadata <- adam_metadata$ADAE$columns
+
+    all_matching_columns_have_comment <- column_metadata |>
+      purrr::keep(\(x) x$id %in% source_columns_with_comment) |>
+      purrr::every(\(x) "comment" %in% names(x))
+
+    expect_true(all_matching_columns_have_comment)
+  })
+
+  it("builds ADaM metadata including 'comment' field at parameter level", {
+    metadata <- load_test_metadata_components(
+      table_filter = table == "ADLB",
+      column_filter = table == "ADLB",
+      value_filter = table == "ADLB"
+    )
+
+    adam_metadata <- build_adam_metadata(metadata, verbose = FALSE)
+    parameter_metadata <- adam_metadata$ADLB$parameters
+
+    all_parameters_have_comment <- parameter_metadata |>
+      purrr::every(\(parameter) purrr::every(parameter$columns, \(column) "comment" %in% names(column)))
+
+    expect_true(all_parameters_have_comment)
+  })
 })

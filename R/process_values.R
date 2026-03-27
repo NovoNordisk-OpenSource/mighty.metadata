@@ -60,7 +60,8 @@ process_values <- function(val_filtered, table_name, verbose) {
     val_grouped <- val_data |>
       dplyr::group_by(.data$paramcd, .data$endpoint) |>
       dplyr::summarise(column = list(.data$column),
-                       method_text = list(gsub("\r\n", "\n", .data$unified_origin)))
+                       method_text = list(gsub("\r\n", "\n", .data$unified_origin)),
+                       comment = list(.data$comment))
 
     val_meta <- lapply(seq_len(nrow(val_grouped)), function(i) {
       row <- val_grouped[i, ]
@@ -68,8 +69,10 @@ process_values <- function(val_filtered, table_name, verbose) {
       result <- list(
         id = row$paramcd,
         label = row$endpoint,
-        columns = purrr::map2(unlist(row$column), unlist(row$method_text),
-                              \(id, method) list(id = id, method = method))
+        columns = purrr::pmap(
+          list(id = unlist(row$column), method = unlist(row$method_text), comment = unlist(row$comment)),
+          list
+        )
       )
 
       clean_list(result)

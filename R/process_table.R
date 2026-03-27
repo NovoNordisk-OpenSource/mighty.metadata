@@ -235,6 +235,10 @@ process_table <- function(
       result <- append(result, list(core = row$core))
     }
 
+    if ("comment" %in% colnames(row)) {
+      result <- append(result, list(comment = row$comment))
+    }
+
     method_text <- row$unified_origin
     if (!is.na(method_text)) {
       # Standardize newlines

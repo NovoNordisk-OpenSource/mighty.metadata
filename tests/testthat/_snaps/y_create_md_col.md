@@ -6,7 +6,7 @@
         "names": {
           "type": "character",
           "attributes": {},
-          "value": ["table_id", "table_label", "order", "id", "label", "origin", "key", "is_core", "core", "method", "codelist", "format_type", "format_length", "format_display"]
+          "value": ["table_id", "table_label", "order", "id", "label", "origin", "key", "is_core", "core", "method", "codelist", "format_type", "format_length", "format_display", "comment"]
         },
         "row.names": {
           "type": "integer",
@@ -89,6 +89,11 @@
           "type": "character",
           "attributes": {},
           "value": [null, null, null, null, null, null, "date9.", "date9.", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+        },
+        {
+          "type": "character",
+          "attributes": {},
+          "value": [null, null, null, null, null, null, null, null, "AEs occurring more than 30 days post-treatment are not flagged", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
         }
       ]
     }

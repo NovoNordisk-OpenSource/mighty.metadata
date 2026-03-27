@@ -136,6 +136,10 @@
         "core": {
           "description": "Describes whether a variable is required (Req), conditionally required (Cond) or permissible (Perm)",
           "$ref": "#/definitions/cdisc/core"
+        },
+        "comment": {
+          "description": "Comment to the column (free text)",
+          "type": "string"
         }
       },
       "required": [

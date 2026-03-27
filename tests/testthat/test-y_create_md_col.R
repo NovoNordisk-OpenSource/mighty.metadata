@@ -25,7 +25,8 @@ test_that("create_md_col()", {
       "codelist",
       "format_type",
       "format_length",
-      "format_display"
+      "format_display",
+      "comment"
     )
   )
 

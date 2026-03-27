@@ -26,6 +26,7 @@ A tibble with one row per column containing:
 \item{format_type}{Data type ("C" or "N")}
 \item{format_length}{Maximum length}
 \item{format_display}{Display format}
+\item{comment}{Comment}
 }
 }
 \description{

@@ -36,7 +36,7 @@ describe("CST - yaml - mdcol - workflow", {
     })
 
     # Test shape of mdcol
-    expect_equal(dim(mdcol), c(1605, 14))
+    expect_equal(dim(mdcol), c(1605, 15))
 
     # Test names of mdcol
     expect_equal(
@@ -55,7 +55,8 @@ describe("CST - yaml - mdcol - workflow", {
         "codelist",
         "format_type",
         "format_length",
-        "format_display"
+        "format_display",
+        "comment"
       )
     )
 

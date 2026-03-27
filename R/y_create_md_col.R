@@ -22,6 +22,7 @@
 #'   \item{format_type}{Data type ("C" or "N")}
 #'   \item{format_length}{Maximum length}
 #'   \item{format_display}{Display format}
+#'   \item{comment}{Comment}
 #' }
 #'
 #' @seealso [mighty_study], [populate_sparse()], [populate_core()]
@@ -93,5 +94,6 @@ mdcol_template <- tibble::tibble(
   codelist = character(),
   format_type = character(),
   format_length = integer(),
-  format_display = character()
+  format_display = character(),
+  comment = character()
 )
