@@ -140,3 +140,27 @@ list_includes <- function(x) {
   )
   list_ids(x[is_include])
 }
+
+#' Helper to check that all lists have unique `id` entries
+#' Note, that it checks uniqueness on the same top-level and not
+#' for the entire object.
+#' @noRd
+check_unique_ids <- function(x) {
+  if (!length(x)) {
+    return(x)
+  }
+
+  flat <- unlist(x)
+  flat <- flat[grepl(pattern = "^[^.]+\\.id$", x = names(flat))]
+
+  flatter <- paste(names(flat), flat, sep = ": ")
+
+  dups <- unique(flatter[duplicated(flatter)])
+  names(dups) <- rep("x", times = length(dups))
+
+  if (length(dups)) {
+    cli::cli_abort(
+      c("Duplicate `id` entries found:", dups)
+    )
+  }
+}

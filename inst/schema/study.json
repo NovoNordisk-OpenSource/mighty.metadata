@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/NN-OpenSource/mighty.metadata/refs/heads/main/inst/schema/study.json",
+  "title": "Mighty Study Specification",
+  "description": "Schema for study-level properties in the mightyverse",
+  "type": "object",
+  "properties": {
+    "study_id": {
+      "description": "Unique identifier of the study",
+      "type": "string"
+    },
+    "study_description": {
+      "description": "Description of the study",
+      "type": "string"
+    },
+    "external_data": {
+      "description": "External data sources referenced by the study",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Identifier of the external data source",
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$"
+          },
+          "keys": {
+            "description": "Key columns for joining the external data",
+            "oneOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9_]*$"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]*$"
+              }
+            ]
+          }
+        },
+        "required": ["id", "keys"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "study_id"
+  ],
+  "additionalProperties": true
+}

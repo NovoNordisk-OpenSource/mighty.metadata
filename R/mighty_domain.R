@@ -43,12 +43,20 @@ construct_mighty_domain <- function(file) {
   )
 }
 
+#' @noRd
+validate_mighty_domain <- function(self) {
+  check_unique_ids(self)
+}
+
 #' @rdname mighty_domain
 #' @export
 mighty_domain <- S7::new_class(
   name = "mighty_domain",
   parent = S7schema::S7schema,
-  constructor = construct_mighty_domain
+  constructor = construct_mighty_domain,
+  validator = function(self) {
+    validate_mighty_domain(self)
+  }
 )
 
 #' @noRd

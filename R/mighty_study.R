@@ -69,10 +69,13 @@ construct_mighty_study <- function(path) {
     FUN.VALUE = character(1)
   )
 
+  schema <- system.file("schema", "study.json", package = "mighty.metadata")
+
   if (length(properties) == 0) {
     zephyr::msg_debug("No _mighty.yml file found")
     properties <- list()
   } else {
+    S7schema::validate_yaml(properties, schema)
     properties <- yaml::read_yaml(properties)
   }
 
@@ -82,13 +85,32 @@ construct_mighty_study <- function(path) {
   )
 }
 
+#' @noRd
+validate_info <- function(value) {
+  if (length(value) > 0) {
+    schema <- system.file(
+      "schema",
+      "study.json",
+      package = "mighty.metadata"
+    )
+    S7schema::validate_list(value, schema)
+    check_unique_ids(value)
+  }
+  NULL
+}
+
 #' @rdname mighty_study
 #' @export
 mighty_study <- S7::new_class(
   name = "mighty_study",
   parent = S7::class_list,
   properties = list(
-    info = S7::class_list
+    info = S7::new_property(
+      class = S7::class_list,
+      validator = \(value) {
+        validate_info(value = value)
+      }
+    )
   ),
   constructor = construct_mighty_study
 )

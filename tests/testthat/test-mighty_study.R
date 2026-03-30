@@ -18,8 +18,16 @@ test_that("mighty_study()", {
   expect_equal(
     object = study@info,
     expected = list(
-      study_id = "test_study"
+      study_id = "test_study",
+      external_data = list(
+        list(id = "DM", keys = c("STUDYID", "USUBJID"))
+      )
     )
+  )
+
+  expect_error(
+    study@info <- list(not_study_id = "missing required field"),
+    "study_id"
   )
 
   expect_snapshot(
@@ -47,4 +55,22 @@ test_that("Error if more than one _mighty file", {
 
   mighty_study(tmp) |>
     expect_error("Only one _mighty file allowed")
+})
+
+test_that("Debug message if no _mighty file", {
+  withr::local_options(list("zephyr.verbosity_level" = "debug"))
+  tmp <- withr::local_tempdir()
+
+  test_path("test_study") |>
+    list.files(full.names = TRUE) |>
+    file.copy(to = tmp) |>
+    all() |>
+    expect_true()
+
+  file.path(tmp, "_mighty.yml") |>
+    file.remove() |>
+    expect_true()
+
+  mighty_study(tmp) |>
+    expect_message("No _mighty.yml file found")
 })

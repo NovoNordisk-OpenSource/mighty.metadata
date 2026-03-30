@@ -98,3 +98,34 @@ test_that("list_includes()", {
   list_includes(list()) |>
     expect_equal(character(0))
 })
+
+test_that("check_unique_ids()", {
+  list() |>
+    check_unique_ids() |>
+    expect_length(0L)
+
+  list(
+    list(id = "a", x = 1),
+    list(id = "b", x = 1)
+  ) |>
+    check_unique_ids() |>
+    expect_no_condition()
+
+  x <- list(
+    id = "a",
+    new_list = list(
+      list(id = "a", a = 1),
+      list(id = "b", b = 1),
+      list(id = "a", a = 2)
+    ),
+    other_list = list(
+      sub_list = list(
+        list(id = "a"),
+        list(id = "b")
+      )
+    )
+  )
+
+  check_unique_ids(x) |>
+    expect_error("Duplicate `id` entries found")
+})

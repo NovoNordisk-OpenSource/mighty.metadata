@@ -92,6 +92,7 @@ test_that("resolve_includes() - study - complex", {
     object = study_resolved@info,
     expected = list(
       study_id = "test_study",
+      external_data = list(list(id = "DM", keys = c("STUDYID", "USUBJID"))),
       impute_baseline_row = FALSE
     )
   )

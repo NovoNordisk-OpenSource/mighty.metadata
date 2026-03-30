@@ -191,7 +191,9 @@
       "type": "array",
       "items": {
         "$ref": "#/definitions/parameter"
-      }
+      },
+      "minItems": 1,
+      "uniqueItems": true
     },
     "parameter": {
       "type": "object",
