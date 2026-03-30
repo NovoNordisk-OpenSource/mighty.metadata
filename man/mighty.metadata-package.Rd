@@ -16,12 +16,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ari Siggaard Knoph \email{aikp@novonordisk.com}
+\strong{Maintainer}: Aksel Thomsen \email{oath@novonordisk.com}
 
 Authors:
 \itemize{
+  \item Ari Siggaard Knoph \email{aikp@novonordisk.com}
   \item Esben Tore Moelgaard \email{ebtm@novonordisk.com}
-  \item Aksel Thomsen \email{oath@novonordisk.com}
 }
 
 Other contributors:
