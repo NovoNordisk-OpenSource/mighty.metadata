@@ -93,7 +93,6 @@ corevars
 CRAN
 dataformat
 dataframe
-ddisplayformat
 decodetext
 displayformat
 DISPLAYFORMAT
@@ -101,18 +100,15 @@ displayformatf
 displayformatn
 displayformatr
 displayidentifier
-dlength
 DOSEU
 dplyr
 DTHDTC
-dtype
 ECDOSFRQ
 ECSCAT
 ECSEQ
 EGSEQ
 egtestcd
 Esben
-imap
 INTRSDT
 jsonvalidate
 jsonvalidator
@@ -225,6 +221,7 @@ TOTINSDS
 TRTA
 TRTAN
 TRTEDT
+TRTEMFL
 TRTP
 TRTPN
 TRTSDT

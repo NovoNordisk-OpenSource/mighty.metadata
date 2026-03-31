@@ -126,7 +126,7 @@ which_ids <- function(x, id) {
   which(list_ids(x) %in% id)
 }
 
-#' Helper to list all subelements with an 'include' entry
+#' Helper to list all sub-elements with an 'include' entry
 #' @noRd
 list_includes <- function(x) {
   if (!length(x)) {
@@ -155,12 +155,12 @@ check_unique_ids <- function(x) {
 
   flatter <- paste(names(flat), flat, sep = ": ")
 
-  dups <- unique(flatter[duplicated(flatter)])
-  names(dups) <- rep("x", times = length(dups))
+  duplicates <- unique(flatter[duplicated(flatter)])
+  names(duplicates) <- rep("x", times = length(duplicates))
 
-  if (length(dups)) {
+  if (length(duplicates)) {
     cli::cli_abort(
-      c("Duplicate `id` entries found:", dups)
+      c("Duplicate `id` entries found:", duplicates)
     )
   }
 }

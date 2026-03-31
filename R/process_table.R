@@ -224,8 +224,6 @@ process_table <- function(
       "colorder"
     ))))
 
-  # TODO: This can be cleaned up considerably
-  # TODO: The listify-function could be pulled out.
   # Create column metadata list with appropriate fields based on type
   col_meta <- lapply(seq_len(nrow(col_data)), function(i) {
     row <- col_data[i, ]

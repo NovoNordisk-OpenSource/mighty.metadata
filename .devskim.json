@@ -1,0 +1,5 @@
+{
+  "Globs": [
+    "**/inst/schema/*.json"
+  ]
+}

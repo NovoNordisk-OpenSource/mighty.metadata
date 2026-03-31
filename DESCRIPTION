@@ -1,6 +1,6 @@
 Package: mighty.metadata
 Title: CDISC ADaM Metadata Management in YAML Format
-Version: 0.0.0.9019
+Version: 0.0.0.9020
 Authors@R: c(
     person("Aksel", "Thomsen", , "oath@novonordisk.com", role = c("aut", "cre")),
     person("Ari", "Siggaard Knoph", , "aikp@novonordisk.com", role = "aut"),

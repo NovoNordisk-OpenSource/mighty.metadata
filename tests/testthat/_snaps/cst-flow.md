@@ -37,7 +37,7 @@
 # CST - yaml - mdcol - workflow / Builds mdcol
 
     Code
-      cat(paste(res$table_id, res$n, sep = " - "), sep = "\n")
+      snapshot_table_counts(mdcol)
     Output
       ADADJ - 76
       ADAE - 102
@@ -73,7 +73,7 @@
 # CST - yaml - mdcol - workflow / Runs entire flow with core variables
 
     Code
-      cat(paste(res$table_id, res$n, sep = " - "), sep = "\n")
+      snapshot_table_counts(mdcol)
     Output
       ADADJ - 83
       ADAE - 109
@@ -109,7 +109,7 @@
 # CST - yaml - mdcol - workflow / Runs entire flow with predecessors
 
     Code
-      cat(paste(res$table_id, res$n, sep = " - "), sep = "\n")
+      snapshot_table_counts(mdcol)
     Output
       ADADJ - 76
       ADAE - 102
