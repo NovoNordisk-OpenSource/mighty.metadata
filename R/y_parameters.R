@@ -45,7 +45,8 @@
 #'   str()
 #'
 #' # Select a specific parameter
-#' select_parameter(x, id = "BMI")
+#' select_parameter(x, id = "BMI") |>
+#'   str()
 #'
 #' @name parameters
 NULL

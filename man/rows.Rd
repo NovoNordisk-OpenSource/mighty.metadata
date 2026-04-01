@@ -65,6 +65,7 @@ x |>
   str()
 
 # Select a specific row
-select_row(x, id = "BASELINE")
+select_row(x, id = "BASELINE") |>
+  str()
 
 }

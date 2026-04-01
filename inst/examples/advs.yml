@@ -3,163 +3,88 @@ label: Vital Signs Analysis Dataset
 class: BASIC DATA STRUCTURE
 structure: One record per vital sign parameter, per visit, per subject
 keys: [USUBJID, PARAMCD, AVISITN]
-comment: |
-  This is an example comment with extra information
-
 
 population:
   base:
-    - domain: LB
+    - domain: VS
       depends:
-        - LBTESTCD
-      filter: LBTESTCD == "B"
-    - domain: EG
-      depends:
-        - EGTESTCD
-      filter: EGTESTCD == "A"
+        - VSTESTCD
+      filter: VSTESTCD != ""
   global:
     - filter: SAFFL == "Y"
       depends:
-       - SAFFL
+        - SAFFL
 
 columns:
   - id: STUDYID
     label: Study Identifier
-    format:
-      type: integer
-      length: 2
-      display: "2."
-    origin: Predecessor
-    codelist: id of codelist
     method: VS.STUDYID
+    core: Req
 
   - id: USUBJID
     label: Unique Subject Identifier
     method: VS.USUBJID
+    core: Req
 
   - id: SAFFL
     label: Safety Population Flag
     method: ADSL.SAFFL
-    component:
-      id: predecessor
-      with:
-        source: ADSL
-        variable: SAFFL
-        by: USUBJID
+    core: Req
 
   - id: TRTP
     label: Planned Treatment
     method: ADSL.TRT01P
-    component:
-      id: copy_merge # To be made
-      with:
-        variable: TRTP
-        source: ADSL
-        column: TRT01P
-        by: USUBJID
+    core: Req
 
   - id: VISITNUM
     label: Visit Number
-    method: SV.VISITNUM
-
-  - id: VISIT
-    label: Visit Name
-    method: SV.VISIT
+    method: VS.VISITNUM
+    core: Perm
 
   - id: AVISITN
     label: Analysis Visit (N)
-    method: VISITNUM
-    component:
-      id: copy # to be made
-      with:
-        input: VISITNUM
-        variable: AVISITN
+    method: Derived from VISITNUM
+    core: Req
 
   - id: AVISIT
     label: Analysis Visit
-    method: VISIT converted to title case
-    component:
-      id: title_case # to be made
-      with:
-        input: VISIT
-        variable: AVISIT
+    method: Derived from VISIT converted to title case
+    core: Req
 
   - id: PARAMCD
     label: Parameter Code
-    method: For readings in VS set to VS.VSTESTCD. Otherwise see parameters.
-    component:
-      id: copy # to be made
-      with:
-        input: VSTESTCD
-        variable: PARAMCD
+    method: VS.VSTESTCD
+    core: Req
 
   - id: PARAM
     label: Parameter
-    method: For readings in VS set to VS.VSTEST. Otherwise see parameters.
-    component:
-      id: copy # to be made
-      with:
-        input: VSTEST
-        variable: PARAM
+    method: VS.VSTEST
+    core: Req
 
   - id: AVAL
     label: Analysis Value
-    method: For readings in VS set to VS.VSSTRESN. Otherwise see parameters.
-    component:
-      id: copy # to be made
-      with:
-        input: VSSTRESN
-        variable: AVAL
+    method: VS.VSSTRESN
+    core: Req
 
   - id: AVALC
     label: Analysis Value (C)
-
-  - id: BLBMIGRP
-    label: BMI Group at baseline
-    method: AVALC where PARAMCD = "BMIGRP" for the baseline visit
-    depends:
-      - rows.BASELINE
-      - parameters.BMIGRP # Either explicit or from component
-    component:
-      id: bds_copy_param
-      with:
-        variable: BMIGRP
-        paramcd: BMIGRP
-        input: AVALCs
+    core: Perm
 
 rows:
   - id: BASELINE
     method: Add baseline visit as a new row
-    component:
-      id: add_baseline_visit # To be made
-      with:
-        first_treatment_visit: n
 
-parameters: # Only additional parameters to be calculated not coming from base domain
+parameters:
   - id: BMI
     label: Body Mass Index (kg/m^2)
     columns:
       - id: AVAL
-        method: Derive AVAL as Body Mass Index based on height and weight
-    component:
-      id: bds_bmi # to be made
-      with:
-        height: HEIGHT
-        weight: WEIGHT
-        by: [USUBJID, AVISITN]
+        method: Derived from height and weight
 
   - id: BMIGRP
     label: Body Mass Index Group
-    depends: parameters.BMI
     columns:
       - id: AVALC
         method: BMI grouped in <20, 20-<25, 25-<30, 30+
       - id: AVAL
-        method: Set AVAL to numeric representation of AVALC for sorting purposes
-    component:
-      id: bds_groups # to be made
-      with:
-        input: BMI
-        output: BMIGRP
-        bins: [0, 20, 25, 30, 100] # which bin => AVAL
-        labels: ["<20", "20-<25", "25-<30", "30+"] # => AVALC
+        method: Numeric representation of AVALC

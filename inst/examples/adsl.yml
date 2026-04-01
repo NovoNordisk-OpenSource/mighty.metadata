@@ -1,0 +1,77 @@
+id: ADSL
+label: Subject-Level Analysis Dataset
+class: SUBJECT LEVEL ANALYSIS DATASET
+structure: One record per subject
+keys: USUBJID
+
+population:
+  base:
+    - domain: DM
+      depends:
+        - USUBJID
+      filter: USUBJID != ""
+  global:
+    - filter: RANDFL == "Y"
+      depends:
+        - RANDFL
+
+columns:
+  - id: STUDYID
+    label: Study Identifier
+    method: DM.STUDYID
+    core: Req
+
+  - id: USUBJID
+    label: Unique Subject Identifier
+    method: DM.USUBJID
+    core: Req
+
+  - id: SUBJID
+    label: Subject Identifier for the Study
+    method: DM.SUBJID
+    core: Req
+
+  - id: SITEID
+    label: Study Site Identifier
+    method: DM.SITEID
+    core: Req
+
+  - id: AGE
+    label: Age
+    method: DM.AGE
+    core: Req
+
+  - id: AGEU
+    label: Age Units
+    method: DM.AGEU
+    core: Req
+
+  - id: SEX
+    label: Sex
+    method: DM.SEX
+    core: Req
+
+  - id: RACE
+    label: Race
+    method: DM.RACE
+    core: Req
+
+  - id: TRT01P
+    label: Planned Treatment for Period 01
+    method: DM.ARM
+    core: Req
+
+  - id: TRT01A
+    label: Actual Treatment for Period 01
+    method: DM.ACTARM
+    core: Req
+
+  - id: SAFFL
+    label: Safety Population Flag
+    method: Derived based on treatment exposure
+    core: Req
+
+  - id: RANDFL
+    label: Randomized Population Flag
+    method: Set to "Y" if subject was randomized
+    core: Req

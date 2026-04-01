@@ -12,3 +12,4 @@
 ^pkgdown$
 ^tools$
 ^vignettes/articles$
+^README\.Rmd$

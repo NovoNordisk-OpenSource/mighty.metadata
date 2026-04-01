@@ -2,7 +2,6 @@
 .Rhistory
 docs
 inst/doc
-**/.quarto/
 
 # MegaLinter files and reports
 megalinter-reports/

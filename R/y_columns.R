@@ -33,7 +33,8 @@
 #'
 #' list_columns(y)
 #'
-#' str(y[["columns"]][[1]])
+#' y[["columns"]][[1]] |>
+#'   str()
 #'
 #' # Move the STUDYID column to the 3rd position
 #' x |>
@@ -47,7 +48,8 @@
 #'   str()
 #'
 #' # Select a specific column
-#' select_column(x, id = "STUDYID")
+#' select_column(x, id = "STUDYID") |>
+#'   str()
 #'
 #' @name columns
 NULL
