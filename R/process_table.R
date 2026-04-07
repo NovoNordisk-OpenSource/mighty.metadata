@@ -128,22 +128,14 @@ process_table <- function(
           TRUE ~ NA_character_
         ),
 
-        # Create unified origin field based
-        unified_origin = dplyr::case_when(
-          is_complex_predecessor ~ paste0("Derived: ", origindescription),
-          is_predecessor ~ paste0("Predecessor: ", origindescription),
-          !is.na(origin) &
-            tolower(origin) == "derived" &
-            !is.na(algorithm) ~ paste0("Derived: ", algorithm),
-          !is.na(origin) &
-            tolower(origin) == "assigned" &
-            !is.na(comment) ~ paste0("Assigned: ", comment),
-          TRUE ~ NA_character_
-        ),
+        # Create unified method field
+        method = dplyr::coalesce(.data$origindescription,
+                                 .data$algorithm,
+                                 .data$comment),
 
         # Set origin to derived for complex predecessors
         origin_final = dplyr::case_when(
-          is_complex_predecessor ~ "derived",
+          is_complex_predecessor ~ "Derived",
           TRUE ~ origin
         )
       ) |>
@@ -237,7 +229,7 @@ process_table <- function(
       result <- append(result, list(comment = row$comment))
     }
 
-    method_text <- row$unified_origin
+    method_text <- row$method
     if (!is.na(method_text)) {
       # Standardize newlines
       method_text <- gsub("\r\n", "\n", method_text)
@@ -261,6 +253,7 @@ process_table <- function(
         result,
         list(
           id = row$column,
+          origin = row$origin_final,
           method = method_text
         )
       )
@@ -271,6 +264,7 @@ process_table <- function(
         list(
           id = row$column,
           label = row$label,
+          origin = row$origin_final,
           method = method_text
         )
       )
@@ -285,6 +279,7 @@ process_table <- function(
           id = row$column,
           label = row$label,
           format = fmt,
+          origin = row$origin_final,
           method = method_text,
           is_core = row$corefl == "Y"
         )
@@ -297,6 +292,7 @@ process_table <- function(
           id = row$column,
           label = row$label,
           format = fmt,
+          origin = row$origin_final,
           method = method_text,
           is_core = row$corefl == "Y"
         )
@@ -310,6 +306,7 @@ process_table <- function(
           label = row$label,
           format = fmt,
           codelist = row$xmlcodelist,
+          origin = row$origin_final,
           method = method_text,
           is_core = row$corefl == "Y"
         )
@@ -323,6 +320,7 @@ process_table <- function(
           label = row$label,
           format = fmt,
           codelist = row$xmlcodelist,
+          origin = row$origin_final,
           method = method_text,
           is_core = row$corefl == "Y"
         )
