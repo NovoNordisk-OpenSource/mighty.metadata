@@ -13,3 +13,5 @@
 ^tools$
 ^vignettes/articles$
 ^README\.Rmd$
+^doc$
+^Meta$

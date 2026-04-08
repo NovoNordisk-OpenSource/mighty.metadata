@@ -27,3 +27,15 @@ reference:
     contents:
     - build_adam_metadata
     - reexports
+
+articles:
+- title: Schema specifications
+  navbar: Schema specifications
+  contents:
+  - adam-schema
+  - study-schema
+- title: Architecture Decision Records
+  navbar: Architecture Decision Records
+  contents:
+  - articles/adr
+  - articles/adr-mighty_toolbox_integration

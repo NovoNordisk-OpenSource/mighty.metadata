@@ -18,39 +18,54 @@
       "type": "array",
       "uniqueItems": true,
       "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "Identifier of the external data source",
-            "type": "string",
-            "pattern": "^[A-Z][A-Z0-9_]*$"
-          },
-          "keys": {
-            "description": "Key columns for joining the external data",
-            "oneOf": [
-              {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "pattern": "^[A-Z][A-Z0-9_]*$"
-                },
-                "minItems": 1,
-                "uniqueItems": true
-              },
-              {
-                "type": "string",
-                "pattern": "^[A-Z][A-Z0-9_]*$"
-              }
-            ]
-          }
-        },
-        "required": ["id", "keys"],
-        "additionalProperties": false
+        "$ref": "#/definitions/external_data_source"
       }
     }
   },
   "required": [
     "study_id"
   ],
-  "additionalProperties": true
+  "additionalProperties": true,
+  "definitions": {
+    "external_data_source": {
+      "description": "Specification of a single external data source",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Identifier of the external data source",
+          "$ref": "#/definitions/cdisc/name"
+        },
+        "keys": {
+          "description": "Key columns for joining the external data",
+          "$ref": "#/definitions/keys"
+        }
+      },
+      "required": ["id", "keys"],
+      "additionalProperties": false
+    },
+    "keys": {
+      "description": "Keys are always unique and of minimum length 1",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/cdisc/name"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        {
+          "$ref": "#/definitions/cdisc/name"
+        }
+      ]
+    },
+    "cdisc": {
+      "description": "Definitions from CDISC standards",
+      "name": {
+        "description": "Uppercase identifier",
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_]*$"
+      }
+    }
+  }
 }

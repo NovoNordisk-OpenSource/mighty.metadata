@@ -18,9 +18,10 @@ and cannot be consumed by automation tooling. mighty.metadata replaces
 that workflow with YAML files.
 
 The package loads YAML specifications, validates them against a JSON
-schema, and provides a pipe-friendly R API for inspecting and modifying
-column, parameter, and row definitions. It works at two levels: a single
-ADaM domain (`mighty_domain()`) or an entire study (`mighty_study()`).
+schema, and provides a pipe-friendly R interface for inspecting and
+modifying column, parameter, and row definitions. It works at two
+levels: a single ADaM domain (`mighty_domain()`) or an entire study
+(`mighty_study()`).
 
 mighty.metadata is part of the
 [mighty](https://github.com/NN-OpenSource/mighty) framework for
@@ -36,7 +37,6 @@ robust validation and modern OOP.
 # install.packages("mighty.metadata")
 
 # Install the development version from GitHub:
-# install.packages("pak")
 pak::pak("NN-OpenSource/mighty.metadata")
 ```
 
@@ -147,8 +147,9 @@ str(study@info)
 
 ## Useful links
 
-- `vignette("adam-schema")` – Detailed description of the YAML schema
-  structure
+- `vignette("mighty-metadata")` – Getting started guide
+- `vignette("adam-schema")` – Domain YAML schema reference
+- `vignette("study-schema")` – Study YAML schema reference
 - [mighty](https://github.com/NN-OpenSource/mighty) – The full mighty
   framework for automated ADaM programming
 - [S7schema](https://novonordisk-opensource.github.io/S7schema/) –

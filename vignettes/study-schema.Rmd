@@ -1,0 +1,32 @@
+---
+title: "Study specifications"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Study specifications}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`mighty.metadata` uses a `_mighty.yml` file to specify study-level properties.
+Each study directory must contain one. The file follows a fixed structure
+defined in a [JSON-schema](https://json-schema.org) that you can access with:
+
+```r
+system.file("schema", "study.json", package = "mighty.metadata")
+```
+
+Below you can find a detailed description of the structure.
+
+```{r echo=FALSE}
+S7schema::document_schema(
+  x = system.file("schema", "study.json", package = "mighty.metadata"),
+  header_start_level = 1
+)
+```

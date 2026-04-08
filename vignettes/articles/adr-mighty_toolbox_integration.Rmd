@@ -1,5 +1,5 @@
 ---
-title: "Architecture Decision Record - mighty.toolbox integration"
+title: "ADR: mighty.toolbox integration"
 date: "2026-03-11"
 author: 
   - "Aksel Thomsen"
