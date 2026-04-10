@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
   "$id": "https://raw.githubusercontent.com/NN-OpenSource/mighty.metadata/refs/heads/main/inst/schema/study.json",
-  "title": "Mighty Study Specification",
+  "title": "Study Specification",
   "description": "Schema for study-level properties in the mightyverse",
   "type": "object",
   "properties": {
@@ -12,60 +12,10 @@
     "study_description": {
       "description": "Description of the study",
       "type": "string"
-    },
-    "external_data": {
-      "description": "External data sources referenced by the study",
-      "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/definitions/external_data_source"
-      }
     }
   },
   "required": [
     "study_id"
   ],
-  "additionalProperties": true,
-  "definitions": {
-    "external_data_source": {
-      "description": "Specification of a single external data source",
-      "type": "object",
-      "properties": {
-        "id": {
-          "description": "Identifier of the external data source",
-          "$ref": "#/definitions/cdisc/name"
-        },
-        "keys": {
-          "description": "Key columns for joining the external data",
-          "$ref": "#/definitions/keys"
-        }
-      },
-      "required": ["id", "keys"],
-      "additionalProperties": false
-    },
-    "keys": {
-      "description": "Keys are always unique and of minimum length 1",
-      "oneOf": [
-        {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/cdisc/name"
-          },
-          "minItems": 1,
-          "uniqueItems": true
-        },
-        {
-          "$ref": "#/definitions/cdisc/name"
-        }
-      ]
-    },
-    "cdisc": {
-      "description": "Definitions from CDISC standards",
-      "name": {
-        "description": "Uppercase identifier",
-        "type": "string",
-        "pattern": "^[A-Z][A-Z0-9_]*$"
-      }
-    }
-  }
+  "additionalProperties": true
 }

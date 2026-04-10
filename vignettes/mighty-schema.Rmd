@@ -1,0 +1,32 @@
+---
+title: "Mighty specifications"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Mighty specifications}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`_mighty.yml` defines specifications for the mighty framework. The file
+structure is defined by a [JSON-schema](https://json-schema.org) accessible
+with:
+
+```r
+system.file("schema", "mighty.json", package = "mighty.metadata")
+```
+
+Below you can find a detailed description of the structure.
+
+```{r echo=FALSE}
+S7schema::document_schema(
+  x = system.file("schema", "mighty.json", package = "mighty.metadata"),
+  header_start_level = 1
+)
+```

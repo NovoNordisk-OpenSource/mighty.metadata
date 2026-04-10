@@ -108,8 +108,9 @@ advs |>
 ### Work with a full study
 
 `mighty_study()` loads every YAML file from a directory. Each file
-becomes a named `mighty_domain`, and the optional `_mighty.yml` file
-provides study-level properties.
+becomes a named `mighty_domain`. The optional `_study.yml` provides
+study-level properties and `_mighty.yml` provides mighty framework
+configuration.
 
 ``` r
 study <- mighty_study(
@@ -118,7 +119,8 @@ study <- mighty_study(
 
 study
 #> <mighty.metadata::mighty_study/list/S7_object>
-#> @ info: `study_id` and `external_data`
+#> @ mighty: `external_data`
+#> @ study: `study_id`
 #> $ ADAE: <mighty.metadata::mighty_domain>
 #> $ ADSL: <mighty.metadata::mighty_domain>
 #> $ ADVS: <mighty.metadata::mighty_domain>
@@ -130,9 +132,11 @@ names(study)
 ```
 
 ``` r
-str(study@info)
-#> List of 2
-#>  $ study_id     : chr "example_study"
+str(study@study)
+#> List of 1
+#>  $ study_id: chr "example_study"
+str(study@mighty)
+#> List of 1
 #>  $ external_data:List of 3
 #>   ..$ :List of 2
 #>   .. ..$ id  : chr "DM"
@@ -150,6 +154,7 @@ str(study@info)
 - `vignette("mighty-metadata")` – Getting started guide
 - `vignette("adam-schema")` – Domain YAML schema reference
 - `vignette("study-schema")` – Study YAML schema reference
+- `vignette("mighty-schema")` – Mighty YAML schema reference
 - [mighty](https://github.com/NN-OpenSource/mighty) – The full mighty
   framework for automated ADaM programming
 - [S7schema](https://novonordisk-opensource.github.io/S7schema/) –

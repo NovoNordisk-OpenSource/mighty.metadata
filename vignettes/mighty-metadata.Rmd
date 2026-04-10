@@ -224,7 +224,8 @@ The written file can be loaded back with `mighty_domain()`.
 ### Loading a Study
 
 Load all domain specifications from a directory with `mighty_study()`. The
-directory must contain a `_mighty.yml` file with study-level metadata.
+directory can contain `_study.yml` (study-level properties) and `_mighty.yml`
+(mighty framework configuration).
 
 ```{r}
 study_path <- system.file("examples", package = "mighty.metadata")
@@ -232,16 +233,18 @@ study <- mighty_study(study_path)
 study
 ```
 
-Access individual domains with `$`. Study-level properties from `_mighty.yml`
-are stored in `@info`. The `@` operator accesses properties of S7 objects:
+Access individual domains with `$`. Study-level properties from `_study.yml`
+are stored in `@study` and mighty framework configuration from `_mighty.yml` is stored
+in `@mighty`. The `@` operator accesses properties of S7 objects:
 
 ```{r}
 names(study)
-str(study@info)
+str(study@study)
+str(study@mighty)
 ```
 
-The `_mighty.yml` file provides the `study_id` and `external_data` definitions
-(source domains and their keys).
+The `_study.yml` file provides the `study_id`. The `_mighty.yml` file provides
+`external_data` definitions (source domains and their keys).
 
 ### Populating Core Variables
 
@@ -325,7 +328,7 @@ study <- study |>
 
 Pooled specifications can serve multiple studies by using conditional `include`
 fields. Conditions are wrapped in `{braces}` and evaluated as R expressions
-(via `glue::glue_data()`) against the study's `@info` values.
+(via `glue::glue_data()`) against the study's `@study` values.
 
 ```{r}
 study <- mighty_study(study_path)
@@ -337,7 +340,7 @@ study$ADVS <- study$ADVS |>
   )
 ```
 
-When `study_id` in `@info` matches, the condition is `TRUE` and the column is
+When `study_id` in `@study` matches, the condition is `TRUE` and the column is
 kept:
 
 ```{r}
@@ -374,6 +377,7 @@ To learn more:
 
 - `vignette("adam-schema")` documents the domain YAML schema reference
 - `vignette("study-schema")` documents the study YAML schema reference
+- `vignette("mighty-schema")` documents the mighty YAML schema reference
 - The [package reference](https://nn-opensource.github.io/mighty.metadata/reference/index.html)
   lists all available functions
 - [mighty](https://github.com/NN-OpenSource/mighty) generates ADaM programs

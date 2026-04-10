@@ -27,6 +27,7 @@ reference:
     contents:
     - build_adam_metadata
     - reexports
+    - mighty.metadata-options
 
 articles:
 - title: Schema specifications
@@ -34,6 +35,7 @@ articles:
   contents:
   - adam-schema
   - study-schema
+  - mighty-schema
 - title: Architecture Decision Records
   navbar: Architecture Decision Records
   contents:

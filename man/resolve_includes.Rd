@@ -10,7 +10,7 @@ resolve_includes(x, info = list())
 \item{x}{A \link{mighty_study} or \link{mighty_domain} object.}
 
 \item{info}{\code{list()} Named list of values used to evaluate \code{include}
-expressions. For \link{mighty_study}, merged into \code{x@info}.}
+expressions. For \link{mighty_study}, merged into \code{x@study}.}
 }
 \value{
 The input object with conditional items resolved.
@@ -36,7 +36,7 @@ study$ADVS <- update_column(
   include = "{study_id == 'my_study'}"
 )
 
-# Condition TRUE: column kept (study_id is "my_study" in @info)
+# Condition TRUE: column kept (study_id is "my_study" in @study)
 study |>
   resolve_includes() |>
   getElement("ADVS") |>

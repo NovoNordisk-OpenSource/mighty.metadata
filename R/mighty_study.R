@@ -2,9 +2,10 @@
 #'
 #' @description
 #' Creates a `mighty_study` object by loading all YAML metadata files from a
-#' directory. Each YAML file (except `_mighty.yaml`) is parsed as a
-#' [mighty_domain] object. The optional `_mighty.yaml` file provides
-#' study-level properties.
+#' directory. Each YAML file (except `_mighty.yml` and `_study.yml`) is parsed
+#' as a [mighty_domain] object. The optional `_study.yml` file provides
+#' study-level properties and the optional `_mighty.yml` file provides
+#' mighty framework configuration.
 #'
 #' @param path `character(1)` path to a directory containing YAML metadata files.
 #'
@@ -12,15 +13,18 @@
 #' \describe{
 #'   \item{List elements}{[mighty_domain] objects, named by their `id` field.
 #'     Access via e.g. `study$adsl`.}
-#'   \item{`@info`}{Study-level properties from `_mighty.yaml`, or empty list
+#'   \item{`@study`}{Study-level properties from `_study.yml`, or empty list
 #'     if no properties file exists.}
+#'   \item{`@mighty`}{Mighty framework configuration from `_mighty.yml`, or empty list
+#'     if no configuration file exists.}
 #' }
 #'
 #' @details
 #' The function scans the directory for files matching `*.yaml` or `*.yml`:
-#' - Files named `_mighty.yaml` or `_mighty.yml` are treated as study properties
+#' - Files named `_study.yml` or `_study.yaml` are treated as study properties
+#' - Files named `_mighty.yml` or `_mighty.yaml` are treated as mighty framework config
 #' - All other YAML files are loaded as [mighty_domain] objects
-#' - Only one `_mighty.yaml` file is allowed per directory
+#' - Only one `_mighty.yml` and one `_study.yml` file is allowed per directory
 #'
 #' @seealso [mighty_domain], [populate_sparse()], [populate_core()], [create_md_col()]
 #'
@@ -37,29 +41,36 @@
 #' study$ADVS
 #'
 #' # Access study-level properties
-#' study@info
+#' study@study
+#'
+#' # Access mighty framework configuration
+#' study@mighty
 #'
 #' @name mighty_study
 NULL
 
 #' @noRd
 construct_mighty_study <- function(path) {
-  properties <- list.files(
-    path = path,
-    pattern = "^_mighty\\.(yaml|yml)$",
-    full.names = TRUE
+  mighty_schema <- system.file(
+    "schema",
+    "mighty.json",
+    package = "mighty.metadata"
+  )
+  study_schema <- system.file(
+    "schema",
+    "study.json",
+    package = "mighty.metadata"
   )
 
-  if (length(properties) > 1) {
-    cli::cli_abort("Only one _mighty file allowed. Found: {.file {properties}}")
-  }
+  mighty_file <- find_yml(path = path, name = "_mighty", schema = mighty_schema)
+  study_file <- find_yml(path = path, name = "_study", schema = study_schema)
 
   entries <- list.files(
     path = path,
     pattern = "\\.(yaml|yml)$",
     full.names = TRUE
   ) |>
-    setdiff(properties)
+    setdiff(c(mighty_file, study_file))
 
   entries <- lapply(X = entries, FUN = mighty_domain)
 
@@ -69,24 +80,29 @@ construct_mighty_study <- function(path) {
     FUN.VALUE = character(1)
   )
 
-  schema <- system.file("schema", "study.json", package = "mighty.metadata")
-
-  if (length(properties) == 0) {
-    zephyr::msg_debug("No _mighty.yml file found")
-    properties <- list()
-  } else {
-    S7schema::validate_yaml(properties, schema)
-    properties <- yaml::read_yaml(properties)
-  }
-
   S7::new_object(
     .parent = entries,
-    info = properties
+    mighty = read_yml(file = mighty_file),
+    study = read_yml(file = study_file)
   )
 }
 
 #' @noRd
-validate_info <- function(value) {
+validate_mighty <- function(value) {
+  if (length(value) > 0) {
+    schema <- system.file(
+      "schema",
+      "mighty.json",
+      package = "mighty.metadata"
+    )
+    S7schema::validate_list(value, schema)
+    check_unique_ids(value)
+  }
+  NULL
+}
+
+#' @noRd
+validate_study <- function(value) {
   if (length(value) > 0) {
     schema <- system.file(
       "schema",
@@ -94,7 +110,6 @@ validate_info <- function(value) {
       package = "mighty.metadata"
     )
     S7schema::validate_list(value, schema)
-    check_unique_ids(value)
   }
   NULL
 }
@@ -105,10 +120,16 @@ mighty_study <- S7::new_class(
   name = "mighty_study",
   parent = S7::class_list,
   properties = list(
-    info = S7::new_property(
+    mighty = S7::new_property(
       class = S7::class_list,
       validator = \(value) {
-        validate_info(value = value)
+        validate_mighty(value = value)
+      }
+    ),
+    study = S7::new_property(
+      class = S7::class_list,
+      validator = \(value) {
+        validate_study(value = value)
       }
     )
   ),
@@ -134,15 +155,21 @@ print_mighty_study <- function(x, ...) {
     "}"
   )
 
-  info <- NULL
-  if (length(x@info)) {
-    info <- "@ info: {.code {names(x@info)}}"
+  mighty <- NULL
+  if (length(x@mighty)) {
+    mighty <- "@ mighty: {.code {names(x@mighty)}}"
+  }
+
+  study <- NULL
+  if (length(x@study)) {
+    study <- "@ study: {.code {names(x@study)}}"
   }
 
   cli::cli_bullets(
     text = c(
       "{.cls {class(x)}}",
-      info,
+      mighty,
+      study,
       entries
     )
   )

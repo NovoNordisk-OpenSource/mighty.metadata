@@ -9,7 +9,7 @@
 #'
 #' @param x A [mighty_study] or [mighty_domain] object.
 #' @param info `list()` Named list of values used to evaluate `include`
-#'   expressions. For [mighty_study], merged into `x@info`.
+#'   expressions. For [mighty_study], merged into `x@study`.
 #' @returns The input object with conditional items resolved.
 #' @examples
 #' study <- mighty_study(
@@ -23,7 +23,7 @@
 #'   include = "{study_id == 'my_study'}"
 #' )
 #'
-#' # Condition TRUE: column kept (study_id is "my_study" in @info)
+#' # Condition TRUE: column kept (study_id is "my_study" in @study)
 #' study |>
 #'   resolve_includes() |>
 #'   getElement("ADVS") |>
@@ -54,12 +54,12 @@ S7::method(resolve_includes, mighty_domain) <- function(x, info = list()) {
 
 #' @noRd
 includes_resolve_study <- function(study, info = list()) {
-  study@info[names(info)] <- info
+  study@study[names(info)] <- info
 
   S7::S7_data(study) <- lapply(
     X = study,
     FUN = resolve_includes,
-    info = study@info
+    info = study@study
   )
 
   study

@@ -2,7 +2,7 @@ test_that("resolve_includes() - study - simple", {
   study <- test_path("test_study") |>
     mighty_study()
 
-  study@info$study_id |>
+  study@study$study_id |>
     expect_equal("test_study")
 
   study |>
@@ -21,7 +21,7 @@ test_that("resolve_includes() - study - simple", {
     list_columns() |>
     expect_contains("TRTEMFL")
 
-  study@info$study_id <- "other_study"
+  study@study$study_id <- "other_study"
 
   study |>
     resolve_includes() |>
@@ -36,7 +36,7 @@ test_that("resolve_includes() - study - simple", {
       )
     )
 
-  study2@info$study_id |>
+  study2@study$study_id |>
     expect_equal("test_study")
 
   study$ADAE |>
@@ -89,10 +89,9 @@ test_that("resolve_includes() - study - complex", {
   )
 
   expect_equal(
-    object = study_resolved@info,
+    object = study_resolved@study,
     expected = list(
       study_id = "test_study",
-      external_data = list(list(id = "DM", keys = c("STUDYID", "USUBJID"))),
       impute_baseline_row = FALSE
     )
   )

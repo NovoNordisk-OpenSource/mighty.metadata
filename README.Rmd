@@ -103,8 +103,8 @@ advs |>
 ### Work with a full study
 
 `mighty_study()` loads every YAML file from a directory. Each file becomes a
-named `mighty_domain`, and the optional `_mighty.yml` file provides study-level
-properties.
+named `mighty_domain`. The optional `_study.yml` provides study-level
+properties and `_mighty.yml` provides mighty framework configuration.
 
 ```{r}
 study <- mighty_study(
@@ -119,7 +119,8 @@ names(study)
 ```
 
 ```{r}
-str(study@info)
+str(study@study)
+str(study@mighty)
 ```
 
 ## Useful links
@@ -127,6 +128,7 @@ str(study@info)
 - `vignette("mighty-metadata")` -- Getting started guide
 - `vignette("adam-schema")` -- Domain YAML schema reference
 - `vignette("study-schema")` -- Study YAML schema reference
+- `vignette("mighty-schema")` -- Mighty YAML schema reference
 - [mighty](https://github.com/NN-OpenSource/mighty) -- The full mighty
   framework for automated ADaM programming
 - [S7schema](https://novonordisk-opensource.github.io/S7schema/) -- Schema

@@ -3,36 +3,36 @@
     Code
       cat(list.files(output_dir), sep = "\n")
     Output
-      adadj.yaml
-      adae.yaml
-      adcgm.yaml
-      adcgmen.yaml
-      adcm.yaml
-      adec.yaml
-      adecen.yaml
-      adeg.yaml
-      adhypo.yaml
-      adhypoen.yaml
-      adlb.yaml
-      admh.yaml
-      adpe.yaml
-      adqsdpem.yaml
-      adqsdtsq.yaml
-      adqsipq.yaml
-      adresp.yaml
-      adsl.yaml
-      adsmpg.yaml
-      adsmpgen.yaml
-      advs.yaml
-      mdcntry.yaml
-      mdcol.yaml
-      mdflow.yaml
-      mdmq.yaml
-      mdnr.yaml
-      mdparam.yaml
-      mdsymbol.yaml
-      mdunitcv.yaml
-      mdvisit.yaml
+      adadj.yml
+      adae.yml
+      adcgm.yml
+      adcgmen.yml
+      adcm.yml
+      adec.yml
+      adecen.yml
+      adeg.yml
+      adhypo.yml
+      adhypoen.yml
+      adlb.yml
+      admh.yml
+      adpe.yml
+      adqsdpem.yml
+      adqsdtsq.yml
+      adqsipq.yml
+      adresp.yml
+      adsl.yml
+      adsmpg.yml
+      adsmpgen.yml
+      advs.yml
+      mdcntry.yml
+      mdcol.yml
+      mdflow.yml
+      mdmq.yml
+      mdnr.yml
+      mdparam.yml
+      mdsymbol.yml
+      mdunitcv.yml
+      mdvisit.yml
 
 # CST - yaml - mdcol - workflow / Builds mdcol
 

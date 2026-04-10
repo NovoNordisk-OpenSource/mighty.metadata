@@ -14,9 +14,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-`mighty.metadata` uses a `_mighty.yml` file to specify study-level properties.
-Each study directory must contain one. The file follows a fixed structure
-defined in a [JSON-schema](https://json-schema.org) that you can access with:
+`_study.yml` provides study-level properties for a study directory --- the
+study identifier and an optional description. The file structure is defined by a
+[JSON-schema](https://json-schema.org) accessible with:
 
 ```r
 system.file("schema", "study.json", package = "mighty.metadata")

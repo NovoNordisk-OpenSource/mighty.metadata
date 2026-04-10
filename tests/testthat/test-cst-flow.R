@@ -8,7 +8,7 @@ snapshot_table_counts <- function(mdcol) {
 # Shared test helper: write all domains to YAML and validate against schema
 write_and_validate_yaml <- function(adam_metadata, output_dir) {
   all_yaml <- lapply(names(adam_metadata), function(domain) {
-    path <- file.path(output_dir, paste0(tolower(domain), ".yaml"))
+    path <- file.path(output_dir, paste0(tolower(domain), ".yml"))
     write_safe_yaml(adam_metadata[[domain]], path)
   })
   lapply(all_yaml, mighty_domain)

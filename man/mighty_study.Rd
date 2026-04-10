@@ -14,22 +14,26 @@ A \code{mighty_study} S7 object extending \code{list}:
 \describe{
 \item{List elements}{\link{mighty_domain} objects, named by their \code{id} field.
 Access via e.g. \code{study$adsl}.}
-\item{\verb{@info}}{Study-level properties from \verb{_mighty.yaml}, or empty list
+\item{\verb{@study}}{Study-level properties from \verb{_study.yml}, or empty list
 if no properties file exists.}
+\item{\verb{@mighty}}{Mighty framework configuration from \verb{_mighty.yml}, or empty list
+if no configuration file exists.}
 }
 }
 \description{
 Creates a \code{mighty_study} object by loading all YAML metadata files from a
-directory. Each YAML file (except \verb{_mighty.yaml}) is parsed as a
-\link{mighty_domain} object. The optional \verb{_mighty.yaml} file provides
-study-level properties.
+directory. Each YAML file (except \verb{_mighty.yml} and \verb{_study.yml}) is parsed
+as a \link{mighty_domain} object. The optional \verb{_study.yml} file provides
+study-level properties and the optional \verb{_mighty.yml} file provides
+mighty framework configuration.
 }
 \details{
 The function scans the directory for files matching \verb{*.yaml} or \verb{*.yml}:
 \itemize{
-\item Files named \verb{_mighty.yaml} or \verb{_mighty.yml} are treated as study properties
+\item Files named \verb{_study.yml} or \verb{_study.yaml} are treated as study properties
+\item Files named \verb{_mighty.yml} or \verb{_mighty.yaml} are treated as mighty framework config
 \item All other YAML files are loaded as \link{mighty_domain} objects
-\item Only one \verb{_mighty.yaml} file is allowed per directory
+\item Only one \verb{_mighty.yml} and one \verb{_study.yml} file is allowed per directory
 }
 }
 \examples{
@@ -45,7 +49,10 @@ names(study)
 study$ADVS
 
 # Access study-level properties
-study@info
+study@study
+
+# Access mighty framework configuration
+study@mighty
 
 }
 \seealso{

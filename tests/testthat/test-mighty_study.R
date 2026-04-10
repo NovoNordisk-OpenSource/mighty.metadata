@@ -13,20 +13,26 @@ test_that("mighty_study()", {
     expect_equal(c("ADAE", "ADSL", "ADVS"))
 
   S7::prop_names(study) |>
-    expect_equal("info")
+    expect_equal(c("mighty", "study"))
 
   expect_equal(
-    object = study@info,
+    object = study@mighty,
     expected = list(
-      study_id = "test_study",
       external_data = list(
         list(id = "DM", keys = c("STUDYID", "USUBJID"))
       )
     )
   )
 
+  expect_equal(
+    object = study@study,
+    expected = list(
+      study_id = "test_study"
+    )
+  )
+
   expect_error(
-    study@info <- list(not_study_id = "missing required field"),
+    study@study <- list(not_study_id = "missing required field"),
     "study_id"
   )
 
@@ -37,40 +43,4 @@ test_that("mighty_study()", {
       gsub(pattern = "mighty\\.metadata::", replacement = "", x = x)
     }
   )
-})
-
-test_that("Error if more than one _mighty file", {
-  tmp <- withr::local_tempdir()
-
-  test_path("test_study") |>
-    list.files(full.names = TRUE) |>
-    file.copy(to = tmp) |>
-    all() |>
-    expect_true()
-
-  writeLines(
-    text = "duplicate file",
-    con = file.path(tmp, "_mighty.yaml")
-  )
-
-  mighty_study(tmp) |>
-    expect_error("Only one _mighty file allowed")
-})
-
-test_that("Debug message if no _mighty file", {
-  withr::local_options(list("zephyr.verbosity_level" = "debug"))
-  tmp <- withr::local_tempdir()
-
-  test_path("test_study") |>
-    list.files(full.names = TRUE) |>
-    file.copy(to = tmp) |>
-    all() |>
-    expect_true()
-
-  file.path(tmp, "_mighty.yml") |>
-    file.remove() |>
-    expect_true()
-
-  mighty_study(tmp) |>
-    expect_message("No _mighty.yml file found")
 })

@@ -32,7 +32,7 @@ test_that("populate_sparse() - errors when predecessor does not exist", {
 
 test_that("populate_sparse() - debug info for predecessors not in study (e.g. SDTM)", {
   withr::local_options(
-    .new = list(zephyr.verbosity_level = "debug")
+    .new = list(mighty.metadata.verbosity_level = "debug")
   )
 
   study <- test_path("test_study") |>
@@ -40,8 +40,8 @@ test_that("populate_sparse() - debug info for predecessors not in study (e.g. SD
     populate_core()
 
   populate_sparse(study) |>
-    expect_message(regexp = "Predecessor domain `[A-Z]+` not found in study") |>
-    suppressMessages()
+    capture_messages() |>
+    expect_match("Predecessor domain `[A-Z]+` not found in study")
 })
 
 test_that("populate_sparse() - errors on non-standard predecessor method", {

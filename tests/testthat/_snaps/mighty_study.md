@@ -4,7 +4,8 @@
       print(study)
     Message
       <mighty_study/list/S7_object>
-      @ info: `study_id` and `external_data`
+      @ mighty: `external_data`
+      @ study: `study_id`
       $ ADAE: <mighty_domain>
       $ ADSL: <mighty_domain>
       $ ADVS: <mighty_domain>
