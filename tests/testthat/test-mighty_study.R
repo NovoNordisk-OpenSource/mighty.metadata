@@ -1,3 +1,31 @@
+test_that("mighty_study(populate = FALSE) does not populate", {
+  study <- test_path("test_study") |>
+    mighty_study(populate = FALSE) |>
+    expect_no_condition() |>
+    expect_s7_class(mighty_study)
+
+  study$ADAE |>
+    list_columns() |>
+    intersect(c("SEX", "RACE")) |>
+    expect_length(0)
+})
+
+test_that("mighty_study(populate = TRUE) populates core and sparse", {
+  study <- test_path("test_study") |>
+    mighty_study(populate = TRUE) |>
+    expect_no_condition() |>
+    expect_s7_class(mighty_study)
+
+  study$ADAE |>
+    list_columns() |>
+    expect_contains(c("SEX", "RACE"))
+
+  expect_equal(
+    select_column(study$ADAE, "SEX")[["label"]],
+    select_column(study$ADSL, "SEX")[["label"]]
+  )
+})
+
 test_that("mighty_study()", {
   study <- test_path("test_study") |>
     mighty_study() |>

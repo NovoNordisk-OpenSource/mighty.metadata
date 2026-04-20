@@ -4,10 +4,13 @@
 \alias{mighty_study}
 \title{Mighty Study}
 \usage{
-mighty_study(path)
+mighty_study(path, populate = FALSE)
 }
 \arguments{
 \item{path}{\code{character(1)} path to a directory containing YAML metadata files.}
+
+\item{populate}{\code{logical(1)} if \code{TRUE}, calls \code{\link[=populate_core]{populate_core()}} then
+\code{\link[=populate_sparse]{populate_sparse()}} before returning. Default is \code{FALSE}.}
 }
 \value{
 A \code{mighty_study} S7 object extending \code{list}:
@@ -53,6 +56,12 @@ study@study
 
 # Access mighty framework configuration
 study@mighty
+
+# Load and populate in one step
+study <- mighty_study(
+  path = system.file("examples", package = "mighty.metadata"),
+  populate = TRUE
+)
 
 }
 \seealso{

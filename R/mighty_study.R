@@ -8,6 +8,8 @@
 #' mighty framework configuration.
 #'
 #' @param path `character(1)` path to a directory containing YAML metadata files.
+#' @param populate `logical(1)` if `TRUE`, calls [populate_core()] then
+#'   [populate_sparse()] before returning. Default is `FALSE`.
 #'
 #' @return A `mighty_study` S7 object extending `list`:
 #' \describe{
@@ -46,11 +48,17 @@
 #' # Access mighty framework configuration
 #' study@mighty
 #'
+#' # Load and populate in one step
+#' study <- mighty_study(
+#'   path = system.file("examples", package = "mighty.metadata"),
+#'   populate = TRUE
+#' )
+#'
 #' @name mighty_study
 NULL
 
 #' @noRd
-construct_mighty_study <- function(path) {
+construct_mighty_study <- function(path, populate = FALSE) {
   mighty_schema <- system.file(
     "schema",
     "mighty.json",
@@ -80,11 +88,19 @@ construct_mighty_study <- function(path) {
     FUN.VALUE = character(1)
   )
 
-  S7::new_object(
+  study <- S7::new_object(
     .parent = entries,
     mighty = read_yml(file = mighty_file),
     study = read_yml(file = study_file)
   )
+
+  if (!isTRUE(populate)) {
+    return(study)
+  }
+
+  study |>
+    populate_core() |>
+    populate_sparse()
 }
 
 #' @noRd

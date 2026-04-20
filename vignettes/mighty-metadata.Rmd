@@ -324,6 +324,14 @@ study <- study |>
   populate_sparse()
 ```
 
+If your YAML files already include the `is_core` and `usecore` flags, the
+entire pipeline collapses to a single call. Passing `populate = TRUE` is
+equivalent to calling `populate_core()` then `populate_sparse()` after loading:
+
+```{r}
+study <- mighty_study(study_path, populate = TRUE)
+```
+
 ## Conditional Metadata
 
 Pooled specifications can serve multiple studies by using conditional `include`
