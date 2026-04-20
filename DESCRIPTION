@@ -1,6 +1,6 @@
 Package: mighty.metadata
 Title: Manage CDISC ADaM Dataset Specifications in YAML Format
-Version: 0.0.0.9024
+Version: 0.0.0.9025
 Authors@R: c(
     person("Aksel", "Thomsen", , "oath@novonordisk.com", role = c("aut", "cre")),
     person("Ari", "Siggaard Knoph", , "aikp@novonordisk.com", role = "aut"),
@@ -25,17 +25,14 @@ Imports:
     S7,
     S7schema,
     stats,
-    stringr,
     tibble,
-    tidyr,
-    utils,
     yaml,
     zephyr
 Suggests:
     knitr,
-    openxlsx,
     rmarkdown,
     testthat (>= 3.0.0),
+    tidyr,
     withr
 VignetteBuilder: knitr
 Config/testthat/edition: 3

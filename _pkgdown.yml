@@ -22,10 +22,7 @@ reference:
     - rows
     - parameters
   - title: Utilities
-    description: |
-      Utilities for building ADaM metadata from source data.
     contents:
-    - build_adam_metadata
     - reexports
     - mighty.metadata-options
 

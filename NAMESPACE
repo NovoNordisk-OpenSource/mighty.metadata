@@ -3,7 +3,6 @@
 export(add_column)
 export(add_parameter)
 export(add_row)
-export(build_adam_metadata)
 export(create_md_col)
 export(list_columns)
 export(list_parameters)
