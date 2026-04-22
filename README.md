@@ -1,11 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# mighty.metadata <a href="https://nn-opensource.github.io/mighty.metadata"><img src="man/figures/logo.png" align="right" height="139" alt="mighty.metadata website" /></a>
+# mighty.metadata <a href="https://novonordisk-opensource.github.io/mighty.metadata"><img src="man/figures/logo.png" align="right" height="139" alt="mighty.metadata website" /></a>
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/NN-OpenSource/mighty.metadata/actions/workflows/check_and_co.yaml/badge.svg)](https://github.com/NN-OpenSource/mighty.metadata/actions/workflows/check_and_co.yaml)
+[![R-CMD-check](https://github.com/NovoNordisk-OpenSource/mighty.metadata/actions/workflows/check_and_co.yaml/badge.svg)](https://github.com/NovoNordisk-OpenSource/mighty.metadata/actions/workflows/check_and_co.yaml)
 <!-- badges: end -->
 
 ## Overview
@@ -24,7 +24,7 @@ levels: a single ADaM domain (`mighty_domain()`) or an entire study
 (`mighty_study()`).
 
 mighty.metadata is part of the
-[mighty](https://github.com/NN-OpenSource/mighty) framework for
+[mighty](https://github.com/NovoNordisk-OpenSource/mighty) framework for
 automated ADaM programming. It is built on
 [S7](https://rconsortium.github.io/S7/) and
 [S7schema](https://novonordisk-opensource.github.io/S7schema/) for
@@ -37,7 +37,7 @@ robust validation and modern OOP.
 # install.packages("mighty.metadata")
 
 # Install the development version from GitHub:
-pak::pak("NN-OpenSource/mighty.metadata")
+pak::pak("NovoNordisk-OpenSource/mighty.metadata")
 ```
 
 ## Usage
@@ -155,8 +155,8 @@ str(study@mighty)
 - `vignette("adam-schema")` – Domain YAML schema reference
 - `vignette("study-schema")` – Study YAML schema reference
 - `vignette("mighty-schema")` – Mighty YAML schema reference
-- [mighty](https://github.com/NN-OpenSource/mighty) – The full mighty
-  framework for automated ADaM programming
+- [mighty](https://github.com/NovoNordisk-OpenSource/mighty) – The full
+  mighty framework for automated ADaM programming
 - [S7schema](https://novonordisk-opensource.github.io/S7schema/) –
   Schema validation engine used by mighty.metadata
 - [Novo Nordisk Open Source R

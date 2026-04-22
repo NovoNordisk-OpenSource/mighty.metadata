@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://raw.githubusercontent.com/NN-OpenSource/mighty.metadata/refs/heads/main/inst/schema/mighty.json",
+  "$id": "https://raw.githubusercontent.com/NovoNordisk-OpenSource/mighty.metadata/refs/heads/main/inst/schema/mighty.json",
   "title": "Mighty Configuration",
   "description": "Schema for mighty framework configuration in the mightyverse",
   "type": "object",

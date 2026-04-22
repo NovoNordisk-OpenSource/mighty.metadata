@@ -13,7 +13,7 @@ Description: Load, validate, and manipulate CDISC ADaM dataset metadata
     and row-level operations within and across ADaM domains. Designed for
     use with the 'mighty' framework.
 License: Apache License (>= 2)
-URL: https://nn-opensource.github.io/mighty.metadata
+URL: https://novonordisk-opensource.github.io/mighty.metadata
 Depends: 
     R (>= 4.1)
 Imports:
