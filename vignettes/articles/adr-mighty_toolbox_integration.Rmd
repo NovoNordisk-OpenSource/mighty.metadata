@@ -23,19 +23,19 @@ author:
 
 ## Context
 1. `mighty.metadata::mighty_study()` would provide the potential R object
-2. [Planned utility function to create metadata datasets similar to existing sheets in the CST file and "md" datasets](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/45)
+2. [Planned utility function to create metadata datasets similar to existing sheets in the CST file and "md" datasets](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/11)
 3. We want to make it easy to map `mighty.metadata` metadata into a list of data.frames (structure already used by `mighty.toolbox`)
 4. `mighty.toolbox::generate_define_xml()` has the `metadata_path` argument which currently accepts a path to an `.xlsx` file or a folder with `YAML`
 5. [Current schema of one metadata domain](https://github.com/NovoNordisk-OpenSource/mighty.metadata/blob/main/inst/schema/adam.json)
 6. YAML metadata is planned to be version controlled, so it will always be saved to disk
-7. When dealing with pooled metadata - one yaml file might define the same domain in multiple studies and [a user would subset metadata manually before using it](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/55)
+7. When dealing with pooled metadata - one yaml file might define the same domain in multiple studies and a user would subset metadata manually before using it
 8. Metadata can be in a "populated" state or not - `mighty.metadata::populate_sparse()` and `mighty.metadata::populate_core()` are used to populate predecessor columns along with inherited metadata - these operations are assumed to be idempotent  
 9. `mighty.metadata` is missing some fields required by `mighty.toolbox`:
-    * [mighty.metadata drops whereclauses that don't use EQ as a comparator in source_values](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/71)
-    * [xmlcodelist information does not get included in column_metadata in YAML files](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/72)
-    * [Origin and Origindescription are missing in value metadata](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/77)
-    * [include_in_submission/include_in_trial columns get ignored](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/78)
-    * [Equivalent of 'Mapping' sheet from the CST file](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/88)
+    * mighty.metadata drops whereclauses that don't use EQ as a comparator in source_values
+    * xmlcodelist information does not get included in column_metadata in YAML files
+    * Origin and Origindescription are missing in value metadata
+    * include_in_submission/include_in_trial columns get ignored
+    * [Equivalent of 'Mapping' sheet from the CST file](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/5)
 
 ## Decisions
 
