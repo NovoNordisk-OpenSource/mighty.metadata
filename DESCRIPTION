@@ -1,6 +1,6 @@
 Package: mighty.metadata
 Title: Manage CDISC ADaM Dataset Specifications in YAML Format
-Version: 0.0.0.9026
+Version: 0.0.0.9027
 Authors@R: c(
     person("Aksel", "Thomsen", , "oath@novonordisk.com", role = c("aut", "cre")),
     person("Ari", "Siggaard Knoph", , "aikp@novonordisk.com", role = "aut"),
@@ -13,7 +13,7 @@ Description: Load, validate, and manipulate CDISC ADaM dataset metadata
     and row-level operations within and across ADaM domains. Designed for
     use with the 'mighty' framework.
 License: Apache License (>= 2)
-URL: https://nn-opensource.github.io/mighty.metadata
+URL: https://novonordisk-opensource.github.io/mighty.metadata
 Depends: 
     R (>= 4.1)
 Imports:

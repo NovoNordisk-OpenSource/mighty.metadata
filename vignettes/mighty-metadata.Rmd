@@ -386,7 +386,7 @@ To learn more:
 - `vignette("adam-schema")` documents the domain YAML schema reference
 - `vignette("study-schema")` documents the study YAML schema reference
 - `vignette("mighty-schema")` documents the mighty YAML schema reference
-- The [package reference](https://nn-opensource.github.io/mighty.metadata/reference/index.html)
+- The [package reference](https://novonordisk-opensource.github.io/mighty.metadata/reference/index.html)
   lists all available functions
-- [mighty](https://github.com/NN-OpenSource/mighty) generates ADaM programs
+- [mighty](https://github.com/NovoNordisk-OpenSource/mighty) generates ADaM programs
   from your metadata

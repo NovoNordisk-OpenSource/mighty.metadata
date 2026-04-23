@@ -2,6 +2,3 @@
 http://svgjs.dev/svgjs
 https://packagemanager.posit.co/cran/.*
 https://raw.githubusercontent.com/NovoNordisk-OpenSource/r.workflows/.*
-
-# Private repo — raw.githubusercontent.com returns 404 without auth
-https://raw.githubusercontent.com/NN-OpenSource/mighty.metadata/.*

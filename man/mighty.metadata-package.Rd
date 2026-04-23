@@ -13,7 +13,7 @@ Load, validate, and manipulate CDISC ADaM dataset metadata stored as YAML files.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://nn-opensource.github.io/mighty.metadata}
+  \item \url{https://novonordisk-opensource.github.io/mighty.metadata}
 }
 
 }

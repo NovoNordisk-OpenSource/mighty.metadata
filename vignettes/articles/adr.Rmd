@@ -209,10 +209,10 @@ but rely on helper function to throw errors on invalid input in order to keep te
 ## References
 
 * [jsonvalidate](https://docs.ropensci.org/jsonvalidate/index.html)
-* [mighty](https://github.com/NN-OpenSource/mighty)
-* [mighty.metadata](https://github.com/NN-OpenSource/mighty.metadata)
-* [mighty.toolbox](https://github.com/NN-OpenSource/mighty.toolbox)
-* [plz](https://github.com/NN-OpenSource/plz)
+* [mighty](https://github.com/NovoNordisk-OpenSource/mighty)
+* [mighty.metadata](https://github.com/NovoNordisk-OpenSource/mighty.metadata)
+* mighty.toolbox (internal package)
+* plz (internal package)
 * [r.workflows](https://github.com/NovoNordisk-OpenSource/r.workflows)
 * [roxygen2](https://roxygen2.r-lib.org)
 * [S7](https://rconsortium.github.io/S7/index.html)
