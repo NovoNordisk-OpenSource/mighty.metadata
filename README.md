@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# mighty.metadata <a href="https://novonordisk-opensource.github.io/mighty.metadata"><img src="man/figures/logo.png" align="right" height="139" alt="mighty.metadata website" /></a>
+# mighty.metadata <a href="https://novonordisk-opensource.github.io/mighty.metadata/"><img src="man/figures/logo.png" align="right" height="139" alt="mighty.metadata website" /></a>
 
 <!-- badges: start -->
 
