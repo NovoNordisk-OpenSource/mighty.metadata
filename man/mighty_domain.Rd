@@ -7,7 +7,13 @@
 mighty_domain(file)
 }
 \arguments{
-\item{file}{\code{character(1)} path to a yaml file defining a ADaM dataset.}
+\item{file}{\code{character(1)} path to a yaml file defining an ADaM dataset.}
+}
+\value{
+A \code{mighty_domain} S7 object extending \link[S7schema:S7schema]{S7schema::S7schema}.
+The underlying list contains the parsed and validated YAML metadata
+including \code{id}, \code{label}, \code{class}, \code{keys}, \code{columns}, \code{parameters},
+and \code{rows}.
 }
 \description{
 \code{mighty_domain()} provides a robust way of working with ADaM metadata in the \code{{mighty}} framework.

@@ -4,16 +4,18 @@
 \name{mighty.metadata-package}
 \alias{mighty.metadata}
 \alias{mighty.metadata-package}
-\title{mighty.metadata: Manage CDISC ADaM Dataset Specifications in YAML Format}
+\title{mighty.metadata: Manage 'CDISC' 'ADaM' Dataset Specifications in 'YAML' Format}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Load, validate, and manipulate CDISC ADaM dataset metadata stored as YAML files. Metadata files are validated against a JSON schema. Provides functions to inspect and modify columns, parameters, and row-level operations within and across ADaM domains. Designed for use with the 'mighty' framework.
+Load, validate, and manipulate Clinical Data Interchange Standards Consortium ('CDISC') Analysis Data Model ('ADaM') dataset metadata stored as 'YAML' files. Metadata files are validated against a JSON schema. Provides functions to inspect and modify columns, parameters, and row-level operations within and across 'ADaM' domains. Designed for use with the 'mighty' framework.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://novonordisk-opensource.github.io/mighty.metadata}
+  \item \url{https://novonordisk-opensource.github.io/mighty.metadata/}
+  \item \url{https://github.com/NovoNordisk-OpenSource/mighty.metadata}
+  \item Report bugs at \url{https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues}
 }
 
 }
