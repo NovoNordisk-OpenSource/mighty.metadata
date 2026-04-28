@@ -146,6 +146,30 @@ test_that("resolve_includes() - domain", {
     expect_no_match("^include$")
 })
 
+test_that("resolve_includes() - drops domains if not included", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  study$ADVS[["include"]] <- FALSE
+
+  result <- study |>
+    resolve_includes()
+
+  result |>
+    getElement("ADVS") |>
+    expect_null()
+
+  result |>
+    getElement("ADSL") |>
+    S7::S7_inherits(class = mighty_domain) |>
+    expect_true()
+
+  result |>
+    getElement("ADAE") |>
+    S7::S7_inherits(class = mighty_domain) |>
+    expect_true()
+})
+
 test_that("eval_include()", {
   info <- list(x = "a", y = 2, z = 10)
 
