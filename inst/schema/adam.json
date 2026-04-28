@@ -13,6 +13,10 @@
       "description": "Label of the ADaM dataset",
       "type": "string"
     },
+    "include": {
+      "description": "Conditional expression to include the domain",
+      "$ref": "#/definitions/mighty/include"
+    },
     "class": {
       "description": "CDISC class of the dataset",
       "$ref": "#/definitions/cdisc/class"

@@ -1,6 +1,6 @@
 #' Resolve conditional metadata items
 #'
-#' Evaluates `include` fields on metadata items (columns, rows, parameters)
+#' Evaluates `include` fields on metadata items (domains, columns, rows, parameters)
 #' and removes items where the condition evaluates to `FALSE`.
 #'
 #' Include conditions are R expressions with `{glue}` syntax for variable
@@ -56,17 +56,30 @@ S7::method(resolve_includes, mighty_domain) <- function(x, info = list()) {
 includes_resolve_study <- function(study, info = list()) {
   study@study[names(info)] <- info
 
-  S7::S7_data(study) <- lapply(
+  result <- lapply(
     X = study,
     FUN = resolve_includes,
     info = study@study
   )
+
+  dropped_domains <- names(result)[purrr::map_lgl(result, is.null)]
+  if (length(dropped_domains) > 0) {
+    for (domain in dropped_domains) {
+      study[[domain]] <- NULL
+    }
+  }
+
+  S7::S7_data(study) <- result |> purrr::discard(is.null)
 
   study
 }
 
 #' @noRd
 includes_resolve_domain <- function(domain, info = list()) {
+  include <- list_includes(list(domain))
+  if (length(include) > 0 && !eval_include(domain[["include"]], info)) {
+    return(NULL)
+  }
   domain$columns <- includes_resolve_list(domain$columns, info)
   domain$rows <- includes_resolve_list(domain$rows, info)
   domain$parameters <- includes_resolve_list(domain$parameters, info)
