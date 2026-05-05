@@ -63,10 +63,8 @@ includes_resolve_study <- function(study, info = list()) {
   )
 
   dropped_domains <- names(result)[purrr::map_lgl(result, is.null)]
-  if (length(dropped_domains) > 0) {
-    for (domain in dropped_domains) {
-      study[[domain]] <- NULL
-    }
+  for (domain in dropped_domains) {
+    study[[domain]] <- NULL
   }
 
   S7::S7_data(study) <- result |> purrr::discard(is.null)
@@ -76,8 +74,9 @@ includes_resolve_study <- function(study, info = list()) {
 
 #' @noRd
 includes_resolve_domain <- function(domain, info = list()) {
-  include <- list_includes(list(domain))
-  if (length(include) > 0 && !eval_include(domain[["include"]], info)) {
+  if (
+    !is.null(domain[["include"]]) && !eval_include(domain[["include"]], info)
+  ) {
     return(NULL)
   }
   domain$columns <- includes_resolve_list(domain$columns, info)
