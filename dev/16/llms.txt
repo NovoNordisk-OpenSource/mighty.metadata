@@ -27,6 +27,7 @@ robust validation and modern OOP.
 ## Installation
 
 ``` r
+
 # Install from CRAN (when available):
 # install.packages("mighty.metadata")
 
@@ -43,6 +44,7 @@ loads a YAML metadata file for a single ADaM dataset and validates it
 against the schema on load.
 
 ``` r
+
 library(mighty.metadata)
 
 advs <- mighty_domain(
@@ -64,17 +66,20 @@ and
 to see what the specification contains.
 
 ``` r
+
 list_columns(advs)
 #>  [1] "STUDYID"  "USUBJID"  "SAFFL"    "TRTP"     "VISITNUM" "AVISITN" 
 #>  [7] "AVISIT"   "PARAMCD"  "PARAM"    "AVAL"     "AVALC"
 ```
 
 ``` r
+
 list_parameters(advs)
 #> [1] "BMI"    "BMIGRP"
 ```
 
 ``` r
+
 list_rows(advs)
 #> [1] "BASELINE"
 ```
@@ -87,6 +92,7 @@ verbs: `list_*`, `add_*`, `remove_*`, `update_*`, `select_*`, and
 naturally with the pipe.
 
 ``` r
+
 # Add a new column
 advs |>
   add_column(id = "TRTA", label = "Actual Treatment", .pos = 3) |>
@@ -96,6 +102,7 @@ advs |>
 ```
 
 ``` r
+
 # Remove columns
 advs |>
   remove_columns(c("VISITNUM", "AVALC")) |>
@@ -112,6 +119,7 @@ loads every YAML file from a directory. Each file becomes a named
 properties and `_mighty.yml` provides mighty framework configuration.
 
 ``` r
+
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
@@ -126,11 +134,13 @@ study
 ```
 
 ``` r
+
 names(study)
 #> [1] "ADAE" "ADSL" "ADVS"
 ```
 
 ``` r
+
 str(study@study)
 #> List of 1
 #>  $ study_id: chr "example_study"

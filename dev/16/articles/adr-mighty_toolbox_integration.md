@@ -2,11 +2,11 @@
 
 ## Status
 
-|             |                                                                  |
-|-------------|------------------------------------------------------------------|
-| Package     | mighty.metadata                                                  |
-| Status      | Approved                                                         |
-| Version     | 0.2.1                                                            |
+|  |  |
+|----|----|
+| Package | mighty.metadata |
+| Status | Approved |
+| Version | 0.2.1 |
 | Description | ADR for how mighty.metadata should integrate with mighty.toolbox |
 
 ## Success criteria
@@ -64,6 +64,7 @@ for the integration
 #### Pass a `mighty.metadata::mighty_study()` object
 
 ``` r
+
 mighty.metadata::mighty_study("path/to/folder") |>
   mighty.toolbox::generate_define_xml()
 ```
@@ -107,6 +108,7 @@ N/A
 #### Pass the folder with `YAML` files to `mighty.toolbox::generate_define_xml()` and use `mighty.metadata::mighty_study()` under the hood
 
 ``` r
+
 mighty.toolbox::generate_define_xml(metadata_path = "folder_with_yaml_metadata") # mighty.metadata::mighty_study() used under the hood
 ```
 

@@ -8,6 +8,7 @@ This structure is defined in a [JSON-schema](https://json-schema.org)
 that you can access with:
 
 ``` r
+
 system.file("schema", "adam.json", package = "mighty.metadata")
 ```
 
@@ -21,21 +22,21 @@ Common schema for ADaM dataset specification in the mightyverse
 
 ### Properties
 
-| Name       | Description                                           | Type                             | Required |
-|:-----------|:------------------------------------------------------|:---------------------------------|:---------|
-| id         | Name of the ADaM dataset                              | [cdisc/name](#name)              | Yes      |
-| label      | Label of the ADaM dataset                             | string                           | Yes      |
-| include    | Conditional expression to include the domain          | [mighty/include](#include)       | No       |
-| class      | CDISC class of the dataset                            | [cdisc/class](#class)            | Yes      |
-| subclass   | CDISC subclass of the dataset                         | [cdisc/subclass](#subclass)      | No       |
-| structure  | Text description of the structure of the dataset      | string                           | Yes      |
-| keys       | Key variables for the dataset                         | [keys](#keys)                    | Yes      |
-| comment    | Comment to the dataset                                | string                           | No       |
-| usecore    | Flag to populate with core variables from ADSL        | boolean                          | No       |
-| population | Population and base domain used to create the dataset | [mighty/population](#population) | No       |
-| columns    | Columns in the dataset                                | [columns](#columns)              | Yes      |
-| rows       | Row derivations for mighty                            | [rows](#rows)                    | No       |
-| parameters | Parameters in a BDS dataset                           | [parameters](#parameters)        | No       |
+| Name | Description | Type | Required |
+|:---|:---|:---|:---|
+| id | Name of the ADaM dataset | [cdisc/name](#name) | Yes |
+| label | Label of the ADaM dataset | string | Yes |
+| include | Conditional expression to include the domain | [mighty/include](#include) | No |
+| class | CDISC class of the dataset | [cdisc/class](#class) | Yes |
+| subclass | CDISC subclass of the dataset | [cdisc/subclass](#subclass) | No |
+| structure | Text description of the structure of the dataset | string | Yes |
+| keys | Key variables for the dataset | [keys](#keys) | Yes |
+| comment | Comment to the dataset | string | No |
+| usecore | Flag to populate with core variables from ADSL | boolean | No |
+| population | Population and base domain used to create the dataset | [mighty/population](#population) | No |
+| columns | Columns in the dataset | [columns](#columns) | Yes |
+| rows | Row derivations for mighty | [rows](#rows) | No |
+| parameters | Parameters in a BDS dataset | [parameters](#parameters) | No |
 
 ## Definitions
 
@@ -66,20 +67,20 @@ Specification of a single column
 
 #### Properties
 
-| Name      | Description                                                                                         | Type                               | Required |
-|:----------|:----------------------------------------------------------------------------------------------------|:-----------------------------------|:---------|
-| id        | Name of the column                                                                                  | [cdisc/name](#name)                | Yes      |
-| include   | Conditional expression to include the column                                                        | [mighty/include](#include)         | No       |
-| label     | Label of the column                                                                                 | string                             | No       |
-| method    | How to derive the column (free text)                                                                | string                             | No       |
-| origin    | Origin type of the column                                                                           | [cdisc/origin](#origin)            | No       |
-| codelist  | Codelist of possible values of the column                                                           | string                             | No       |
-| is_core   | Flag for designating a core variables in subject level datasets                                     | boolean                            | No       |
-| format    | Data format of the column                                                                           | [standard/dataformat](#dataformat) | No       |
-| component | Mighty component to create the column                                                               | [mighty/component](#component)     | No       |
-| depends   | dependencies required to create the column                                                          | [mighty/depends](#depends)         | No       |
-| core      | Describes whether a variable is required (Req), conditionally required (Cond) or permissible (Perm) | [cdisc/core](#core)                | No       |
-| comment   | Comment to the column (free text)                                                                   | string                             | No       |
+| Name | Description | Type | Required |
+|:---|:---|:---|:---|
+| id | Name of the column | [cdisc/name](#name) | Yes |
+| include | Conditional expression to include the column | [mighty/include](#include) | No |
+| label | Label of the column | string | No |
+| method | How to derive the column (free text) | string | No |
+| origin | Origin type of the column | [cdisc/origin](#origin) | No |
+| codelist | Codelist of possible values of the column | string | No |
+| is_core | Flag for designating a core variables in subject level datasets | boolean | No |
+| format | Data format of the column | [standard/dataformat](#dataformat) | No |
+| component | Mighty component to create the column | [mighty/component](#component) | No |
+| depends | dependencies required to create the column | [mighty/depends](#depends) | No |
+| core | Describes whether a variable is required (Req), conditionally required (Cond) or permissible (Perm) | [cdisc/core](#core) | No |
+| comment | Comment to the column (free text) | string | No |
 
 ### rows
 
@@ -100,13 +101,13 @@ Specification of a single row action
 
 #### Properties
 
-| Name      | Description                                                                               | Type                           | Required |
-|:----------|:------------------------------------------------------------------------------------------|:-------------------------------|:---------|
-| id        | Unique identifier of the action. Used to reference in other places, e.g. as a dependency. | [cdisc/name](#name)            | Yes      |
-| include   | Conditional expression to include the row                                                 | [mighty/include](#include)     | No       |
-| method    | How to derive the row action (free text)                                                  | string                         | No       |
-| component | Mighty component to do the row action                                                     | [mighty/component](#component) | No       |
-| depends   | Dependencies needed before the action can be carried out                                  | [mighty/depends](#depends)     | No       |
+| Name | Description | Type | Required |
+|:---|:---|:---|:---|
+| id | Unique identifier of the action. Used to reference in other places, e.g. as a dependency. | [cdisc/name](#name) | Yes |
+| include | Conditional expression to include the row | [mighty/include](#include) | No |
+| method | How to derive the row action (free text) | string | No |
+| component | Mighty component to do the row action | [mighty/component](#component) | No |
+| depends | Dependencies needed before the action can be carried out | [mighty/depends](#depends) | No |
 
 ### parameters
 
@@ -126,14 +127,14 @@ Specification of a single BDS parameter
 
 #### Properties
 
-| Name      | Description                                                            | Type                           | Required |
-|:----------|:-----------------------------------------------------------------------|:-------------------------------|:---------|
-| id        | Parameter id (PARAMCD)                                                 | [cdisc/name](#name)            | Yes      |
-| include   | Conditional expression to include the parameter                        | [mighty/include](#include)     | No       |
-| label     | Parameter label (PARAM)                                                | string                         | No       |
-| columns   | Additional columns to derive for the parameter, e.g. AVAL and AVALC    | [columns](#columns)            | No       |
-| component | Mighty component used to derive the parameter and all relevant columns | [mighty/component](#component) | No       |
-| depends   | Dependencies required to create the parameter                          | [mighty/depends](#depends)     | No       |
+| Name | Description | Type | Required |
+|:---|:---|:---|:---|
+| id | Parameter id (PARAMCD) | [cdisc/name](#name) | Yes |
+| include | Conditional expression to include the parameter | [mighty/include](#include) | No |
+| label | Parameter label (PARAM) | string | No |
+| columns | Additional columns to derive for the parameter, e.g. AVAL and AVALC | [columns](#columns) | No |
+| component | Mighty component used to derive the parameter and all relevant columns | [mighty/component](#component) | No |
+| depends | Dependencies required to create the parameter | [mighty/depends](#depends) | No |
 
 ### standard
 
@@ -147,11 +148,11 @@ Format used to display the data
 
 ##### Properties
 
-| Name    | Description               | Type    | Enum                                                                                                                                                    | Minimum | Pattern | Required |
-|:--------|:--------------------------|:--------|:--------------------------------------------------------------------------------------------------------------------------------------------------------|--------:|:--------|:---------|
-| type    | Data type                 | string  | text , integer , float , datetime , date , time , partialDate , partialTime , partialDatetime , incompleteDatetime, durationDatetime , intervalDatetime |         |         | Yes      |
-| length  | Maximum length of content | integer | NULL                                                                                                                                                    |       1 |         | Yes      |
-| display | SAS display format        | string  | NULL                                                                                                                                                    |         | .       | No       |
+| Name | Description | Type | Enum | Minimum | Pattern | Required |
+|:---|:---|:---|:---|---:|:---|:---|
+| type | Data type | string | text , integer , float , datetime , date , time , partialDate , partialTime , partialDatetime , incompleteDatetime, durationDatetime , intervalDatetime |  |  | Yes |
+| length | Maximum length of content | integer | NULL | 1 |  | Yes |
+| display | SAS display format | string | NULL |  | . | No |
 
 ### cdisc
 
@@ -161,9 +162,9 @@ Definitions from CDISC standards
 
 Uppercase identifier
 
-| Type   | Pattern                   |
-|:-------|:--------------------------|
-| string | [¹](#fn1)\[A-Z0-9\_\]\*\$ |
+| Type   | Pattern                  |
+|:-------|:-------------------------|
+| string | ^\[A-Z\]\[A-Z0-9\_\]\*\$ |
 
 #### class
 
@@ -205,10 +206,10 @@ apply
 
 ##### Properties
 
-| Name   | Description                                                      | Required | Type                                           |
-|:-------|:-----------------------------------------------------------------|:---------|:-----------------------------------------------|
-| base   | mighty - domains to filter and combine to create initial dataset | Yes      | [mighty/base_input_list](#base_input_list)     |
-| global | mighty - global filters to apply after combining base datasets   | No       | [mighty/global_input_list](#global_input_list) |
+| Name | Description | Required | Type |
+|:---|:---|:---|:---|
+| base | mighty - domains to filter and combine to create initial dataset | Yes | [mighty/base_input_list](#base_input_list) |
+| global | mighty - global filters to apply after combining base datasets | No | [mighty/global_input_list](#global_input_list) |
 
 #### base_input_list
 
@@ -226,11 +227,11 @@ mighty - single base input dataset with filters
 
 ##### Properties
 
-| Name    | Description                                        | Required | Type                       |
-|:--------|:---------------------------------------------------|:---------|:---------------------------|
-| domain  | Name of the dataset to use                         | Yes      | [cdisc/name](#name)        |
-| depends | Which columns in the dataset the filter depends on | Yes      | [mighty/depends](#depends) |
-| filter  |                                                    | Yes      | [mighty/filter](#filter)   |
+| Name | Description | Required | Type |
+|:---|:---|:---|:---|
+| domain | Name of the dataset to use | Yes | [cdisc/name](#name) |
+| depends | Which columns in the dataset the filter depends on | Yes | [mighty/depends](#depends) |
+| filter |  | Yes | [mighty/filter](#filter) |
 
 #### global_input_list
 
@@ -248,27 +249,27 @@ mighty - single global filter
 
 ##### Properties
 
-| Name    | Description                         | Required | Type                       |
-|:--------|:------------------------------------|:---------|:---------------------------|
-| filter  |                                     | Yes      | [mighty/filter](#filter)   |
-| depends | Which columns the filter depends on | Yes      | [mighty/depends](#depends) |
+| Name | Description | Required | Type |
+|:---|:---|:---|:---|
+| filter |  | Yes | [mighty/filter](#filter) |
+| depends | Which columns the filter depends on | Yes | [mighty/depends](#depends) |
 
 #### depends_string
 
 A single dependency: COLUMN, DOMAIN.COLUMN, rows.ID, or parameters.ID
 
-| Type   | Pattern                                                                                                 |
-|:-------|:--------------------------------------------------------------------------------------------------------|
-| string | ^(\[A-Z\]\[A-Z0-9\_\]*(.\[A-Z\]\[A-Z0-9\_\]*)?)\$&#124;^(rows&#124;parameters)\\\[A-Z\]\[A-Z0-9\_\]\*\$ |
+| Type | Pattern |
+|:---|:---|
+| string | ^((\[A-Z\]\[A-Z0-9\_\]*(.\[A-Z\]\[A-Z0-9\_\]*)?)\$\|)(rows\|parameters).\[A-Z\]\[A-Z0-9\_\]\*\$ |
 
 #### depends
 
 List of dependencies needed before the component code can be evaluated
 
-| Type                                     | Items                                    | Min Items | Unique Items |
-|:-----------------------------------------|:-----------------------------------------|:----------|:-------------|
-| array                                    | [mighty/depends_string](#depends_string) | 1         | Yes          |
-| [mighty/depends_string](#depends_string) |                                          |           |              |
+| Type | Items | Min Items | Unique Items |
+|:---|:---|:---|:---|
+| array | [mighty/depends_string](#depends_string) | 1 | Yes |
+| [mighty/depends_string](#depends_string) |  |  |  |
 
 #### include
 
@@ -297,11 +298,7 @@ mighty component used to carry out the desired derivation
 
 ##### Properties
 
-| Name | Description                                                                   | Type   | Required |
-|:-----|:------------------------------------------------------------------------------|:-------|:---------|
-| id   | ID of the component. Either name of standard or file path to local component. | string | Yes      |
-| with | named list of input arguments needed to render component                      | object | No       |
-
-------------------------------------------------------------------------
-
-1.  A-Z
+| Name | Description | Type | Required |
+|:---|:---|:---|:---|
+| id | ID of the component. Either name of standard or file path to local component. | string | Yes |
+| with | named list of input arguments needed to render component | object | No |
