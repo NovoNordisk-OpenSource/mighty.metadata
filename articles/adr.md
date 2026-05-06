@@ -76,7 +76,7 @@ In order to achieve this we need agreement on the aspects below.
 > The package will define two main classes:
 > [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
 > and
-> [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)[¹](#fn1).
+> [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)[^1].
 > [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
 > is a list of metadata regarding a single ADaM domain. A new instance
 > will be created based on the YAML specification.
@@ -243,6 +243,7 @@ Below is an example workflow. Note that function names are stand-ins
 unless they are explicitly specified above:
 
 ``` r
+
 mighty_study("path/to/specs") |> # --> List `mighty_domain()` specs
   filter_with_metadata() |> # --> Remove e.g. columns from a pooled spec that are not relevant for study A
   populate_core() |> # --> adds core variables as predecessors 
@@ -300,6 +301,4 @@ mighty_study("path/to/specs") |> # --> List `mighty_domain()` specs
 - [S7](https://rconsortium.github.io/S7/index.html)
 - [S7schema](https://github.com/NovoNordisk-OpenSource/S7schema)
 
-------------------------------------------------------------------------
-
-1.  Originally named `mighty_metadata()`.
+[^1]: Originally named `mighty_metadata()`.

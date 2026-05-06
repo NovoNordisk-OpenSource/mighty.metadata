@@ -5,6 +5,7 @@ structure is defined by a [JSON-schema](https://json-schema.org)
 accessible with:
 
 ``` r
+
 system.file("schema", "mighty.json", package = "mighty.metadata")
 ```
 
@@ -20,9 +21,9 @@ Schema for mighty framework configuration in the mightyverse
 
 ### Properties
 
-| Name          | Description                                   | Type  | Unique Items | Items                                         | Required |
-|:--------------|:----------------------------------------------|:------|:-------------|:----------------------------------------------|:---------|
-| external_data | External data sources referenced by the study | array | Yes          | [external_data_source](#external_data_source) | Yes      |
+| Name | Description | Type | Unique Items | Items | Required |
+|:---|:---|:---|:---|:---|:---|
+| external_data | External data sources referenced by the study | array | Yes | [external_data_source](#external_data_source) | Yes |
 
 ## Definitions
 
@@ -56,10 +57,6 @@ Definitions from CDISC standards
 
 Uppercase identifier
 
-| Type   | Pattern                   |
-|:-------|:--------------------------|
-| string | [¹](#fn1)\[A-Z0-9\_\]\*\$ |
-
-------------------------------------------------------------------------
-
-1.  A-Z
+| Type   | Pattern                  |
+|:-------|:-------------------------|
+| string | ^\[A-Z\]\[A-Z0-9\_\]\*\$ |
