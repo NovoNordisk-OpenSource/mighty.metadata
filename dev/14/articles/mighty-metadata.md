@@ -79,13 +79,13 @@ for the full schema reference.
 The package provides a consistent set of verbs for columns, parameters,
 and rows:
 
-| Action | Columns                                                                                             | Parameters                                                                                                | Rows                                                                                          |
-|--------|-----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| List   | [`list_columns()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md)   | [`list_parameters()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md)   | [`list_rows()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.md)   |
-| Select | [`select_column()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md)  | [`select_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md)  | [`select_row()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.md)  |
-| Add    | [`add_column()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md)     | [`add_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md)     | [`add_row()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.md)     |
-| Update | [`update_column()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md)  | [`update_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md)  | [`update_row()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.md)  |
-| Move   | [`move_column()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md)    | [`move_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md)    | [`move_row()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.md)    |
+| Action | Columns | Parameters | Rows |
+|----|----|----|----|
+| List | [`list_columns()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md) | [`list_parameters()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md) | [`list_rows()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.md) |
+| Select | [`select_column()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md) | [`select_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md) | [`select_row()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.md) |
+| Add | [`add_column()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md) | [`add_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md) | [`add_row()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.md) |
+| Update | [`update_column()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md) | [`update_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md) | [`update_row()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.md) |
+| Move | [`move_column()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md) | [`move_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md) | [`move_row()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.md) |
 | Remove | [`remove_columns()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md) | [`remove_parameters()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md) | [`remove_rows()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.md) |
 
 The `remove_*` functions accept a character vector to remove multiple
@@ -98,6 +98,7 @@ Load a domain specification from a YAML file with
 The file is validated against the ADaM JSON schema on load.
 
 ``` r
+
 path <- system.file("examples", "advs.yml", package = "mighty.metadata")
 advs <- mighty_domain(path)
 advs
@@ -110,6 +111,7 @@ advs
 Use `list_*()` functions to see what the specification contains:
 
 ``` r
+
 list_columns(advs)
 #>  [1] "STUDYID"  "USUBJID"  "SAFFL"    "TRTP"     "VISITNUM" "AVISITN" 
 #>  [7] "AVISIT"   "PARAMCD"  "PARAM"    "AVAL"     "AVALC"
@@ -123,6 +125,7 @@ Drill into a specific column with
 [`select_column()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md):
 
 ``` r
+
 select_column(advs, id = "AVAL") |>
   str()
 #> List of 4
@@ -140,6 +143,7 @@ naturally into a pipe chain. Here we add an actual treatment column
 sourced from ADSL, update a label, and drop an unused column:
 
 ``` r
+
 advs <- mighty_domain(path) |>
   add_column(
     id = "TRTA",
@@ -163,6 +167,7 @@ call
 explicitly at any time:
 
 ``` r
+
 validate(advs)
 ```
 
@@ -170,6 +175,7 @@ If a modification violates the schema, you get an immediate error. For
 example, adding a column with a duplicate ID fails:
 
 ``` r
+
 advs |> add_column(id = "AVAL", label = "Duplicate")
 #> Error in `check_unique_ids()`:
 #> ! Duplicate `id` entries found:
@@ -185,6 +191,7 @@ which accepts a nested list of column overrides specific to that
 parameter:
 
 ``` r
+
 select_parameter(advs, id = "BMI") |>
   str()
 #> List of 3
@@ -197,6 +204,7 @@ select_parameter(advs, id = "BMI") |>
 ```
 
 ``` r
+
 advs <- advs |>
   add_parameter(
     id = "WSTCIR",
@@ -213,6 +221,7 @@ list_parameters(advs)
 Update and remove work as expected:
 
 ``` r
+
 advs <- advs |>
   update_parameter(id = "WSTCIR", label = "Waist Circumference") |>
   remove_parameters(id = "BMIGRP")
@@ -227,6 +236,7 @@ Rows follow the same pattern. Inspect a row with
 [`select_row()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.md):
 
 ``` r
+
 select_row(advs, id = "BASELINE") |>
   str()
 #> List of 2
@@ -240,6 +250,7 @@ Write the modified domain back to YAML with
 [`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html):
 
 ``` r
+
 out <- tempfile(fileext = ".yml")
 write_config(advs, file = out)
 ```
@@ -257,6 +268,7 @@ The directory can contain `_study.yml` (study-level properties) and
 `_mighty.yml` (mighty framework configuration).
 
 ``` r
+
 study_path <- system.file("examples", package = "mighty.metadata")
 study <- mighty_study(study_path)
 study
@@ -274,6 +286,7 @@ from `_mighty.yml` is stored in `@mighty`. The `@` operator accesses
 properties of S7 objects:
 
 ``` r
+
 names(study)
 #> [1] "ADAE" "ADSL" "ADVS"
 str(study@study)
@@ -321,6 +334,7 @@ The bundled examples do not include these fields, so we add them here to
 demonstrate the workflow:
 
 ``` r
+
 study$ADSL <- study$ADSL |>
   update_column(id = "SEX", is_core = TRUE) |>
   update_column(id = "RACE", is_core = TRUE)
@@ -347,6 +361,7 @@ performs this lookup across the study, filling in only missing
 properties.
 
 ``` r
+
 # Before: SAFFL in ADVS references ADSL.SAFFL
 select_column(study$ADVS, id = "SAFFL") |>
   str()
@@ -358,6 +373,7 @@ select_column(study$ADVS, id = "SAFFL") |>
 ```
 
 ``` r
+
 study <- study |> populate_sparse()
 
 # After: origin inherited from ADSL
@@ -376,6 +392,7 @@ select_column(study$ADVS, id = "SAFFL") |>
 Here is the full pipeline in one block:
 
 ``` r
+
 study <- mighty_study(study_path)
 
 # Mark ADSL core variables
@@ -401,6 +418,7 @@ then
 after loading:
 
 ``` r
+
 study <- mighty_study(study_path, populate = TRUE)
 ```
 
@@ -413,6 +431,7 @@ R expressions (via
 against the study’s `@study` values.
 
 ``` r
+
 study <- mighty_study(study_path)
 
 study$ADVS <- study$ADVS |>
@@ -426,6 +445,7 @@ When `study_id` in `@study` matches, the condition is `TRUE` and the
 column is kept:
 
 ``` r
+
 resolved <- resolve_includes(study)
 list_columns(resolved$ADVS)
 #>  [1] "STUDYID"  "USUBJID"  "SAFFL"    "TRTP"     "VISITNUM" "AVISITN" 
@@ -435,6 +455,7 @@ list_columns(resolved$ADVS)
 Override with a different value and the column is removed:
 
 ``` r
+
 resolved <- resolve_includes(study, info = list(study_id = "other"))
 list_columns(resolved$ADVS)
 #>  [1] "USUBJID"  "SAFFL"    "TRTP"     "VISITNUM" "AVISITN"  "AVISIT"  
@@ -450,6 +471,7 @@ flattens the study’s column specifications into a single tibble. This is
 the format consumed by downstream mighty tools.
 
 ``` r
+
 create_md_col(study)
 #> # A tibble: 32 × 15
 #>    table_id table_label      order id    label origin key   is_core core  method

@@ -1,7 +1,7 @@
 # Resolve conditional metadata items
 
-Evaluates `include` fields on metadata items (columns, rows, parameters)
-and removes items where the condition evaluates to `FALSE`.
+Evaluates `include` fields on metadata items (domains, columns, rows,
+parameters) and removes items where the condition evaluates to `FALSE`.
 
 ## Usage
 

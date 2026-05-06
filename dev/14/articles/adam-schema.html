@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9028</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9029</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -137,61 +137,67 @@ with:</p>
 <td align="left">Yes</td>
 </tr>
 <tr class="odd">
+<td align="left">include</td>
+<td align="left">Conditional expression to include the domain</td>
+<td align="left"><a href="#include">mighty/include</a></td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
 <td align="left">class</td>
 <td align="left">CDISC class of the dataset</td>
 <td align="left"><a href="#class">cdisc/class</a></td>
 <td align="left">Yes</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">subclass</td>
 <td align="left">CDISC subclass of the dataset</td>
 <td align="left"><a href="#subclass">cdisc/subclass</a></td>
 <td align="left">No</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">structure</td>
 <td align="left">Text description of the structure of the dataset</td>
 <td align="left">string</td>
 <td align="left">Yes</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">keys</td>
 <td align="left">Key variables for the dataset</td>
 <td align="left"><a href="#keys">keys</a></td>
 <td align="left">Yes</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">comment</td>
 <td align="left">Comment to the dataset</td>
 <td align="left">string</td>
 <td align="left">No</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">usecore</td>
 <td align="left">Flag to populate with core variables from ADSL</td>
 <td align="left">boolean</td>
 <td align="left">No</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">population</td>
 <td align="left">Population and base domain used to create the
 dataset</td>
 <td align="left"><a href="#population">mighty/population</a></td>
 <td align="left">No</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">columns</td>
 <td align="left">Columns in the dataset</td>
 <td align="left"><a href="#columns">columns</a></td>
 <td align="left">Yes</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">rows</td>
 <td align="left">Row derivations for mighty</td>
 <td align="left"><a href="#rows">rows</a></td>
 <td align="left">No</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">parameters</td>
 <td align="left">Parameters in a BDS dataset</td>
 <td align="left"><a href="#parameters">parameters</a></td>
@@ -634,8 +640,7 @@ durationDatetime , intervalDatetime</td>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">string</td>
-<td align="left">
-<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;A-Z&lt;/p&gt;"><sup>1</sup></a>[A-Z0-9_]*$</td>
+<td align="left">^[A-Z][A-Z0-9_]*$</td>
 </tr></tbody>
 </table>
 </div>
@@ -928,8 +933,8 @@ parameters.ID</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="left">string</td>
-<td align="left">^([A-Z][A-Z0-9_]<em>(.[A-Z][A-Z0-9_]</em>)?)<span class="math inline">$&amp;#124;^(rows&amp;#124;parameters)\.[A-Z][A-Z0-9_]*$</span>
-</td>
+<td align="left">
+<sup>([A-Z][A-Z0-9_]<em>(.[A-Z][A-Z0-9_]</em>)?)$|</sup>(rows|parameters).[A-Z][A-Z0-9_]*$</td>
 </tr></tbody>
 </table>
 </div>
@@ -1055,7 +1060,6 @@ component</td>
 </div>
 </div>
 </div>
-
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>

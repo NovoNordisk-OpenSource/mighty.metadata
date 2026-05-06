@@ -5,6 +5,7 @@ study identifier and an optional description. The file structure is
 defined by a [JSON-schema](https://json-schema.org) accessible with:
 
 ``` r
+
 system.file("schema", "study.json", package = "mighty.metadata")
 ```
 
