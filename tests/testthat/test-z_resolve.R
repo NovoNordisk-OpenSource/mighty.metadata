@@ -146,6 +146,56 @@ test_that("resolve_includes() - domain", {
     expect_no_match("^include$")
 })
 
+test_that("resolve_includes() - drops domains if not included", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  study$ADVS[["include"]] <- FALSE
+
+  validate(study) |>
+    expect_no_condition()
+
+  result <- study |>
+    resolve_includes()
+
+  result |>
+    getElement("ADVS") |>
+    expect_null()
+
+  result |>
+    getElement("ADSL") |>
+    S7::S7_inherits(class = mighty_domain) |>
+    expect_true()
+
+  result |>
+    getElement("ADAE") |>
+    S7::S7_inherits(class = mighty_domain) |>
+    expect_true()
+})
+
+test_that("resolve_includes() - drops domains if not included (expression)", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  study$ADVS[["include"]] <- "{study_id == 'test_study'}"
+
+  validate(study) |>
+    expect_no_condition()
+
+  study |>
+    resolve_includes() |>
+    getElement("ADVS") |>
+    S7::S7_inherits(class = mighty_domain) |>
+    expect_true()
+
+  study@study$study_id <- "other_study"
+
+  study |>
+    resolve_includes() |>
+    getElement("ADVS") |>
+    expect_null()
+})
+
 test_that("eval_include()", {
   info <- list(x = "a", y = 2, z = 10)
 
