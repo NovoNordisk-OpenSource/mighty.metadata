@@ -16,7 +16,7 @@ expressions. For \link{mighty_study}, merged into \code{x@study}.}
 The input object with conditional items resolved.
 }
 \description{
-Evaluates \code{include} fields on metadata items (columns, rows, parameters)
+Evaluates \code{include} fields on metadata items (domains, columns, rows, parameters)
 and removes items where the condition evaluates to \code{FALSE}.
 }
 \details{
