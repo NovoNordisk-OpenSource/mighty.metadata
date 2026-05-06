@@ -80,7 +80,7 @@
 </h2>
 <p>Clinical data scientists programming CDISC Analysis Data Model (ADaM) datasets need specifications that are both human-readable and machine-readable. These specifications typically live in Excel spreadsheets that are hard to version-control, difficult to validate, and cannot be consumed by automation tooling. mighty.metadata replaces that workflow with YAML files.</p>
 <p>The package loads YAML specifications, validates them against a JSON schema, and provides a pipe-friendly R interface for inspecting and modifying column, parameter, and row definitions. It works at two levels: a single ADaM domain (<code><a href="reference/mighty_domain.html">mighty_domain()</a></code>) or an entire study (<code><a href="reference/mighty_study.html">mighty_study()</a></code>).</p>
-<p>mighty.metadata is part of the <a href="https://github.com/NovoNordisk-OpenSource/mighty" class="external-link">mighty</a> framework for automated ADaM programming. It is built on <a href="https://rconsortium.github.io/S7/" class="external-link">S7</a> and <a href="https://novonordisk-opensource.github.io/S7schema/" class="external-link">S7schema</a> for robust validation and modern OOP.</p>
+<p>mighty.metadata is part of the mighty framework for automated ADaM programming. It is built on <a href="https://rconsortium.github.io/S7/" class="external-link">S7</a> and <a href="https://novonordisk-opensource.github.io/S7schema/" class="external-link">S7schema</a> for robust validation and modern OOP.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -191,8 +191,6 @@
 <code><a href="articles/study-schema.html">vignette("study-schema")</a></code> – Study YAML schema reference</li>
 <li>
 <code><a href="articles/mighty-schema.html">vignette("mighty-schema")</a></code> – Mighty YAML schema reference</li>
-<li>
-<a href="https://github.com/NovoNordisk-OpenSource/mighty" class="external-link">mighty</a> – The full mighty framework for automated ADaM programming</li>
 <li>
 <a href="https://novonordisk-opensource.github.io/S7schema/" class="external-link">S7schema</a> – Schema validation engine used by mighty.metadata</li>
 <li>
