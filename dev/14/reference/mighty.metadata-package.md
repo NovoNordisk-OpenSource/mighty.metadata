@@ -26,7 +26,9 @@ Authors:
 
 - Ari Siggaard Knoph <aikp@novonordisk.com>
 
-- Esben Tore Moelgaard <ebtm@novonordisk.com>
+- Matthew Phelps <mewp@novonordisk.com>
+
+- Giulia Pais <egzp@novonordisk.com>
 
 Other contributors:
 

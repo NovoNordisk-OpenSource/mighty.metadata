@@ -6,7 +6,9 @@
 
 - **Ari Siggaard Knoph**. Author.
 
-- **Esben Tore Moelgaard**. Author.
+- **Matthew Phelps**. Author.
+
+- **Giulia Pais**. Author.
 
 - **Novo Nordisk A/S**. Copyright holder.
 
@@ -15,14 +17,14 @@
 Source:
 [`DESCRIPTION`](https://github.com/NovoNordisk-OpenSource/mighty.metadata/blob/feat/cran-prep/DESCRIPTION)
 
-Thomsen A, Siggaard Knoph A, Tore Moelgaard E (2026). *mighty.metadata:
+Thomsen A, Siggaard Knoph A, Phelps M, Pais G (2026). *mighty.metadata:
 Manage 'CDISC' 'ADaM' Dataset Specifications in 'YAML' Format*. R
 package version 0.0.0.9029,
 <https://novonordisk-opensource.github.io/mighty.metadata/>.
 
     @Manual{,
       title = {mighty.metadata: Manage 'CDISC' 'ADaM' Dataset Specifications in 'YAML' Format},
-      author = {Aksel Thomsen and Ari {Siggaard Knoph} and Esben {Tore Moelgaard}},
+      author = {Aksel Thomsen and Ari {Siggaard Knoph} and Matthew Phelps and Giulia Pais},
       year = {2026},
       note = {R package version 0.0.0.9029},
       url = {https://novonordisk-opensource.github.io/mighty.metadata/},
