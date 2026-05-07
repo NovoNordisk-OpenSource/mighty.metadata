@@ -4,7 +4,8 @@ Version: 0.0.0.9029
 Authors@R: c(
     person("Aksel", "Thomsen", , "oath@novonordisk.com", role = c("aut", "cre")),
     person("Ari", "Siggaard Knoph", , "aikp@novonordisk.com", role = "aut"),
-    person("Esben", "Tore Moelgaard", , "ebtm@novonordisk.com", role = "aut"),
+    person("Matthew", "Phelps", , "mewp@novonordisk.com", role = "aut"),
+    person("Giulia", "Pais", , "egzp@novonordisk.com", role = "aut"),
     person("Novo Nordisk A/S", role = "cph")
   )
 Description: Load, validate, and manipulate Clinical Data Interchange

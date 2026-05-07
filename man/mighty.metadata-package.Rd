@@ -25,7 +25,8 @@ Useful links:
 Authors:
 \itemize{
   \item Ari Siggaard Knoph \email{aikp@novonordisk.com}
-  \item Esben Tore Moelgaard \email{ebtm@novonordisk.com}
+  \item Matthew Phelps \email{mewp@novonordisk.com}
+  \item Giulia Pais \email{egzp@novonordisk.com}
 }
 
 Other contributors:
