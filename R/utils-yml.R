@@ -41,3 +41,33 @@ read_yml <- function(file) {
   }
   yaml::read_yaml(file = file)
 }
+
+#' @noRd
+match_yml <- function(path, name) {
+  files <- list.files(
+    path = path,
+    pattern = paste0("^", name, "\\.(yaml|yml)$"),
+    full.names = TRUE
+  )
+
+  if (!length(files)) {
+    return(file.path(path, paste0(name, ".yml")))
+  } else if (length(files) == 1L) {
+    return(files)
+  }
+
+  cli::cli_abort(
+    "Only one {.code {name}} file allowed. Found: {.file {files}}"
+  )
+}
+
+#' @noRd
+write_yml <- function(x, path, name) {
+  cat(
+    result = S7schema::to_yaml(x),
+    file = match_yml(path, name),
+    sep = ""
+  )
+
+  invisible(x)
+}
