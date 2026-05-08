@@ -41,7 +41,7 @@ test_that("mighty_study()", {
     expect_equal(c("ADAE", "ADSL", "ADVS"))
 
   S7::prop_names(study) |>
-    expect_equal(c("mighty", "study"))
+    expect_equal(c("mighty", "study", "path"))
 
   expect_equal(
     object = study@mighty,

@@ -91,7 +91,8 @@ construct_mighty_study <- function(path, populate = FALSE) {
   study <- S7::new_object(
     .parent = entries,
     mighty = read_yml(file = mighty_file),
-    study = read_yml(file = study_file)
+    study = read_yml(file = study_file),
+    path = path
   )
 
   if (!isTRUE(populate)) {
@@ -130,6 +131,13 @@ validate_study <- function(value) {
   NULL
 }
 
+#' @noRd
+validate_path <- function(value) {
+  if (!dir.exists(value)) {
+    return("Directory does not exist")
+  }
+}
+
 #' @rdname mighty_study
 #' @export
 mighty_study <- S7::new_class(
@@ -146,6 +154,12 @@ mighty_study <- S7::new_class(
       class = S7::class_list,
       validator = \(value) {
         validate_study(value = value)
+      }
+    ),
+    path = S7::new_property(
+      class = S7::class_character,
+      validator = \(value) {
+        validate_path(value = value)
       }
     )
   ),
