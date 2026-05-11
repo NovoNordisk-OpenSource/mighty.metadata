@@ -1,4 +1,4 @@
-# multiplication works
+# write_config() writes study to directory
 
     Code
       list.files(tmpdir)

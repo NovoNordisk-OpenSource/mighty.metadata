@@ -1,4 +1,4 @@
-test_that("multiplication works", {
+test_that("write_config() writes study to directory", {
   study <- test_path("test_study") |>
     mighty_study()
 
