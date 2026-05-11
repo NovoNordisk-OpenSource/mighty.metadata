@@ -1,3 +1,20 @@
+#' @noRd
+list_yml <- function(path, name) {
+  files <- list.files(
+    path = path,
+    pattern = paste0("^", name, "\\.(yaml|yml)$"),
+    full.names = TRUE
+  )
+
+  if (length(files) > 1) {
+    cli::cli_abort(
+      "Only one {.code {name}} file allowed. Found: {.file {files}}"
+    )
+  }
+
+  files
+}
+
 #' Find and validate a YAML configuration file
 #'
 #' Looks for a single YAML file matching the given name in a directory and
@@ -10,17 +27,7 @@
 #' @returns The file path as `character(1)`, or `NULL`.
 #' @noRd
 find_yml <- function(path, name, schema) {
-  files <- list.files(
-    path = path,
-    pattern = paste0("^", name, "\\.(yaml|yml)$"),
-    full.names = TRUE
-  )
-
-  if (length(files) > 1) {
-    cli::cli_abort(
-      "Only one {.code {name}} file allowed. Found: {.file {files}}"
-    )
-  }
+  files <- list_yml(path, name)
 
   if (length(files) == 0) {
     zephyr::msg_verbose("No {.code {name}.yml} file found")
@@ -44,21 +51,13 @@ read_yml <- function(file) {
 
 #' @noRd
 match_yml <- function(path, name) {
-  files <- list.files(
-    path = path,
-    pattern = paste0("^", name, "\\.(yaml|yml)$"),
-    full.names = TRUE
-  )
+  files <- list_yml(path, name)
 
   if (!length(files)) {
     return(file.path(path, paste0(name, ".yml")))
-  } else if (length(files) == 1L) {
-    return(files)
   }
 
-  cli::cli_abort(
-    "Only one {.code {name}} file allowed. Found: {.file {files}}"
-  )
+  files
 }
 
 #' @noRd
