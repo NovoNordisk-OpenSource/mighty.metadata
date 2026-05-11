@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9029</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9030</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -477,6 +477,20 @@ loading:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span>, populate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="saving-a-study">Saving a Study<a class="anchor" aria-label="anchor" href="#saving-a-study"></a>
+</h3>
+<p>Write all domain files, <code>_study.yml</code>, and
+<code>_mighty.yml</code> back to disk with
+<code><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config()</a></code>:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_tempfile.html" class="external-link">local_tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config</a></span><span class="op">(</span><span class="va">study</span>, path <span class="op">=</span> <span class="va">out</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "_mighty.yml" "_study.yml"  "adae.yml"    "adsl.yml"    "advs.yml"</span></span></code></pre></div>
+<p>Omit <code>path</code> to write back to the original directory
+(<code>study@path</code>).</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="conditional-metadata">Conditional Metadata<a class="anchor" aria-label="anchor" href="#conditional-metadata"></a>
@@ -486,7 +500,7 @@ loading:</p>
 <code>{braces}</code> and evaluated as R expressions (via
 <code><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue_data()</a></code>) against the study’s <code>@study</code>
 values.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">study</span><span class="op">$</span><span class="va">ADVS</span> <span class="op">&lt;-</span> <span class="va">study</span><span class="op">$</span><span class="va">ADVS</span> <span class="op">|&gt;</span></span>
@@ -496,13 +510,13 @@ values.</p>
 <span>  <span class="op">)</span></span></code></pre></div>
 <p>When <code>study_id</code> in <code>@study</code> matches, the
 condition is <code>TRUE</code> and the column is kept:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resolved</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/resolve_includes.html">resolve_includes</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/columns.html">list_columns</a></span><span class="op">(</span><span class="va">resolved</span><span class="op">$</span><span class="va">ADVS</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "STUDYID"  "USUBJID"  "SAFFL"    "TRTP"     "VISITNUM" "AVISITN" </span></span>
 <span><span class="co">#&gt;  [7] "AVISIT"   "PARAMCD"  "PARAM"    "AVAL"     "AVALC"</span></span></code></pre></div>
 <p>Override with a different value and the column is removed:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resolved</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/resolve_includes.html">resolve_includes</a></span><span class="op">(</span><span class="va">study</span>, info <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>study_id <span class="op">=</span> <span class="st">"other"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/columns.html">list_columns</a></span><span class="op">(</span><span class="va">resolved</span><span class="op">$</span><span class="va">ADVS</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "USUBJID"  "SAFFL"    "TRTP"     "VISITNUM" "AVISITN"  "AVISIT"  </span></span>
@@ -516,7 +530,7 @@ columns.</p>
 <p><code><a href="../reference/create_md_col.html">create_md_col()</a></code> flattens the study’s column
 specifications into a single tibble. This is the format consumed by
 downstream mighty tools.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create_md_col.html">create_md_col</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 32 × 15</span></span></span>
 <span><span class="co">#&gt;    table_id table_label      order id    label origin key   is_core core  method</span></span>
@@ -542,8 +556,9 @@ downstream mighty tools.</p>
 <code><a href="../reference/mighty_domain.html">mighty_domain()</a></code> for single datasets,
 <code><a href="../reference/mighty_study.html">mighty_study()</a></code> for collections,
 <code><a href="../reference/populate_core.html">populate_core()</a></code> and <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code> for
-metadata propagation, <code><a href="../reference/resolve_includes.html">resolve_includes()</a></code> for conditional
-specifications, and <code><a href="../reference/create_md_col.html">create_md_col()</a></code> for flat output.</p>
+metadata propagation, <code><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config()</a></code> for saving changes,
+<code><a href="../reference/resolve_includes.html">resolve_includes()</a></code> for conditional specifications, and
+<code><a href="../reference/create_md_col.html">create_md_col()</a></code> for flat output.</p>
 <p>To learn more:</p>
 <ul>
 <li>

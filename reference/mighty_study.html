@@ -15,7 +15,7 @@ mighty framework configuration."><meta property="og:image" content="https://novo
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9029</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9030</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ mighty framework configuration."><meta property="og:image" content="https://novo
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Mighty Study</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/blob/main/R/mighty_study.R" class="external-link"><code>R/mighty_study.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/blob/main/R/mighty_study.R" class="external-link"><code>R/mighty_study.R</code></a>, <a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/blob/main/R/y_write_config.R" class="external-link"><code>R/y_write_config.R</code></a></small>
       <div class="d-none name"><code>mighty_study.Rd</code></div>
     </div>
 
@@ -93,6 +93,9 @@ if no properties file exists.</p></dd>
 <dd><p>Mighty framework configuration from <code>_mighty.yml</code>, or empty list
 if no configuration file exists.</p></dd>
 
+<dt><code>@path</code></dt>
+<dd><p>The source directory path as <code>character(1)</code>.</p></dd>
+
 
 </dl></div>
     <div class="section level2">
@@ -103,8 +106,18 @@ if no configuration file exists.</p></dd>
 <li><p>Only one <code>_mighty.yml</code> and one <code>_study.yml</code> file is allowed per directory</p></li>
 </ul></div>
     <div class="section level2">
+    <h2 id="write-study-metadata">Write Study Metadata<a class="anchor" aria-label="anchor" href="#write-study-metadata"></a></h2>
+
+
+<p>Use <code><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config()</a></code> to serialize a <code>mighty_study()</code> object back to YAML
+files. Each domain is written as a separate file, plus
+<code>_mighty.yml</code> and <code>_study.yml</code> when non-empty.</p>
+<p>If <code>path</code> is <code>NULL</code> (default), files are written to <code>x@path</code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="mighty_domain.html">mighty_domain</a>, <code><a href="populate_sparse.html">populate_sparse()</a></code>, <code><a href="populate_core.html">populate_core()</a></code>, <code><a href="create_md_col.html">create_md_col()</a></code></p></div>
+    <div class="dont-index"><p><a href="mighty_domain.html">mighty_domain</a>, <code><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config()</a></code>, <code><a href="populate_sparse.html">populate_sparse()</a></code>,
+<code><a href="populate_core.html">populate_core()</a></code>, <code><a href="create_md_col.html">create_md_col()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -165,6 +178,10 @@ if no configuration file exists.</p></dd>
 <span class="r-in"><span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  populate <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Write study back to YAML</span></span></span>
+<span class="r-in"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config</a></span><span class="op">(</span><span class="va">study</span>, path <span class="op">=</span> <span class="va">tmp</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
