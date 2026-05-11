@@ -16,6 +16,16 @@ test_that("populate_sparse() - works with intended input", {
     expect_equal(study)
 })
 
+test_that("populate_sparse() - works on a single mighty_domain", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  populate_sparse(study$ADAE, study = study) |>
+    expect_no_condition() |>
+    expect_s7_class(mighty_domain)
+})
+
 test_that("populate_sparse() - errors when predecessor does not exist", {
   study <- test_path("test_study") |>
     mighty_study() |>
