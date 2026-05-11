@@ -133,6 +133,9 @@ validate_study <- function(value) {
 
 #' @noRd
 validate_path <- function(value) {
+  if (length(value) != 1L || is.na(value)) {
+    return("@path must be a single non-NA string")
+  }
   if (!dir.exists(value)) {
     return("Directory does not exist")
   }
