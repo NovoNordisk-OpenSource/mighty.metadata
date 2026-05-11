@@ -221,6 +221,8 @@ The written file can be loaded back with `mighty_domain()`.
 
 ## Working with a Study
 
+See also `write_config()` for writing a study back to YAML files.
+
 ### Loading a Study
 
 Load all domain specifications from a directory with `mighty_study()`. The
@@ -391,8 +393,8 @@ create_md_col(study)
 
 This vignette covered the core workflows: `mighty_domain()` for single datasets,
 `mighty_study()` for collections, `populate_core()` and `populate_sparse()` for
-metadata propagation, `resolve_includes()` for conditional specifications, and
-`create_md_col()` for flat output.
+metadata propagation, `write_config()` for saving changes, `resolve_includes()`
+for conditional specifications, and `create_md_col()` for flat output.
 
 To learn more:
 

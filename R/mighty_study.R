@@ -29,7 +29,8 @@
 #' - All other YAML files are loaded as [mighty_domain] objects
 #' - Only one `_mighty.yml` and one `_study.yml` file is allowed per directory
 #'
-#' @seealso [mighty_domain], [populate_sparse()], [populate_core()], [create_md_col()]
+#' @seealso [mighty_domain], [write_config()], [populate_sparse()],
+#'   [populate_core()], [create_md_col()]
 #'
 #' @examples
 #' # Load example study

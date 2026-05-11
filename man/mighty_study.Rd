@@ -79,5 +79,6 @@ write_config(study, path = tmp)
 
 }
 \seealso{
-\link{mighty_domain}, \code{\link[=populate_sparse]{populate_sparse()}}, \code{\link[=populate_core]{populate_core()}}, \code{\link[=create_md_col]{create_md_col()}}
+\link{mighty_domain}, \code{\link[=write_config]{write_config()}}, \code{\link[=populate_sparse]{populate_sparse()}},
+\code{\link[=populate_core]{populate_core()}}, \code{\link[=create_md_col]{create_md_col()}}
 }
