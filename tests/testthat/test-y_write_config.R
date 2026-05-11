@@ -25,7 +25,7 @@ test_that("write_config() uses study@path when path is NULL", {
   expect_true(all(file.exists(file.path(tmpdir, expected))))
 })
 
-test_that("write_config() roundtrips study correctly", {
+test_that("write_config() roundtrip is consistent", {
   study <- test_path("test_study") |> mighty_study()
   tmpdir <- withr::local_tempdir()
 
