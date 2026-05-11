@@ -47,6 +47,10 @@ A `mighty_study` S7 object extending `list`:
   Mighty framework configuration from `_mighty.yml`, or empty list if no
   configuration file exists.
 
+- `@path`:
+
+  The source directory path as `character(1)`.
+
 ## Details
 
 The function scans the directory for files matching `*.yaml` or `*.yml`:
@@ -63,6 +67,14 @@ The function scans the directory for files matching `*.yaml` or `*.yml`:
 
 - Only one `_mighty.yml` and one `_study.yml` file is allowed per
   directory
+
+## Writing configuration
+
+Use `write_config(x, path)` to serialize a study back to YAML files.
+Each domain is written as a separate file, plus `_mighty.yml` and
+`_study.yml` when non-empty.
+
+If `path` is `NULL` (default), files are written to `x@path`.
 
 ## See also
 

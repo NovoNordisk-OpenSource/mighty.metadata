@@ -49,7 +49,7 @@ mighty framework configuration."><meta property="og:image" content="https://novo
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Mighty Study</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/blob/feat/write-config-study/R/mighty_study.R" class="external-link"><code>R/mighty_study.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/blob/feat/write-config-study/R/mighty_study.R" class="external-link"><code>R/mighty_study.R</code></a>, <a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/blob/feat/write-config-study/R/y_write_config.R" class="external-link"><code>R/y_write_config.R</code></a></small>
       <div class="d-none name"><code>mighty_study.Rd</code></div>
     </div>
 
@@ -93,6 +93,9 @@ if no properties file exists.</p></dd>
 <dd><p>Mighty framework configuration from <code>_mighty.yml</code>, or empty list
 if no configuration file exists.</p></dd>
 
+<dt><code>@path</code></dt>
+<dd><p>The source directory path as <code>character(1)</code>.</p></dd>
+
 
 </dl></div>
     <div class="section level2">
@@ -102,6 +105,15 @@ if no configuration file exists.</p></dd>
 <li><p>All other YAML files are loaded as <a href="mighty_domain.html">mighty_domain</a> objects</p></li>
 <li><p>Only one <code>_mighty.yml</code> and one <code>_study.yml</code> file is allowed per directory</p></li>
 </ul></div>
+    <div class="section level2">
+    <h2 id="writing-configuration">Writing configuration<a class="anchor" aria-label="anchor" href="#writing-configuration"></a></h2>
+
+
+<p>Use <code>write_config(x, path)</code> to serialize a study back to YAML
+files. Each domain is written as a separate file, plus
+<code>_mighty.yml</code> and <code>_study.yml</code> when non-empty.</p>
+<p>If <code>path</code> is <code>NULL</code> (default), files are written to <code>x@path</code>.</p>
+    </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><a href="mighty_domain.html">mighty_domain</a>, <code><a href="populate_sparse.html">populate_sparse()</a></code>, <code><a href="populate_core.html">populate_core()</a></code>, <code><a href="create_md_col.html">create_md_col()</a></code></p></div>
