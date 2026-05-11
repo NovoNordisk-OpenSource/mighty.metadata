@@ -64,7 +64,7 @@ match_yml <- function(path, name) {
 #' @noRd
 write_yml <- function(x, path, name) {
   cat(
-    result = S7schema::to_yaml(x),
+    S7schema::to_yaml(x),
     file = match_yml(path, name),
     sep = ""
   )
