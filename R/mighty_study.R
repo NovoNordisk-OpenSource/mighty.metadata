@@ -19,6 +19,7 @@
 #'     if no properties file exists.}
 #'   \item{`@mighty`}{Mighty framework configuration from `_mighty.yml`, or empty list
 #'     if no configuration file exists.}
+#'   \item{`@path`}{The source directory path as `character(1)`.}
 #' }
 #'
 #' @details
@@ -28,7 +29,8 @@
 #' - All other YAML files are loaded as [mighty_domain] objects
 #' - Only one `_mighty.yml` and one `_study.yml` file is allowed per directory
 #'
-#' @seealso [mighty_domain], [populate_sparse()], [populate_core()], [create_md_col()]
+#' @seealso [mighty_domain], [write_config()], [populate_sparse()],
+#'   [populate_core()], [create_md_col()]
 #'
 #' @examples
 #' # Load example study
@@ -53,6 +55,10 @@
 #'   path = system.file("examples", package = "mighty.metadata"),
 #'   populate = TRUE
 #' )
+#'
+#' # Write study back to YAML
+#' tmp <- tempdir()
+#' write_config(study, path = tmp)
 #'
 #' @name mighty_study
 NULL
@@ -91,7 +97,8 @@ construct_mighty_study <- function(path, populate = FALSE) {
   study <- S7::new_object(
     .parent = entries,
     mighty = read_yml(file = mighty_file),
-    study = read_yml(file = study_file)
+    study = read_yml(file = study_file),
+    path = path
   )
 
   if (!isTRUE(populate)) {
@@ -130,6 +137,16 @@ validate_study <- function(value) {
   NULL
 }
 
+#' @noRd
+validate_path <- function(value) {
+  if (length(value) != 1L || is.na(value)) {
+    return("@path must be a single non-NA string")
+  }
+  if (!dir.exists(value)) {
+    return("Directory does not exist")
+  }
+}
+
 #' @rdname mighty_study
 #' @export
 mighty_study <- S7::new_class(
@@ -146,6 +163,12 @@ mighty_study <- S7::new_class(
       class = S7::class_list,
       validator = \(value) {
         validate_study(value = value)
+      }
+    ),
+    path = S7::new_property(
+      class = S7::class_character,
+      validator = \(value) {
+        validate_path(value = value)
       }
     )
   ),

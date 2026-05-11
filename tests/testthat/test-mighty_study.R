@@ -41,7 +41,7 @@ test_that("mighty_study()", {
     expect_equal(c("ADAE", "ADSL", "ADVS"))
 
   S7::prop_names(study) |>
-    expect_equal(c("mighty", "study"))
+    expect_equal(c("mighty", "study", "path"))
 
   expect_equal(
     object = study@mighty,
@@ -71,4 +71,31 @@ test_that("mighty_study()", {
       gsub(pattern = "mighty\\.metadata::", replacement = "", x = x)
     }
   )
+})
+
+test_that("validate_path() errors when @path set to non-existent directory", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  expect_error(
+    study@path <- "/nonexistent/path",
+    "Directory does not exist"
+  )
+})
+
+test_that("validate_path() accepts existing directory", {
+  study <- test_path("test_study") |> mighty_study()
+  tmp <- withr::local_tempdir()
+  study@path <- tmp
+  expect_equal(study@path, tmp)
+})
+
+test_that("validate_path() errors on character(0)", {
+  study <- test_path("test_study") |> mighty_study()
+  expect_error(study@path <- character(0), "single non-NA string")
+})
+
+test_that("validate_path() errors on NA", {
+  study <- test_path("test_study") |> mighty_study()
+  expect_error(study@path <- NA_character_, "single non-NA string")
 })
