@@ -72,3 +72,13 @@ test_that("mighty_study()", {
     }
   )
 })
+
+test_that("validate_path() errors when @path set to non-existent directory", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  expect_error(
+    study@path <- "/nonexistent/path",
+    "Directory does not exist"
+  )
+})
