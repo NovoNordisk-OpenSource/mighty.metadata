@@ -260,6 +260,10 @@ The written file can be loaded back with
 
 ## Working with a Study
 
+See also
+[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
+for writing a study back to YAML files.
+
 ### Loading a Study
 
 Load all domain specifications from a directory with
@@ -422,6 +426,22 @@ after loading:
 study <- mighty_study(study_path, populate = TRUE)
 ```
 
+### Saving a Study
+
+Write all domain files, `_study.yml`, and `_mighty.yml` back to disk
+with
+[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html):
+
+``` r
+
+out <- withr::local_tempdir()
+write_config(study, path = out)
+list.files(out)
+#> [1] "_mighty.yml" "_study.yml"  "adae.yml"    "adsl.yml"    "advs.yml"
+```
+
+Omit `path` to write back to the original directory (`study@path`).
+
 ## Conditional Metadata
 
 Pooled specifications can serve multiple studies by using conditional
@@ -502,6 +522,8 @@ for collections,
 and
 [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
 for metadata propagation,
+[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
+for saving changes,
 [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md)
 for conditional specifications, and
 [`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)

@@ -68,17 +68,20 @@ The function scans the directory for files matching `*.yaml` or `*.yml`:
 - Only one `_mighty.yml` and one `_study.yml` file is allowed per
   directory
 
-## Writing configuration
+## Write Study Metadata
 
-Use `write_config(x, path)` to serialize a study back to YAML files.
-Each domain is written as a separate file, plus `_mighty.yml` and
-`_study.yml` when non-empty.
+Use
+[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
+to serialize a `mighty_study()` object back to YAML files. Each domain
+is written as a separate file, plus `_mighty.yml` and `_study.yml` when
+non-empty.
 
 If `path` is `NULL` (default), files are written to `x@path`.
 
 ## See also
 
 [mighty_domain](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md),
+[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html),
 [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md),
 [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md),
 [`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)
@@ -142,4 +145,8 @@ study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata"),
   populate = TRUE
 )
+
+# Write study back to YAML
+tmp <- tempdir()
+write_config(study, path = tmp)
 ```
