@@ -7,13 +7,10 @@
 mighty_study(path, populate = FALSE)
 }
 \arguments{
-\item{path}{\code{character(1)} or \code{NULL}. Directory to write to.
-Defaults to \code{x@path}.}
+\item{path}{\code{character(1)} path to a directory containing YAML metadata files.}
 
 \item{populate}{\code{logical(1)} if \code{TRUE}, calls \code{\link[=populate_core]{populate_core()}} then
 \code{\link[=populate_sparse]{populate_sparse()}} before returning. Default is \code{FALSE}.}
-
-\item{x}{A \code{mighty_study} object.}
 }
 \value{
 A \code{mighty_study} S7 object extending \code{list}:
