@@ -19,6 +19,7 @@
 #'     if no properties file exists.}
 #'   \item{`@mighty`}{Mighty framework configuration from `_mighty.yml`, or empty list
 #'     if no configuration file exists.}
+#'   \item{`@path`}{The source directory path as `character(1)`.}
 #' }
 #'
 #' @details
