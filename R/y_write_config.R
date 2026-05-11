@@ -11,8 +11,12 @@ write_mighty_study <- function(study, path) {
     path <- study@path
   }
 
-  write_yml(x = study@mighty, path = path, name = "_mighty")
-  write_yml(x = study@study, path = path, name = "_study")
+  if (length(study@mighty)) {
+    write_yml(x = study@mighty, path = path, name = "_mighty")
+  }
+  if (length(study@study)) {
+    write_yml(x = study@study, path = path, name = "_study")
+  }
 
   for (i in seq_along(study)) {
     write_config(
