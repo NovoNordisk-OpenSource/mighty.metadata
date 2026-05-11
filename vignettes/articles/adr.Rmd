@@ -209,7 +209,6 @@ but rely on helper function to throw errors on invalid input in order to keep te
 ## References
 
 * [jsonvalidate](https://docs.ropensci.org/jsonvalidate/index.html)
-* [mighty](https://github.com/NovoNordisk-OpenSource/mighty)
 * [mighty.metadata](https://github.com/NovoNordisk-OpenSource/mighty.metadata)
 * mighty.toolbox (internal package)
 * plz (internal package)

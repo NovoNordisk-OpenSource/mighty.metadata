@@ -214,7 +214,7 @@ Write the modified domain back to YAML with `write_config()`:
 
 ```{r}
 out <- tempfile(fileext = ".yml")
-write_config(advs, file = out)
+write_config(advs, path = out)
 ```
 
 The written file can be loaded back with `mighty_domain()`.
@@ -388,5 +388,3 @@ To learn more:
 - `vignette("mighty-schema")` documents the mighty YAML schema reference
 - The [package reference](https://novonordisk-opensource.github.io/mighty.metadata/reference/index.html)
   lists all available functions
-- [mighty](https://github.com/NovoNordisk-OpenSource/mighty) generates ADaM programs
-  from your metadata

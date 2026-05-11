@@ -29,6 +29,7 @@ dataframe
 dplyr
 envir
 Esben
+Giulia
 jsonvalidate
 jsonvalidator
 knitr
@@ -43,6 +44,7 @@ Nordisk
 OCCDS
 openxlsx
 origindescription
+Pais
 PARAMCD
 PHARMACOKINETIC
 pipeable
@@ -83,10 +85,10 @@ VISITNUM
 VSSTRESN
 VSTEST
 VSTESTCD
-WSTCIR
 whereclause
 whereclauses
 withr
 WORDLIST
+WSTCIR
 xlink
 xmlcodelist

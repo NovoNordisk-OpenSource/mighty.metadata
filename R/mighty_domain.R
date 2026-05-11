@@ -18,7 +18,13 @@
 #' You can at anytime validate an object by calling `validate()` and use
 #' `write_config()` to save it as a yaml file again.
 #'
-#' @param file `character(1)` path to a yaml file defining a ADaM dataset.
+#' @param file `character(1)` path to a yaml file defining an ADaM dataset.
+#'
+#' @return A `mighty_domain` S7 object extending [S7schema::S7schema].
+#'   The underlying list contains the parsed and validated YAML metadata
+#'   including `id`, `label`, `class`, `keys`, `columns`, `parameters`,
+#'   and `rows`.
+#'
 #' @examples
 #' x <- mighty_domain(
 #'   file = system.file("examples", "advs.yml", package = "mighty.metadata")
