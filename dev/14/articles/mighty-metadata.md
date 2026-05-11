@@ -518,5 +518,3 @@ To learn more:
 - The [package
   reference](https://novonordisk-opensource.github.io/mighty.metadata/reference/index.html)
   lists all available functions
-- [mighty](https://github.com/NovoNordisk-OpenSource/mighty) generates
-  ADaM programs from your metadata
