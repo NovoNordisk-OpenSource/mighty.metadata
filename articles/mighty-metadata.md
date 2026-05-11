@@ -252,7 +252,7 @@ Write the modified domain back to YAML with
 ``` r
 
 out <- tempfile(fileext = ".yml")
-write_config(advs, file = out)
+write_config(advs, path = out)
 ```
 
 The written file can be loaded back with
@@ -518,5 +518,3 @@ To learn more:
 - The [package
   reference](https://novonordisk-opensource.github.io/mighty.metadata/reference/index.html)
   lists all available functions
-- [mighty](https://github.com/NovoNordisk-OpenSource/mighty) generates
-  ADaM programs from your metadata

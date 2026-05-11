@@ -35,7 +35,15 @@ mighty_domain(file)
 
 - file:
 
-  `character(1)` path to a yaml file defining a ADaM dataset.
+  `character(1)` path to a yaml file defining an ADaM dataset.
+
+## Value
+
+A `mighty_domain` S7 object extending
+[S7schema::S7schema](https://novonordisk-opensource.github.io/S7schema/reference/S7schema.html).
+The underlying list contains the parsed and validated YAML metadata
+including `id`, `label`, `class`, `keys`, `columns`, `parameters`, and
+`rows`.
 
 ## Examples
 
@@ -148,6 +156,6 @@ str(x)
 #>   .. .. .. ..$ method: chr "Numeric representation of AVALC"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/adam.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x562a5ac2b958> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55a7cf04e2e8> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/advs.yml"
 ```

@@ -17,10 +17,8 @@ levels: a single ADaM domain
 or an entire study
 ([`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)).
 
-mighty.metadata is part of the
-[mighty](https://github.com/NovoNordisk-OpenSource/mighty) framework for
-automated ADaM programming. It is built on
-[S7](https://rconsortium.github.io/S7/) and
+mighty.metadata is part of the mighty framework for automated ADaM
+programming. It is built on [S7](https://rconsortium.github.io/S7/) and
 [S7schema](https://novonordisk-opensource.github.io/S7schema/) for
 robust validation and modern OOP.
 
@@ -168,8 +166,6 @@ str(study@mighty)
   – Study YAML schema reference
 - [`vignette("mighty-schema")`](https://novonordisk-opensource.github.io/mighty.metadata/articles/mighty-schema.md)
   – Mighty YAML schema reference
-- [mighty](https://github.com/NovoNordisk-OpenSource/mighty) – The full
-  mighty framework for automated ADaM programming
 - [S7schema](https://novonordisk-opensource.github.io/S7schema/) –
   Schema validation engine used by mighty.metadata
 - [Novo Nordisk Open Source R

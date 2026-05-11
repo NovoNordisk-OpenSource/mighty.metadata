@@ -292,7 +292,6 @@ mighty_study("path/to/specs") |> # --> List `mighty_domain()` specs
 ## References
 
 - [jsonvalidate](https://docs.ropensci.org/jsonvalidate/index.html)
-- [mighty](https://github.com/NovoNordisk-OpenSource/mighty)
 - [mighty.metadata](https://github.com/NovoNordisk-OpenSource/mighty.metadata)
 - mighty.toolbox (internal package)
 - plz (internal package)
