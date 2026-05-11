@@ -252,7 +252,7 @@ Write the modified domain back to YAML with
 ``` r
 
 out <- tempfile(fileext = ".yml")
-write_config(advs, file = out)
+write_config(advs, path = out)
 ```
 
 The written file can be loaded back with
