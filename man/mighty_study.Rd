@@ -40,9 +40,9 @@ The function scans the directory for files matching \verb{*.yaml} or \verb{*.yml
 \item Only one \verb{_mighty.yml} and one \verb{_study.yml} file is allowed per directory
 }
 }
-\section{Writing configuration}{
+\section{Write Study Metadata}{
 
-Use \code{write_config(x, path)} to serialize a study back to YAML
+Use \code{write_config()} to serialize a \code{mighty_study()} object back to YAML
 files. Each domain is written as a separate file, plus
 \verb{_mighty.yml} and \verb{_study.yml} when non-empty.
 

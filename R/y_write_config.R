@@ -1,5 +1,5 @@
-#' @section Writing configuration:
-#' Use `write_config(x, path)` to serialize a study back to YAML
+#' @section Write Study Metadata:
+#' Use `write_config()` to serialize a `mighty_study()` object back to YAML
 #' files. Each domain is written as a separate file, plus
 #' `_mighty.yml` and `_study.yml` when non-empty.
 #'
