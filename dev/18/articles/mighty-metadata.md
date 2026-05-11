@@ -260,10 +260,6 @@ The written file can be loaded back with
 
 ## Working with a Study
 
-See also
-[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
-for writing a study back to YAML files.
-
 ### Loading a Study
 
 Load all domain specifications from a directory with
