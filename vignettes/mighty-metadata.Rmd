@@ -332,6 +332,19 @@ equivalent to calling `populate_core()` then `populate_sparse()` after loading:
 study <- mighty_study(study_path, populate = TRUE)
 ```
 
+### Saving a Study
+
+Write all domain files, `_study.yml`, and `_mighty.yml` back to disk
+with `write_config()`:
+
+```{r}
+out <- withr::local_tempdir()
+write_config(study, path = out)
+list.files(out)
+```
+
+Omit `path` to write back to the original directory (`study@path`).
+
 ## Conditional Metadata
 
 Pooled specifications can serve multiple studies by using conditional `include`

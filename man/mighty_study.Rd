@@ -73,6 +73,10 @@ study <- mighty_study(
   populate = TRUE
 )
 
+# Write study back to YAML
+tmp <- tempdir()
+write_config(study, path = tmp)
+
 }
 \seealso{
 \link{mighty_domain}, \code{\link[=populate_sparse]{populate_sparse()}}, \code{\link[=populate_core]{populate_core()}}, \code{\link[=create_md_col]{create_md_col()}}

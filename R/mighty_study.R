@@ -55,6 +55,10 @@
 #'   populate = TRUE
 #' )
 #'
+#' # Write study back to YAML
+#' tmp <- tempdir()
+#' write_config(study, path = tmp)
+#'
 #' @name mighty_study
 NULL
 
