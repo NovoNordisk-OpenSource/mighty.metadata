@@ -28,7 +28,7 @@ Imports:
     purrr,
     rlang,
     S7,
-    S7schema,
+    S7schema (>= 0.1.1),
     stats,
     tibble,
     yaml,
