@@ -31,8 +31,8 @@ robust validation and modern OOP.
 ## Installation
 
 ``` r
-# Install from CRAN (when available):
-# install.packages("mighty.metadata")
+# Install from CRAN:
+install.packages("mighty.metadata")
 
 # Install the development version from GitHub:
 pak::pak("NovoNordisk-OpenSource/mighty.metadata")
