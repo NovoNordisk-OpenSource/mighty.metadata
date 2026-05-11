@@ -221,8 +221,6 @@ The written file can be loaded back with `mighty_domain()`.
 
 ## Working with a Study
 
-See also `write_config()` for writing a study back to YAML files.
-
 ### Loading a Study
 
 Load all domain specifications from a directory with `mighty_study()`. The
