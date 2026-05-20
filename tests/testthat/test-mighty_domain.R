@@ -16,3 +16,13 @@ test_that("mighty_domain works", {
       }
     )
 })
+
+test_that("construct_mighty_domain() - invalid file in specifications dir", {
+  expect_error(
+    mighty_domain(
+      file = "test_study/empty.yml"
+    ),
+    regexp = "File could not be loaded correctly:.*empty\\.yml.*test_study",
+    fixed = FALSE
+  )
+})
