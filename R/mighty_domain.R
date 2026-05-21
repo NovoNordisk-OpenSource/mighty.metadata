@@ -41,22 +41,12 @@ NULL
 
 #' @noRd
 construct_mighty_domain <- function(file) {
-  schema_obj <- tryCatch(
-    S7schema::S7schema(
+  S7::new_object(
+    .parent = S7schema::S7schema(
       file = file,
       schema = system.file("schema", "adam.json", package = "mighty.metadata")
-    ),
-    error = function(e) e
+    )
   )
-
-  if (inherits(schema_obj, "error")) {
-    cli::cli_abort(paste0("File could not be loaded correctly: ",
-                          "{.emph {basename(file)}}", " (path: {.path {dirname(file)}}). ",
-                          "The file may be empty or has an unrecognized/unsupported schema.",
-                          "Please adjust the file content or remove from specifications directory."))
-  }
-
-  S7::new_object(.parent = schema_obj)
 }
 
 #' @noRd
