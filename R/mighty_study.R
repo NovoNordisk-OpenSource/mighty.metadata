@@ -86,6 +86,8 @@ construct_mighty_study <- function(path, populate = FALSE) {
   ) |>
     setdiff(c(mighty_file, study_file))
 
+  validate_datasets(entries)
+
   entries <- lapply(X = entries, FUN = mighty_domain)
 
   names(entries) <- vapply(
@@ -108,6 +110,17 @@ construct_mighty_study <- function(path, populate = FALSE) {
   study |>
     populate_core() |>
     populate_sparse()
+}
+
+#' @noRd
+validate_datasets <- function(files) {
+  files_names <- files[!startsWith(toupper(basename(files)), "AD")]
+
+  if (length(files_names) > 0) {
+    cli::cli_abort(paste0("Incorrect file name detected: ",
+                          "{.list {basename(files_names)}}", " in (path: {.path {unique(dirname(files_names))}}). ",
+                          "Please change the file name or remove file from specifications directory."))
+  }
 }
 
 #' @noRd
