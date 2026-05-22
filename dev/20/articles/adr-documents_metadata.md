@@ -79,7 +79,6 @@ columns:
     core: Req
     doc_refs:
       - id: "unique_id_for_the_document" # Column level reference
-        physical_ref: true # When referencing pdf pages, optional
         pdf_page: 5 # When referencing pdf pages, optional
 
   [...]
@@ -110,6 +109,8 @@ users can provide meaningful ids following their own conventions
 
 - `mighty.metadata` should check that documents of type `METHOD` are not
   referenced in columns/values whose origin is not “Derived”
+- `mighty.metadata` should check that a comment is set for
+  tables/columns/values referencing a `COMMENT` type document
 
 ### Classes
 
@@ -121,22 +122,10 @@ methods to add, remove and edit documents.
 
 ### Changes to current content
 
-With the current proposal, `mighty.metadata` does not actively check
-that a comment is set for tables/columns/values referencing a `COMMENT`
-type document. This was a concious choice after observing
-`mighty.toolbox` codebase and behavior, therefore it is more of an open
-discussion/question for the `mighty.toolbox` team.
-
-- Is there any reason why we expect a general comment to be set for the
-  document references to show up? Document references are mostly
-  independent, meaning the hyperlink is always rendered as the title of
-  the document and, optionally, a direct reference to the page number
-  for pdf documents, so the presence of additional comment doesn’t seem
-  relevant nor necessary
-- The `pdfpagereftype` attribute in the CST file has been simplified to
-  a boolean flag, since no other type of reference is currently
-  supported and there are no plans (that I know of) to support other
-  types of references in the near future
+- The `pdfpagereftype` attribute in the CST file has been removed from
+  the current implementation, since it is only set when a page of a pdf
+  document is referenced - hence it will be inferred automatically from
+  `mighty.toolbox`
 
 ## Alternatives Considered
 
@@ -158,6 +147,11 @@ special characters, etc) and can lead to errors if not handled properly
 \* Titles are displayed in the `define.html` file and they can’t contain
 some special characters (e.g. “’”) - they need to be validated and
 sanitized, no need to do this with ids
+
+On `COMMENT` type document references, do not enforce the presence of a
+comment in the corresponding table/column/value: \* After discussion
+with `mighty.toolbox` team, it is clear this validation is needed so it
+will be included
 
 ## Implementation Details
 

@@ -184,19 +184,18 @@ follows:</p>
 <span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="at">    </span><span class="fu">core</span><span class="kw">:</span><span class="at"> Req</span></span>
 <span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="at">    </span><span class="fu">doc_refs</span><span class="kw">:</span></span>
 <span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"unique_id_for_the_document"</span><span class="co"> # Column level reference</span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="at">        </span><span class="fu">physical_ref</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span><span class="co"> # When referencing pdf pages, optional</span></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="at">        </span><span class="fu">pdf_page</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span><span class="co"> # When referencing pdf pages, optional</span></span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="at">  </span><span class="kw">[</span><span class="at">...</span><span class="kw">]</span></span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="fu">parameters</span><span class="kw">:</span></span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> BMI</span></span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Body Mass Index (kg/m^2)</span></span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span></span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AVAL</span></span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="at">        </span><span class="fu">method</span><span class="kw">:</span><span class="at"> Derived from height and weight</span></span>
-<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="at">        </span><span class="fu">doc_refs</span><span class="kw">:</span></span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="at">          </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"unique_id_for_the_document"</span><span class="co"> # Parameter level reference, usually a method</span></span></code></pre></div>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="at">        </span><span class="fu">pdf_page</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span><span class="co"> # When referencing pdf pages, optional</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="at">  </span><span class="kw">[</span><span class="at">...</span><span class="kw">]</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="fu">parameters</span><span class="kw">:</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> BMI</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Body Mass Index (kg/m^2)</span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AVAL</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="at">        </span><span class="fu">method</span><span class="kw">:</span><span class="at"> Derived from height and weight</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="at">        </span><span class="fu">doc_refs</span><span class="kw">:</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="at">          </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"unique_id_for_the_document"</span><span class="co"> # Parameter level reference, usually a method</span></span></code></pre></div>
 <p>In this way, the same document can be referenced in different places
 without the need to duplicate the metadata (e.g. same pdf file,
 different pages).</p>
@@ -217,6 +216,10 @@ users can provide meaningful ids following their own conventions
 <code>mighty.metadata</code> should check that documents of type
 <code>METHOD</code> are not referenced in columns/values whose origin is
 not “Derived”</li>
+<li>
+<code>mighty.metadata</code> should check that a comment is set for
+tables/columns/values referencing a <code>COMMENT</code> type
+document</li>
 </ul>
 </div>
 <div class="section level3">
@@ -233,23 +236,12 @@ methods to add, remove and edit documents.</p>
 <div class="section level3">
 <h3 id="changes-to-current-content">Changes to current content<a class="anchor" aria-label="anchor" href="#changes-to-current-content"></a>
 </h3>
-<p>With the current proposal, <code>mighty.metadata</code> does not
-actively check that a comment is set for tables/columns/values
-referencing a <code>COMMENT</code> type document. This was a concious
-choice after observing <code>mighty.toolbox</code> codebase and
-behavior, therefore it is more of an open discussion/question for the
-<code>mighty.toolbox</code> team.</p>
 <ul>
-<li>Is there any reason why we expect a general comment to be set for
-the document references to show up? Document references are mostly
-independent, meaning the hyperlink is always rendered as the title of
-the document and, optionally, a direct reference to the page number for
-pdf documents, so the presence of additional comment doesn’t seem
-relevant nor necessary</li>
 <li>The <code>pdfpagereftype</code> attribute in the CST file has been
-simplified to a boolean flag, since no other type of reference is
-currently supported and there are no plans (that I know of) to support
-other types of references in the near future</li>
+removed from the current implementation, since it is only set when a
+page of a pdf document is referenced - hence it will be inferred
+automatically from <code>mighty.toolbox</code>
+</li>
 </ul>
 </div>
 </div>
@@ -273,6 +265,10 @@ characters, etc) and can lead to errors if not handled properly * Titles
 are displayed in the <code>define.html</code> file and they can’t
 contain some special characters (e.g. “’”) - they need to be validated
 and sanitized, no need to do this with ids</p>
+<p>On <code>COMMENT</code> type document references, do not enforce the
+presence of a comment in the corresponding table/column/value: * After
+discussion with <code>mighty.toolbox</code> team, it is clear this
+validation is needed so it will be included</p>
 </div>
 <div class="section level2">
 <h2 id="implementation-details">Implementation Details<a class="anchor" aria-label="anchor" href="#implementation-details"></a>
