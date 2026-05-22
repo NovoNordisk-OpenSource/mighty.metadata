@@ -26,7 +26,8 @@
 #' The function scans the directory for files matching `*.yaml` or `*.yml`:
 #' - Files named `_study.yml` or `_study.yaml` are treated as study properties
 #' - Files named `_mighty.yml` or `_mighty.yaml` are treated as mighty framework config
-#' - All other YAML files are loaded as [mighty_domain] objects
+#' - All other YAML files must follow ADaM naming conventions (starting with
+#'   `ad`) and are loaded as [mighty_domain] objects
 #' - Only one `_mighty.yml` and one `_study.yml` file is allowed per directory
 #'
 #' @seealso [mighty_domain], [write_config()], [populate_sparse()],
