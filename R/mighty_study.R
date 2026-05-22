@@ -88,7 +88,7 @@ construct_mighty_study <- function(path, populate = FALSE) {
 
   entries <- lapply(X = entries, FUN = mighty_domain)
 
-  check_col_to_col_depends(entries)
+  check_column_dependencies(entries)
 
   names(entries) <- vapply(
     X = entries,
