@@ -182,12 +182,12 @@ check_column_dependencies <- function(mighty_domains) {
   lapply(mighty_domains, function(domain) {
 
     flattened_columns <- unlist(domain$columns)
-    declared_dependencies <- flattened_columns[ grepl("depends", names(flattened_columns))]
-    forbidden_dependencies <- intersect( declared_dependencies, all_column_ids)
+    declared_dependencies <- flattened_columns[grepl("depends", names(flattened_columns))]
+    forbidden_dependencies <- intersect(declared_dependencies, all_column_ids)
 
     if (length(forbidden_dependencies) > 0) {
-      cli::cli_abort(paste0("Detected not allowed column to column dependencies: {forbidden_dependencies} in {domain$id} dataset. ",
-                            "Please fix this dependency or remove it."))
+      cli::cli_abort(paste0("Detected not allowed column to column dependencies: {forbidden_dependencies}",
+                            "in {domain$id} dataset. Please fix this dependency or remove it."))
     }
   })
 
