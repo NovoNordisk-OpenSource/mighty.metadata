@@ -174,7 +174,7 @@ follows:</p>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">class</span><span class="kw">:</span><span class="at"> BASIC DATA STRUCTURE</span></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">structure</span><span class="kw">:</span><span class="at"> One record per vital sign parameter, per visit, per subject</span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">keys</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">USUBJID</span><span class="kw">,</span><span class="at"> PARAMCD</span><span class="kw">,</span><span class="at"> AVISITN</span><span class="kw">]</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">doc_refs</span><span class="kw">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">documents</span><span class="kw">:</span></span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"unique_id_for_the_document"</span><span class="co"> # Domain/table level reference</span></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
@@ -182,9 +182,9 @@ follows:</p>
 <span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Study Identifier</span></span>
 <span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="at">    </span><span class="fu">method</span><span class="kw">:</span><span class="at"> VS.STUDYID</span></span>
 <span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="at">    </span><span class="fu">core</span><span class="kw">:</span><span class="at"> Req</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="at">    </span><span class="fu">doc_refs</span><span class="kw">:</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="at">    </span><span class="fu">documents</span><span class="kw">:</span></span>
 <span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"unique_id_for_the_document"</span><span class="co"> # Column level reference</span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="at">        </span><span class="fu">pdf_page</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span><span class="co"> # When referencing pdf pages, optional</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="at">        </span><span class="fu">page</span><span class="kw">:</span><span class="at"> </span><span class="dv">5</span><span class="co"> # When referencing pdf pages, optional</span></span>
 <span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a></span>
 <span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="at">  </span><span class="kw">[</span><span class="at">...</span><span class="kw">]</span></span>
 <span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a></span>
@@ -194,7 +194,7 @@ follows:</p>
 <span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span></span>
 <span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AVAL</span></span>
 <span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="at">        </span><span class="fu">method</span><span class="kw">:</span><span class="at"> Derived from height and weight</span></span>
-<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="at">        </span><span class="fu">doc_refs</span><span class="kw">:</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="at">        </span><span class="fu">documents</span><span class="kw">:</span></span>
 <span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="at">          </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"unique_id_for_the_document"</span><span class="co"> # Parameter level reference, usually a method</span></span></code></pre></div>
 <p>In this way, the same document can be referenced in different places
 without the need to duplicate the metadata (e.g. same pdf file,
@@ -220,6 +220,8 @@ not “Derived”</li>
 <code>mighty.metadata</code> should check that a comment is set for
 tables/columns/values referencing a <code>COMMENT</code> type
 document</li>
+<li>The <code>documents</code> entry should be defined in
+<code>inst/schema/adam.json</code> (non required).</li>
 </ul>
 </div>
 <div class="section level3">

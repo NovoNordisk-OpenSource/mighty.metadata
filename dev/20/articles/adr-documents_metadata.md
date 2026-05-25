@@ -69,7 +69,7 @@ label: Vital Signs Analysis Dataset
 class: BASIC DATA STRUCTURE
 structure: One record per vital sign parameter, per visit, per subject
 keys: [USUBJID, PARAMCD, AVISITN]
-doc_refs:
+documents:
     - id: "unique_id_for_the_document" # Domain/table level reference
 
 columns:
@@ -77,9 +77,9 @@ columns:
     label: Study Identifier
     method: VS.STUDYID
     core: Req
-    doc_refs:
+    documents:
       - id: "unique_id_for_the_document" # Column level reference
-        pdf_page: 5 # When referencing pdf pages, optional
+        page: 5 # When referencing pdf pages, optional
 
   [...]
 
@@ -89,7 +89,7 @@ parameters:
     columns:
       - id: AVAL
         method: Derived from height and weight
-        doc_refs:
+        documents:
           - id: "unique_id_for_the_document" # Parameter level reference, usually a method
 ```
 
@@ -111,6 +111,8 @@ users can provide meaningful ids following their own conventions
   referenced in columns/values whose origin is not “Derived”
 - `mighty.metadata` should check that a comment is set for
   tables/columns/values referencing a `COMMENT` type document
+- The `documents` entry should be defined in `inst/schema/adam.json`
+  (non required).
 
 ### Classes
 
