@@ -5,6 +5,9 @@
 \title{Mighty Study}
 \usage{
 mighty_study(path, populate = FALSE)
+
+## S7 method for class <mighty.metadata::mighty_study>
+write_config(x, path = NULL)
 }
 \arguments{
 \item{path}{\code{character(1)} path to a directory containing YAML metadata files.}
@@ -36,7 +39,8 @@ The function scans the directory for files matching \verb{*.yaml} or \verb{*.yml
 \itemize{
 \item Files named \verb{_study.yml} or \verb{_study.yaml} are treated as study properties
 \item Files named \verb{_mighty.yml} or \verb{_mighty.yaml} are treated as mighty framework config
-\item All other YAML files are loaded as \link{mighty_domain} objects
+\item All other YAML files must follow ADaM naming conventions (starting with
+\code{ad}) and are loaded as \link{mighty_domain} objects
 \item Only one \verb{_mighty.yml} and one \verb{_study.yml} file is allowed per directory
 }
 }
