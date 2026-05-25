@@ -170,6 +170,7 @@ check_unique_ids <- function(x) {
 #' Column dependencies are allowed only on row and parameters levels.
 #' Dependencies pointing directly to another column are considered invalid
 #' and will terminate execution with a descriptive error.
+#' @noRd
 check_column_dependencies <- function(mighty_domains) {
 
   all_column_ids <- lapply(mighty_domains, function(domain) {
