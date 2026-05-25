@@ -179,7 +179,6 @@ str(study@mighty)
 Work with ADaM metadata for an entire study.
 
 - [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
-  [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
   : Mighty Study
 - [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md)
   : Resolve conditional metadata items
