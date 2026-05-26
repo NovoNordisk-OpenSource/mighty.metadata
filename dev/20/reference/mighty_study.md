@@ -61,7 +61,8 @@ The function scans the directory for files matching `*.yaml` or `*.yml`:
 - Files named `_mighty.yml` or `_mighty.yaml` are treated as mighty
   framework config
 
-- All other YAML files are loaded as
+- All other YAML files must follow ADaM naming conventions (starting
+  with `ad`) and are loaded as
   [mighty_domain](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
   objects
 

@@ -15,7 +15,7 @@ mighty framework configuration."><meta property="og:image" content="https://novo
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,7 +103,8 @@ if no configuration file exists.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The function scans the directory for files matching <code>*.yaml</code> or <code>*.yml</code>:</p><ul><li><p>Files named <code>_study.yml</code> or <code>_study.yaml</code> are treated as study properties</p></li>
 <li><p>Files named <code>_mighty.yml</code> or <code>_mighty.yaml</code> are treated as mighty framework config</p></li>
-<li><p>All other YAML files are loaded as <a href="mighty_domain.html">mighty_domain</a> objects</p></li>
+<li><p>All other YAML files must follow ADaM naming conventions (starting with
+<code>ad</code>) and are loaded as <a href="mighty_domain.html">mighty_domain</a> objects</p></li>
 <li><p>Only one <code>_mighty.yml</code> and one <code>_study.yml</code> file is allowed per directory</p></li>
 </ul></div>
     <div class="section level2">

@@ -116,9 +116,9 @@ users can provide meaningful ids following their own conventions
 
 ### Classes
 
-We can have 2 new S7 classes, one representing the list of documents and
-one representing a single document. The class for the list will have
-methods to add, remove and edit documents.
+We will define an S7 class for the list of documents. The class will
+have methods to add, remove and edit documents in the list, as well as
+to validate the documents metadata against the defined schema.
 
 ## Consequences
 
