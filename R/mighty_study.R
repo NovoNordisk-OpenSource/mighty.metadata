@@ -26,7 +26,8 @@
 #' The function scans the directory for files matching `*.yaml` or `*.yml`:
 #' - Files named `_study.yml` or `_study.yaml` are treated as study properties
 #' - Files named `_mighty.yml` or `_mighty.yaml` are treated as mighty framework config
-#' - All other YAML files are loaded as [mighty_domain] objects
+#' - All other YAML files must follow ADaM naming conventions (starting with
+#'   `ad`) and are loaded as [mighty_domain] objects
 #' - Only one `_mighty.yml` and one `_study.yml` file is allowed per directory
 #'
 #' @seealso [mighty_domain], [write_config()], [populate_sparse()],
@@ -86,6 +87,8 @@ construct_mighty_study <- function(path, populate = FALSE) {
   ) |>
     setdiff(c(mighty_file, study_file))
 
+  validate_datasets(entries)
+
   entries <- lapply(X = entries, FUN = mighty_domain)
 
   check_column_dependencies(entries)
@@ -110,6 +113,17 @@ construct_mighty_study <- function(path, populate = FALSE) {
   study |>
     populate_core() |>
     populate_sparse()
+}
+
+#' @noRd
+validate_datasets <- function(files) {
+  files_names <- files[!startsWith(toupper(basename(files)), "AD")]
+
+  if (length(files_names) > 0) {
+    cli::cli_abort(paste0("Incorrect file name detected: ",
+                          "{.list {basename(files_names)}}", " in (path: {.path {unique(dirname(files_names))}}). ",
+                          "Please change the file name or remove file from specifications directory."))
+  }
 }
 
 #' @noRd

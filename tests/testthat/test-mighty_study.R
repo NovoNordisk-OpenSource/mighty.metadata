@@ -99,3 +99,8 @@ test_that("validate_path() errors on NA", {
   study <- test_path("test_study") |> mighty_study()
   expect_error(study@path <- NA_character_, "single non-NA string")
 })
+
+test_that("validate_datasets() error on incorrect file name", {
+  files <- c("example/adae.yaml", "example/advs.yaml", "example/_test.yaml")
+  expect_error(validate_datasets(files))
+})
