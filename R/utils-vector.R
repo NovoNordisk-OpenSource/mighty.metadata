@@ -181,19 +181,8 @@ check_column_dependencies <- function(domain) {
   forbidden_dependencies <- declared_dependencies[!grepl("rows|parameters", declared_dependencies, fixed = F)]
 
   if (length(forbidden_dependencies) > 0) {
-    cli::cli_abort(paste0("Detected not allowed column to column dependencies: {forbidden_dependencies} ",
+    cli::cli_abort(paste0("Detected not allowed column dependencies: {forbidden_dependencies} ",
                           "in the {domain$id} dataset. Please fix this dependency or remove it."))
-  }
-
-  has_multiple_dep <- lapply(domain$columns, function(column) {
-    if (length(column$depends) > 1) {
-      column$id
-    }
-  }) |> unlist()
-
-  if (length(has_multiple_dep) > 0) {
-    cli::cli_abort(paste0("Detected multiple column dependencies for column: {has_multiple_dep} ",
-                          "in the {domain$id} dataset. Please fix them or remove them."))
   }
 
 }
