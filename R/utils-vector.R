@@ -167,30 +167,33 @@ check_unique_ids <- function(x) {
 
 #' Check that no forbidden column-to-column dependencies exist across domains
 #'
-#' Column dependencies are allowed only on row and parameters levels.
-#' Dependencies pointing directly to another column are considered invalid
-#' and will terminate execution with a descriptive error.
+#' Column dependencies are allowed only on rows and parameters levels.
+#' Dependencies pointing directly to another column or multiple records are considered
+#' invalid and will terminate execution with a descriptive error.
 #' @noRd
-check_column_dependencies <- function(mighty_domains) {
+check_column_dependencies <- function(domain) {
+  if (!length(domain)) {
+    return(domain)
+  }
 
-  all_column_ids <- lapply(mighty_domains, function(domain) {
+  flat_columns <- unlist(domain$columns)
+  declared_dependencies <- flat_columns[grepl("depends", names(flat_columns))]
+  forbidden_dependencies <- declared_dependencies[!grepl("rows|parameters", declared_dependencies, fixed = F)]
 
-    flattened_columns <- unlist(domain$columns)
-    local_column_ids <- flattened_columns[grepl("id$", names(flattened_columns))]
-    paste0(domain$id, ".", local_column_ids)
+  if (length(forbidden_dependencies) > 0) {
+    cli::cli_abort(paste0("Detected not allowed column to column dependencies: {forbidden_dependencies} ",
+                          "in the {domain$id} dataset. Please fix this dependency or remove it."))
+  }
+
+  has_multiple_dep <- lapply(domain$columns, function(column) {
+    if (length(column$depends) > 1) {
+      column$id
+    }
   }) |> unlist()
 
-  lapply(mighty_domains, function(domain) {
+  if (length(has_multiple_dep) > 0) {
+    cli::cli_abort(paste0("Detected multiple column dependencies for column: {has_multiple_dep} ",
+                          "in the {domain$id} dataset. Please fix them or remove them."))
+  }
 
-    flattened_columns <- unlist(domain$columns)
-    declared_dependencies <- flattened_columns[grepl("depends", names(flattened_columns))]
-    forbidden_dependencies <- intersect(declared_dependencies, all_column_ids)
-
-    if (length(forbidden_dependencies) > 0) {
-      cli::cli_abort(paste0("Detected not allowed column to column dependencies: {forbidden_dependencies}",
-                            "in {domain$id} dataset. Please fix this dependency or remove it."))
-    }
-  })
-
-  invisible(TRUE)
 }
