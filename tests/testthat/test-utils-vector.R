@@ -129,3 +129,51 @@ test_that("check_unique_ids()", {
   check_unique_ids(x) |>
     expect_error("Duplicate `id` entries found")
 })
+
+
+test_that("check_column_dependencies()", {
+  list() |>
+    check_column_dependencies() |>
+    expect_length(0L)
+
+  list(
+    list(id = "a", columns = "STUDYID"),
+    list(id = "b", x = "USUBJID")
+  ) |>
+    check_column_dependencies() |>
+    expect_no_condition()
+
+  list(
+    id = "XYZ",
+    columns = list(
+      list(id = "a", depends = "parameters.xyz"),
+      list(id = "b", depends = "rows.xyz"),
+      list(id = "c")
+    )
+  ) |> expect_no_condition()
+
+
+  list(
+    id = "XYZ",
+    columns = list(
+      list(id = "a", depends = c("parameters.xyz", "rows.xyz")),
+      list(id = "b"),
+      list(id = "c")
+    )
+  ) |>
+    check_column_dependencies() |>
+    expect_error(paste0("Detected multiple column dependencies for column: a in the XYZ dataset. ",
+                        "Please fix them or remove them."))
+
+  list(
+    id = "XYZ",
+    columns = list(
+      list(id = "a", depends = "parameters.xyz"),
+      list(id = "b", depends = ".abc"),
+      list(id = "c", depends = "XYZ.abc")
+    )
+  ) |>
+    check_column_dependencies() |>
+    expect_error()
+
+})
