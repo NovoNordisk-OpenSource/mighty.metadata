@@ -1,0 +1,154 @@
+---
+title: "ADR: documents metadata structure"
+date: "2026-05-19"
+author: "Giulia Pais"
+---
+
+|             |                                                                                              |
+|-------------|----------------------------------------------------------------------------------------------|
+| Package     | mighty.metadata                                                                              |
+| Status      | Waiting for approval                                                                         |
+| Version     | 0.1.0                                                                                        |
+| Description | ADR for defining the structure of documents metadata in compliance with mighty.toolbox needs |
+
+## Success criteria
+
+* `mighty.metadata` declares a json schema for documents metadata
+* The schema is compliant with `mighty.toolbox` needs for documents metadata
+* Documents can be correctly referenced in all supported levels for `define.xml` (domain, column, parameter)
+* `mighty.toolbox` is able to generate a `define.xml` using metadata created with `mighty.metadata` and referencing documents in the supported levels
+
+## Context
+
+Document references are shown in several places in `define.xml` as hyperlinks to external documents.
+We can have different types of documents:
+
+* Supplemental Documents: they are declared in the CST file as `SUPPDOC` and they are referenced at the very top of the `define.xml` file. 
+They are usually the "Analysis Reviewers guide protocol" and the "Statistical Analysis Plan".
+* Comments: they are rendered as hyperlinks in the "Documentation" column of the "Datasets" section (table-level comments) or in the "Origin / Source / Method / Comment" column
+of the individual domain tables (column or value level comments). They are declared in the CST file as `COMMENT`.
+* Methods: they are rendered as hyperlinks in the "Origin / Source / Method / Comment" column of the individual domain tables (column or value level methods).
+They represent programs on how a column (or a value) was derived, hence they are NOT allowed for columns/values whose origin is not "Derived". 
+They are declared in the CST file as `METHOD`.
+
+*A note for comment document references*: at the moment, `mighty.toolbox` actively discards document references for `COMMENT` type if a comment is not set in the corresponding table/column/value.
+
+## Decisions
+
+Documents metadata belong in their own yaml file as a list of documents with their attributes. Documents can then be referenced one or multiple times in domain metadata.
+The schema for documents metadata is defined in `inst/schema/documents.json` and it represents a list, where a single document is defined as follows:
+
+```json
+{
+    "id": "unique_id_for_the_document",
+    "title": "title of the document",
+    "doctype": "suppdoc" | "comment" | "method",
+    "href": "./path/to/document.*"
+}
+```
+
+Then we can reference documents in the domain metadata as follows:
+
+```yaml
+id: ADVS
+label: Vital Signs Analysis Dataset
+class: BASIC DATA STRUCTURE
+structure: One record per vital sign parameter, per visit, per subject
+keys: [USUBJID, PARAMCD, AVISITN]
+documents:
+    - id: "unique_id_for_the_document" # Domain/table level reference
+
+columns:
+  - id: STUDYID
+    label: Study Identifier
+    method: VS.STUDYID
+    core: Req
+    documents:
+      - id: "unique_id_for_the_document" # Column level reference
+        page: 5 # When referencing pdf pages, optional
+
+  [...]
+
+parameters:
+  - id: BMI
+    label: Body Mass Index (kg/m^2)
+    columns:
+      - id: AVAL
+        method: Derived from height and weight
+        documents:
+          - id: "unique_id_for_the_document" # Parameter level reference, usually a method
+```
+
+In this way, the same document can be referenced in different places without the need to duplicate the metadata (e.g. same pdf file, different pages).
+
+### Strategies for unique ids
+
+I would not enforce a specific format for unique ids, just validate that they are unique across the documents metadata file.
+Unique ids generation can be handled within CST conversion in internal packages or users can provide meaningful ids following their own conventions (e.g. "SUPPDOC001", "METHOD001", etc).
+
+### Validation and checks
+
+* `mighty.metadata` should check that documents of type `METHOD` are not referenced in columns/values whose origin is not "Derived"
+* `mighty.metadata` should check that a comment is set for tables/columns/values referencing a `COMMENT` type document
+* The `documents` entry should be defined in `inst/schema/adam.json` (non required).
+
+### Classes
+
+We will define an S7 class for the list of documents. The class will have methods to add, remove and edit documents in the list, as well as to validate the documents metadata against the defined schema. 
+
+## Consequences
+
+### Changes to current content
+
+* The `pdfpagereftype` attribute in the CST file has been removed from the current implementation, since it is only set when a page of a pdf document is referenced - hence it will be inferred automatically from `mighty.toolbox`
+
+## Alternatives Considered
+
+Instead of a separate yaml file for documents metadata, we could have added the metadata directly in the domain yaml files.
+Pros:
+* No need to maintain a separate file and schema for documents metadata
+* All metadata in one place
+Cons:
+* Duplication of metadata if the same document is referenced in different places (e.g. same pdf file, different pages)
+* Less clear structure of the metadata, as we would have a mixture of domain metadata and documents metadata in the same file, which can be quite long and complex
+
+Using title of the document directly instead of unique ids for referencing documents in domain metadata:
+Pros:
+* No need to maintain unique ids for documents, which can be an additional step for users and a source of errors if not handled properly
+Cons:
+* Validating uniqueness of titles can be tricky (trailing spaces, capital letters, special characters, etc) and can lead to errors if not handled properly
+* Titles are displayed in the `define.html` file and they can't contain some special characters (e.g. "'") - they need to be validated and sanitized, no need to do this with ids
+
+On `COMMENT` type document references, do not enforce the presence of a comment in the corresponding table/column/value:
+* After discussion with `mighty.toolbox` team, it is clear this validation is needed so it will be included
+
+## Implementation Details
+
+* Documents will be defined in a separate `documents.yaml` file following the defined schema
+* The schema will be defined in `inst/schema/documents.json` and it will be used for validation when creating the `documents.yaml` file
+* The `mighty.metadata` package will have a function to read the `documents.yaml` file and create the corresponding S7 objects
+* The methods for adding, removing and editing documents will follow the same pattern as the ones already implemented in the package and likely put in a file `y_documents.R` - alternatively we
+can have a single `documents.R` file for both classes declaration and methods
+
+## Testing Strategy
+
+* Test in `mighty.toolbox` using `mighty.metadata` metadata
+* (If possible) CI in `mighty.metadata` informing about breaking `mighty.toolbox`
+* Unit and/or acceptance tests in `mighty.metadata`
+
+## Risks
+
+* Schema for domains needs to accomodate the new fields for referencing documents, they will be marked as optional but code in `mighty.toolbox` needs adapting, verify it doesn't cause breaking issues
+* If we decide to validate the presence of comments for `COMMENT` type document references, it might cause issues with existing metadata that doesn't have comments set for all document references - mitigation: we can make this validation a warning instead of an error, or we can just not implement it at all and let users figure it out if they want to use that feature or not
+
+
+## Compliance Considerations
+
+* All development on GitHub using Pull Requests for merges to main branch, and standard ATMOS branch protection rules.
+* R CMD Check is required to pass on all relevant platforms before a PR is approved.
+
+## References
+
+* [mighty.metadata](https://github.com/NovoNordisk-OpenSource/mighty.metadata)
+* mighty.toolbox (internal package)
+* [r.workflows](https://github.com/NovoNordisk-OpenSource/r.workflows)

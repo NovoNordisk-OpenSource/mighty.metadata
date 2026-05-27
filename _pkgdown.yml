@@ -38,3 +38,4 @@ articles:
   contents:
   - articles/adr
   - articles/adr-mighty_toolbox_integration
+  - articles/adr-documents_metadata
