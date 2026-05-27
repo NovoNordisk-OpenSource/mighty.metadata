@@ -91,8 +91,6 @@ construct_mighty_study <- function(path, populate = FALSE) {
 
   entries <- lapply(X = entries, FUN = mighty_domain)
 
-  check_column_dependencies(entries)
-
   names(entries) <- vapply(
     X = entries,
     FUN = \(x) x$id,
