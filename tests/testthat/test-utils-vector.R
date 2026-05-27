@@ -156,14 +156,14 @@ test_that("check_column_dependencies()", {
   list(
     id = "XYZ",
     columns = list(
-      list(id = "a", depends = c("parameters.xyz", "rows.xyz")),
+      list(id = "a", depends = c("parameters.xyz", ".xyz")),
       list(id = "b"),
       list(id = "c")
     )
   ) |>
     check_column_dependencies() |>
-    expect_error(paste0("Detected multiple column dependencies for column: a in the XYZ dataset. ",
-                        "Please fix them or remove them."))
+    expect_error(paste0("Detected not allowed column dependencies: .xyz in the XYZ dataset. ",
+                        "Please fix this dependency or remove it."))
 
   list(
     id = "XYZ",
@@ -174,6 +174,6 @@ test_that("check_column_dependencies()", {
     )
   ) |>
     check_column_dependencies() |>
-    expect_error()
-
+    expect_error(paste0("Detected not allowed column dependencies: .xyz in the XYZ dataset. ",
+                        "Please fix this dependency or remove it."))
 })
