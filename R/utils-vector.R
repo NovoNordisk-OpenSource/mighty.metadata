@@ -165,7 +165,7 @@ check_unique_ids <- function(x) {
   }
 }
 
-#' Check that no forbidden column-to-column dependencies exist across domains
+#' Check that no forbidden column-to-column dependencies exist in domain
 #'
 #' Column dependencies are allowed only on rows and parameters levels.
 #' Dependencies pointing directly to another column or multiple records are considered
