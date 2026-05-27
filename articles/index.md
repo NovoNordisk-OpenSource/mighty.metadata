@@ -15,3 +15,5 @@
   scope](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr.md):
 - [ADR: mighty.toolbox
   integration](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-mighty_toolbox_integration.md):
+- [ADR: documents metadata
+  structure](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-documents_metadata.md):
