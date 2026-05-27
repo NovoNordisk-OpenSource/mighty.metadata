@@ -174,6 +174,6 @@ test_that("check_column_dependencies()", {
     )
   ) |>
     check_column_dependencies() |>
-    expect_error(paste0("Detected not allowed column dependencies: .xyz in the XYZ dataset. ",
+    expect_error(paste0("Detected not allowed column dependencies: .abc and XYZ.abc in the XYZ dataset. ",
                         "Please fix this dependency or remove it."))
 })
