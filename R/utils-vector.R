@@ -181,8 +181,11 @@ check_column_dependencies <- function(domain) {
   forbidden_dependencies <- declared_dependencies[!grepl("^(rows|parameters)\\.", declared_dependencies)]
 
   if (length(forbidden_dependencies) > 0) {
-    cli::cli_abort(paste0("Detected not allowed column dependencies: {forbidden_dependencies} ",
-                          "in the {domain$id} dataset. Please fix this dependency or remove it."))
+    cli::cli_abort(c(
+      "Column dependencies must reference {.field rows} or {.field parameters} only.",
+      "x" = "Found disallowed dependencies: {.val {forbidden_dependencies}}",
+      "i" = "Domain: {.field {domain$id}}"
+    ))
   }
 
 }
