@@ -7,3 +7,8 @@
   `remove_*()`, `update_*()`, `select_*()`, `move_*()`.
 * Study-level operations: `populate_core()`, `populate_sparse()`, and
   `resolve_includes()`.
+
+# mighty.metadata (development version)
+
+* added validation for column dependencies in `mighty_domain()` - related with issue #12 
+* added validation for naming pattern for mighty_study() - related with issue #2 

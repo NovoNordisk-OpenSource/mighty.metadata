@@ -176,16 +176,27 @@ check_column_dependencies <- function(domain) {
     return(domain)
   }
 
-  flat_columns <- unlist(domain$columns)
-  declared_dependencies <- flat_columns[grepl("depends", names(flat_columns))]
-  forbidden_dependencies <- declared_dependencies[!grepl("^(rows|parameters)\\.", declared_dependencies)]
+  col_ids <- vapply(domain$columns, function(col) col$id, character(1))
 
-  if (length(forbidden_dependencies) > 0) {
-    cli::cli_abort(c(
-      "Column dependencies must reference {.field rows} or {.field parameters} only.",
-      "x" = "Found disallowed dependencies: {.val {forbidden_dependencies}}",
-      "i" = "Domain: {.field {domain$id}}"
-    ))
-  }
+  bad_deps <- lapply(domain$columns, function(col) {
+    col$depends[!grepl("^(rows|parameters)\\.", col$depends)]
+  })
 
+  bad_by_col <- Filter(length, setNames(bad_deps, col_ids))
+
+  if (!length(bad_by_col)) {
+    return(domain)
+
+  bullets <- vapply(names(bad_by_col), function(col_id) {
+    cli::format_inline(
+      "Column {.field {col_id}}: {.val {bad_by_col[[col_id]]}}"
+    )
+  }, character(1))
+  names(bullets) <- rep("x", length(bullets))
+
+  cli::cli_abort(c(
+    "Column dependencies must reference {.field rows} or {.field parameters} only. The following are malformed:",
+    bullets,
+    "i" = "Domain: {.field {domain$id}}"
+  ))
 }

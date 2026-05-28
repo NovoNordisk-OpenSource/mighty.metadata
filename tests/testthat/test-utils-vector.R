@@ -134,7 +134,7 @@ test_that("check_unique_ids()", {
 test_that("check_column_dependencies()", {
   list() |>
     check_column_dependencies() |>
-    expect_length(0L)
+    expect_equal(list())
 
   list(
     list(id = "a", columns = "STUDYID"),
@@ -169,7 +169,7 @@ test_that("check_column_dependencies()", {
     columns = list(
       list(id = "a", depends = "parameters.xyz"),
       list(id = "b", depends = ".abc"),
-      list(id = "c", depends = "XYZ.abc")
+      list(id = "c", depends = "XYZ.abc", depends_var = "abc")
     )
   ) |>
     check_column_dependencies() |>
