@@ -178,7 +178,7 @@ check_column_dependencies <- function(domain) {
 
   flat_columns <- unlist(domain$columns)
   declared_dependencies <- flat_columns[grepl("depends", names(flat_columns))]
-  forbidden_dependencies <- declared_dependencies[!grepl("rows|parameters", declared_dependencies, fixed = FALSE)]
+  forbidden_dependencies <- declared_dependencies[!grepl("^(rows|parameters)\\.", declared_dependencies)]
 
   if (length(forbidden_dependencies) > 0) {
     cli::cli_abort(paste0("Detected not allowed column dependencies: {forbidden_dependencies} ",
