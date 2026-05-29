@@ -186,6 +186,7 @@ check_column_dependencies <- function(domain) {
 
   if (!length(bad_by_col)) {
     return(domain)
+  }
 
   bullets <- vapply(names(bad_by_col), function(col_id) {
     cli::format_inline(
@@ -199,4 +200,5 @@ check_column_dependencies <- function(domain) {
     bullets,
     "i" = "Domain: {.field {domain$id}}"
   ))
+
 }

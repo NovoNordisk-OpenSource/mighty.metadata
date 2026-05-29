@@ -51,8 +51,8 @@ construct_mighty_domain <- function(file) {
 
 #' @noRd
 validate_mighty_domain <- function(self) {
-  check_unique_ids(self)
   check_column_dependencies(self)
+  check_unique_ids(self)
 }
 
 #' @rdname mighty_domain
