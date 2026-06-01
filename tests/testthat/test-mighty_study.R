@@ -43,12 +43,11 @@ test_that("mighty_study()", {
   S7::prop_names(study) |>
     expect_equal(c("mighty", "study", "path"))
 
+  expect_true(S7::S7_inherits(study@mighty, mighty_config))
   expect_equal(
-    object = study@mighty,
+    object = study@mighty$external_data,
     expected = list(
-      external_data = list(
-        list(id = "DM", keys = c("STUDYID", "USUBJID"))
-      )
+      list(id = "DM", keys = c("STUDYID", "USUBJID"))
     )
   )
 

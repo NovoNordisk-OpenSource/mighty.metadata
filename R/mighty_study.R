@@ -18,7 +18,7 @@
 #'   \item{`@study`}{Study-level properties from `_study.yml`, or empty list
 #'     if no properties file exists.}
 #'   \item{`@mighty`}{Mighty framework configuration from `_mighty.yml`, or empty list
-#'     if no configuration file exists.}
+#'     if no configuration file exists (NULL).}
 #'   \item{`@path`}{The source directory path as `character(1)`.}
 #' }
 #'
@@ -66,18 +66,17 @@ NULL
 
 #' @noRd
 construct_mighty_study <- function(path, populate = FALSE) {
-  mighty_schema <- system.file(
-    "schema",
-    "mighty.json",
-    package = "mighty.metadata"
-  )
   study_schema <- system.file(
     "schema",
     "study.json",
     package = "mighty.metadata"
   )
 
-  mighty_file <- find_yml(path = path, name = "_mighty", schema = mighty_schema)
+  mighty_file <- find_yml(
+    path = path,
+    name = "_mighty",
+    schema = system.file("schema", "mighty.json", package = "mighty.metadata")
+  )
   study_file <- find_yml(path = path, name = "_study", schema = study_schema)
 
   entries <- list.files(
@@ -97,9 +96,11 @@ construct_mighty_study <- function(path, populate = FALSE) {
     FUN.VALUE = character(1)
   )
 
+  mighty <- if (is.null(mighty_file)) NULL else mighty_config(path = path)
+
   study <- S7::new_object(
     .parent = entries,
-    mighty = read_yml(file = mighty_file),
+    mighty = mighty,
     study = read_yml(file = study_file),
     path = path
   )
@@ -122,20 +123,6 @@ validate_datasets <- function(files) {
                           "{.list {basename(files_names)}}", " in (path: {.path {unique(dirname(files_names))}}). ",
                           "Please change the file name or remove file from specifications directory."))
   }
-}
-
-#' @noRd
-validate_mighty <- function(value) {
-  if (length(value) > 0) {
-    schema <- system.file(
-      "schema",
-      "mighty.json",
-      package = "mighty.metadata"
-    )
-    S7schema::validate_list(value, schema)
-    check_unique_ids(value)
-  }
-  NULL
 }
 
 #' @noRd
@@ -168,9 +155,12 @@ mighty_study <- S7::new_class(
   parent = S7::class_list,
   properties = list(
     mighty = S7::new_property(
-      class = S7::class_list,
+      class = S7::class_any,
       validator = \(value) {
-        validate_mighty(value = value)
+        if (!is.null(value) && !S7::S7_inherits(value, mighty_config)) {
+          return("@mighty must be a mighty_config object or NULL")
+        }
+        NULL
       }
     ),
     study = S7::new_property(
@@ -209,8 +199,8 @@ print_mighty_study <- function(x, ...) {
   )
 
   mighty <- NULL
-  if (length(x@mighty)) {
-    mighty <- "@ mighty: {.code {names(x@mighty)}}"
+  if (!is.null(x@mighty)) {
+    mighty <- "@ mighty: {.cls {class(x@mighty)[[1]]}}"
   }
 
   study <- NULL

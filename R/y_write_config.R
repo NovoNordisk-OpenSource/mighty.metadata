@@ -1,3 +1,19 @@
+#' @section Write Config:
+#' Use `write_config()` to serialize a `mighty_config()` object back to a
+#' `_mighty.yml` file.
+#'
+#' Supply `path` to write to a specific directory; defaults to the directory
+#' the object was loaded from.
+#' @name mighty_config
+#' @rdname mighty_config
+S7::method(write_config, mighty_config) <- function(x, path = NULL) {
+  if (is.null(path)) {
+    path <- dirname(x@file)
+  }
+  write_yml(x = unclass(x), path = path, name = "_mighty")
+  invisible(x)
+}
+
 #' @section Write Study Metadata:
 #' Use `write_config()` to serialize a `mighty_study()` object back to YAML
 #' files. Each domain is written as a separate file, plus
@@ -18,8 +34,8 @@ write_mighty_study <- function(study, path) {
     path <- study@path
   }
 
-  if (length(study@mighty)) {
-    write_yml(x = study@mighty, path = path, name = "_mighty")
+  if (!is.null(study@mighty)) {
+    write_config(x = study@mighty, path = path)
   }
   if (length(study@study)) {
     write_yml(x = study@study, path = path, name = "_study")
