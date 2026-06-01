@@ -1,8 +1,8 @@
 #' Mighty Config
 #'
 #' @description
-#' `mighty_config()` provides a dedicated S7 class for the `_mighty.yml`
-#' configuration file used in the `{mighty}` framework.
+#' `mighty_config()` provides a robust way of working with the `_mighty.yml`
+#' configuration file in the `{mighty}` framework.
 #'
 #' A new object is initialized by supplying a directory path containing a
 #' `_mighty.yml` file. The file is automatically validated against the
@@ -16,8 +16,18 @@
 #'   file.
 #'
 #' @return A `mighty_config` S7 object extending [S7schema::S7schema].
-#'   The underlying list contains the parsed and validated YAML configuration
-#'   including `external_data`.
+#' \describe{
+#'   \item{`external_data`}{A list of external data source specifications,
+#'     each with an `id` and `keys` field.}
+#' }
+#'
+#' @details
+#' The `_mighty.yml` file is validated against the `mighty.json` schema on
+#' load. The file must contain an `external_data` array declaring the primary
+#' keys of any datasets external to the ADaM study (e.g. SDTM or reference
+#' datasets) that ADaM domain specifications may depend on.
+#'
+#' @seealso [mighty_study], [mighty_domain], [write_config()]
 #'
 #' @examples
 #' x <- mighty_config(
@@ -29,6 +39,10 @@
 #'
 #' # Underlying object is a `list`
 #' str(x)
+#'
+#' # Write back to a directory
+#' tmp <- tempdir()
+#' write_config(x, path = tmp)
 #'
 #' @name mighty_config
 NULL
