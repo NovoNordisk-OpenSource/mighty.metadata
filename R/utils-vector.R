@@ -172,6 +172,7 @@ check_unique_ids <- function(x) {
 #' Column dependencies are allowed only on rows and parameters levels.
 #' Dependencies pointing directly to another column or multiple records are considered
 #' invalid and will terminate execution with a descriptive error.
+#' @importFrom stats setNames
 #' @noRd
 check_column_dependencies <- function(domain) {
   if (!length(domain)) {
