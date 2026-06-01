@@ -7,11 +7,10 @@
 #' @name mighty_config
 #' @rdname mighty_config
 S7::method(write_config, mighty_config) <- function(x, path = NULL) {
-  if (is.null(path)) {
-    path <- dirname(x@file)
+  if (!is.null(path)) {
+    path <- match_yml(path = path, name = "_mighty")
   }
-  write_yml(x = unclass(x), path = path, name = "_mighty")
-  invisible(x)
+  S7::method(write_config, S7schema::S7schema)(x, path = path)
 }
 
 #' @section Write Study Metadata:
