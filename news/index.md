@@ -17,3 +17,13 @@ CRAN release: 2026-05-15
   [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md),
   and
   [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md).
+
+## mighty.metadata (development version)
+
+- added validation for column dependencies in
+  [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md) -
+  related with issue
+  [\#12](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/12)
+- added validation for naming pattern for mighty_study() - related with
+  issue
+  [\#2](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/2)
