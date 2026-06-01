@@ -129,3 +129,49 @@ test_that("check_unique_ids()", {
   check_unique_ids(x) |>
     expect_error("Duplicate `id` entries found")
 })
+
+
+test_that("check_column_dependencies()", {
+  list() |>
+    check_column_dependencies() |>
+    expect_equal(list())
+
+  list(
+    list(id = "a", columns = "STUDYID"),
+    list(id = "b", x = "USUBJID")
+  ) |>
+    check_column_dependencies() |>
+    expect_no_condition()
+
+  list(
+    id = "XYZ",
+    columns = list(
+      list(id = "a", depends = "parameters.xyz"),
+      list(id = "b", depends = "rows.xyz"),
+      list(id = "c")
+    )
+  ) |> expect_no_condition()
+
+
+  list(
+    id = "XYZ",
+    columns = list(
+      list(id = "a", depends = c("parameters.xyz", ".xyz")),
+      list(id = "b"),
+      list(id = "c")
+    )
+  ) |>
+    check_column_dependencies() |>
+    expect_error("Column dependencies must reference")
+
+  list(
+    id = "XYZ",
+    columns = list(
+      list(id = "a", depends = "parameters.xyz"),
+      list(id = "b", depends = ".abc"),
+      list(id = "c", depends = "XYZ.abc", depends_var = "abc")
+    )
+  ) |>
+    check_column_dependencies() |>
+    expect_error("Column dependencies must reference")
+})
