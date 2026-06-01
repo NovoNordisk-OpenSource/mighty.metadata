@@ -158,12 +158,14 @@ check_unique_ids <- function(x) {
   duplicates <- unique(flatter[duplicated(flatter)])
   names(duplicates) <- rep("x", times = length(duplicates))
 
-  if (length(duplicates)) {
-    cli::cli_abort(
-      c("Duplicate `id` entries found:", duplicates)
-    )
+  if (!length(duplicates)) {
+    return(x)
   }
+  cli::cli_abort(
+    c("Duplicate `id` entries found:", duplicates)
+  )
 }
+
 
 #' Check that no forbidden column-to-column dependencies exist in domain
 #'
@@ -188,11 +190,15 @@ check_column_dependencies <- function(domain) {
     return(domain)
   }
 
-  bullets <- vapply(names(bad_by_col), function(col_id) {
-    cli::format_inline(
-      "Column {.field {col_id}}: {.val {bad_by_col[[col_id]]}}"
-    )
-  }, character(1))
+  bullets <- vapply(
+    names(bad_by_col),
+    function(col_id) {
+      cli::format_inline(
+        "Column {.field {col_id}}: {.val {bad_by_col[[col_id]]}}"
+      )
+    },
+    character(1)
+  )
   names(bullets) <- rep("x", length(bullets))
 
   cli::cli_abort(c(
@@ -200,5 +206,4 @@ check_column_dependencies <- function(domain) {
     bullets,
     "i" = "Domain: {.field {domain$id}}"
   ))
-
 }
