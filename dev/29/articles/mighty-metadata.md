@@ -306,7 +306,7 @@ str(study@mighty)
 #>   .. ..$ keys: chr [1:2] "STUDYID" "USUBJID"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55e41f49f478> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55e9da4990e0> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 ```
 
