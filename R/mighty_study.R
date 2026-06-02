@@ -17,8 +17,8 @@
 #'     Access via e.g. `study$adsl`.}
 #'   \item{`@study`}{Study-level properties from `_study.yml`, or empty list
 #'     if no properties file exists.}
-#'   \item{`@mighty`}{Mighty framework configuration from `_mighty.yml`, or empty list
-#'     if no configuration file exists.}
+#'   \item{`@mighty`}{A `mighty_config` object loaded from `_mighty.yml`, or
+#'     `NULL` if no configuration file exists.}
 #'   \item{`@path`}{The source directory path as `character(1)`.}
 #' }
 #'
@@ -66,8 +66,16 @@ NULL
 
 #' @noRd
 construct_mighty_study <- function(path, populate = FALSE) {
-  mighty_schema <- system.file("schema", "mighty.json", package = "mighty.metadata")
-  study_schema <- system.file("schema", "study.json", package = "mighty.metadata")
+  mighty_schema <- system.file(
+    "schema",
+    "mighty.json",
+    package = "mighty.metadata"
+  )
+  study_schema <- system.file(
+    "schema",
+    "study.json",
+    package = "mighty.metadata"
+  )
 
   mighty_file <- find_yml(path = path, name = "_mighty", schema = mighty_schema)
   study_file <- find_yml(path = path, name = "_study", schema = study_schema)
@@ -112,9 +120,12 @@ validate_datasets <- function(files) {
   files_names <- files[!startsWith(toupper(basename(files)), "AD")]
 
   if (length(files_names) > 0) {
-    cli::cli_abort(paste0("Incorrect file name detected: ",
-                          "{.list {basename(files_names)}}", " in (path: {.path {unique(dirname(files_names))}}). ",
-                          "Please change the file name or remove file from specifications directory."))
+    cli::cli_abort(paste0(
+      "Incorrect file name detected: ",
+      "{.list {basename(files_names)}}",
+      " in (path: {.path {unique(dirname(files_names))}}). ",
+      "Please change the file name or remove file from specifications directory."
+    ))
   }
 }
 
