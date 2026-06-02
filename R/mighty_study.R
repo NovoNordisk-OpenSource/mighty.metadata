@@ -159,13 +159,7 @@ mighty_study <- S7::new_class(
   parent = S7::class_list,
   properties = list(
     mighty = S7::new_property(
-      class = S7::class_any,
-      validator = \(value) {
-        if (!is.null(value) && !S7::S7_inherits(value, mighty_config)) {
-          return("@mighty must be a mighty_config object or NULL")
-        }
-        NULL
-      }
+      class = NULL | mighty_config
     ),
     study = S7::new_property(
       class = S7::class_list,

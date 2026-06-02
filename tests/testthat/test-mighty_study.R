@@ -72,6 +72,16 @@ test_that("mighty_study()", {
   )
 })
 
+test_that("@mighty accepts NULL and rejects invalid types", {
+  study <- test_path("test_study") |> mighty_study()
+
+  study@mighty <- NULL
+  expect_null(study@mighty)
+
+  expect_error(study@mighty <- "not a mighty_config")
+  expect_error(study@mighty <- list(external_data = list()))
+})
+
 test_that("validate_path() errors when @path set to non-existent directory", {
   study <- test_path("test_study") |>
     mighty_study()
