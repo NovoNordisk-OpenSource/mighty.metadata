@@ -80,6 +80,7 @@ x <- mighty_config(
 print(x)
 #> <mighty.metadata::mighty_config>
 #> External data: 3 sources (`DM`, `VS`, and `AE`)
+#> Repos: 2 (`NovoNordisk-OpenSource/mighty.standards/components@main` and `.`)
 
 # Underlying object is a `list`
 str(x)
@@ -97,7 +98,7 @@ str(x)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55c5829dae70> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55dcfa2d0fb8> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 
 # Write back to a directory
