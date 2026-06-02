@@ -30,6 +30,8 @@ Authors:
 
 - Giulia Pais <egzp@novonordisk.com>
 
+- Michael Hedegaard Thomsen <mhzt@novonordisk.com>
+
 Other contributors:
 
 - Novo Nordisk A/S \[copyright holder\]

@@ -15,7 +15,7 @@ mighty framework configuration."><meta property="og:image" content="https://novo
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,8 +91,8 @@ Access via e.g. <code>study$adsl</code>.</p></dd>
 if no properties file exists.</p></dd>
 
 <dt><code>@mighty</code></dt>
-<dd><p>Mighty framework configuration from <code>_mighty.yml</code>, or empty list
-if no configuration file exists.</p></dd>
+<dd><p>A <code>mighty_config</code> object loaded from <code>_mighty.yml</code>, or
+<code>NULL</code> if no configuration file exists.</p></dd>
 
 <dt><code>@path</code></dt>
 <dd><p>The source directory path as <code>character(1)</code>.</p></dd>
@@ -150,6 +150,7 @@ files. Each domain is written as a separate file, plus
 <span class="r-in"><span><span class="va">study</span><span class="op">@</span><span class="va">mighty</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">&lt;mighty.metadata::mighty_config&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> External data: 3 sources (`DM`, `VS`, and `AE`)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Repos: 2 (`NovoNordisk-OpenSource/mighty.standards/components@main` and `.`)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Load and populate in one step</span></span></span>
 <span class="r-in"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu">mighty_study</span><span class="op">(</span></span></span>

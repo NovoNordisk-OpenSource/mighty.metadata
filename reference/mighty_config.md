@@ -37,12 +37,22 @@ A `mighty_config` S7 object extending
   A list of external data source specifications, each with an `id` and
   `keys` field.
 
+- `repos`:
+
+  Optional character vector of component repository locations, or `NULL`
+  if not specified.
+
 ## Details
 
 The `_mighty.yml` file is validated against the `mighty.json` schema on
 load. The file must contain an `external_data` array declaring the
 primary keys of any datasets external to the ADaM study (e.g. SDTM or
 reference datasets) that ADaM domain specifications may depend on.
+
+The optional `repos` field specifies where `mighty.component` should
+look for shared components. Each entry is either a local path (e.g.
+`"."`) or a GitHub reference in `owner/repo/subdir@ref` format (e.g.
+`"NovoNordisk-OpenSource/mighty.standards/components@main"`).
 
 ## Write Config
 
@@ -70,10 +80,11 @@ x <- mighty_config(
 print(x)
 #> <mighty.metadata::mighty_config>
 #> External data: 3 sources (`DM`, `VS`, and `AE`)
+#> Repos: 2 (`NovoNordisk-OpenSource/mighty.standards/components@main` and `.`)
 
 # Underlying object is a `list`
 str(x)
-#> <mighty.metadata::mighty_config> List of 1
+#> <mighty.metadata::mighty_config> List of 2
 #>  $ external_data:List of 3
 #>   ..$ :List of 2
 #>   .. ..$ id  : chr "DM"
@@ -84,9 +95,10 @@ str(x)
 #>   ..$ :List of 2
 #>   .. ..$ id  : chr "AE"
 #>   .. ..$ keys: chr [1:2] "STUDYID" "USUBJID"
+#>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55de842f9200> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55eacc338138> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 
 # Write back to a directory

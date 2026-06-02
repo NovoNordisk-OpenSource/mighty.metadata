@@ -293,7 +293,7 @@ str(study@study)
 #> List of 1
 #>  $ study_id: chr "example_study"
 str(study@mighty)
-#> <mighty.metadata::mighty_config> List of 1
+#> <mighty.metadata::mighty_config> List of 2
 #>  $ external_data:List of 3
 #>   ..$ :List of 2
 #>   .. ..$ id  : chr "DM"
@@ -304,9 +304,10 @@ str(study@mighty)
 #>   ..$ :List of 2
 #>   .. ..$ id  : chr "AE"
 #>   .. ..$ keys: chr [1:2] "STUDYID" "USUBJID"
+#>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x563d746859a8> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55bfb1386f68> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 ```
 

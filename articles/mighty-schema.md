@@ -21,9 +21,10 @@ Schema for mighty framework configuration in the mightyverse
 
 ### Properties
 
-| Name | Description | Type | Unique Items | Items | Required |
-|:---|:---|:---|:---|:---|:---|
-| external_data | External data sources referenced by the study | array | Yes | [external_data_source](#external_data_source) | Yes |
+| Name | Description | Type | Unique Items | Items | One Of | Required |
+|:---|:---|:---|:---|:---|:---|:---|
+| external_data | External data sources referenced by the study | array | Yes | [external_data_source](#external_data_source) | NULL | Yes |
+| repos | Component repositories to search for ADaM code components, as local paths or <owner/repo/subdir@ref> strings |  |  | NULL | array , TRUE , string, 1 , string, 1 | No |
 
 ## Definitions
 

@@ -44,7 +44,7 @@ A `mighty_study` S7 object extending `list`:
 
 - `@mighty`:
 
-  Mighty framework configuration from `_mighty.yml`, or empty list if no
+  A `mighty_config` object loaded from `_mighty.yml`, or `NULL` if no
   configuration file exists.
 
 - `@path`:
@@ -116,6 +116,7 @@ study@study
 study@mighty
 #> <mighty.metadata::mighty_config>
 #> External data: 3 sources (`DM`, `VS`, and `AE`)
+#> Repos: 2 (`NovoNordisk-OpenSource/mighty.standards/components@main` and `.`)
 
 # Load and populate in one step
 study <- mighty_study(
