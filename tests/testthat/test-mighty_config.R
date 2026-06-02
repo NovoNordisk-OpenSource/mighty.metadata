@@ -28,7 +28,7 @@ test_that("mighty_config errors on missing _mighty.yml", {
 test_that("mighty_config errors on invalid schema", {
   tmp <- withr::local_tempdir()
   writeLines("not_valid_field: true", file.path(tmp, "_mighty.yml"))
-  expect_error(mighty_config(path = tmp))
+  expect_error(mighty_config(path = tmp), regexp = "external_data")
 })
 
 test_that("mighty_config write_config round-trips", {
