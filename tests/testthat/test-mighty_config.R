@@ -20,6 +20,17 @@ test_that("mighty_config works", {
     )
 })
 
+test_that("mighty_config errors on duplicate external_data ids", {
+  tmp <- withr::local_tempdir()
+  writeLines(
+    c("external_data:",
+      "  - id: DM", "    keys: USUBJID",
+      "  - id: DM", "    keys: STUDYID"),
+    file.path(tmp, "_mighty.yml")
+  )
+  expect_error(mighty_config(path = tmp), regexp = "Duplicate")
+})
+
 test_that("mighty_config errors on missing _mighty.yml", {
   tmp <- withr::local_tempdir()
   expect_error(mighty_config(path = tmp))

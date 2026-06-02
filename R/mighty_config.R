@@ -60,12 +60,22 @@ construct_mighty_config <- function(path) {
   )
 }
 
+#' @noRd
+validate_mighty_config <- function(self) {
+  self |>
+    check_unique_ids()
+  return(NULL)
+}
+
 #' @rdname mighty_config
 #' @export
 mighty_config <- S7::new_class(
   name = "mighty_config",
   parent = S7schema::S7schema,
-  constructor = construct_mighty_config
+  constructor = construct_mighty_config,
+  validator = function(self) {
+    validate_mighty_config(self)
+  }
 )
 
 #' @noRd
