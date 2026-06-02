@@ -10,7 +10,7 @@ S7::method(write_config, mighty_config) <- function(x, path = NULL) {
   if (!is.null(path)) {
     path <- match_yml(path = path, name = "_mighty")
   }
-  S7::method(write_config, S7schema::S7schema)(x, path = path)
+  write_config(S7::super(x, to = S7schema::S7schema), path = path)
 }
 
 #' @section Write Study Metadata:
