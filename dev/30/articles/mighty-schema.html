@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,14 +103,15 @@ framework. The file structure is defined by a <a href="https://json-schema.org" 
 <div class="section level3">
 <h3 id="properties">Properties<a class="anchor" aria-label="anchor" href="#properties"></a>
 </h3>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
-<col width="8%">
-<col width="62%">
-<col width="3%">
-<col width="7%">
-<col width="12%">
-<col width="5%">
+<col width="6%">
+<col width="50%">
+<col width="2%">
+<col width="6%">
+<col width="9%">
+<col width="19%">
+<col width="4%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Name</th>
@@ -118,6 +119,7 @@ framework. The file structure is defined by a <a href="https://json-schema.org" 
 <th align="left">Type</th>
 <th align="left">Unique Items</th>
 <th align="left">Items</th>
+<th align="left">One Of</th>
 <th align="left">Required</th>
 </tr></thead>
 <tbody>
@@ -127,15 +129,17 @@ framework. The file structure is defined by a <a href="https://json-schema.org" 
 <td align="left">array</td>
 <td align="left">Yes</td>
 <td align="left"><a href="#external_data_source">external_data_source</a></td>
+<td align="left">NULL</td>
 <td align="left">Yes</td>
 </tr>
 <tr class="even">
 <td align="left">repos</td>
 <td align="left">Component repositories to search for ADaM code
 components, as local paths or <a href="mailto:owner/repo/subdir@ref" class="email">owner/repo/subdir@ref</a> strings</td>
-<td align="left">array</td>
-<td align="left">Yes</td>
-<td align="left">string, 1</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">NULL</td>
+<td align="left">array , TRUE , string, 1 , string, 1</td>
 <td align="left">No</td>
 </tr>
 </tbody>
@@ -249,7 +253,7 @@ components, as local paths or <a href="mailto:owner/repo/subdir@ref" class="emai
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Aksel Thomsen, Ari Siggaard Knoph, Matthew Phelps, Giulia Pais.</p>
+  <p>Developed by Aksel Thomsen, Ari Siggaard Knoph, Matthew Phelps, Giulia Pais, Michael Hedegaard Thomsen.</p>
 </div>
 
 <div class="pkgdown-footer-right">
