@@ -33,7 +33,7 @@ test_that("write_config() roundtrip is consistent", {
   roundtrip <- mighty_study(path = tmpdir)
 
   expect_equal(roundtrip@study, study@study)
-  expect_equal(roundtrip@mighty, study@mighty)
+  expect_equal(roundtrip@mighty$external_data, study@mighty$external_data)
   expect_equal(names(roundtrip), names(study))
 })
 
@@ -41,7 +41,7 @@ test_that("write_config() skips empty _mighty and _study files", {
   study <- test_path("test_study") |> mighty_study()
   tmpdir <- withr::local_tempdir()
 
-  study@mighty <- list()
+  study@mighty <- NULL
   study@study <- list()
 
   write_config(x = study, path = tmpdir)

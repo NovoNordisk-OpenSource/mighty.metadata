@@ -9,6 +9,7 @@ reference:
       Work with ADaM metadata for an entire study.
     contents:
     - mighty_study
+    - mighty_config
     - resolve_includes
     - populate_core
     - populate_sparse
