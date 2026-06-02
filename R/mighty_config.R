@@ -95,10 +95,14 @@ print_mighty_config <- function(x, ...) {
   n <- length(x$external_data)
   ids <- vapply(x$external_data, \(e) e$id, character(1))
 
-  cli::cli_bullets(c(
+  bullets <- c(
     "{.cls {class(x)[[1]]}}",
     "External data: {n} source{?s} ({.code {ids}})"
-  ))
+  )
+  if (length(x$repos) > 0) {
+    bullets <- c(bullets, "Repos: {length(x$repos)} ({.code {x$repos}})")
+  }
+  cli::cli_bullets(bullets)
 
   invisible(x)
 }
