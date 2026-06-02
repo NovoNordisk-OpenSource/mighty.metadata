@@ -44,7 +44,7 @@ A `mighty_study` S7 object extending `list`:
 
 - `@mighty`:
 
-  Mighty framework configuration from `_mighty.yml`, or empty list if no
+  A `mighty_config` object loaded from `_mighty.yml`, or `NULL` if no
   configuration file exists.
 
 - `@path`:

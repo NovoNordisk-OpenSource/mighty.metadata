@@ -91,6 +91,10 @@ file.</p></dd>
 <dd><p>A list of external data source specifications,
 each with an <code>id</code> and <code>keys</code> field.</p></dd>
 
+<dt><code>repos</code></dt>
+<dd><p>Optional character vector of component repository
+locations, or <code>NULL</code> if not specified.</p></dd>
+
 
 </dl></div>
     <div class="section level2">
@@ -99,6 +103,10 @@ each with an <code>id</code> and <code>keys</code> field.</p></dd>
 load. The file must contain an <code>external_data</code> array declaring the primary
 keys of any datasets external to the ADaM study (e.g. SDTM or reference
 datasets) that ADaM domain specifications may depend on.</p>
+<p>The optional <code>repos</code> field specifies where <code>mighty.component</code> should look
+for shared components. Each entry is either a local path (e.g. <code>"."</code>) or a
+GitHub reference in <code>owner/repo/subdir@ref</code> format (e.g.
+<code>"NovoNordisk-OpenSource/mighty.standards/components@main"</code>).</p>
     </div>
     <div class="section level2">
     <h2 id="write-config">Write Config<a class="anchor" aria-label="anchor" href="#write-config"></a></h2>
@@ -141,7 +149,7 @@ the object was loaded from.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ validator: &lt;S7schema::validator&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x56128ac65170&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x55c5829dae70&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Write back to a directory</span></span></span>
