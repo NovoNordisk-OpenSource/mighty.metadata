@@ -273,7 +273,7 @@ study_path <- system.file("examples", package = "mighty.metadata")
 study <- mighty_study(study_path)
 study
 #> <mighty.metadata::mighty_study/list/S7_object>
-#> @ mighty: `external_data`
+#> @ mighty: <mighty.metadata::mighty_config>
 #> @ study: `study_id`
 #> $ ADAE: <mighty.metadata::mighty_domain>
 #> $ ADSL: <mighty.metadata::mighty_domain>
@@ -293,7 +293,7 @@ str(study@study)
 #> List of 1
 #>  $ study_id: chr "example_study"
 str(study@mighty)
-#> List of 1
+#> <mighty.metadata::mighty_config> List of 1
 #>  $ external_data:List of 3
 #>   ..$ :List of 2
 #>   .. ..$ id  : chr "DM"
@@ -304,6 +304,10 @@ str(study@mighty)
 #>   ..$ :List of 2
 #>   .. ..$ id  : chr "AE"
 #>   .. ..$ keys: chr [1:2] "STUDYID" "USUBJID"
+#>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
+#>  @ validator: <S7schema::validator>
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x563d746859a8> 
+#>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 ```
 
 The `_study.yml` file provides the `study_id`. The `_mighty.yml` file

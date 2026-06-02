@@ -114,32 +114,8 @@ study@study
 
 # Access mighty framework configuration
 study@mighty
-#> $external_data
-#> $external_data[[1]]
-#> $external_data[[1]]$id
-#> [1] "DM"
-#> 
-#> $external_data[[1]]$keys
-#> [1] "STUDYID" "USUBJID"
-#> 
-#> 
-#> $external_data[[2]]
-#> $external_data[[2]]$id
-#> [1] "VS"
-#> 
-#> $external_data[[2]]$keys
-#> [1] "STUDYID" "USUBJID"
-#> 
-#> 
-#> $external_data[[3]]
-#> $external_data[[3]]$id
-#> [1] "AE"
-#> 
-#> $external_data[[3]]$keys
-#> [1] "STUDYID" "USUBJID"
-#> 
-#> 
-#> 
+#> <mighty.metadata::mighty_config>
+#> External data: 3 sources (`DM`, `VS`, and `AE`)
 
 # Load and populate in one step
 study <- mighty_study(
