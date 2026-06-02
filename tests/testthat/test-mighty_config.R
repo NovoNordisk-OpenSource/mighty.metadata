@@ -42,6 +42,36 @@ test_that("mighty_config errors on invalid schema", {
   expect_error(mighty_config(path = tmp), regexp = "external_data")
 })
 
+test_that("mighty_config repos field is accessible", {
+  x <- mighty_config(
+    path = system.file("examples", package = "mighty.metadata")
+  )
+
+  expect_equal(length(x$repos), 2L)
+  expect_equal(x$repos[[1]], "NovoNordisk-OpenSource/mighty.standards/components@main")
+  expect_equal(x$repos[[2]], ".")
+})
+
+test_that("mighty_config works without repos field", {
+  tmp <- withr::local_tempdir()
+  writeLines(
+    c("external_data:", "  - id: DM", "    keys: USUBJID"),
+    file.path(tmp, "_mighty.yml")
+  )
+  x <- mighty_config(path = tmp) |> expect_no_condition()
+  expect_null(x$repos)
+})
+
+test_that("mighty_config errors on invalid repo entry", {
+  tmp <- withr::local_tempdir()
+  writeLines(
+    c("external_data:", "  - id: DM", "    keys: USUBJID",
+      "repos:", "  - 123"),
+    file.path(tmp, "_mighty.yml")
+  )
+  expect_error(mighty_config(path = tmp))
+})
+
 test_that("mighty_config write_config round-trips", {
   x <- mighty_config(
     path = system.file("examples", package = "mighty.metadata")
@@ -54,4 +84,5 @@ test_that("mighty_config write_config round-trips", {
 
   x2 <- mighty_config(path = tmp)
   expect_equal(x$external_data, x2$external_data)
+  expect_equal(x$repos, x2$repos)
 })
