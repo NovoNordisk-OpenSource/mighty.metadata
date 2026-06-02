@@ -81,7 +81,7 @@ test_that("mighty_config errors on invalid repo entry", {
       "repos:", "  - 123"),
     file.path(tmp, "_mighty.yml")
   )
-  expect_error(mighty_config(path = tmp))
+  expect_error(mighty_config(path = tmp), regexp = "repos")
 })
 
 test_that("mighty_config write_config round-trips", {
