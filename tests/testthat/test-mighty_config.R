@@ -54,6 +54,16 @@ test_that("mighty_config repos field is accessible", {
   expect_equal(x$repos[[2]], ".")
 })
 
+test_that("mighty_config works with single repos entry", {
+  tmp <- withr::local_tempdir()
+  writeLines(
+    c("external_data:", "  - id: DM", "    keys: USUBJID", "repos:", "  - \".\""),
+    file.path(tmp, "_mighty.yml")
+  )
+  x <- mighty_config(path = tmp) |> expect_no_condition()
+  expect_true(length(x$repos) > 0)
+})
+
 test_that("mighty_config works without repos field", {
   tmp <- withr::local_tempdir()
   writeLines(

@@ -15,12 +15,20 @@
     },
     "repos": {
       "description": "Component repositories to search for ADaM code components, as local paths or owner/repo/subdir@ref strings",
-      "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "type": "string",
-        "minLength": 1
-      }
+      "oneOf": [
+        {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "type": "string",
+          "minLength": 1
+        }
+      ]
     }
   },
   "required": ["external_data"],
