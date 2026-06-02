@@ -76,13 +76,12 @@ S7::method(print, mighty_config) <- function(x, ...) {
 #' @noRd
 print_mighty_config <- function(x, ...) {
   n <- length(x$external_data)
+  ids <- vapply(x$external_data, \(e) e$id, character(1))
 
-  cli::cli_bullets(
-    text = c(
-      "{.cls {class(x)[[1]]}}",
-      "External data: {n} source{?s} ({.code {vapply(x$external_data, \\(e) e$id, character(1))}})"
-    )
-  )
+  cli::cli_bullets(c(
+    "{.cls {class(x)[[1]]}}",
+    "External data: {n} source{?s} ({.code {ids}})"
+  ))
 
   invisible(x)
 }
