@@ -66,17 +66,10 @@ NULL
 
 #' @noRd
 construct_mighty_study <- function(path, populate = FALSE) {
-  study_schema <- system.file(
-    "schema",
-    "study.json",
-    package = "mighty.metadata"
-  )
+  mighty_schema <- system.file("schema", "mighty.json", package = "mighty.metadata")
+  study_schema <- system.file("schema", "study.json", package = "mighty.metadata")
 
-  mighty_file <- find_yml(
-    path = path,
-    name = "_mighty",
-    schema = system.file("schema", "mighty.json", package = "mighty.metadata")
-  )
+  mighty_file <- find_yml(path = path, name = "_mighty", schema = mighty_schema)
   study_file <- find_yml(path = path, name = "_study", schema = study_schema)
 
   entries <- list.files(
