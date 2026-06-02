@@ -15,6 +15,8 @@ A \code{mighty_config} S7 object extending \link[S7schema:S7schema]{S7schema::S7
 \describe{
 \item{\code{external_data}}{A list of external data source specifications,
 each with an \code{id} and \code{keys} field.}
+\item{\code{repos}}{Optional character vector of component repository
+locations, or \code{NULL} if not specified.}
 }
 }
 \description{
@@ -34,6 +36,11 @@ The \verb{_mighty.yml} file is validated against the \code{mighty.json} schema o
 load. The file must contain an \code{external_data} array declaring the primary
 keys of any datasets external to the ADaM study (e.g. SDTM or reference
 datasets) that ADaM domain specifications may depend on.
+
+The optional \code{repos} field specifies where \code{mighty.component} should look
+for shared components. Each entry is either a local path (e.g. \code{"."}) or a
+GitHub reference in \code{owner/repo/subdir@ref} format (e.g.
+\code{"NovoNordisk-OpenSource/mighty.standards/components@main"}).
 }
 \section{Write Config}{
 

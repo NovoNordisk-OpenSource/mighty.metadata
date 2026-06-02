@@ -19,6 +19,8 @@
 #' \describe{
 #'   \item{`external_data`}{A list of external data source specifications,
 #'     each with an `id` and `keys` field.}
+#'   \item{`repos`}{Optional character vector of component repository
+#'     locations, or `NULL` if not specified.}
 #' }
 #'
 #' @details
@@ -26,6 +28,11 @@
 #' load. The file must contain an `external_data` array declaring the primary
 #' keys of any datasets external to the ADaM study (e.g. SDTM or reference
 #' datasets) that ADaM domain specifications may depend on.
+#'
+#' The optional `repos` field specifies where `mighty.component` should look
+#' for shared components. Each entry is either a local path (e.g. `"."`) or a
+#' GitHub reference in `owner/repo/subdir@ref` format (e.g.
+#' `"NovoNordisk-OpenSource/mighty.standards/components@main"`).
 #'
 #' @seealso [mighty_study], [mighty_domain], [write_config()]
 #'
@@ -88,10 +95,14 @@ print_mighty_config <- function(x, ...) {
   n <- length(x$external_data)
   ids <- vapply(x$external_data, \(e) e$id, character(1))
 
-  cli::cli_bullets(c(
+  bullets <- c(
     "{.cls {class(x)[[1]]}}",
     "External data: {n} source{?s} ({.code {ids}})"
-  ))
+  )
+  if (length(x$repos) > 0) {
+    bullets <- c(bullets, "Repos: {length(x$repos)} ({.code {x$repos}})")
+  }
+  cli::cli_bullets(bullets)
 
   invisible(x)
 }
