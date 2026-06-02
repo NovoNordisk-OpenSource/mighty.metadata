@@ -7,6 +7,8 @@ test_that("mighty_config works", {
   expect_true(S7::S7_inherits(x, mighty_config))
   expect_true(is.list(x$external_data))
   expect_true(length(x$external_data) > 0)
+  expect_true(is.character(x$repos))
+  expect_true(length(x$repos) > 0)
 
   print(x) |>
     expect_snapshot(
