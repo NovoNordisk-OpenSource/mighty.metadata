@@ -86,7 +86,7 @@ str(x)
 #>   .. ..$ keys: chr [1:2] "STUDYID" "USUBJID"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55b3aa442b70> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55f678047788> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 
 # Write back to a directory
