@@ -19,7 +19,7 @@
 * added read/write support for `documents.yml` in `mighty_study()` and `write_config()`
 * improved `print.mighty_study()` output with documents summary
 * added tests and fixtures for documents schema, reference validation, and write/read roundtrip
-(all above related with issue #20)
+(all above related with issue #27)
 
 * added validation for column dependencies in `mighty_domain()` - related with issue #12 
 * added validation for naming pattern for mighty_study() - related with issue #2 
