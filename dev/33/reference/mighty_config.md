@@ -19,9 +19,6 @@ to save it back as a yaml file.
 
 ``` r
 mighty_config(path)
-
-## S7 method for class <mighty.metadata::mighty_config>
-write_config(x, path = NULL)
 ```
 
 ## Arguments
@@ -56,15 +53,6 @@ The optional `repos` field specifies where `mighty.component` should
 look for shared components. Each entry is either a local path (e.g.
 `"."`) or a GitHub reference in `owner/repo/subdir@ref` format (e.g.
 `"NovoNordisk-OpenSource/mighty.standards/components@main"`).
-
-## Write Config
-
-Use
-[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
-to serialize a `mighty_config()` object back to a `_mighty.yml` file.
-
-Supply `path` to write to a specific directory; defaults to the
-directory the object was loaded from.
 
 ## See also
 
@@ -101,7 +89,7 @@ str(x)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55e07cc959c8> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x561fd3d73ef8> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 
 # Write back to a directory
