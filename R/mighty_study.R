@@ -2,10 +2,11 @@
 #'
 #' @description
 #' Creates a `mighty_study` object by loading all YAML metadata files from a
-#' directory. Each YAML file (except `_mighty.yml` and `_study.yml`) is parsed
+#' directory. Each YAML file (except `_mighty.yml`,`_study.yml` and `documents.yml`) is parsed
 #' as a [mighty_domain] object. The optional `_study.yml` file provides
 #' study-level properties and the optional `_mighty.yml` file provides
-#' mighty framework configuration.
+#' mighty framework configuration, and optional `documents.yml`
+#' provides study-level documents metadata.
 #'
 #' @param path `character(1)` path to a directory containing YAML metadata files.
 #' @param populate `logical(1)` if `TRUE`, calls [populate_core()] then
@@ -19,6 +20,8 @@
 #'     if no properties file exists.}
 #'   \item{`@mighty`}{Mighty framework configuration from `_mighty.yml`, or empty list
 #'     if no configuration file exists.}
+#'   \item{`@documents`}{Study-level document metadata from `documents.yml`,
+#'     or empty list if no documents file exists.}
 #'   \item{`@path`}{The source directory path as `character(1)`.}
 #' }
 #'
@@ -26,9 +29,10 @@
 #' The function scans the directory for files matching `*.yaml` or `*.yml`:
 #' - Files named `_study.yml` or `_study.yaml` are treated as study properties
 #' - Files named `_mighty.yml` or `_mighty.yaml` are treated as mighty framework config
+#' - File named `documents.yml` is treated as study documents metadata
 #' - All other YAML files must follow ADaM naming conventions (starting with
 #'   `ad`) and are loaded as [mighty_domain] objects
-#' - Only one `_mighty.yml` and one `_study.yml` file is allowed per directory
+#' - Only one `_mighty.yml`, one `_study.yml` and one `documents.yml` file is allowed per directory
 #'
 #' @seealso [mighty_domain], [write_config()], [populate_sparse()],
 #'   [populate_core()], [create_md_col()]
@@ -50,6 +54,9 @@
 #'
 #' # Access mighty framework configuration
 #' study@mighty
+#'
+#' # Access study-level documents metadata
+#' study@documents
 #'
 #' # Load and populate in one step
 #' study <- mighty_study(
@@ -76,16 +83,22 @@ construct_mighty_study <- function(path, populate = FALSE) {
     "study.json",
     package = "mighty.metadata"
   )
+  documents_schema <- system.file(
+    "schema",
+    "documents.json",
+    package = "mighty.metadata"
+  )
 
   mighty_file <- find_yml(path = path, name = "_mighty", schema = mighty_schema)
   study_file <- find_yml(path = path, name = "_study", schema = study_schema)
+  documents_file <- find_yml(path = path, name = "documents", schema = documents_schema)
 
   entries <- list.files(
     path = path,
     pattern = "\\.(yaml|yml)$",
     full.names = TRUE
   ) |>
-    setdiff(c(mighty_file, study_file))
+    setdiff(c(mighty_file, study_file, documents_file))
 
   validate_datasets(entries)
 
@@ -101,6 +114,7 @@ construct_mighty_study <- function(path, populate = FALSE) {
     .parent = entries,
     mighty = read_yml(file = mighty_file),
     study = read_yml(file = study_file),
+    documents = mighty_documents(file = documents_file),
     path = path
   )
 
@@ -161,6 +175,13 @@ validate_path <- function(value) {
   }
 }
 
+#' @noRd
+validate_documents <- function(value) {
+  if (!S7::S7_inherits(value, mighty_documents)) {
+    return("@documents must be a mighty_documents object")
+  }
+}
+
 #' @rdname mighty_study
 #' @export
 mighty_study <- S7::new_class(
@@ -179,6 +200,12 @@ mighty_study <- S7::new_class(
         validate_study(value = value)
       }
     ),
+    documents = S7::new_property(
+      class = S7::class_list,
+      validator = \(value) {
+        validate_documents(value = value)
+      }
+    ),
     path = S7::new_property(
       class = S7::class_character,
       validator = \(value) {
@@ -186,7 +213,11 @@ mighty_study <- S7::new_class(
       }
     )
   ),
-  constructor = construct_mighty_study
+  constructor = construct_mighty_study,
+  validator = function(self) {
+    check_document_references(self)
+    NULL
+  }
 )
 
 #' @noRd
@@ -218,11 +249,18 @@ print_mighty_study <- function(x, ...) {
     study <- "@ study: {.code {names(x@study)}}"
   }
 
+  documents <- NULL
+  if (length(x@documents)) {
+    documents <- paste0("@ documents: ", length(x@documents), " entries")
+  }
+
+
   cli::cli_bullets(
     text = c(
       "{.cls {class(x)}}",
       mighty,
       study,
+      documents,
       entries
     )
   )
