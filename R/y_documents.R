@@ -38,6 +38,26 @@ mighty_documents <- S7::new_class(
 
 #' @rdname documents
 #' @export
+list_documents <- S7::new_generic(
+  name = "list_documents",
+  dispatch_args = "x",
+  fun = function(x) {
+    S7::S7_dispatch()
+  }
+)
+
+#' @noRd
+S7::method(list_documents, mighty_documents) <- function(x) {
+  list_ids(x)
+}
+
+#' @noRd
+S7::method(list_documents, mighty_study) <- function(x) {
+  list_documents(x@documents)
+}
+
+#' @rdname documents
+#' @export
 select_document <- S7::new_generic(
   name = "select_document",
   dispatch_args = "x",
