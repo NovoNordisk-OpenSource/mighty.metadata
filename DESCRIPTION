@@ -6,7 +6,7 @@ Authors@R: c(
     person("Ari", "Siggaard Knoph", , "aikp@novonordisk.com", role = "aut"),
     person("Matthew", "Phelps", , "mewp@novonordisk.com", role = "aut"),
     person("Giulia", "Pais", , "egzp@novonordisk.com", role = "aut"),
-    person("Katarzyna", "Graczyk", ,"vzgc@novonordisk.com", role = "aut")
+    person("Katarzyna", "Graczyk", ,"vzgc@novonordisk.com", role = "aut"),
     person("Novo Nordisk A/S", role = "cph")
   )
 Description: Load, validate, and manipulate Clinical Data Interchange
