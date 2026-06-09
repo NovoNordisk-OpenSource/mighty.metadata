@@ -11,3 +11,6 @@ external_data:
     keys:
       - STUDYID
       - USUBJID
+repos:
+  - "NovoNordisk-OpenSource/mighty.standards/components@main"
+  - "."

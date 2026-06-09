@@ -4,7 +4,7 @@
       print(study)
     Message
       <mighty_study/list/S7_object>
-      @ mighty: `external_data`
+      @ mighty: <mighty_config>
       @ study: `study_id`
       @ documents: 3 entries
       $ ADAE: <mighty_domain>
