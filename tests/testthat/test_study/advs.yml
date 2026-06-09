@@ -4,6 +4,9 @@ class: BASIC DATA STRUCTURE
 structure: One record per vital sign parameter, per visit, per subject
 keys: [USUBJID, PARAMCD, AVISITN]
 
+documents:
+  - id: SUPPDOC001
+
 columns:
   - id: STUDYID
     label: Study Identifier
@@ -29,6 +32,9 @@ columns:
     label: Analysis Value
     method: VS.VSSTRESN
     core: Req
+    origin: Derived
+    documents:
+      - id: METHOD001
 
   - id: AVISITN
     label: Analysis Visit (N)
@@ -45,3 +51,6 @@ parameters:
     columns:
       - id: AVAL
         method: Derived from height and weight
+        origin: Derived
+        documents:
+          - id: METHOD001

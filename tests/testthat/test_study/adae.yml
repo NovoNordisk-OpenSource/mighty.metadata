@@ -65,3 +65,5 @@ columns:
       length: 1
     core: Cond
     comment: AEs occurring more than 30 days post-treatment are not flagged
+    documents:
+      - id: COMMENT001
