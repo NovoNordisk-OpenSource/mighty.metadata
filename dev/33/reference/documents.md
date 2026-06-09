@@ -126,12 +126,10 @@ docs <- docs |>
   add_document(
     id = "CSR",
     title = "Clinical Study Report",
-    doctype = "SUPPDOC",
+    doctype = "suppdoc",
     href = "./docs/csr.pdf"
   )
-#> Error in S7schema::validate_list(S7::S7_data(self), schema): /1/doctype must be equal to one of the allowed values
-#> ✖ allowedValues: list("suppdoc", "comment", "method")
 
 list_documents(docs)
-#> character(0)
+#> [1] "CSR"
 ```

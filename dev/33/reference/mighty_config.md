@@ -19,6 +19,9 @@ to save it back as a yaml file.
 
 ``` r
 mighty_config(path)
+
+## S7 method for class <mighty.metadata::mighty_config>
+write_config(x, path = NULL)
 ```
 
 ## Arguments
@@ -98,7 +101,7 @@ str(x)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5638deebc8b0> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55e07cc959c8> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 
 # Write back to a directory
