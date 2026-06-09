@@ -232,3 +232,263 @@ S7::method(update_document, mighty_study) <- function(x, id, ...) {
   x@documents <- update_document(x@documents, id, ...)
   validate(x)
 }
+
+
+#' @noRd
+as_list_or_empty <- function(x) {
+  if (length(x)) {
+    x
+  } else {
+    list()
+  }
+}
+
+#' @noRd
+build_document_refs <- function(
+    documents,
+    level,
+    comment = NULL,
+    origin = NULL
+) {
+  if (!length(documents)) {
+    return(list())
+  }
+
+  lapply(documents, function(doc) {
+    list(
+      id = doc[["id"]],
+      level = level,
+      comment = comment,
+      origin = origin
+    )
+  })
+}
+
+#' @noRd
+collect_domain_document_refs <- function(domain) {
+  build_document_refs(
+    documents = domain[["documents"]],
+    level = paste0("domain ", domain$id),
+    comment = domain[["comment"]]
+  )
+}
+
+#' @noRd
+collect_column_document_refs <- function(columns, domain_id) {
+  columns <- as_list_or_empty(columns)
+
+  unlist(
+    lapply(columns, function(col) {
+      build_document_refs(
+        documents = col[["documents"]],
+        level = paste0("domain ", domain_id, " column ", col$id),
+        comment = col[["comment"]],
+        origin = col[["origin"]]
+      )
+    }),
+    recursive = FALSE
+  )
+}
+
+#' @noRd
+collect_parameter_document_refs <- function(parameters, domain_id) {
+  parameters <- as_list_or_empty(parameters)
+
+  unlist(
+    lapply(parameters, function(param) {
+      param_cols <- as_list_or_empty(param[["columns"]])
+
+      unlist(
+        lapply(param_cols, function(col) {
+          build_document_refs(
+            documents = col[["documents"]],
+            level = paste0(
+              "domain ",
+              domain_id,
+              " parameter ",
+              param$id,
+              " column ",
+              col$id
+            ),
+            comment = col[["comment"]],
+            origin = col[["origin"]]
+          )
+        }),
+        recursive = FALSE
+      )
+    }),
+    recursive = FALSE
+  )
+}
+
+#' @noRd
+collect_document_refs <- function(domain) {
+  domain_id <- domain$id
+
+  domain_refs <- collect_domain_document_refs(domain)
+  column_refs <- collect_column_document_refs(domain[["columns"]], domain_id)
+  parameter_refs <- collect_parameter_document_refs(
+    domain[["parameters"]],
+    domain_id
+  )
+
+  unlist(list(domain_refs, column_refs, parameter_refs), recursive = FALSE)
+}
+
+#' @noRd
+is_missing_comment <- function(x) {
+  is.null(x) || !nzchar(trimws(x))
+}
+
+
+
+#' @noRd
+build_doc_types <- function(documents) {
+  doc_ids <- list_ids(documents)
+  doc_types <- vapply(documents, function(x) x[["doctype"]], character(1))
+  names(doc_types) <- doc_ids
+  doc_types
+}
+
+#' @noRd
+abort_on_unknown_document_refs <- function(refs, doc_ids) {
+  ref_ids <- vapply(refs, function(x) x[["id"]], character(1))
+  missing_ids <- setdiff(unique(ref_ids), doc_ids)
+
+  if (!length(missing_ids)) {
+    return(invisible(NULL))
+  }
+
+  missing_refs <- refs[vapply(
+    refs,
+    function(x) x[["id"]] %in% missing_ids,
+    logical(1)
+  )]
+
+  bullets <- vapply(
+    missing_refs,
+    function(ref) {
+      cli::format_inline(
+        "Unknown document id {.val {ref$id}} referenced in {.field {ref$level}}."
+      )
+    },
+    character(1)
+  )
+  names(bullets) <- rep("x", length(bullets))
+
+  available <- if (length(doc_ids)) {
+    cli::format_inline("Available document ids: {.val {doc_ids}}")
+  } else {
+    "No documents are currently defined in documents.yml."
+  }
+
+  cli::cli_abort(c(
+    "Unknown document references detected.",
+    bullets,
+    "Add this id to {.path documents.yml} or update the reference id in metadata.",
+    i = available
+  ))
+}
+
+#' @noRd
+find_invalid_method_refs <- function(refs, ref_types) {
+  refs[
+    vapply(
+      seq_along(refs),
+      function(i) {
+        identical(ref_types[[i]], "method") &&
+          !identical(refs[[i]][["origin"]], "Derived")
+      },
+      logical(1)
+    )
+  ]
+}
+
+#' @noRd
+abort_on_invalid_method_refs <- function(invalid_method_refs) {
+  if (!length(invalid_method_refs)) {
+    return(invisible(NULL))
+  }
+
+  bullets <- vapply(
+    invalid_method_refs,
+    function(ref) {
+      origin_value <- ref[["origin"]]
+      if (is.null(origin_value) || !nzchar(trimws(origin_value))) {
+        origin_value <- "<missing>"
+      }
+
+      cli::format_inline(
+        "METHOD document {.val {ref$id}} referenced in {.field {ref$level}} has origin {.val {origin_value}}. METHOD is allowed only when {.field origin} is exactly {.val Derived}."
+      )
+    },
+    character(1)
+  )
+  names(bullets) <- rep("x", length(bullets))
+
+  cli::cli_abort(c("Invalid METHOD document references detected.", bullets))
+}
+
+#' @noRd
+warn_on_missing_comment_refs <- function(refs, ref_types) {
+  missing_comment_refs <- refs[
+    vapply(
+      seq_along(refs),
+      function(i) {
+        identical(ref_types[[i]], "comment") &&
+          is_missing_comment(refs[[i]][["comment"]])
+      },
+      logical(1)
+    )
+  ]
+
+  if (!length(missing_comment_refs)) {
+    return(invisible(NULL))
+  }
+
+  bullets <- vapply(
+    missing_comment_refs,
+    function(ref) {
+      cli::format_inline(
+        "COMMENT document {.val {ref$id}} referenced in {.field {ref$level}} has empty or missing comment text. Add non-empty {.field comment} in this metadata location."
+      )
+    },
+    character(1)
+  )
+  names(bullets) <- rep("!", length(bullets))
+
+  cli::cli_warn(c(
+    "Missing comment text for COMMENT document references.",
+    bullets
+  ))
+}
+
+#' @noRd
+check_document_references <- function(study) {
+  if (!length(study@documents) > 0) {
+    return(study)
+  }
+
+  refs <- unlist(lapply(study, collect_document_refs), recursive = FALSE)
+
+  if (!length(refs)) {
+    return(study)
+  }
+
+  docs <- S7::S7_data(study@documents)
+  doc_ids <- list_ids(docs)
+  doc_types <- build_doc_types(docs)
+
+  abort_on_unknown_document_refs(refs, doc_ids)
+
+  ref_ids <- vapply(refs, function(x) x[["id"]], character(1))
+  ref_types <- doc_types[ref_ids]
+
+  invalid_method_refs <- find_invalid_method_refs(refs, ref_types)
+
+  abort_on_invalid_method_refs(invalid_method_refs)
+
+  warn_on_missing_comment_refs(refs, ref_types)
+
+  study
+}
