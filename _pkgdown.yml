@@ -21,6 +21,11 @@ reference:
     - columns
     - rows
     - parameters
+  - title: Documents metadata
+    description: |
+      Manage study-level document catalog and references.
+    contents:
+    - documents
   - title: Utilities
     contents:
     - reexports

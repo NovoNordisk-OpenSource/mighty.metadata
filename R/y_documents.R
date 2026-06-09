@@ -179,12 +179,12 @@ add_document <- S7::new_generic(
 
 #' @noRd
 S7::method(add_document, mighty_documents) <- function(
-    x,
-    id,
-    title,
-    doctype,
-    href,
-    .pos = length(list_documents(x)) + 1L
+  x,
+  id,
+  title,
+  doctype,
+  href,
+  .pos = length(list_documents(x)) + 1L
 ) {
   doc <- list(id = id, title = title, doctype = doctype, href = href)
   S7::S7_data(x) <- insert_in_vector(S7::S7_data(x), doc, pos = .pos)
@@ -193,12 +193,12 @@ S7::method(add_document, mighty_documents) <- function(
 
 #' @noRd
 S7::method(add_document, mighty_study) <- function(
-    x,
-    id,
-    title,
-    doctype,
-    href,
-    .pos = length(list_documents(x)) + 1L
+  x,
+  id,
+  title,
+  doctype,
+  href,
+  .pos = length(list_documents(x)) + 1L
 ) {
   x@documents <- add_document(
     x@documents,
@@ -245,10 +245,10 @@ as_list_or_empty <- function(x) {
 
 #' @noRd
 build_document_refs <- function(
-    documents,
-    level,
-    comment = NULL,
-    origin = NULL
+  documents,
+  level,
+  comment = NULL,
+  origin = NULL
 ) {
   if (!length(documents)) {
     return(list())
@@ -419,7 +419,8 @@ abort_on_invalid_method_refs <- function(invalid_method_refs) {
       }
 
       cli::format_inline(
-        "METHOD document {.val {ref$id}} referenced in {.field {ref$level}} has origin {.val {origin_value}}. METHOD is allowed only when {.field origin} is exactly {.val Derived}."
+        "METHOD document {.val {ref$id}} referenced in {.field {ref$level}}
+        has origin {.val {origin_value}}. METHOD is allowed only when {.field origin} is exactly {.val Derived}."
       )
     },
     character(1)
@@ -450,7 +451,8 @@ warn_on_missing_comment_refs <- function(refs, ref_types) {
     missing_comment_refs,
     function(ref) {
       cli::format_inline(
-        "COMMENT document {.val {ref$id}} referenced in {.field {ref$level}} has empty or missing comment text. Add non-empty {.field comment} in this metadata location."
+        "COMMENT document {.val {ref$id}} referenced in {.field {ref$level}} has
+        empty or missing comment text. Add non-empty {.field comment} in this metadata location."
       )
     },
     character(1)

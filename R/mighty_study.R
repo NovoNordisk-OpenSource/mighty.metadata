@@ -2,8 +2,8 @@
 #'
 #' @description
 #' Creates a `mighty_study` object by loading all YAML metadata files from a
-#' directory. Each YAML file (except `_mighty.yml`,`_study.yml` and `documents.yml`) is parsed
-#' as a [mighty_domain] object. The optional `_study.yml` file provides
+#' directory. Each YAML file (except `_mighty.yml`,`_study.yml` and `documents.yml`)
+#'  is parsed as a [mighty_domain] object. The optional `_study.yml` file provides
 #' study-level properties and the optional `_mighty.yml` file provides
 #' mighty framework configuration, and optional `documents.yml`
 #' provides study-level documents metadata.
