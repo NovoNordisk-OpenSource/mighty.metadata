@@ -184,7 +184,7 @@ check_column_dependencies <- function(domain) {
     col$depends[!grepl("^(rows|parameters)\\.", col$depends)]
   })
 
-  bad_by_col <- Filter(length, setNames(bad_deps, col_ids))
+  bad_by_col <- Filter(length, stats::setNames(bad_deps, col_ids))
 
   if (!length(bad_by_col)) {
     return(domain)

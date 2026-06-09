@@ -22,8 +22,8 @@ A \code{mighty_study} S7 object extending \code{list}:
 Access via e.g. \code{study$adsl}.}
 \item{\verb{@study}}{Study-level properties from \verb{_study.yml}, or empty list
 if no properties file exists.}
-\item{\verb{@mighty}}{Mighty framework configuration from \verb{_mighty.yml}, or empty list
-if no configuration file exists.}
+\item{\verb{@mighty}}{A \code{mighty_config} object loaded from \verb{_mighty.yml}, or
+\code{NULL} if no configuration file exists.}
 \item{\verb{@documents}}{Study-level document metadata from \code{documents.yml},
 or empty list if no documents file exists.}
 \item{\verb{@path}}{The source directory path as \code{character(1)}.}
