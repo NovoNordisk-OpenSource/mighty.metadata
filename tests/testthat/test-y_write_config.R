@@ -21,7 +21,7 @@ test_that("write_config() uses study@path when path is NULL", {
   write_config(x = study) |>
     expect_no_error()
 
-  expected <- c("_mighty.yml", "_study.yml", "adae.yml", "adsl.yml", "advs.yml")
+  expected <- c("_mighty.yml", "_study.yml", "documents.yml", "adae.yml", "adsl.yml", "advs.yml")
   expect_true(all(file.exists(file.path(tmpdir, expected))))
 })
 
