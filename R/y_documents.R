@@ -97,3 +97,54 @@ S7::method(remove_documents, mighty_study) <- function(x, id) {
   x@documents <- remove_documents(x@documents, id)
   validate(x)
 }
+
+#' @rdname documents
+#' @export
+add_document <- S7::new_generic(
+  name = "add_document",
+  dispatch_args = "x",
+  fun = function(
+    x,
+    id,
+    title,
+    doctype,
+    href,
+    .pos = length(list_documents(x)) + 1L
+  ) {
+    S7::S7_dispatch()
+  }
+)
+
+#' @noRd
+S7::method(add_document, mighty_documents) <- function(
+    x,
+    id,
+    title,
+    doctype,
+    href,
+    .pos = length(list_documents(x)) + 1L
+) {
+  doc <- list(id = id, title = title, doctype = doctype, href = href)
+  S7::S7_data(x) <- insert_in_vector(S7::S7_data(x), doc, pos = .pos)
+  validate(x)
+}
+
+#' @noRd
+S7::method(add_document, mighty_study) <- function(
+    x,
+    id,
+    title,
+    doctype,
+    href,
+    .pos = length(list_documents(x)) + 1L
+) {
+  x@documents <- add_document(
+    x@documents,
+    id = id,
+    title = title,
+    doctype = doctype,
+    href = href,
+    .pos = .pos
+  )
+  validate(x)
+}
