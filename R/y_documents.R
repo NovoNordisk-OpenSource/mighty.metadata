@@ -148,3 +148,25 @@ S7::method(add_document, mighty_study) <- function(
   )
   validate(x)
 }
+
+#' @rdname documents
+#' @export
+update_document <- S7::new_generic(
+  name = "update_document",
+  dispatch_args = "x",
+  fun = function(x, id, ...) {
+    S7::S7_dispatch()
+  }
+)
+
+#' @noRd
+S7::method(update_document, mighty_documents) <- function(x, id, ...) {
+  S7::S7_data(x) <- update_ids(S7::S7_data(x), id, ...)
+  validate(x)
+}
+
+#' @noRd
+S7::method(update_document, mighty_study) <- function(x, id, ...) {
+  x@documents <- update_document(x@documents, id, ...)
+  validate(x)
+}
