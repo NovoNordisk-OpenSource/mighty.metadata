@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/NovoNordisk-OpenSource/mighty.metadata/refs/heads/main/inst/schema/documents.json",
+  "title": "Mighty Metadata Documents Specification",
+  "description": "Schema for study-level document metadata referenced from ADaM domain metadata",
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/document"
+  },
+  "minItems": 1,
+  "uniqueItems": true,
+  "definitions": {
+    "document": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Unique id used to reference the document",
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_\\-]*$"
+        },
+        "title": {
+          "description": "Display title of the document",
+          "type": "string"
+        },
+        "doctype": {
+          "description": "Type of document referenced in define.xml",
+          "type": "string",
+          "enum": [
+            "SUPPDOC",
+            "COMMENT",
+            "METHOD"
+          ]
+        },
+        "href": {
+          "description": "Relative or absolute path to the document",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "doctype",
+        "href"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
