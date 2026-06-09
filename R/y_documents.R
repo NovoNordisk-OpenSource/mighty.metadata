@@ -1,3 +1,65 @@
+#' Update documents in your metadata
+#'
+#' Functions to list, select, remove, add, and update documents in
+#' your `mighty_documents()` object (or through `mighty_study@documents`).
+#'
+#' @param x A `mighty_documents()` or `mighty_study()` object.
+#' @param file `character(1)` path to `documents.yml`.
+#' @param id `character()` id of document(s) to select, remove, or update.
+#' @param title `character(1)` document title.
+#' @param doctype `character(1)` document type.
+#' @param href `character(1)` document path/URL.
+#' @param .pos `integer(1)` insertion position for a new document.
+#' @param ... Additional document properties to update.
+#' @returns
+#' - `list_documents()`: `character()` vector with document ids.
+#' - `select_document()`: selected document entry as a list.
+#' - `add_document()`, `update_document()`, `remove_documents()`: modified object (`invisible(x)`).
+#'
+#' @examples
+#' # Load study config
+#' s <- mighty_study(
+#'   path = system.file("examples", package = "mighty.metadata")
+#' )
+#'
+#' # Add a document
+#' s <- s |>
+#'   add_document(
+#'     id = "SAP",
+#'     title = "Statistical Analysis Plan",
+#'     doctype = "suppdoc",
+#'     href = "./docs/sap.pdf"
+#'   )
+#'
+#' # List and select documents
+#' list_documents(s)
+#' select_document(s, id = "SAP")
+#'
+#' # Update existing document
+#' s <- s |>
+#'   update_document(
+#'     id = "SAP",
+#'     title = "Statistical Analysis Plan v2"
+#'   )
+#'
+#' # Remove one or more documents
+#' s <- s |>
+#'   remove_documents(id = "SAP")
+#'
+#' # Work directly on mighty_documents
+#' docs <- mighty_documents()
+#' docs <- docs |>
+#'   add_document(
+#'     id = "CSR",
+#'     title = "Clinical Study Report",
+#'     doctype = "SUPPDOC",
+#'     href = "./docs/csr.pdf"
+#'   )
+#'
+#' list_documents(docs)
+#'
+#' @name documents
+NULL
 
 #' @noRd
 construct_mighty_documents <- function(file = NULL, x = NULL) {
