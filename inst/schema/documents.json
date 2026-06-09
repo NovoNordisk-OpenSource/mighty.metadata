@@ -26,9 +26,9 @@
           "description": "Type of document referenced in define.xml",
           "type": "string",
           "enum": [
-            "SUPPDOC",
-            "COMMENT",
-            "METHOD"
+            "suppdoc",
+            "comment",
+            "method"
           ]
         },
         "href": {
