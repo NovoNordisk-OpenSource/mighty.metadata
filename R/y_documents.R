@@ -35,3 +35,24 @@ mighty_documents <- S7::new_class(
     validate_mighty_documents(self)
   }
 )
+
+
+#' @rdname documents
+#' @export
+select_document <- S7::new_generic(
+  name = "select_document",
+  dispatch_args = "x",
+  fun = function(x, id) {
+    S7::S7_dispatch()
+  }
+)
+
+#' @noRd
+S7::method(select_document, mighty_documents) <- function(x, id) {
+  get_id(x, id)
+}
+
+#' @noRd
+S7::method(select_document, mighty_study) <- function(x, id) {
+  select_document(x@documents, id)
+}
