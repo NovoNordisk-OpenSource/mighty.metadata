@@ -5,6 +5,9 @@
 \title{Mighty Config}
 \usage{
 mighty_config(path)
+
+## S7 method for class <mighty.metadata::mighty_config>
+write_config(x, path = NULL)
 }
 \arguments{
 \item{path}{\code{character(1)} path to a directory containing a \verb{_mighty.yml}

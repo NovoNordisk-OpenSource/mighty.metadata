@@ -31,8 +31,8 @@ or empty list if no documents file exists.}
 }
 \description{
 Creates a \code{mighty_study} object by loading all YAML metadata files from a
-directory. Each YAML file (except \verb{_mighty.yml},\verb{_study.yml} and \code{documents.yml}) is parsed
-as a \link{mighty_domain} object. The optional \verb{_study.yml} file provides
+directory. Each YAML file (except \verb{_mighty.yml},\verb{_study.yml} and \code{documents.yml})
+is parsed as a \link{mighty_domain} object. The optional \verb{_study.yml} file provides
 study-level properties and the optional \verb{_mighty.yml} file provides
 mighty framework configuration, and optional \code{documents.yml}
 provides study-level documents metadata.

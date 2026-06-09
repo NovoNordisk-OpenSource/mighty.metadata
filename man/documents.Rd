@@ -93,7 +93,7 @@ docs <- docs |>
   add_document(
     id = "CSR",
     title = "Clinical Study Report",
-    doctype = "SUPPDOC",
+    doctype = "suppdoc",
     href = "./docs/csr.pdf"
   )
 
