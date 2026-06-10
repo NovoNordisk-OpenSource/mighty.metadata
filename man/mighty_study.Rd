@@ -5,9 +5,6 @@
 \title{Mighty Study}
 \usage{
 mighty_study(path, populate = FALSE)
-
-## S7 method for class <mighty.metadata::mighty_study>
-write_config(x, path = NULL)
 }
 \arguments{
 \item{path}{\code{character(1)} path to a directory containing YAML metadata files.}
