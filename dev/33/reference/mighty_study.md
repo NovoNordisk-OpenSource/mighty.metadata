@@ -13,9 +13,6 @@ documents metadata.
 
 ``` r
 mighty_study(path, populate = FALSE)
-
-## S7 method for class <mighty.metadata::mighty_study>
-write_config(x, path = NULL)
 ```
 
 ## Arguments

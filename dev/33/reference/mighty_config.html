@@ -56,7 +56,7 @@ save it back as a yaml file."><meta property="og:image" content="https://novonor
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Mighty Config</h1>
-      <small class="dont-index">Source: <a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/blob/feat/document-metadata/R/mighty_config.R" class="external-link"><code>R/mighty_config.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/blob/feat/document-metadata/R/mighty_config.R" class="external-link"><code>R/mighty_config.R</code></a>, <a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/blob/feat/document-metadata/R/y_write_config.R" class="external-link"><code>R/y_write_config.R</code></a></small>
       <div class="d-none name"><code>mighty_config.Rd</code></div>
     </div>
 
@@ -109,6 +109,15 @@ GitHub reference in <code>owner/repo/subdir@ref</code> format (e.g.
 <code>"NovoNordisk-OpenSource/mighty.standards/components@main"</code>).</p>
     </div>
     <div class="section level2">
+    <h2 id="write-config">Write Config<a class="anchor" aria-label="anchor" href="#write-config"></a></h2>
+
+
+<p>Use <code><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config()</a></code> to serialize a <code>mighty_config()</code> object back to a
+<code>_mighty.yml</code> file.</p>
+<p>Supply <code>path</code> to write to a specific directory; defaults to the directory
+the object was loaded from.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><a href="mighty_study.html">mighty_study</a>, <a href="mighty_domain.html">mighty_domain</a>, <code><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config()</a></code></p></div>
     </div>
@@ -141,7 +150,7 @@ GitHub reference in <code>owner/repo/subdir@ref</code> format (e.g.
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ validator: &lt;S7schema::validator&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x55cfed2a3bb8&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x5617964816d0&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Write back to a directory</span></span></span>
