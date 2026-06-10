@@ -6,7 +6,6 @@
 #' the object was loaded from.
 #' @name mighty_config
 #' @rdname mighty_config
-#' @noRd
 S7::method(write_config, mighty_config) <- function(x, path = NULL) {
   if (!is.null(path)) {
     path <- match_yml(path = path, name = "_mighty")
