@@ -99,7 +99,7 @@ test_that("build_document_refs() builds normalized references", {
   expect_equal(build_document_refs(list(), "x"), list())
 })
 
-test_that("collect_*_document_refs() collect references from each metadata level", {
+test_that("collect_*_document_refs() collects references from each metadata level", {
   domain <- list(
     id = "ADSL",
     comment = "Domain comment",
