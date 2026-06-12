@@ -50,13 +50,12 @@ Work with metadata for a single ADaM data set.
 Manage study-level document catalog and references.
 
 - [`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
-  [`print()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   [`list_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   [`select_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   [`remove_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   [`add_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   [`update_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
-  : Update documents in your metadata
+  : Mighty Documents
 
 ## Utilities
 

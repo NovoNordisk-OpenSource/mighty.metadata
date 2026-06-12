@@ -1,16 +1,32 @@
-# Update documents in your metadata
+# Mighty Documents
+
+`mighty_documents()` creates an S7 object for storing document metadata.
+The class inherits from
+[`S7::class_list`](https://rconsortium.github.io/S7/reference/base_classes.html)
+and represents the contents of `documents.yml` as a list of document
+entries.
+
+The object is validated on creation and when
+[`validate()`](https://rconsortium.github.io/S7/reference/validate.html)
+is called. Validation includes:
+
+- schema compliance with `inst/schema/documents.json`,
+
+- uniqueness of document identifiers (`id`).
+
+Writing to YAML is done via
+[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
+on a
+[`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+object, where documents are saved to `documents.yml`.
 
 Functions to list, select, remove, add, and update documents in your
-[`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.html)
-object (or through `mighty_study@documents`).
+`mighty_documents()` object (or through `mighty_study@documents`).
 
 ## Usage
 
 ``` r
 mighty_documents(file = NULL, x = NULL)
-
-## S7 method for class <mighty.metadata::mighty_documents>
-print(x, ...)
 
 list_documents(x)
 
@@ -38,15 +54,9 @@ update_document(x, id, ...)
 
 - x:
 
-  A
-  [`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.html)
-  or
+  A `mighty_documents()` or
   [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
   object.
-
-- ...:
-
-  Additional document properties to update.
 
 - id:
 
@@ -69,7 +79,13 @@ update_document(x, id, ...)
 
   `integer(1)` insertion position for a new document.
 
+- ...:
+
+  Additional document properties to update.
+
 ## Value
+
+An object of class `mighty_documents`.
 
 - `list_documents()`:
   [`character()`](https://rdrr.io/r/base/character.html) vector with
@@ -83,6 +99,30 @@ update_document(x, id, ...)
 ## Examples
 
 ``` r
+docs <- mighty_documents(
+  x = list(
+    list(
+      id = "DOC001",
+      title = "Statistical Analysis Plan",
+      doctype = "suppdoc",
+      href = "./docs/sap.pdf"
+    )
+  )
+)
+
+# Custom print method gives a small overview
+print(docs)
+#> <mighty.metadata::mighty_documents>
+#> Documents: 1 entry
+#> IDs: `DOC001`
+
+# Write documents.yml through mighty_study
+study <- mighty_study(
+  path = system.file("examples", package = "mighty.metadata")
+)
+#> → No `documents.yml` file found
+study@documents <- docs
+
 # Load study config
 s <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
