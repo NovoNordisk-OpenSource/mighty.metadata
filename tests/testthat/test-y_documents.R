@@ -3,7 +3,8 @@ test_that("list_documents() returns document ids", {
   expect_identical(list_documents(docs), character())
 
   docs <- mighty_documents(
-    file = test_path("test_study/documents.yml"))
+    file = test_path("test_study/documents.yml")
+  )
   expect_identical(list_documents(docs), c("SUPPDOC001", "COMMENT001", "METHOD001"))
 })
 
@@ -28,14 +29,16 @@ test_that("document can be added via add_document()", {
 
 test_that("document can be selected via select_document()", {
   docs <- mighty_documents(
-    file = test_path("test_study/documents.yml"))
+    file = test_path("test_study/documents.yml")
+  )
 
   expect_equal(select_document(docs, "SUPPDOC001")$title, "Analysis Reviewer Guide Protocol")
 })
 
 test_that("document title can be correctly updated via update_document() method", {
   docs <- mighty_documents(
-    file = test_path("test_study/documents.yml"))
+    file = test_path("test_study/documents.yml")
+  )
 
   docs <- update_document(docs, id = "SUPPDOC001", title = "Updated")
   expect_equal(select_document(docs, "SUPPDOC001")$title, "Updated")
@@ -43,7 +46,8 @@ test_that("document title can be correctly updated via update_document() method"
 
 test_that("document can be removed via remove_documents()", {
   docs <- mighty_documents(
-    file = test_path("test_study/documents.yml"))
+    file = test_path("test_study/documents.yml")
+  )
 
   docs <- remove_documents(docs, id = "COMMENT001")
 
