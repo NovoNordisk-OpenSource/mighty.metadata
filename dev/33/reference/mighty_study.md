@@ -129,7 +129,9 @@ study@mighty
 
 # Access study-level documents metadata
 study@documents
-#> <mighty.metadata::mighty_documents>  list()
+#> <mighty.metadata::mighty_documents>
+#> Documents: 0 entries
+#> IDs:
 
 # Load and populate in one step
 study <- mighty_study(

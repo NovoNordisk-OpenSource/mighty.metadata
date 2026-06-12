@@ -1,12 +1,16 @@
 # Update documents in your metadata
 
 Functions to list, select, remove, add, and update documents in your
-`mighty_documents()` object (or through `mighty_study@documents`).
+[`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.html)
+object (or through `mighty_study@documents`).
 
 ## Usage
 
 ``` r
 mighty_documents(file = NULL, x = NULL)
+
+## S7 method for class <mighty.metadata::mighty_documents>
+print(x, ...)
 
 list_documents(x)
 
@@ -34,9 +38,15 @@ update_document(x, id, ...)
 
 - x:
 
-  A `mighty_documents()` or
+  A
+  [`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.html)
+  or
   [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
   object.
+
+- ...:
+
+  Additional document properties to update.
 
 - id:
 
@@ -58,10 +68,6 @@ update_document(x, id, ...)
 - .pos:
 
   `integer(1)` insertion position for a new document.
-
-- ...:
-
-  Additional document properties to update.
 
 ## Value
 

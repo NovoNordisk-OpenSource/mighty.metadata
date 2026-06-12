@@ -21,7 +21,7 @@ CRAN release: 2026-05-15
 ## mighty.metadata (development version)
 
 - added
-  [`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  [`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.html)
   class with schema validation and document manipulation helpers:
   [`list_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
   [`select_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
