@@ -30,7 +30,7 @@
 #'   )
 #' )
 #'
-#' Custom print method gives a small overview
+#' # Custom print method gives a small overview
 #' print(docs)
 #'
 #' # Write documents.yml through mighty_study
@@ -39,7 +39,7 @@
 #' )
 #' study@documents <- docs
 #'
-#' @name mighty_documents
+#' @name documents
 NULL
 
 #' @noRd
@@ -79,8 +79,7 @@ mighty_documents <- S7::new_class(
   }
 )
 
-#' @rdname documents
-#' @export
+#' @noRd
 S7::method(print, mighty_documents) <- function(x, ...) {
   print_mighty_documents(x)
 }

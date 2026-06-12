@@ -4,7 +4,6 @@
 #' your `mighty_documents()` object (or through `mighty_study@documents`).
 #'
 #' @param x A `mighty_documents()` or `mighty_study()` object.
-#' @param file `character(1)` path to `documents.yml`.
 #' @param id `character()` id of document(s) to select, remove, or update.
 #' @param title `character(1)` document title.
 #' @param doctype `character(1)` document type.
