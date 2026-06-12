@@ -1,20 +1,13 @@
-test_that("mighty_documents() validates schema", {
-  docs <- mighty_documents(
-    x = list(
-      list(
-        id = "DOC001",
-        title = "A title",
-        doctype = "suppdoc",
-        href = "./doc.pdf"
-      )
-    )
-  )
+test_that("list_documents() returns document ids", {
+  docs <- mighty_documents()
+  expect_identical(list_documents(docs), character())
 
-  expect_s7_class(docs, mighty_documents)
-  expect_equal(list_documents(docs), "DOC001")
+  docs <- mighty_documents(
+    file = test_path("test_study/documents.yml"))
+  expect_identical(list_documents(docs), c("SUPPDOC001", "COMMENT001", "METHOD001"))
 })
 
-test_that("documents methods work", {
+test_that("document can be added via add_document()", {
   docs <- mighty_documents()
 
   docs <- add_document(
@@ -23,25 +16,48 @@ test_that("documents methods work", {
     title = "A title",
     doctype = "suppdoc",
     href = "./doc.pdf"
+  ) |> add_document(
+    id = "DOC002",
+    title = "Another title",
+    doctype = "comment",
+    href = "./comment.txt"
   )
 
-  expect_equal(list_documents(docs), "DOC001")
-  expect_equal(select_document(docs, "DOC001")$title, "A title")
+  expect_equal(sort(list_documents(docs)), c("DOC001", "DOC002"))
+})
 
-  docs <- update_document(docs, id = "DOC001", title = "Updated")
-  expect_equal(select_document(docs, "DOC001")$title, "Updated")
+test_that("document can be selected via select_document()", {
+  docs <- mighty_documents(
+    file = test_path("test_study/documents.yml"))
 
-  docs <- remove_documents(docs, id = "DOC001")
-  expect_length(list_documents(docs), 0)
+  expect_equal(select_document(docs, "SUPPDOC001")$title, "Analysis Reviewer Guide Protocol")
+})
+
+test_that("document title can be correctly updated via update_document() method", {
+  docs <- mighty_documents(
+    file = test_path("test_study/documents.yml"))
+
+  docs <- update_document(docs, id = "SUPPDOC001", title = "Updated")
+  expect_equal(select_document(docs, "SUPPDOC001")$title, "Updated")
+})
+
+test_that("document can be removed via remove_documents()", {
+  docs <- mighty_documents(
+    file = test_path("test_study/documents.yml"))
+
+  docs <- remove_documents(docs, id = "COMMENT001")
+
+  expect_length(list_documents(docs), 2)
+  expect_equal(list_documents(docs),  c("SUPPDOC001", "METHOD001"))
 })
 
 test_that("mighty_study() reads documents.yml", {
   study <- mighty_study(test_path("test_study"))
 
   expect_s7_class(study@documents, mighty_documents)
-  expect_equal(
-    sort(list_documents(study)),
-    sort(c("COMMENT001", "METHOD001", "SUPPDOC001"))
+  expect_setequal(
+    list_documents(study),
+    c("COMMENT001", "METHOD001", "SUPPDOC001")
   )
 })
 
@@ -49,21 +65,21 @@ test_that("check_document_references() errors for unknown ids", {
   study <- mighty_study(test_path("test_study"))
   study$ADVS$documents <- list(list(id = "UNKNOWN"), list(id = "NEXT"))
 
-  expect_error(validate(study), "Unknown document references")
+  expect_snapshot(validate(study), error = TRUE)
 })
 
 test_that("check_document_references() errors for METHOD on non-Derived", {
   study <- mighty_study(test_path("test_study"))
   study$ADVS$columns[[1]]$documents <- list(list(id = "METHOD001"))
 
-  expect_error(validate(study), "Invalid METHOD document references")
+  expect_snapshot(validate(study), error = TRUE)
 })
 
 test_that("check_document_references() warns for COMMENT with missing text", {
   study <- mighty_study(test_path("test_study"))
   study$ADAE$columns[[9]]$comment <- ""
 
-  expect_warning(validate(study), "Missing comment text")
+  expect_snapshot(validate(study))
 })
 
 test_that("as_list_or_empty() returns empty list for empty inputs", {
