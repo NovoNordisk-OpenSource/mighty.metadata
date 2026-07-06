@@ -35,6 +35,10 @@ jobs:
       contents: read
       pull-requests: write
     uses: NovoNordisk-OpenSource/r.workflows/.github/workflows/coverage.yaml@fa1f70cce8b5544ddb31d8ea31dc2b917af1a4b3 # v0.1.0
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    with:
+      use_codecov: true
   megalinter:
     name: Megalinter
     permissions:
