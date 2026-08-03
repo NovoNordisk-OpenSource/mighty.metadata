@@ -35,7 +35,7 @@ Codelist values are primarily sourced from GCMD (Global Controlled Metadata Dict
 
 * **KEEP** — retain only a subset of values from a GCMD codelist (e.g. restrict `COUNTRY` to the countries enrolled in the study)
 * **ADD** — add sponsor-defined values to an ADaM globally defined codelist (e.g. a new derived parameter), or define a codelist that does not exist in GCMD entirely through `ADD` entries. `mighty.toolbox` blocks `ADD` for non-extensible CDISC codelists.
-* **TAKE** — add sponsor-defined values to an SDTM globally defined codelist, bypassing the restriction that applies to `ADD`. Currently not supported in `mighty.toolbox` but planned for a future release; the schema includes `TAKE` early given the known user need.
+* **TAKE** — add SDTM controlled terminology codelist value into ADaM CT even when that codelist value is not used in SDTM define.xml, bypassing the restriction that applies to `ADD`. Currently not supported in `mighty.toolbox` but planned for a future release; the schema includes `TAKE` early given the known user need.
 
 Currently `mighty.metadata` supports only a free-text `codelist` string on column entries, which produces the correct codelist reference in `define.xml`. However it provides no mechanism to declare value-level overrides. This is currently only supported with the `source_codelists` sheet in the Excel CST file.
 
@@ -93,7 +93,7 @@ The `operation` field controls how `mighty.toolbox` uses the value entry relativ
 
 * `KEEP` — subset values from GCMD
 * `ADD` — add sponsor-defined values to an ADaM globally defined codelist, or define a codelist entirely through `ADD` entries when no GCMD source exists
-* `TAKE` — add sponsor-defined values to SDTM globally defined codelists
+* `TAKE` — add SDTM controlled terminology codelist value into ADaM CT even when that codelist value is not used in SDTM define.xml
 
 ### Validation and checks
 
