@@ -1,0 +1,204 @@
+---
+title: "ADR: codelists metadata structure"
+date: "2026-07-03"
+author: "Nataliia Bakalo"
+---
+
+|             |                                                                                               |
+|-------------|-----------------------------------------------------------------------------------------------|
+| Package     | mighty.metadata                                                                               |
+| Status      | Approved                                                                                      |
+| Version     | 0.1.0                                                                                         |
+| Description | ADR for defining the structure of codelists metadata in compliance with mighty.toolbox needs  |
+
+## Success criteria
+
+* `mighty.metadata` declares a json schema for codelists metadata
+* The schema is compliant with `mighty.toolbox` needs for codelist metadata
+* `mighty.toolbox` is able to apply value-level codelist overrides (KEEP, ADD, TAKE) defined in `codelists.yaml` when generating `define.xml`
+
+## Context
+
+Codelists in `define.xml` describe the allowed values for a given column. They are rendered as `<CodeList>` elements containing one or more `<CodeListItem>` entries, each with a `CodedValue` and an optional `<Decode>` translated text:
+
+```xml
+<CodeList OID="CL.REGION" Name="Codelist for region" DataType="text" SASFormatName="$REGION">
+  <CodeListItem CodedValue="EUROPE" OrderNumber="1" Rank="10">
+    <Decode>
+      <TranslatedText xml:lang="en">Europe</TranslatedText>
+    </Decode>
+  </CodeListItem>
+</CodeList>
+```
+
+Codelist values are primarily sourced from GCMD (Global Controlled Metadata Dictionary). Retrieval of codelists from GCMD is handled by `mighty.toolbox`. Studies often need to customise these or define codelists not present in GCMD at all:
+
+* **KEEP** — retain only a subset of values from a GCMD codelist (e.g. restrict `COUNTRY` to the countries enrolled in the study)
+* **ADD** — add sponsor-defined values to an ADaM globally defined codelist (e.g. a new derived parameter), or define a codelist that does not exist in GCMD entirely through `ADD` entries. `mighty.toolbox` blocks `ADD` for non-extensible CDISC codelists.
+* **TAKE** — add sponsor-defined values to an SDTM globally defined codelist, bypassing the restriction that applies to `ADD`. Currently not supported in `mighty.toolbox` but planned for a future release; the schema includes `TAKE` early given the known user need.
+
+Currently `mighty.metadata` supports only a free-text `codelist` string on column entries, which produces the correct codelist reference in `define.xml`. However it provides no mechanism to declare value-level overrides. This is currently only supported with the `source_codelists` sheet in the Excel CST file.
+
+`mighty.metadata` needs to provide an equivalent YAML-based mechanism so that YAML metadata workflows have full codelist override support in `mighty.toolbox`.
+
+## Decisions
+
+Codelist overrides belong in their own `codelists.yaml` file as a list of codelist entries with their value-level instructions. Codelists can then be referenced by `id` from column metadata.
+
+The schema for codelists metadata is defined in `inst/schema/codelists.json` and represents a list where a single codelist is defined as follows:
+
+```json
+{
+  "id": "unique_codelist_id",
+  "label": "codelist label",
+  "description": "description",
+  "datatype": "text" | "integer" | "float",
+  "values": [
+    {
+      "code": "coded value",
+      "decode": "decode text",
+      "operation": "KEEP" | "ADD" | "TAKE"
+    }
+  ]
+}
+```
+
+The `code` field replaces the separate `codedvaluechar` / `codedvaluenum` columns from the Excel `source_codelists` sheet. Since `datatype` is declared at the codelist level and applies uniformly to all values, a single `code` field is sufficient.
+
+The `decode` field maps directly to the `<Decode><TranslatedText>` element in `define.xml`.
+
+Codelists are referenced from column metadata using the existing `codelist` string field — no change to `adam.json` is required:
+
+```yaml
+# codelists.yaml
+- id: AGEU
+  values:
+    - code: YEARS
+      decode: Years
+      operation: KEEP
+    - code: DAYS
+      decode: Days
+      operation: KEEP
+
+# in domain yaml
+columns:
+  - id: AGEU
+    label: Age Units
+    codelist: AGEU
+```
+
+### Operation values
+
+The `operation` field controls how `mighty.toolbox` uses the value entry relative to the GCMD source:
+
+* `KEEP` — subset values from GCMD
+* `ADD` — add sponsor-defined values to an ADaM globally defined codelist, or define a codelist entirely through `ADD` entries when no GCMD source exists
+* `TAKE` — add sponsor-defined values to SDTM globally defined codelists
+
+### Validation and checks
+
+**Schema-level** (`codelists.json` enforces these automatically):
+
+* Required fields at codelist level: `id`, `values`
+* Optional fields at codelist level: `label`, `description`, `datatype` — required only for sponsor-defined codelists not present in GCMD; omitted for GCMD codelists where `mighty.toolbox` retrieves these from GCMD
+* Required fields at value level: `code`, `operation`
+* Optional fields at value level: `decode`
+* Valid `operation` enum: `KEEP`, `ADD`, `TAKE`
+* Valid `datatype` enum: `text`, `integer`, `float`
+
+**Class-level** (`validate_mighty_codelists`):
+
+* `id` values must be unique across all codelists in the file
+* `code` must be unique within each codelist
+* Every codelist defined in `codelists.yaml` must be referenced by at least one column in the domain metadata
+
+### Classes
+
+An S7 class `mighty_codelists` will be defined for the list of codelists. The class follows the same pattern as `mighty_domain`: a `construct_mighty_codelists()` function, a `validate_mighty_codelists()` function, and class registration via `S7::new_class()`.
+
+`mighty_study` will gain a nullable `codelists` property of class `mighty_codelists | NULL`, auto-populated when a `codelists.yaml` file is found in the study folder.
+
+## Consequences
+
+### Changes to current content
+
+* `adam.json` is unchanged — the `codelist` column field remains a plain string reference
+* `mighty_study` gains a new `codelists` property (nullable, non-breaking)
+
+
+## Implementation Details
+
+* Codelists are defined in a `codelists.yaml` file in the study folder, validated against `inst/schema/codelists.json`
+* A new `R/mighty_codelists.R` file defines the `mighty_codelists` S7 class
+* CRUD methods follow the pattern of `y_columns.R`:
+  * Codelist level: `add_codelist`, `remove_codelist`, `update_codelist`
+  * Value level: `add_codelist_value`, `remove_codelist_value`, `update_codelist_value`
+* `add_codelist` requires at least one value — a codelist entry with no values has no purpose in `codelists.yaml`
+* `move_codelist_value` is omitted — value ordering is implicit from list position
+* All mutating methods call `S7::validate()` after modification
+* `mighty_study` auto-detects `codelists.yaml` on construction and populates the `codelists` property
+
+```r
+# Add a new codelist with initial values
+codelists |>
+  add_codelist(
+    id = "REGION",
+    label = "Region",
+    description = "Geographical regions used in the study",
+    datatype = "text",
+    values = list(
+      list(code = "EUROPE", decode = "Europe", operation = "ADD"),
+      list(code = "NORTH AMERICA", decode = "North America", operation = "ADD")
+    )
+  )
+
+# Remove an entire codelist
+codelists |>
+  remove_codelist(id = "REGION")
+
+# Update codelist-level fields
+codelists |>
+  update_codelist(id = "REGION", description = "Geographical regions used in the trial")
+
+# Retain a specific value from a GCMD codelist
+codelists |>
+  add_codelist_value(
+    codelist_id = "AGEU",
+    code = "MONTHS",
+    decode = "Months",
+    operation = "KEEP"
+  )
+
+# Remove a value from a codelist
+codelists |>
+  remove_codelist_value(codelist_id = "AGEU", code = "MONTHS")
+
+# Update a value
+codelists |>
+  update_codelist_value(
+    codelist_id = "AGEU",
+    code = "MONTHS",
+    decode = "Month"
+  )
+```
+
+## Testing Strategy
+
+* Unit tests for `mighty_codelists`
+* Integration test in `mighty.toolbox` verifying codelist overrides are applied correctly when generating `define.xml`
+
+## Risks
+
+* The nullable `codelists` property on `mighty_study` is non-breaking for `mighty.metadata`, but `mighty.toolbox` code reading `@codelists` must handle `NULL` gracefully when no `codelists.yaml` is present
+
+## Compliance Considerations
+
+* All development on GitHub using Pull Requests for merges to main branch, and standard ATMOS branch protection rules.
+* R CMD Check is required to pass on all relevant platforms before a PR is approved.
+
+## References
+
+* [mighty.metadata](https://github.com/NovoNordisk-OpenSource/mighty.metadata)
+* [mighty.toolbox](https://novonordisk.ghe.com/novonordisk/mighty.toolbox) (internal package)
+* [ADR: documents metadata structure](adr-documents_metadata.html)
+* [ADR: mighty.toolbox integration](adr-mighty_toolbox_integration.html)
