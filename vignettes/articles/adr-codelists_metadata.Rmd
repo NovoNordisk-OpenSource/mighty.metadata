@@ -31,7 +31,7 @@ Codelists in `define.xml` describe the allowed values for a given column. They a
 </CodeList>
 ```
 
-Codelist values are primarily sourced from GCMD (Global Controlled Metadata Dictionary). Retrieval of codelists from GCMD is handled by `mighty.toolbox`. Studies often need to customise these or define codelists not present in GCMD at all:
+Codelist values are primarily sourced from GCMD (Global Controlled Metadata Dictionary). Retrieval of codelists from GCMD is handled by `mighty.toolbox`. Studies often need to customize these or define codelists not present in GCMD at all:
 
 * **KEEP** — retain only a subset of values from a GCMD codelist (e.g. restrict `COUNTRY` to the countries enrolled in the study)
 * **ADD** — add sponsor-defined values to an ADaM globally defined codelist (e.g. a new derived parameter), or define a codelist that does not exist in GCMD entirely through `ADD` entries. `mighty.toolbox` blocks `ADD` for non-extensible CDISC codelists.
