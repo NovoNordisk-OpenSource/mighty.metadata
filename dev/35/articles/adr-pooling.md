@@ -108,7 +108,7 @@ For each use case the recommended approach is:
   `component.with` values.
 - {mighty.toolbox} must integrate row-operation metadata into
   `define.xml` output.
-- {mighty.component} rendering must honour the `subset` field when
+- {mighty.component} rendering must honor the `subset` field when
   producing code.
 
 ## Alternatives Considered
@@ -232,7 +232,7 @@ remains after evaluation.
 
 #### Alternative 3: Use row operations (recommended)
 
-Initialise the column with an empty component, then conditionally
+Initialize the column with an empty component, then conditionally
 overwrite it via row operations:
 
 ``` yaml
@@ -262,7 +262,7 @@ rows:
 | Pros | Cons |
 |:---|:---|
 | Keep specifications in the pooled YAML | Harder to get overview of a column when it is edited by row operations directly in the YAML[^1] |
-| Full flexibility for the CDS | The generated script will first initialise the column, which might look a little weird |
+| Full flexibility for the CDS | The generated script will first initialize the column, which might look a little weird |
 | No updates to mighty packages needed |  |
 | Validation stays consistent |  |
 

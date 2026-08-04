@@ -224,7 +224,7 @@ operations (schema update to <code>inst/schema/adam.json</code>) and a
 <code>component.with</code> values.</li>
 <li>{mighty.toolbox} must integrate row-operation metadata into
 <code>define.xml</code> output.</li>
-<li>{mighty.component} rendering must honour the <code>subset</code>
+<li>{mighty.component} rendering must honor the <code>subset</code>
 field when producing code.</li>
 </ul>
 </div>
@@ -367,7 +367,7 @@ uniqueness is making validation harder</td>
 <div class="section level4">
 <h4 id="alternative-3-use-row-operations-recommended">Alternative 3: Use row operations (recommended)<a class="anchor" aria-label="anchor" href="#alternative-3-use-row-operations-recommended"></a>
 </h4>
-<p>Initialise the column with an empty component, then conditionally
+<p>Initialize the column with an empty component, then conditionally
 overwrite it via row operations:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> MYVAR</span></span>
@@ -410,7 +410,7 @@ operations. Other tooling or AI can also easily offer this overview.&lt;/p&gt;">
 </tr>
 <tr class="even">
 <td align="left">Full flexibility for the CDS</td>
-<td align="left">The generated script will first initialise the column,
+<td align="left">The generated script will first initialize the column,
 which might look a little weird</td>
 </tr>
 <tr class="odd">
