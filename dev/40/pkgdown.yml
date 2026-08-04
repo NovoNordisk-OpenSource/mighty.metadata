@@ -1,0 +1,16 @@
+pandoc: 3.8.3
+pkgdown: 2.2.1
+pkgdown_sha: ~
+articles:
+  adam-schema: adam-schema.html
+  articles/adr-codelists_metadata: adr-codelists_metadata.html
+  articles/adr-documents_metadata: adr-documents_metadata.html
+  articles/adr-mighty_toolbox_integration: adr-mighty_toolbox_integration.html
+  articles/adr: adr.html
+  mighty-metadata: mighty-metadata.html
+  mighty-schema: mighty-schema.html
+  study-schema: study-schema.html
+last_built: 2026-08-04T14:43Z
+urls:
+  reference: https://novonordisk-opensource.github.io/mighty.metadata/reference
+  article: https://novonordisk-opensource.github.io/mighty.metadata/articles
