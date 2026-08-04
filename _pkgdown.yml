@@ -11,6 +11,7 @@ reference:
     - mighty_study
     - mighty_config
     - resolve_includes
+    - resolve_subsets
     - populate_core
     - populate_sparse
     - create_md_col
@@ -24,6 +25,7 @@ reference:
     - parameters
   - title: Utilities
     contents:
+    - write_config
     - reexports
     - mighty.metadata-options
 
