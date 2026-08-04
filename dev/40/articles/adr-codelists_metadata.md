@@ -35,7 +35,7 @@ more `<CodeListItem>` entries, each with a `CodedValue` and an optional
 
 Codelist values are primarily sourced from GCMD (Global Controlled
 Metadata Dictionary). Retrieval of codelists from GCMD is handled by
-`mighty.toolbox`. Studies often need to customise these or define
+`mighty.toolbox`. Studies often need to customize these or define
 codelists not present in GCMD at all:
 
 - **KEEP** — retain only a subset of values from a GCMD codelist
