@@ -1,0 +1,272 @@
+---
+title: "ADR: Mapping Sheet Structure"
+date: "2026-07-13"
+author: "Katarzyna Graczyk"
+---
+
+|        |       |
+|--------|-------|
+| **Package** | `mighty.metadata` |
+| **Status** | Approved |
+| **Version** | 0.1.0 |
+| **Description** | ADR for defining the structure of mapping metadata in compliance with `mighty.toolbox` needs |
+
+## Success Criteria
+
+- `mighty.metadata` declares a JSON schema for mapping metadata.
+- The schema is compliant with `mighty.toolbox` requirements for the Mapping sheet.
+- Mapping entries can be correctly referenced at all supported levels for `define.xml`.
+- `mighty.toolbox` can consume Mapping output from `mighty.metadata` without manual transformation when generating `define.xml`.
+- Missing mappings are supported:
+  - when mappings are not provided, or
+  - when the mapping list is empty,
+  downstream processing produces an empty Mapping table (same behavior as `mighty.toolbox`).
+
+---
+
+## Context
+
+The Mapping dataset is used to provide study-level reference values consumed during `define.xml` generation.
+
+For this dataset, only two columns are relevant:
+
+- `referencename`
+- `expression`
+
+`mighty.toolbox` recognizes only the following `referencename` values:
+
+- `studydescription`
+- `formalstandardname`
+- `formalstandardversion`
+- `sasref`
+- `studyversion`
+- `standard`
+- `standardversion`
+
+Other `referencename` values are ignored by `mighty.toolbox`.
+
+The Mapping entries are sourced from the CST file, specifically from the **Mapping** sheet.
+
+When no Mapping entries are available, `mighty.toolbox` creates an empty Mapping table; `mighty.metadata` must support the same behavior.
+
+---
+
+## Decisions
+
+- Introduce a dedicated Mapping file: `mapping.yaml`.
+- Create a dedicated JSON schema: `inst/schema/mapping.json`.
+- `mapping.yaml` is the source of truth for study-level references used by downstream tooling.
+- The schema validates that each Mapping row contains the required fields:
+  - `referencename`
+  - `expression`
+- `inst/schema/mapping.json` enforces the required fields while allowing additional properties.
+- `mapping.yaml` supports extensible row objects.
+- A missing `mapping.yaml` file is allowed and means no mappings are defined.
+- `mighty.toolbox` consumes Mapping entries from this structure and uses only recognized `referencename` values; unrecognized names are ignored.
+- When no mappings are available, downstream processing produces an empty Mapping table (same behavior as `mighty.toolbox`).
+
+---
+
+## Single-row Representation
+
+A single Mapping row is represented as one object with at least two fields:
+
+```yaml
+referencename: formalstandardname
+expression: ADaM-IG
+```
+
+In `mapping.yaml`, rows are stored as a list:
+
+```yaml
+mapping:
+  - referencename: formalstandardname
+    expression: "ADaM-IG"
+
+  - referencename: formalstandardversion
+    expression: "1.1"
+```
+
+Equivalent JSON representation (validated by `inst/schema/mapping.json`):
+
+```json
+{
+  "mapping": [
+    {
+      "referencename": "formalstandardname",
+      "expression": "ADaM-IG"
+    }
+  ]
+}
+```
+
+---
+
+## Validation and Checks
+
+Mapping is handled as study-level metadata derived from the CST Mapping sheet.
+
+Each record may contain additional attributes, for example:
+
+- `DS`
+- `tablelabel`
+- `Type`
+- `Length`
+- `Label`
+
+However, only the following fields are mandatory in `mapping.yaml` and enforced by `inst/schema/mapping.json`:
+
+- `referencename`
+- `expression`
+
+Downstream processing in `mighty.toolbox` relies only on these required fields.
+
+Additional fields are permitted for compatibility and ignored unless explicitly supported.
+
+Validation must also accept the **no mapping** case:
+
+- missing `mapping.yaml`
+
+which is interpreted as an empty Mapping dataset.
+
+---
+
+## Classes
+
+An S7 class `mighty_mapping` will be defined for the list of mappings.
+
+Mapping will be introduced as a separate study-level component (`@mapping`) sourced from `mapping.yaml` and validated against `inst/schema/mapping.json`, rather than embedded ad hoc into `@study`.
+
+The class will provide methods to:
+
+- add mappings,
+- remove mappings,
+- edit mappings,
+- validate mappings against the defined schema.
+
+---
+
+## Consequences
+
+### Changes to Current Content
+
+- `mighty_study` gains a new `mapping` property.
+
+---
+
+## Alternatives Considered
+
+### Store mappings directly in study YAML files
+
+Instead of a separate YAML file, mappings could be embedded directly in study YAML files.
+
+#### Pros
+
+- No need to maintain a separate file and schema.
+- All study information is stored in one place.
+
+#### Cons
+
+- Less clear separation of study metadata and mapping metadata.
+- Study data and mappings become mixed within the same file.
+
+---
+
+## Implementation Details
+
+### Add Mapping Schema
+
+- Create `inst/schema/mapping.json`.
+- Require:
+  - `referencename`
+  - `expression`
+- Accept an empty mapping list:
+
+```yaml
+mapping: []
+```
+
+### Add Mapping Class
+
+Define S7 class `mighty_mapping`.
+
+Implement:
+
+- `construct_mighty_mapping(file = NULL, x = NULL)`
+- `validate_mighty_mapping()` using
+
+```r
+S7schema::validate_list(
+  S7::S7_data(self),
+  schema
+)
+```
+
+### Integrate with `mighty_study`
+
+- If the mapping source is missing, initialize `mighty_mapping` as empty (0 rows).
+
+### Add API Helpers
+
+Create `R/y_mapping.R` with helper functions similar to `y_documents.R`:
+
+- `list_mapping()`
+- `add_mapping()`
+- `update_mapping()`
+- `remove_mapping()`
+
+All mutating methods call:
+
+```r
+S7::validate()
+```
+
+after modification.
+
+`add_mapping()` requires values for:
+
+- `referencename`
+- `expression`
+
+A mapping row without these fields is invalid.
+
+---
+
+## Testing Strategy
+
+- Test in `mighty.toolbox` using `mighty.metadata` metadata.
+- Add unit and/or acceptance tests in `mighty.metadata`.
+- Add tests for **no mapping** scenarios:
+  - missing `mapping.yaml`
+  - `mapping.yaml` containing:
+
+```yaml
+mapping: []
+```
+
+Expected result:
+
+- empty Mapping table,
+- validation message.
+
+---
+
+## Risks
+
+*No specific risks identified.*
+
+---
+
+## Compliance Considerations
+
+- All development is performed on GitHub using Pull Requests for merges to `main`, following standard ATMOS branch protection rules.
+- `R CMD Check` must pass on all relevant platforms before a PR is approved.
+
+---
+
+## References
+
+- `mighty.metadata`
+- `mighty.toolbox` (internal package)
+- `r.workflows`
+- ADR: Documents Metadata Structure
