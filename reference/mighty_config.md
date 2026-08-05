@@ -12,7 +12,7 @@ A new object is initialized by supplying a directory path containing a
 You can validate an object at any time by calling
 [`validate()`](https://rconsortium.github.io/S7/reference/validate.html)
 and use
-[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
+[`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 to save it back as a yaml file.
 
 ## Usage
@@ -57,9 +57,8 @@ look for shared components. Each entry is either a local path (e.g.
 ## Write Config
 
 Use
-[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
+[`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 to serialize a `mighty_config()` object back to a `_mighty.yml` file.
-
 Supply `path` to write to a specific directory; defaults to the
 directory the object was loaded from.
 
@@ -67,7 +66,7 @@ directory the object was loaded from.
 
 [mighty_study](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md),
 [mighty_domain](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md),
-[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
+[`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 
 ## Examples
 
@@ -98,7 +97,7 @@ str(x)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55e2390bfee8> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55e5f45fd7b8> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 
 # Write back to a directory

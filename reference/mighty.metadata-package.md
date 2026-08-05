@@ -24,6 +24,8 @@ Useful links:
 
 Authors:
 
+- Aksel Thomsen <oath@novonordisk.com>
+
 - Ari Siggaard Knoph <aikp@novonordisk.com>
 
 - Matthew Phelps <mewp@novonordisk.com>

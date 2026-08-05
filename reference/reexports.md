@@ -5,8 +5,4 @@ to see their documentation.
 
 - S7:
 
-  [`validate`](https://rconsortium.github.io/S7/reference/validate.html)
-
-- S7schema:
-
-  [`write_config`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
+  [`validate()`](https://rconsortium.github.io/S7/reference/validate.html)

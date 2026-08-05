@@ -247,7 +247,7 @@ select_row(advs, id = "BASELINE") |>
 ### Saving Changes
 
 Write the modified domain back to YAML with
-[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html):
+[`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md):
 
 ``` r
 
@@ -307,7 +307,7 @@ str(study@mighty)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5569e2941a28> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x556028e55cb8> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 ```
 
@@ -431,7 +431,7 @@ study <- mighty_study(study_path, populate = TRUE)
 
 Write all domain files, `_study.yml`, and `_mighty.yml` back to disk
 with
-[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html):
+[`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md):
 
 ``` r
 
@@ -523,7 +523,7 @@ for collections,
 and
 [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
 for metadata propagation,
-[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
+[`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 for saving changes,
 [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md)
 for conditional specifications, and
