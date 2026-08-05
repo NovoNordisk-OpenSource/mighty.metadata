@@ -40,4 +40,4 @@ articles:
   - articles/adr
   - articles/adr-mighty_toolbox_integration
   - articles/adr-documents_metadata
-  - articles/adr-mapping_sheet.Rmd
+  - articles/adr-mapping_sheet
