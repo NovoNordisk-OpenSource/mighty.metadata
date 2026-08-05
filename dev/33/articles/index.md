@@ -17,3 +17,5 @@
   integration](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-mighty_toolbox_integration.md):
 - [ADR: documents metadata
   structure](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-documents_metadata.md):
+- [ADR: Specifying pooled
+  specifications](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-pooling.md):
