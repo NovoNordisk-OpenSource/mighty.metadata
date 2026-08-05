@@ -1,3 +1,4 @@
+---
 url: https://novonordisk-opensource.github.io/mighty.metadata
 
 template:
@@ -8,35 +9,36 @@ reference:
     description: |
       Work with ADaM metadata for an entire study.
     contents:
-    - mighty_study
-    - mighty_config
-    - resolve_includes
-    - populate_core
-    - populate_sparse
-    - create_md_col
+      - mighty_study
+      - mighty_config
+      - resolve_includes
+      - populate_core
+      - populate_sparse
+      - create_md_col
   - title: Domain level metadata
     description: |
       Work with metadata for a single ADaM data set.
     contents:
-    - mighty_domain
-    - columns
-    - rows
-    - parameters
+      - mighty_domain
+      - columns
+      - rows
+      - parameters
   - title: Utilities
     contents:
-    - reexports
-    - mighty.metadata-options
+      - reexports
+      - mighty.metadata-options
 
 articles:
-- title: Schema specifications
-  navbar: Schema specifications
-  contents:
-  - adam-schema
-  - study-schema
-  - mighty-schema
-- title: Architecture Decision Records
-  navbar: Architecture Decision Records
-  contents:
-  - articles/adr
-  - articles/adr-mighty_toolbox_integration
-  - articles/adr-documents_metadata
+  - title: Schema specifications
+    navbar: Schema specifications
+    contents:
+      - adam-schema
+      - study-schema
+      - mighty-schema
+  - title: Architecture Decision Records
+    navbar: Architecture Decision Records
+    contents:
+      - articles/adr
+      - articles/adr-mighty_toolbox_integration
+      - articles/adr-documents_metadata
+      - articles/adr-pooling
