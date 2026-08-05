@@ -1,5 +1,17 @@
 # Changelog
 
+## mighty.metadata (development version)
+
+- Added validation for column dependencies in
+  [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
+  ([\#12](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/12)).
+- Added validation for naming pattern in
+  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  ([\#2](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/2)).
+- Added
+  [`resolve_subsets()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_subsets.md)
+  generic to resolve the `rows.row.subset` property.
+
 ## mighty.metadata 0.1.0
 
 CRAN release: 2026-05-15
@@ -17,13 +29,3 @@ CRAN release: 2026-05-15
   [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md),
   and
   [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md).
-
-## mighty.metadata (development version)
-
-- added validation for column dependencies in
-  [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md) -
-  related with issue
-  [\#12](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/12)
-- added validation for naming pattern for mighty_study() - related with
-  issue
-  [\#2](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/2)

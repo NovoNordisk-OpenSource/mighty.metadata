@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,7 @@
     <li><a class="dropdown-item" href="../articles/adr-mighty_toolbox_integration.html">ADR: mighty.toolbox integration</a></li>
     <li><a class="dropdown-item" href="../articles/adr-documents_metadata.html">ADR: documents metadata structure</a></li>
     <li><a class="dropdown-item" href="../articles/adr-mapping_sheet.html">ADR: Mapping Sheet Structure</a></li>
+    <li><a class="dropdown-item" href="../articles/adr-pooling.html">ADR: Specifying pooled specifications</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -372,8 +373,8 @@ conditionally required (Cond) or permissible (Perm)</td>
 <div class="section level3">
 <h3 id="rows">rows<a class="anchor" aria-label="anchor" href="#rows"></a>
 </h3>
-<p>List of row action specifications. Typically used when adding
-additional rows to the data.</p>
+<p>List of row action specifications. Typically used when updating
+existing rows or adding additional rows to the data.</p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Type</th>
@@ -452,6 +453,13 @@ other places, e.g. as a dependency.</td>
 <td align="left">Dependencies needed before the action can be carried
 out</td>
 <td align="left"><a href="#depends">mighty/depends</a></td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">subset</td>
+<td align="left">R expression restricting the row action to a subset of
+rows</td>
+<td align="left"><a href="#filter">mighty/filter</a></td>
 <td align="left">No</td>
 </tr>
 </tbody>
