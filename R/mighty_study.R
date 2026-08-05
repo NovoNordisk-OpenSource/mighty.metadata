@@ -30,6 +30,12 @@
 #'   `ad`) and are loaded as [mighty_domain] objects
 #' - Only one `_mighty.yml` and one `_study.yml` file is allowed per directory
 #'
+#' @section Write Study Metadata:
+#' Use [write_config()] to serialize a `mighty_study()` object back to YAML
+#' files. Each domain is written as a separate file, plus `_mighty.yml` and
+#' `_study.yml` when non-empty. If `path` is `NULL`, files are written to
+#' `x@path`.
+#'
 #' @seealso [mighty_domain], [write_config()], [populate_sparse()],
 #'   [populate_core()], [create_md_col()]
 #'
