@@ -34,6 +34,11 @@
 #' GitHub reference in `owner/repo/subdir@ref` format (e.g.
 #' `"NovoNordisk-OpenSource/mighty.standards/components@main"`).
 #'
+#' @section Write Config:
+#' Use [write_config()] to serialize a `mighty_config()` object back to a
+#' `_mighty.yml` file. Supply `path` to write to a specific directory;
+#' defaults to the directory the object was loaded from.
+#'
 #' @seealso [mighty_study], [mighty_domain], [write_config()]
 #'
 #' @examples
