@@ -1,3 +1,10 @@
+# mighty.metadata (development version)
+
+* Added validation for column dependencies in `mighty_domain()` (#12).
+* Added validation for naming pattern in `mighty_study()` (#2).
+* Added `resolve_subsets()` generic to resolve the `rows.row.subset`
+  property.
+
 # mighty.metadata 0.1.0
 
 * Initial CRAN submission.
@@ -7,8 +14,3 @@
   `remove_*()`, `update_*()`, `select_*()`, `move_*()`.
 * Study-level operations: `populate_core()`, `populate_sparse()`, and
   `resolve_includes()`.
-
-# mighty.metadata (development version)
-
-* added validation for column dependencies in `mighty_domain()` - related with issue #12 
-* added validation for naming pattern for mighty_study() - related with issue #2 

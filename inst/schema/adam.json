@@ -152,7 +152,7 @@
       "additionalProperties": false
     },
     "rows": {
-      "description": "List of row action specifications. Typically used when adding additional rows to the data.",
+      "description": "List of row action specifications. Typically used when updating existing rows or adding additional rows to the data.",
       "type": "array",
       "items": {
         "$ref": "#/definitions/row"
@@ -183,6 +183,10 @@
         "depends": {
           "description": "Dependencies needed before the action can be carried out",
           "$ref": "#/definitions/mighty/depends"
+        },
+        "subset": {
+          "description": "R expression restricting the row action to a subset of rows",
+          "$ref": "#/definitions/mighty/filter"
         }
       },
       "required": [

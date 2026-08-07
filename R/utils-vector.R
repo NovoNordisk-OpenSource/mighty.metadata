@@ -126,19 +126,19 @@ which_ids <- function(x, id) {
   which(list_ids(x) %in% id)
 }
 
-#' Helper to list all sub-elements with an 'include' entry
+#' Helper to list all sub-elements with an '{name}' entry
 #' @noRd
-list_includes <- function(x) {
+list_with_element <- function(x, name) {
   if (!length(x)) {
     return(character(0))
   }
 
-  is_include <- vapply(
+  has_name <- vapply(
     X = x,
-    FUN = \(x) "include" %in% names(x),
+    FUN = \(x) name %in% names(x),
     FUN.VALUE = logical(1)
   )
-  list_ids(x[is_include])
+  list_ids(x[has_name])
 }
 
 #' Helper to check that all lists have unique `id` entries
