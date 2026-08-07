@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,6 +49,7 @@
     <li><a class="dropdown-item" href="../articles/adr.html">ADR: Package design and scope</a></li>
     <li><a class="dropdown-item" href="../articles/adr-mighty_toolbox_integration.html">ADR: mighty.toolbox integration</a></li>
     <li><a class="dropdown-item" href="../articles/adr-documents_metadata.html">ADR: documents metadata structure</a></li>
+    <li><a class="dropdown-item" href="../articles/adr-pooling.html">ADR: Specifying pooled specifications</a></li>
     <li><a class="dropdown-item" href="../articles/adr-codelists_metadata.html">ADR: codelists metadata structure</a></li>
   </ul>
 </li>
@@ -329,10 +330,10 @@ parameter:</p>
 <h3 id="saving-changes">Saving Changes<a class="anchor" aria-label="anchor" href="#saving-changes"></a>
 </h3>
 <p>Write the modified domain back to YAML with
-<code><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config()</a></code>:</p>
+<code><a href="../reference/write_config.html">write_config()</a></code>:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".yml"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config</a></span><span class="op">(</span><span class="va">advs</span>, path <span class="op">=</span> <span class="va">out</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/write_config.html">write_config</a></span><span class="op">(</span><span class="va">advs</span>, path <span class="op">=</span> <span class="va">out</span><span class="op">)</span></span></code></pre></div>
 <p>The written file can be loaded back with
 <code><a href="../reference/mighty_domain.html">mighty_domain()</a></code>.</p>
 </div>
@@ -383,7 +384,7 @@ of S7 objects:</p>
 <span><span class="co">#&gt;  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."</span></span>
 <span><span class="co">#&gt;  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"</span></span>
 <span><span class="co">#&gt;  @ validator: &lt;S7schema::validator&gt;</span></span>
-<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x558bf2997ba0&gt; </span></span>
+<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x563c14881eb0&gt; </span></span>
 <span><span class="co">#&gt;  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"</span></span></code></pre></div>
 <p>The <code>_study.yml</code> file provides the <code>study_id</code>.
 The <code>_mighty.yml</code> file provides <code>external_data</code>
@@ -489,10 +490,10 @@ loading:</p>
 </h3>
 <p>Write all domain files, <code>_study.yml</code>, and
 <code>_mighty.yml</code> back to disk with
-<code><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config()</a></code>:</p>
+<code><a href="../reference/write_config.html">write_config()</a></code>:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_tempfile.html" class="external-link">local_tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config</a></span><span class="op">(</span><span class="va">study</span>, path <span class="op">=</span> <span class="va">out</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/write_config.html">write_config</a></span><span class="op">(</span><span class="va">study</span>, path <span class="op">=</span> <span class="va">out</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "_mighty.yml" "_study.yml"  "adae.yml"    "adsl.yml"    "advs.yml"</span></span></code></pre></div>
 <p>Omit <code>path</code> to write back to the original directory
@@ -563,7 +564,7 @@ downstream mighty tools.</p>
 <code><a href="../reference/mighty_domain.html">mighty_domain()</a></code> for single datasets,
 <code><a href="../reference/mighty_study.html">mighty_study()</a></code> for collections,
 <code><a href="../reference/populate_core.html">populate_core()</a></code> and <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code> for
-metadata propagation, <code><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config()</a></code> for saving changes,
+metadata propagation, <code><a href="../reference/write_config.html">write_config()</a></code> for saving changes,
 <code><a href="../reference/resolve_includes.html">resolve_includes()</a></code> for conditional specifications, and
 <code><a href="../reference/create_md_col.html">create_md_col()</a></code> for flat output.</p>
 <p>To learn more:</p>

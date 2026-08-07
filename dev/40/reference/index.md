@@ -10,6 +10,8 @@ Work with ADaM metadata for an entire study.
   : Mighty Config
 - [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md)
   : Resolve conditional metadata items
+- [`resolve_subsets()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_subsets.md)
+  : Resolve row subsets
 - [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)
   : Populate Core Variables
 - [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
@@ -47,9 +49,10 @@ Work with metadata for a single ADaM data set.
 
 ## Utilities
 
+- [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
+  : Write a mighty object to YAML
 - [`reexports`](https://novonordisk-opensource.github.io/mighty.metadata/reference/reexports.md)
   [`validate`](https://novonordisk-opensource.github.io/mighty.metadata/reference/reexports.md)
-  [`write_config`](https://novonordisk-opensource.github.io/mighty.metadata/reference/reexports.md)
   : Objects exported from other packages
 - [`mighty.metadata-options`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty.metadata-options.md)
   : Options for mighty.metadata

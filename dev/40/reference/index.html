@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,6 +29,7 @@
     <li><a class="dropdown-item" href="../articles/adr.html">ADR: Package design and scope</a></li>
     <li><a class="dropdown-item" href="../articles/adr-mighty_toolbox_integration.html">ADR: mighty.toolbox integration</a></li>
     <li><a class="dropdown-item" href="../articles/adr-documents_metadata.html">ADR: documents metadata structure</a></li>
+    <li><a class="dropdown-item" href="../articles/adr-pooling.html">ADR: Specifying pooled specifications</a></li>
     <li><a class="dropdown-item" href="../articles/adr-codelists_metadata.html">ADR: codelists metadata structure</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -75,6 +76,13 @@
 
         </dt>
         <dd>Resolve conditional metadata items</dd>
+
+        <dt>
+
+          <code><a href="resolve_subsets.html">resolve_subsets()</a></code>
+
+        </dt>
+        <dd>Resolve row subsets</dd>
 
         <dt>
 
@@ -145,7 +153,14 @@
 
       <dl><dt>
 
-          <code><a href="reexports.html">reexports</a></code> <code><a href="reexports.html">validate</a></code> <code><a href="reexports.html">write_config</a></code>
+          <code><a href="write_config.html">write_config()</a></code>
+
+        </dt>
+        <dd>Write a mighty object to YAML</dd>
+
+        <dt>
+
+          <code><a href="reexports.html">reexports</a></code> <code><a href="reexports.html">validate</a></code>
 
         </dt>
         <dd>Objects exported from other packages</dd>

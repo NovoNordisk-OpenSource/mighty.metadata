@@ -33,7 +33,7 @@ write_config() to save it as a yaml file again.'><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,7 @@ write_config() to save it as a yaml file again.'><meta property="og:image" conte
     <li><a class="dropdown-item" href="../articles/adr.html">ADR: Package design and scope</a></li>
     <li><a class="dropdown-item" href="../articles/adr-mighty_toolbox_integration.html">ADR: mighty.toolbox integration</a></li>
     <li><a class="dropdown-item" href="../articles/adr-documents_metadata.html">ADR: documents metadata structure</a></li>
+    <li><a class="dropdown-item" href="../articles/adr-pooling.html">ADR: Specifying pooled specifications</a></li>
     <li><a class="dropdown-item" href="../articles/adr-codelists_metadata.html">ADR: codelists metadata structure</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -84,7 +85,7 @@ See the references below for help:</p><ul><li><p><code><a href="columns.html">he
 automatically validated when loaded. The helper functions above also always validates
 the new configuration before returning.</p>
 <p>You can at anytime validate an object by calling <code><a href="https://rconsortium.github.io/S7/reference/validate.html" class="external-link">validate()</a></code> and use
-<code><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config()</a></code> to save it as a yaml file again.</p>
+<code><a href="write_config.html">write_config()</a></code> to save it as a yaml file again.</p>
     </div>
 
     <div class="section level2">
@@ -218,7 +219,7 @@ and <code>rows</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ method: chr "Numeric representation of AVALC"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/adam.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ validator: &lt;S7schema::validator&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x556e874c4ca8&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x55da94c49ea0&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/advs.yml"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
