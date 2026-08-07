@@ -350,14 +350,14 @@ columns:
 
 rows:
   - id: MYVAR_STUDY1
-    include: "{study_id == 'my_study_1'}"
+    include: "{study_id == 'my_study_1' || isTRUE(pooled)}"
     subset: "STUDYID == 'my_study_1'"
     method: "Study 1: Doing this special derivation...."
     component:
       id: my_component
 
   - id: MYVAR_STUDY2
-    include: "{study_id == 'my_study_2'}"
+    include: "{study_id == 'my_study_2' || isTRUE(pooled)}"
     subset: "STUDYID == 'my_study_2'"
     method: "Study 2: Doing this other special derivation...."
     component:
