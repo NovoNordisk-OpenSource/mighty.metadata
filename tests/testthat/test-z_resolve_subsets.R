@@ -32,7 +32,7 @@ test_that("resolve_subsets() - subsetting works", {
   study$ADAE |>
     select_row("TRTEMFL_STUDY1") |>
     purrr::pluck("component", "with", "domain") |>
-    expect_equal("ADAE[with(ADAE, STUDYID == 'STUDY1'), ]")
+    expect_equal(".mighty_subset(ADAE, \"STUDYID == 'STUDY1'\")")
 
   study$ADAE |>
     select_row("TRTEMFL_STUDY1") |>
