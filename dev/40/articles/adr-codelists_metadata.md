@@ -115,6 +115,25 @@ columns:
     codelist: AGEU
 ```
 
+### GCMD folder path
+
+The path to the GCMD dataset folder is declared in `study.yaml` under a
+`gcmd` key, not in `codelists.yaml`:
+
+``` yaml
+gcmd:
+  folder: path/to/gcmd
+```
+
+This placement reflects that `codelists.yaml` is optional — a study that
+relies entirely on GCMD-sourced codelists with no overrides would have
+no `codelists.yaml` at all, yet `mighty.toolbox` still needs to locate
+the GCMD folder to retrieve codelist values. Keeping the path in
+`study.yaml` ensures it is always available regardless of whether
+`codelists.yaml` exists.
+
+The gcmd folder field will be defined in `inst/schema/study.json`.
+
 ### Operation values
 
 The `operation` field controls how `mighty.toolbox` uses the value entry
@@ -256,8 +275,7 @@ codelists |>
 ## References
 
 - [mighty.metadata](https://github.com/NovoNordisk-OpenSource/mighty.metadata)
-- [mighty.toolbox](https://novonordisk.ghe.com/novonordisk/mighty.toolbox)
-  (internal package)
+- `mighty.toolbox` (internal package)
 - [ADR: documents metadata
   structure](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-documents_metadata.md)
 - [ADR: mighty.toolbox

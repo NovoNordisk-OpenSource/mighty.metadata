@@ -224,6 +224,24 @@ is required:</p>
 <span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Age Units</span></span>
 <span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="at">    </span><span class="fu">codelist</span><span class="kw">:</span><span class="at"> AGEU</span></span></code></pre></div>
 <div class="section level3">
+<h3 id="gcmd-folder-path">GCMD folder path<a class="anchor" aria-label="anchor" href="#gcmd-folder-path"></a>
+</h3>
+<p>The path to the GCMD dataset folder is declared in
+<code>study.yaml</code> under a <code>gcmd</code> key, not in
+<code>codelists.yaml</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">gcmd</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="at">  </span><span class="fu">folder</span><span class="kw">:</span><span class="at"> path/to/gcmd</span></span></code></pre></div>
+<p>This placement reflects that <code>codelists.yaml</code> is optional
+— a study that relies entirely on GCMD-sourced codelists with no
+overrides would have no <code>codelists.yaml</code> at all, yet
+<code>mighty.toolbox</code> still needs to locate the GCMD folder to
+retrieve codelist values. Keeping the path in <code>study.yaml</code>
+ensures it is always available regardless of whether
+<code>codelists.yaml</code> exists.</p>
+<p>The gcmd folder field will be defined in
+<code>inst/schema/study.json</code>.</p>
+</div>
+<div class="section level3">
 <h3 id="operation-values">Operation values<a class="anchor" aria-label="anchor" href="#operation-values"></a>
 </h3>
 <p>The <code>operation</code> field controls how
@@ -344,7 +362,7 @@ modification</li>
 <code>mighty_study</code> auto-detects <code>codelists.yaml</code>
 on construction and populates the <code>codelists</code> property</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Add a new codelist with initial values</span></span>
 <span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">add_codelist</span><span class="op">(</span></span>
@@ -426,8 +444,7 @@ PR is approved.</li>
 <ul>
 <li><a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata" class="external-link">mighty.metadata</a></li>
 <li>
-<a href="https://novonordisk.ghe.com/novonordisk/mighty.toolbox" class="external-link">mighty.toolbox</a>
-(internal package)</li>
+<code>mighty.toolbox</code> (internal package)</li>
 <li><a href="adr-documents_metadata.html">ADR: documents metadata
 structure</a></li>
 <li><a href="adr-mighty_toolbox_integration.html">ADR: mighty.toolbox
