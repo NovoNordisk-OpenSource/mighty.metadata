@@ -212,6 +212,6 @@ codelists |>
 ## References
 
 * [mighty.metadata](https://github.com/NovoNordisk-OpenSource/mighty.metadata)
-* [mighty.toolbox](https://novonordisk.ghe.com/novonordisk/mighty.toolbox) (internal package)
+* `mighty.toolbox` (internal package)
 * [ADR: documents metadata structure](adr-documents_metadata.html)
 * [ADR: mighty.toolbox integration](adr-mighty_toolbox_integration.html)
