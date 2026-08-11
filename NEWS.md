@@ -3,7 +3,9 @@
 * Added validation for column dependencies in `mighty_domain()` (#12).
 * Added validation for naming pattern in `mighty_study()` (#2).
 * Added `resolve_subsets()` generic to resolve the `rows.row.subset`
-  property.
+  property, rewriting `component.with.domain` to a
+  `.mighty_subset(domain, "subset")` marker call matching the marker syntax
+  `mighty.component::mighty_component$render()` (>= 0.1.0.9003) expects.
 
 # mighty.metadata 0.1.0
 
