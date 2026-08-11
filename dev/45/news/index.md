@@ -10,12 +10,10 @@
   ([\#2](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/2)).
 - Added
   [`resolve_subsets()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_subsets.md)
-  generic to resolve the `rows.row.subset` property.
-- [`resolve_subsets()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_subsets.md)
-  now rewrites `component.with.domain` to a
-  `.mighty_subset(domain, "subset")` marker call instead of a
-  `domain[with(domain, subset), ]` expression, matching the marker
-  syntax `mighty.component::mighty_component$render()` (\>= 0.1.0.9003)
+  generic to resolve the `rows.row.subset` property, rewriting
+  `component.with.domain` to a `.mighty_subset(domain, "subset")` marker
+  call matching the marker syntax
+  `mighty.component::mighty_component$render()` (\>= 0.1.0.9003)
   expects.
 
 ## mighty.metadata 0.1.0
