@@ -21,13 +21,13 @@ Source:
 
 Thomsen A, Siggaard Knoph A, Phelps M, Pais G, Hedegaard Thomsen M
 (2026). *mighty.metadata: Manage 'CDISC' 'ADaM' Dataset Specifications
-in 'YAML' Format*. R package version 0.1.0.9005,
+in 'YAML' Format*. R package version 0.1.0.9006,
 <https://novonordisk-opensource.github.io/mighty.metadata/>.
 
     @Manual{,
       title = {mighty.metadata: Manage 'CDISC' 'ADaM' Dataset Specifications in 'YAML' Format},
       author = {Aksel Thomsen and Ari {Siggaard Knoph} and Matthew Phelps and Giulia Pais and Michael {Hedegaard Thomsen}},
       year = {2026},
-      note = {R package version 0.1.0.9005},
+      note = {R package version 0.1.0.9006},
       url = {https://novonordisk-opensource.github.io/mighty.metadata/},
     }

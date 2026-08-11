@@ -27,9 +27,10 @@ The input object with row subsets resolved.
 ## Details
 
 The row's `component.with.domain` is rewritten to
-`<domain>[with(<domain>, <subset>), ]`, so the action applies only to
-rows matching the R expression given in `subset`. A `component` with a
-`with.domain` entry is required.
+`.mighty_subset(<domain>, "<subset>")`, a marker call that
+`mighty.component::mighty_component$render()` recognizes and expands
+into code that applies the action only to rows matching the R expression
+given in `subset`. A `component` with a `with.domain` entry is required.
 
 ## Examples
 
@@ -49,16 +50,17 @@ study$ADAE <- add_row(
   subset = "STUDYID == 'STUDY1'"
 )
 
-# `subset` is folded into `component.with.domain`
+# `subset` is folded into `component.with.domain` as a `.mighty_subset()` marker call
 study |>
   resolve_subsets() |>
   getElement("ADAE") |>
   select_row("TRTEMFL_STUDY1") |>
   str()
+#> ! Resolving row subsets requires mighty.component (>= 0.1.0.9003)
 #> List of 2
 #>  $ id       : chr "TRTEMFL_STUDY1"
 #>  $ component:List of 2
 #>   ..$ id  : chr "STUDY1_COMPONENT"
 #>   ..$ with:List of 1
-#>   .. ..$ domain: chr "ADAE[with(ADAE, STUDYID == 'STUDY1'), ]"
+#>   .. ..$ domain: chr ".mighty_subset(ADAE, \"STUDYID == 'STUDY1'\")"
 ```
