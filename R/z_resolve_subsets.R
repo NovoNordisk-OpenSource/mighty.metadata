@@ -64,7 +64,18 @@ resolve_subsets_study <- function(study) {
 
 #' @noRd
 resolve_subsets_domain <- function(domain) {
-  domain$rows <- resolve_subsets_list(domain$rows)
+  rows <- resolve_subsets_list(domain$rows)
+
+  if (
+    !identical(rows, domain$rows) &&
+      !rlang::is_installed("mighty.component", version = "0.1.0.9003")
+  ) {
+    zephyr::msg_warning(
+      "Resolving row subsets requires {.pkg mighty.component} (>= 0.1.0.9003)"
+    )
+  }
+
+  domain$rows <- rows
   validate(domain)
 }
 
