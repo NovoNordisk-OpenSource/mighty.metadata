@@ -56,6 +56,7 @@ study |>
   getElement("ADAE") |>
   select_row("TRTEMFL_STUDY1") |>
   str()
+#> ! Resolving row subsets requires mighty.component (>= 0.1.0.9003)
 #> List of 2
 #>  $ id       : chr "TRTEMFL_STUDY1"
 #>  $ component:List of 2

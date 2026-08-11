@@ -97,7 +97,7 @@ str(x)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55b823272598> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x564ab25b3020> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 
 # Write back to a directory
