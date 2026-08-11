@@ -464,15 +464,19 @@ The ADaM schema (`inst/schema/adam.json`) is extended by adding a
 `#/definitions/mighty/filter` is the existing filter-expression type,
 reused so validation is consistent with other filter fields.
 
-When present, the associated component’s `domain` is rewritten to a
-`.mighty_subset(domain, "subset")` marker call, which
-{mighty.component}’s `render()` (\>= 0.1.0.9003) recognizes and expands
-into the row-filtering/row-preserving code:
+When present, the associated component is rendered as:
 
 ``` r
 
-.mighty_subset(ADAE, "STUDYID == 'my_study_1'")
+{{domain}}[with({{domain}}, {{subset}}), ] <-
+    {{domain}}[with({{domain}}, {{subset}}), ] |>
+      code_from_the_component()
 ```
+
+This is achieved by rendering any component with
+`domain = {{domain}}[with({{domain}}, {{subset}}), ]` in the presence of
+a `subset` entry, using the existing {mighty.component} rendering
+machinery.
 
 ### `resolve_subsets()` and rendering
 
@@ -502,7 +506,7 @@ resolve_subsets_entry <- function(x) {
           domain = x[[r]][["component"]][["with"]][["domain"]],
           subset = x[[r]][["subset"]]
         ),
-        '.mighty_subset({domain}, "{subset}")'
+        "{domain}[with({domain}, {subset}), ]"
       ) |>
         as.character()
       x[[r]][["subset"]] <- NULL
