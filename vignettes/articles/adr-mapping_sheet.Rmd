@@ -48,7 +48,7 @@ This structure is intended to be the source consumed by `mighty.toolbox` for `de
 ## Example Representation
 
 ```yaml
-study_id: XYZGTV35
+study_id: example_study
 
 standards:
   - id: ADaM-IG
