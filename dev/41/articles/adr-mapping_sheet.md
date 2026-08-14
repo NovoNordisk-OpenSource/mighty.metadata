@@ -53,7 +53,7 @@ for `define.xml` generation.
 ## Example Representation
 
 ``` yaml
-study_id: XYZGTV35
+study_id: example_study
 
 standards:
   - id: ADaM-IG
