@@ -10,7 +10,11 @@
   ([\#2](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/2)).
 - Added
   [`resolve_subsets()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_subsets.md)
-  generic to resolve the `rows.row.subset` property.
+  generic to resolve the `rows.row.subset` property, rewriting
+  `component.with.domain` to a `.mighty_subset(domain, "subset")` marker
+  call matching the marker syntax
+  `mighty.component::mighty_component$render()` (\>= 0.1.0.9003)
+  expects.
 
 ## mighty.metadata 0.1.0
 
