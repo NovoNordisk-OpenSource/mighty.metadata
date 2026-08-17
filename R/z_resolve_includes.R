@@ -91,7 +91,7 @@ includes_resolve_list <- function(x, info) {
     return(NULL)
   }
 
-  ids <- list_includes(x)
+  ids <- list_with_element(x = x, name = "include")
 
   if (length(ids) == 0L) {
     return(x)

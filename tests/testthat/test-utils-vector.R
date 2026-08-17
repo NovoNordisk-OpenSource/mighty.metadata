@@ -86,16 +86,19 @@ test_that("update_ids()", {
     expect_equal(x)
 })
 
-test_that("list_includes()", {
+test_that("list_with_element()", {
   x <- list(
     list(id = "a", include = "other"),
     list(id = "b", value = 1)
   )
 
-  list_includes(x) |>
+  list_with_element(x, "include") |>
     expect_equal("a")
 
-  list_includes(list()) |>
+  list_with_element(x, "something_else") |>
+    expect_equal(character(0))
+
+  list_with_element(list()) |>
     expect_equal(character(0))
 })
 
@@ -150,8 +153,8 @@ test_that("check_column_dependencies()", {
       list(id = "b", depends = "rows.xyz"),
       list(id = "c")
     )
-  ) |> expect_no_condition()
-
+  ) |>
+    expect_no_condition()
 
   list(
     id = "XYZ",

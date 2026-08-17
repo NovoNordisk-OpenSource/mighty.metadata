@@ -4,7 +4,6 @@
 \name{reexports}
 \alias{reexports}
 \alias{validate}
-\alias{write_config}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
