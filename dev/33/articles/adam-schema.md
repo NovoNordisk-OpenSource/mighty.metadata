@@ -86,8 +86,8 @@ Specification of a single column
 
 ### rows
 
-List of row action specifications. Typically used when adding additional
-rows to the data.
+List of row action specifications. Typically used when updating existing
+rows or adding additional rows to the data.
 
 | Type  | Items       | Min Items | Unique Items |
 |:------|:------------|:----------|:-------------|
@@ -110,6 +110,7 @@ Specification of a single row action
 | method | How to derive the row action (free text) | string | No |
 | component | Mighty component to do the row action | [mighty/component](#component) | No |
 | depends | Dependencies needed before the action can be carried out | [mighty/depends](#depends) | No |
+| subset | R expression restricting the row action to a subset of rows | [mighty/filter](#filter) | No |
 
 ### parameters
 

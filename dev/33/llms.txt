@@ -184,6 +184,8 @@ Work with ADaM metadata for an entire study.
   : Mighty Config
 - [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md)
   : Resolve conditional metadata items
+- [`resolve_subsets()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_subsets.md)
+  : Resolve row subsets
 - [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)
   : Populate Core Variables
 - [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
@@ -233,9 +235,10 @@ Manage study-level document catalog and references.
 
 ## Utilities
 
+- [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
+  : Write a mighty object to YAML
 - [`reexports`](https://novonordisk-opensource.github.io/mighty.metadata/reference/reexports.md)
   [`validate`](https://novonordisk-opensource.github.io/mighty.metadata/reference/reexports.md)
-  [`write_config`](https://novonordisk-opensource.github.io/mighty.metadata/reference/reexports.md)
   : Objects exported from other packages
 - [`mighty.metadata-options`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty.metadata-options.md)
   : Options for mighty.metadata
@@ -259,5 +262,7 @@ Manage study-level document catalog and references.
   integration](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-mighty_toolbox_integration.md):
 - [ADR: documents metadata
   structure](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-documents_metadata.md):
+- [ADR: Mapping Sheet
+  Structure](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-mapping_sheet.md):
 - [ADR: Specifying pooled
   specifications](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-pooling.md):

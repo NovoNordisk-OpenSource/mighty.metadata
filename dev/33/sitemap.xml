@@ -3,6 +3,7 @@
 <url><loc>https://novonordisk-opensource.github.io/mighty.metadata/LICENSE.html</loc></url>
 <url><loc>https://novonordisk-opensource.github.io/mighty.metadata/articles/adam-schema.html</loc></url>
 <url><loc>https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-documents_metadata.html</loc></url>
+<url><loc>https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-mapping_sheet.html</loc></url>
 <url><loc>https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-mighty_toolbox_integration.html</loc></url>
 <url><loc>https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-pooling.html</loc></url>
 <url><loc>https://novonordisk-opensource.github.io/mighty.metadata/articles/adr.html</loc></url>
@@ -28,6 +29,8 @@
 <url><loc>https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.html</loc></url>
 <url><loc>https://novonordisk-opensource.github.io/mighty.metadata/reference/reexports.html</loc></url>
 <url><loc>https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.html</loc></url>
+<url><loc>https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_subsets.html</loc></url>
 <url><loc>https://novonordisk-opensource.github.io/mighty.metadata/reference/rows.html</loc></url>
+<url><loc>https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.html</loc></url>
 </urlset>
 

@@ -15,7 +15,7 @@ is called. Validation includes:
 - uniqueness of document identifiers (`id`).
 
 Writing to YAML is done via
-[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
+[`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 on a
 [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
 object, where documents are saved to `documents.yml`.

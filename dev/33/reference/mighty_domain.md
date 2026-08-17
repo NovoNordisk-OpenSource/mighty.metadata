@@ -22,7 +22,7 @@ returning.
 You can at anytime validate an object by calling
 [`validate()`](https://rconsortium.github.io/S7/reference/validate.html)
 and use
-[`write_config()`](https://novonordisk-opensource.github.io/S7schema/reference/write_config.html)
+[`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 to save it as a yaml file again.
 
 ## Usage
@@ -156,6 +156,6 @@ str(x)
 #>   .. .. .. ..$ method: chr "Numeric representation of AVALC"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/adam.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55f0049416a8> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x562cbeca3ab0> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/advs.yml"
 ```

@@ -31,7 +31,7 @@ your mighty_documents() object (or through mighty_study@documents)."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,7 @@ your mighty_documents() object (or through mighty_study@documents)."><meta prope
     <li><a class="dropdown-item" href="../articles/adr.html">ADR: Package design and scope</a></li>
     <li><a class="dropdown-item" href="../articles/adr-mighty_toolbox_integration.html">ADR: mighty.toolbox integration</a></li>
     <li><a class="dropdown-item" href="../articles/adr-documents_metadata.html">ADR: documents metadata structure</a></li>
+    <li><a class="dropdown-item" href="../articles/adr-mapping_sheet.html">ADR: Mapping Sheet Structure</a></li>
     <li><a class="dropdown-item" href="../articles/adr-pooling.html">ADR: Specifying pooled specifications</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -78,7 +79,7 @@ The class inherits from <code><a href="https://rconsortium.github.io/S7/referenc
 <p>The object is validated on creation and when <code><a href="https://rconsortium.github.io/S7/reference/validate.html" class="external-link">validate()</a></code> is called.
 Validation includes:</p><ul><li><p>schema compliance with <code>inst/schema/documents.json</code>,</p></li>
 <li><p>uniqueness of document identifiers (<code>id</code>).</p></li>
-</ul><p>Writing to YAML is done via <code><a href="https://novonordisk-opensource.github.io/S7schema/reference/write_config.html" class="external-link">write_config()</a></code> on a <code><a href="mighty_study.html">mighty_study()</a></code> object,
+</ul><p>Writing to YAML is done via <code><a href="write_config.html">write_config()</a></code> on a <code><a href="mighty_study.html">mighty_study()</a></code> object,
 where documents are saved to <code>documents.yml</code>.</p>
 <p>Functions to list, select, remove, add, and update documents in
 your <code>mighty_documents()</code> object (or through <code>mighty_study@documents</code>).</p>
