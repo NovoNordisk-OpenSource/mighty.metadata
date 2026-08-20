@@ -7,7 +7,6 @@
   "items": {
     "$ref": "#/definitions/document"
   },
-  "minItems": 1,
   "uniqueItems": true,
   "definitions": {
     "document": {

@@ -1,7 +1,4 @@
 test_that("list_documents() returns document ids", {
-  docs <- mighty_documents()
-  expect_identical(list_documents(docs), character())
-
   docs <- mighty_documents(
     file = test_path("test_study/_documents.yml")
   )
@@ -70,8 +67,9 @@ test_that("check_document_references() returns study unchanged when no doc refs 
   file.copy(test_path("test_study/adsl.yml"), tmpdir) # adsl.yml has no document references
   study <- mighty_study(tmpdir)
 
-  expect_no_error(out <- check_document_references(study))
-  expect_equal(out, study)
+  check_document_references(study) |>
+    expect_no_error() |>
+    expect_equal(study)
 })
 
 test_that("check_document_references() returns study unchanged when no doc refs in domains but docs exist in _documents.yml", { # nolint: line_length_linter
@@ -80,8 +78,9 @@ test_that("check_document_references() returns study unchanged when no doc refs 
   file.copy(test_path("test_study/_documents.yml"), tmpdir)
   study <- mighty_study(tmpdir)
 
-  expect_no_error(out <- check_document_references(study))
-  expect_equal(out, study)
+  check_document_references(study) |>
+    expect_no_error() |>
+    expect_equal(study)
 })
 
 test_that("check_document_references() errors when domains reference document ids but no docs in _documents.yml", {

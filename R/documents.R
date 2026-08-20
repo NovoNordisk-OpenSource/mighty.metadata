@@ -44,27 +44,18 @@ NULL
 
 #' @noRd
 construct_mighty_documents <- function(file = NULL, x = NULL) {
-  if (!is.null(file)) {
-    x <- read_yml(file)
+  schema <- system.file("schema", "documents.json", package = "mighty.metadata")
+  parent <- if (!is.null(file)) {
+    S7schema::S7schema(file = file, schema = schema)
+  } else {
+    S7schema::S7schema(.data = x, schema = schema)
   }
-
-  if (is.null(x)) {
-    x <- list()
-  }
-
-  S7::new_object(.parent = x)
+  S7::new_object(.parent = parent)
 }
 
 #' @noRd
 validate_mighty_documents <- function(self) {
-  if (!length(self)) {
-    return(NULL)
-  }
-
-  schema <- system.file("schema", "documents.json", package = "mighty.metadata")
-  S7schema::validate_list(S7::S7_data(self), schema)
   check_unique_ids(S7::S7_data(self))
-
   NULL
 }
 
@@ -72,7 +63,7 @@ validate_mighty_documents <- function(self) {
 #' @export
 mighty_documents <- S7::new_class(
   name = "mighty_documents",
-  parent = S7::class_list,
+  parent = S7schema::S7schema,
   constructor = construct_mighty_documents,
   validator = function(self) {
     validate_mighty_documents(self)
