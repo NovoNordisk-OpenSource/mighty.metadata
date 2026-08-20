@@ -114,7 +114,7 @@ remove_documents <- S7::new_generic(
 #' @noRd
 S7::method(remove_documents, mighty_documents) <- function(x, id) {
   S7::S7_data(x) <- remove_ids(S7::S7_data(x), id)
-  validate(x)
+  x
 }
 
 #' @noRd
@@ -151,7 +151,7 @@ S7::method(add_document, mighty_documents) <- function(
 ) {
   doc <- list(id = id, title = title, doctype = doctype, href = href)
   S7::S7_data(x) <- insert_in_vector(S7::S7_data(x), doc, pos = .pos)
-  validate(x)
+  x
 }
 
 #' @noRd
@@ -187,7 +187,7 @@ update_document <- S7::new_generic(
 #' @noRd
 S7::method(update_document, mighty_documents) <- function(x, id, ...) {
   S7::S7_data(x) <- update_ids(S7::S7_data(x), id, ...)
-  validate(x)
+  x
 }
 
 #' @noRd
