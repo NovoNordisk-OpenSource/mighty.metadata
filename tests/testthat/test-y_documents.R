@@ -65,7 +65,32 @@ test_that("mighty_study() reads _documents.yml", {
   )
 })
 
-test_that("check_document_references() errors for unknown ids", {
+test_that("check_document_references() returns study unchanged when no doc refs in domains and no docs in _documents.yml", { # nolint: line_length_linter
+  tmpdir <- withr::local_tempdir()
+  file.copy(test_path("test_study/adsl.yml"), tmpdir) # adsl.yml has no document references
+  study <- mighty_study(tmpdir)
+
+  expect_no_error(out <- check_document_references(study))
+  expect_equal(out, study)
+})
+
+test_that("check_document_references() returns study unchanged when no doc refs in domains but docs exist in _documents.yml", { # nolint: line_length_linter
+  tmpdir <- withr::local_tempdir()
+  file.copy(test_path("test_study/adsl.yml"), tmpdir) # adsl.yml has no document references
+  file.copy(test_path("test_study/_documents.yml"), tmpdir)
+  study <- mighty_study(tmpdir)
+
+  expect_no_error(out <- check_document_references(study))
+  expect_equal(out, study)
+})
+
+test_that("check_document_references() errors when domains reference document ids but no docs in _documents.yml", {
+  study <- mighty_study(test_path("test_study"))
+
+  expect_snapshot(study@documents <- mighty_documents(), error = TRUE)
+})
+
+test_that("check_document_references() errors when domains reference document ids not defined in _documents.yml", {
   study <- mighty_study(test_path("test_study"))
   study$ADVS$documents <- list(list(id = "UNKNOWN"), list(id = "NEXT"))
 
@@ -189,12 +214,4 @@ test_that("find_invalid_method_refs() flags METHOD refs with non-Derived origin"
 
   expect_length(invalid, 1)
   expect_identical(invalid[[1]]$level, "x")
-})
-
-test_that("check_document_references() returns study unchanged when no documents exist", {
-  study <- mighty_study(test_path("test_study"))
-  study@documents <- mighty_documents()
-
-  expect_no_error(out <- check_document_references(study))
-  expect_s7_class(out, mighty_study)
 })

@@ -1,4 +1,18 @@
-# check_document_references() errors for unknown ids
+# check_document_references() errors when domains reference document ids but no docs in _documents.yml
+
+    Code
+      study@documents <- mighty_documents()
+    Condition
+      Error in `abort_on_unknown_document_refs()`:
+      ! Unknown document references detected.
+      x Unknown document id "COMMENT001" referenced in domain ADAE column TRTEMFL.
+      x Unknown document id "SUPPDOC001" referenced in domain ADVS.
+      x Unknown document id "METHOD001" referenced in domain ADVS column AVAL.
+      x Unknown document id "METHOD001" referenced in domain ADVS parameter BMI column AVAL.
+      Add this id to '_documents.yml' or update the reference id in metadata.
+      i No documents are currently defined in _documents.yml.
+
+# check_document_references() errors when domains reference document ids not defined in _documents.yml
 
     Code
       validate(study)

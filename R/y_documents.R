@@ -430,10 +430,6 @@ warn_on_missing_comment_refs <- function(refs, ref_types) {
 
 #' @noRd
 check_document_references <- function(study) {
-  if (!length(study@documents) > 0) {
-    return(study)
-  }
-
   refs <- unlist(lapply(study, collect_document_refs), recursive = FALSE)
 
   if (!length(refs)) {
