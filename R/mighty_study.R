@@ -2,10 +2,10 @@
 #'
 #' @description
 #' Creates a `mighty_study` object by loading all YAML metadata files from a
-#' directory. Each YAML file (except `_mighty.yml`,`_study.yml` and `documents.yml`)
+#' directory. Each YAML file (except `_mighty.yml`,`_study.yml` and `_documents.yml`)
 #'  is parsed as a [mighty_domain] object. The optional `_study.yml` file provides
 #' study-level properties and the optional `_mighty.yml` file provides
-#' mighty framework configuration, and optional `documents.yml`
+#' mighty framework configuration, and optional `_documents.yml`
 #' provides study-level documents metadata.
 #'
 #' @param path `character(1)` path to a directory containing YAML metadata files.
@@ -20,7 +20,7 @@
 #'     if no properties file exists.}
 #'   \item{`@mighty`}{A `mighty_config` object loaded from `_mighty.yml`, or
 #'     `NULL` if no configuration file exists.}
-#'   \item{`@documents`}{Study-level document metadata from `documents.yml`,
+#'   \item{`@documents`}{Study-level document metadata from `_documents.yml`,
 #'     or empty list if no documents file exists.}
 #'   \item{`@path`}{The source directory path as `character(1)`.}
 #' }
@@ -29,10 +29,10 @@
 #' The function scans the directory for files matching `*.yaml` or `*.yml`:
 #' - Files named `_study.yml` or `_study.yaml` are treated as study properties
 #' - Files named `_mighty.yml` or `_mighty.yaml` are treated as mighty framework config
-#' - File named `documents.yml` is treated as study documents metadata
+#' - File named `_documents.yml` is treated as study documents metadata
 #' - All other YAML files must follow ADaM naming conventions (starting with
 #'   `ad`) and are loaded as [mighty_domain] objects
-#' - Only one `_mighty.yml`, one `_study.yml` and one `documents.yml` file is allowed per directory
+#' - Only one `_mighty.yml`, one `_study.yml` and one `_documents.yml` file is allowed per directory
 #'
 #' @section Write Study Metadata:
 #' Use [write_config()] to serialize a `mighty_study()` object back to YAML
@@ -97,7 +97,7 @@ construct_mighty_study <- function(path, populate = FALSE) {
 
   mighty_file <- find_yml(path = path, name = "_mighty", schema = mighty_schema)
   study_file <- find_yml(path = path, name = "_study", schema = study_schema)
-  documents_file <- find_yml(path = path, name = "documents", schema = documents_schema)
+  documents_file <- find_yml(path = path, name = "_documents", schema = documents_schema)
 
   entries <- list.files(
     path = path,

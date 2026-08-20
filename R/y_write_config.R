@@ -47,7 +47,7 @@ write_mighty_study <- function(study, path) {
     write_yml(
       x = S7::S7_data(study@documents),
       path = path,
-      name = "documents"
+      name = "_documents"
     )
   }
 

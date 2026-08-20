@@ -3,7 +3,7 @@
 #' @description
 #' `mighty_documents()` creates an S7 object for storing document metadata.
 #' The class inherits from `S7::class_list` and represents the contents of
-#' `documents.yml` as a list of document entries.
+#' `_documents.yml` as a list of document entries.
 #'
 #' The object is validated on creation and when `validate()` is called.
 #' Validation includes:
@@ -11,9 +11,9 @@
 #' - uniqueness of document identifiers (`id`).
 #'
 #' Writing to YAML is done via `write_config()` on a `mighty_study()` object,
-#' where documents are saved to `documents.yml`.
+#' where documents are saved to `_documents.yml`.
 #'
-#' @param file `character(1)` path to `documents.yml`.
+#' @param file `character(1)` path to `_documents.yml`.
 #' @param x `list()` of document entries.
 #'
 #' @return An object of class `mighty_documents`.
@@ -33,7 +33,7 @@
 #' # Custom print method gives a small overview
 #' print(docs)
 #'
-#' # Write documents.yml through mighty_study
+#' # Write _documents.yml through mighty_study
 #' study <- mighty_study(
 #'   path = system.file("examples", package = "mighty.metadata")
 #' )

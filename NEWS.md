@@ -2,11 +2,11 @@
 
 * added `mighty_documents()` class with schema validation and document manipulation helpers:
   `list_documents()`, `select_document()`, `add_document()`, `update_document()`, `remove_documents()`
-* added study-level documents support via `documents.yml` and new `study@documents` property
+* added study-level documents support via `_documents.yml` and new `study@documents` property
 * added document references in ADaM metadata at domain, column, and parameter-column levels
 * added study validation for document references:
   unknown document ids (error), invalid METHOD usage outside `origin: Derived` (error), missing COMMENT text (warning)
-* added read/write support for `documents.yml` in `mighty_study()` and `write_config()`
+* added read/write support for `_documents.yml` in `mighty_study()` and `write_config()`
 * improved `print.mighty_study()` output with documents summary
 * added tests and fixtures for documents schema, reference validation, and write/read roundtrip
 (all above related with issue #27)

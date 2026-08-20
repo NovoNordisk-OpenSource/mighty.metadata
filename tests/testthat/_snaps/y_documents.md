@@ -7,7 +7,7 @@
       ! Unknown document references detected.
       x Unknown document id "UNKNOWN" referenced in domain ADVS.
       x Unknown document id "NEXT" referenced in domain ADVS.
-      Add this id to 'documents.yml' or update the reference id in metadata.
+      Add this id to '_documents.yml' or update the reference id in metadata.
       i Available document ids: "SUPPDOC001", "COMMENT001", and "METHOD001"
 
 # check_document_references() errors for METHOD on non-Derived

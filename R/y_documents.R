@@ -342,13 +342,13 @@ abort_on_unknown_document_refs <- function(refs, doc_ids) {
   available <- if (length(doc_ids)) {
     cli::format_inline("Available document ids: {.val {doc_ids}}")
   } else {
-    "No documents are currently defined in documents.yml."
+    "No documents are currently defined in _documents.yml."
   }
 
   cli::cli_abort(c(
     "Unknown document references detected.",
     bullets,
-    "Add this id to {.path documents.yml} or update the reference id in metadata.",
+    "Add this id to {.path _documents.yml} or update the reference id in metadata.",
     i = available
   ))
 }
