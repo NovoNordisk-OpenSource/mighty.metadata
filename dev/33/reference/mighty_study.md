@@ -100,7 +100,7 @@ non-empty. If `path` is `NULL`, files are written to `x@path`.
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
-#> → No `documents.yml` file found
+#> → No `_documents.yml` file found
 
 # List tables with metadata
 names(study)
@@ -136,7 +136,7 @@ study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata"),
   populate = TRUE
 )
-#> → No `documents.yml` file found
+#> → No `_documents.yml` file found
 
 # Write study back to YAML
 tmp <- tempdir()

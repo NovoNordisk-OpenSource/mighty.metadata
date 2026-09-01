@@ -44,6 +44,6 @@ with predecessor column metadata populated.
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
-#> → No `documents.yml` file found
+#> → No `_documents.yml` file found
 study <- populate_sparse(study)
 ```

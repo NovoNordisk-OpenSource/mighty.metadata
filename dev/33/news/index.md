@@ -10,21 +10,10 @@
   [`add_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
   [`update_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
   [`remove_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
-- added study-level documents support via `documents.yml` and new
+  ([\#27](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/27))
+- added study-level documents support via `_documents.yml` and new
   `study@documents` property
-- added document references in ADaM metadata at domain, column, and
-  parameter-column levels
-- added study validation for document references: unknown document ids
-  (error), invalid METHOD usage outside `origin: Derived` (error),
-  missing COMMENT text (warning)
-- added read/write support for `documents.yml` in
-  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
-  and
-  [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
-- improved `print.mighty_study()` output with documents summary
-- added tests and fixtures for documents schema, reference validation,
-  and write/read roundtrip (all above related with issue
-  [\#27](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/27))
+  ([\#27](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/27))
 - Added validation for column dependencies in
   [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
   ([\#12](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/12)).

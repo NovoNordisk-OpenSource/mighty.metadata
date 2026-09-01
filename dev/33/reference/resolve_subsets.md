@@ -38,7 +38,7 @@ given in `subset`. A `component` with a `with.domain` entry is required.
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
-#> → No `documents.yml` file found
+#> → No `_documents.yml` file found
 
 # Add a row action restricted to a subset of source rows
 study$ADAE <- add_row(

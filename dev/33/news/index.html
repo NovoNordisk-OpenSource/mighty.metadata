@@ -49,15 +49,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="mightymetadata-development-version">mighty.metadata (development version)<a class="anchor" aria-label="anchor" href="#mightymetadata-development-version"></a></h2>
-<ul><li>added <code><a href="../reference/documents.html">mighty_documents()</a></code> class with schema validation and document manipulation helpers: <code><a href="../reference/documents.html">list_documents()</a></code>, <code><a href="../reference/documents.html">select_document()</a></code>, <code><a href="../reference/documents.html">add_document()</a></code>, <code><a href="../reference/documents.html">update_document()</a></code>, <code><a href="../reference/documents.html">remove_documents()</a></code>
-</li>
-<li>added study-level documents support via <code>documents.yml</code> and new <code>study@documents</code> property</li>
-<li>added document references in ADaM metadata at domain, column, and parameter-column levels</li>
-<li>added study validation for document references: unknown document ids (error), invalid METHOD usage outside <code>origin: Derived</code> (error), missing COMMENT text (warning)</li>
-<li>added read/write support for <code>documents.yml</code> in <code><a href="../reference/mighty_study.html">mighty_study()</a></code> and <code><a href="../reference/write_config.html">write_config()</a></code>
-</li>
-<li>improved <code>print.mighty_study()</code> output with documents summary</li>
-<li>added tests and fixtures for documents schema, reference validation, and write/read roundtrip (all above related with issue <a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/27" class="external-link">#27</a>)</li>
+<ul><li>added <code><a href="../reference/documents.html">mighty_documents()</a></code> class with schema validation and document manipulation helpers: <code><a href="../reference/documents.html">list_documents()</a></code>, <code><a href="../reference/documents.html">select_document()</a></code>, <code><a href="../reference/documents.html">add_document()</a></code>, <code><a href="../reference/documents.html">update_document()</a></code>, <code><a href="../reference/documents.html">remove_documents()</a></code> (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/27" class="external-link">#27</a>)</li>
+<li>added study-level documents support via <code>_documents.yml</code> and new <code>study@documents</code> property (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/27" class="external-link">#27</a>)</li>
 <li>Added validation for column dependencies in <code><a href="../reference/mighty_domain.html">mighty_domain()</a></code> (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/12" class="external-link">#12</a>).</li>
 <li>Added validation for naming pattern in <code><a href="../reference/mighty_study.html">mighty_study()</a></code> (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/2" class="external-link">#2</a>).</li>
 <li>Added <code><a href="../reference/resolve_subsets.html">resolve_subsets()</a></code> generic to resolve the <code>rows.row.subset</code> property, rewriting <code>component.with.domain</code> to a <code>.mighty_subset(domain, "subset")</code> marker call matching the marker syntax <code>mighty.component::mighty_component$render()</code> (&gt;= 0.1.0.9003) expects.</li>

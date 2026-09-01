@@ -98,6 +98,6 @@ A tibble with one row per column containing:
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
-#> → No `documents.yml` file found
+#> → No `_documents.yml` file found
 mdcol <- create_md_col(study)
 ```

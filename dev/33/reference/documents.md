@@ -120,14 +120,14 @@ print(docs)
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
-#> → No `documents.yml` file found
+#> → No `_documents.yml` file found
 study@documents <- docs
 
 # Load study config
 s <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
-#> → No `documents.yml` file found
+#> → No `_documents.yml` file found
 
 # Add a document
 s <- s |>
