@@ -1,3 +1,14 @@
+# remove_documents() errors on mighty_study when removing referenced document
+
+    Code
+      remove_documents(study, id = "COMMENT001")
+    Condition
+      Error in `abort_on_unknown_document_refs()`:
+      ! Unknown document references detected.
+      x Unknown document id "COMMENT001" referenced in domain ADAE column TRTEMFL.
+      Add this id to '_documents.yml' or update the reference id in metadata.
+      i Available document ids: "SUPPDOC001" and "METHOD001"
+
 # mighty_documents print() summarizes document ids and entry count
 
     Code

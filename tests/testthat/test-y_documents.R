@@ -1,11 +1,16 @@
-test_that("list_documents() returns document ids", {
+test_that("list_documents() returns document ids for mighty_documents", {
   docs <- mighty_documents(
     file = test_path("test_study/_documents.yml")
   )
   expect_identical(list_documents(docs), c("SUPPDOC001", "COMMENT001", "METHOD001"))
 })
 
-test_that("document can be added via add_document()", {
+test_that("list_documents() returns document ids for mighty_study", {
+  study <- mighty_study(test_path("test_study"))
+  expect_identical(sort(list_documents(study)), c("COMMENT001", "METHOD001", "SUPPDOC001"))
+})
+
+test_that("add_document() works on mighty_documents", {
   docs <- mighty_documents()
 
   docs <- add_document(
@@ -24,7 +29,21 @@ test_that("document can be added via add_document()", {
   expect_equal(sort(list_documents(docs)), c("DOC001", "DOC002"))
 })
 
-test_that("document can be selected via select_document()", {
+test_that("add_document() works on mighty_study", {
+  study <- mighty_study(test_path("test_study"))
+
+  study <- add_document(
+    study,
+    id = "DOC001",
+    title = "A title",
+    doctype = "suppdoc",
+    href = "./doc.pdf"
+  )
+
+  expect_true("DOC001" %in% list_documents(study))
+})
+
+test_that("select_document() works on mighty_documents", {
   docs <- mighty_documents(
     file = test_path("test_study/_documents.yml")
   )
@@ -32,7 +51,13 @@ test_that("document can be selected via select_document()", {
   expect_equal(select_document(docs, "SUPPDOC001")$title, "Analysis Reviewer Guide Protocol")
 })
 
-test_that("document title can be correctly updated via update_document() method", {
+test_that("select_document() works on mighty_study", {
+  study <- mighty_study(test_path("test_study"))
+
+  expect_equal(select_document(study, "SUPPDOC001")$title, "Analysis Reviewer Guide Protocol")
+})
+
+test_that("update_document() works on mighty_documents", {
   docs <- mighty_documents(
     file = test_path("test_study/_documents.yml")
   )
@@ -41,7 +66,14 @@ test_that("document title can be correctly updated via update_document() method"
   expect_equal(select_document(docs, "SUPPDOC001")$title, "Updated")
 })
 
-test_that("document can be removed via remove_documents()", {
+test_that("update_document() works on mighty_study", {
+  study <- mighty_study(test_path("test_study"))
+
+  study <- update_document(study, id = "SUPPDOC001", title = "Updated")
+  expect_equal(select_document(study, "SUPPDOC001")$title, "Updated")
+})
+
+test_that("remove_documents() works on mighty_documents", {
   docs <- mighty_documents(
     file = test_path("test_study/_documents.yml")
   )
@@ -49,7 +81,22 @@ test_that("document can be removed via remove_documents()", {
   docs <- remove_documents(docs, id = "COMMENT001")
 
   expect_length(list_documents(docs), 2)
-  expect_equal(list_documents(docs),  c("SUPPDOC001", "METHOD001"))
+  expect_equal(list_documents(docs), c("SUPPDOC001", "METHOD001"))
+})
+
+test_that("remove_documents() works on mighty_study", {
+  study <- mighty_study(test_path("test_study"))
+  study <- add_document(study, id = "EXTRA001", title = "Extra", doctype = "suppdoc", href = "./extra.pdf")
+
+  study <- remove_documents(study, id = "EXTRA001")
+
+  expect_false("EXTRA001" %in% list_documents(study))
+})
+
+test_that("remove_documents() errors on mighty_study when removing referenced document", {
+  study <- mighty_study(test_path("test_study"))
+
+  expect_snapshot(remove_documents(study, id = "COMMENT001"), error = TRUE)
 })
 
 test_that("mighty_documents print() summarizes document ids and entry count", {
