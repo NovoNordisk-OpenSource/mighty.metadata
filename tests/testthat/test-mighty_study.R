@@ -51,16 +51,10 @@ test_that("mighty_study()", {
     )
   )
 
+  expect_true(S7::S7_inherits(study@study, study_config))
   expect_equal(
-    object = study@study,
-    expected = list(
-      study_id = "test_study"
-    )
-  )
-
-  expect_error(
-    study@study <- list(not_study_id = "missing required field"),
-    "study_id"
+    object = study@study$study_id,
+    expected = "test_study"
   )
 
   expect_snapshot(
@@ -80,6 +74,35 @@ test_that("@mighty accepts NULL and rejects invalid types", {
 
   expect_error(study@mighty <- "not a mighty_config")
   expect_error(study@mighty <- list(external_data = list()))
+})
+
+test_that("@study accepts NULL and rejects invalid types", {
+  study <- test_path("test_study") |> mighty_study()
+
+  study@study <- NULL
+  expect_null(study@study)
+
+  expect_error(study@study <- "not a study_config")
+  expect_error(study@study <- list(study_id = "test_study"))
+})
+
+test_that("mighty_study() without _study.yml has NULL @study", {
+  tmp <- withr::local_tempdir()
+  file.copy(
+    from = test_path("test_study", c("_mighty.yml", "adsl.yml")),
+    to = tmp
+  )
+
+  study <- mighty_study(path = tmp) |> expect_no_condition()
+
+  expect_null(study@study)
+  expect_snapshot(
+    x = print(study),
+    transform = \(x) {
+      # Robust between S7 versions
+      gsub(pattern = "mighty\\.metadata::", replacement = "", x = x)
+    }
+  )
 })
 
 test_that("validate_path() errors when @path set to non-existent directory", {

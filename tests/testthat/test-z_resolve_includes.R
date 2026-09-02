@@ -89,7 +89,7 @@ test_that("resolve_includes() - study - complex", {
   )
 
   expect_equal(
-    object = study_resolved@study,
+    object = S7::S7_data(study_resolved@study),
     expected = list(
       study_id = "test_study",
       impute_baseline_row = FALSE
@@ -112,6 +112,31 @@ test_that("resolve_includes() - study - complex", {
   study_resolved$ADVS |>
     list_parameters() |>
     expect_contains(c("BMI", "BMIGRP"))
+})
+
+test_that("resolve_includes() - study - without @study", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  study@study <- NULL
+
+  study$ADAE <- update_column(
+    study$ADAE,
+    id = "TRTEMFL",
+    include = "{study_id == 'test_study'}"
+  )
+
+  study |>
+    resolve_includes(info = list(study_id = "test_study")) |>
+    getElement("ADAE") |>
+    list_columns() |>
+    expect_contains("TRTEMFL")
+
+  study |>
+    resolve_includes(info = list(study_id = "other_study")) |>
+    getElement("ADAE") |>
+    list_columns() |>
+    expect_no_match("^TRTEMFL$")
 })
 
 test_that("resolve_includes() - domain", {

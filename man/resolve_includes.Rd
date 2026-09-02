@@ -10,7 +10,8 @@ resolve_includes(x, info = list())
 \item{x}{A \link{mighty_study} or \link{mighty_domain} object.}
 
 \item{info}{\code{list()} Named list of values used to evaluate \code{include}
-expressions. For \link{mighty_study}, merged into \code{x@study}.}
+expressions. For \link{mighty_study}, merged into the \link{study_config} held in
+\code{x@study}.}
 }
 \value{
 The input object with conditional items resolved.

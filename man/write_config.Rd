@@ -3,6 +3,7 @@
 \name{write_config}
 \alias{write_config}
 \alias{write_config,mighty.metadata::mighty_config-method}
+\alias{write_config,mighty.metadata::study_config-method}
 \alias{write_config,mighty.metadata::mighty_study-method}
 \title{Write a mighty object to YAML}
 \usage{
@@ -11,11 +12,14 @@ write_config(x, path = NULL)
 ## S7 method for class <mighty.metadata::mighty_config>
 write_config(x, path = NULL)
 
+## S7 method for class <mighty.metadata::study_config>
+write_config(x, path = NULL)
+
 ## S7 method for class <mighty.metadata::mighty_study>
 write_config(x, path = NULL)
 }
 \arguments{
-\item{x}{A \link{mighty_config} or \link{mighty_study} object.}
+\item{x}{A \link{mighty_config}, \link{study_config}, or \link{mighty_study} object.}
 
 \item{path}{Directory to write to. If \code{NULL}, defaults to the source
 directory the object was loaded from.}
@@ -25,8 +29,9 @@ Invisibly returns \code{x}.
 }
 \description{
 Methods for the \code{\link[S7schema:write_config]{S7schema::write_config()}} generic that serialize
-\link{mighty_config} and \link{mighty_study} objects back to YAML files.
+\link{mighty_config}, \link{study_config}, and \link{mighty_study} objects back to YAML
+files.
 }
 \seealso{
-\link{mighty_config}, \link{mighty_study}
+\link{mighty_config}, \link{study_config}, \link{mighty_study}
 }
