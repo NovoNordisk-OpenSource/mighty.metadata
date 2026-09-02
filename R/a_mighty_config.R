@@ -39,7 +39,7 @@
 #' `_mighty.yml` file. Supply `path` to write to a specific directory;
 #' defaults to the directory the object was loaded from.
 #'
-#' @seealso [mighty_study], [mighty_domain], [write_config()]
+#' @seealso [mighty_study], [study_config], [mighty_domain], [write_config()]
 #'
 #' @examples
 #' x <- mighty_config(
