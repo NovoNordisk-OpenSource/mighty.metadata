@@ -1,3 +1,12 @@
+# mighty_documents print() summarises document ids and entry count
+
+    Code
+      print(docs)
+    Message
+      <mighty_documents>
+      Documents: 3 entries
+      IDs: `SUPPDOC001`, `COMMENT001`, and `METHOD001`
+
 # check_document_references() errors when domains reference document ids but no docs in _documents.yml
 
     Code

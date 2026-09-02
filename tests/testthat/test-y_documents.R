@@ -52,6 +52,30 @@ test_that("document can be removed via remove_documents()", {
   expect_equal(list_documents(docs),  c("SUPPDOC001", "METHOD001"))
 })
 
+test_that("mighty_documents print() summarises document ids and entry count", {
+  docs <- mighty_documents(file = test_path("test_study/_documents.yml"))
+
+  print(docs) |>
+    expect_snapshot(
+      transform = \(x) {
+        sub(
+          pattern = "<mighty.metadata::mighty_documents>",
+          replacement = "<mighty_documents>",
+          x = x
+        )
+      }
+    )
+})
+
+test_that("mighty_study() enforces mighty_documents type for @documents", {
+  study <- mighty_study(test_path("test_study"))
+
+  expect_error(
+    study@documents <- list(),
+    "@documents must be a mighty_documents object"
+  )
+})
+
 test_that("mighty_study() reads _documents.yml", {
   study <- mighty_study(test_path("test_study"))
 
