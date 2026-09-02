@@ -1,4 +1,4 @@
-# mighty_documents print() summarises document ids and entry count
+# mighty_documents print() summarizes document ids and entry count
 
     Code
       print(docs)

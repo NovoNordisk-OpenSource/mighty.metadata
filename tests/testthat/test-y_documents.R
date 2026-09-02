@@ -52,7 +52,7 @@ test_that("document can be removed via remove_documents()", {
   expect_equal(list_documents(docs),  c("SUPPDOC001", "METHOD001"))
 })
 
-test_that("mighty_documents print() summarises document ids and entry count", {
+test_that("mighty_documents print() summarizes document ids and entry count", {
   docs <- mighty_documents(file = test_path("test_study/_documents.yml"))
 
   print(docs) |>
