@@ -1,7 +1,8 @@
 #' Mighty Domain
 #'
 #' @description
-#' `mighty_domain()` provides a robust way of working with ADaM metadata in the `{mighty}` framework.
+#' `mighty_domain()` provides a robust way of working with ADaM metadata
+#' in the `{mighty}` framework.
 #'
 #' A new object is initialized by supplying an existing yaml metadata file.
 #' This package provides helpers to update column, parameter, and row entries.
@@ -12,8 +13,8 @@
 #' * `help("rows")`
 #'
 #' `mighty_domain()` inherits from `S7schema::S7schema()` and the yaml file is
-#' automatically validated when loaded. The helper functions above also always validates
-#' the new configuration before returning.
+#' automatically validated when loaded. The helper functions above also always
+#' validates the new configuration before returning.
 #'
 #' You can at anytime validate an object by calling `validate()` and use
 #' `write_config()` to save it as a yaml file again.

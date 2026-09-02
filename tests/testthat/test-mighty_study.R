@@ -41,7 +41,7 @@ test_that("mighty_study()", {
     expect_equal(c("ADAE", "ADSL", "ADVS"))
 
   S7::prop_names(study) |>
-    expect_equal(c("mighty", "study", "path"))
+    expect_equal(c("mighty", "study", "documents", "path"))
 
   expect_true(S7::S7_inherits(study@mighty, mighty_config))
   expect_equal(
@@ -69,6 +69,11 @@ test_that("mighty_study()", {
       # Robust between S7 versions
       gsub(pattern = "mighty\\.metadata::", replacement = "", x = x)
     }
+  )
+
+  expect_equal(
+    object = sort(list_documents(study)),
+    expected = sort(c("SUPPDOC001", "COMMENT001", "METHOD001"))
   )
 })
 

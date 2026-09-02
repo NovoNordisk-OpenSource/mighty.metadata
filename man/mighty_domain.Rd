@@ -16,7 +16,8 @@ including \code{id}, \code{label}, \code{class}, \code{keys}, \code{columns}, \c
 and \code{rows}.
 }
 \description{
-\code{mighty_domain()} provides a robust way of working with ADaM metadata in the \code{{mighty}} framework.
+\code{mighty_domain()} provides a robust way of working with ADaM metadata
+in the \code{{mighty}} framework.
 
 A new object is initialized by supplying an existing yaml metadata file.
 This package provides helpers to update column, parameter, and row entries.
@@ -28,8 +29,8 @@ See the references below for help:
 }
 
 \code{mighty_domain()} inherits from \code{S7schema::S7schema()} and the yaml file is
-automatically validated when loaded. The helper functions above also always validates
-the new configuration before returning.
+automatically validated when loaded. The helper functions above also always
+validates the new configuration before returning.
 
 You can at anytime validate an object by calling \code{validate()} and use
 \code{write_config()} to save it as a yaml file again.

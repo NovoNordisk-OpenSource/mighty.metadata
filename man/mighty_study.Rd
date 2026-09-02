@@ -21,24 +21,28 @@ Access via e.g. \code{study$adsl}.}
 if no properties file exists.}
 \item{\verb{@mighty}}{A \code{mighty_config} object loaded from \verb{_mighty.yml}, or
 \code{NULL} if no configuration file exists.}
+\item{\verb{@documents}}{Study-level document metadata from \code{documents.yml},
+or empty list if no documents file exists.}
 \item{\verb{@path}}{The source directory path as \code{character(1)}.}
 }
 }
 \description{
 Creates a \code{mighty_study} object by loading all YAML metadata files from a
-directory. Each YAML file (except \verb{_mighty.yml} and \verb{_study.yml}) is parsed
-as a \link{mighty_domain} object. The optional \verb{_study.yml} file provides
+directory. Each YAML file (except \verb{_mighty.yml},\verb{_study.yml} and \code{documents.yml})
+is parsed as a \link{mighty_domain} object. The optional \verb{_study.yml} file provides
 study-level properties and the optional \verb{_mighty.yml} file provides
-mighty framework configuration.
+mighty framework configuration, and optional \code{documents.yml}
+provides study-level documents metadata.
 }
 \details{
 The function scans the directory for files matching \verb{*.yaml} or \verb{*.yml}:
 \itemize{
 \item Files named \verb{_study.yml} or \verb{_study.yaml} are treated as study properties
 \item Files named \verb{_mighty.yml} or \verb{_mighty.yaml} are treated as mighty framework config
+\item File named \code{documents.yml} is treated as study documents metadata
 \item All other YAML files must follow ADaM naming conventions (starting with
 \code{ad}) and are loaded as \link{mighty_domain} objects
-\item Only one \verb{_mighty.yml} and one \verb{_study.yml} file is allowed per directory
+\item Only one \verb{_mighty.yml}, one \verb{_study.yml} and one \code{documents.yml} file is allowed per directory
 }
 }
 \section{Write Study Metadata}{
@@ -66,6 +70,9 @@ study@study
 
 # Access mighty framework configuration
 study@mighty
+
+# Access study-level documents metadata
+study@documents
 
 # Load and populate in one step
 study <- mighty_study(

@@ -43,6 +43,13 @@ write_mighty_study <- function(study, path) {
   if (length(study@study)) {
     write_yml(x = study@study, path = path, name = "_study")
   }
+  if (length(study@documents)) {
+    write_yml(
+      x = S7::S7_data(study@documents),
+      path = path,
+      name = "_documents"
+    )
+  }
 
   for (i in seq_along(study)) {
     write_config(
