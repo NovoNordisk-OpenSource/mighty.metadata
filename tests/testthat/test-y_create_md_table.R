@@ -40,7 +40,7 @@ test_that("create_md_table() on a single domain", {
 
   expect_equal(object = nrow(mdtable), expected = 1L)
   expect_equal(object = mdtable[["id"]], expected = "ADVS")
-  expect_equal(object = mdtable[["order"]], expected = 1L)
+  expect_equal(object = mdtable[["order"]], expected = NA_integer_)
   expect_equal(
     object = mdtable[["keys"]][[1]],
     expected = c("USUBJID", "PARAMCD", "AVISITN")

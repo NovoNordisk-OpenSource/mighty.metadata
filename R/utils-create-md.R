@@ -27,7 +27,7 @@ bind_domains <- function(study, fun, order = FALSE) {
 #'
 #' `x` is either a data frame, or a single metadata entry such as a
 #' [mighty_domain] or a column definition. Entries are turned into a one row
-#' data frame by [new_md_row()] first. An `x` without any rows returns the
+#' data frame by `new_md_row()` first. An `x` without any rows returns the
 #' empty `template`.
 #' @noRd
 apply_template <- function(x, template) {
@@ -46,7 +46,7 @@ apply_template <- function(x, template) {
 #'
 #' Nested entries such as `format` are flattened into `format_type`,
 #' `format_length` and so on, entries matching a list column of `template` are
-#' wrapped by [wrap_list_entries()], and everything not named in `template` is
+#' wrapped by `wrap_list_entries()`, and everything not named in `template` is
 #' dropped.
 #' @noRd
 new_md_row <- function(x, template) {

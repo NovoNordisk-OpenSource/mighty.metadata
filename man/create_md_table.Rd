@@ -12,7 +12,7 @@ create_md_table(x)
 \value{
 A tibble with one row per table containing:
 \describe{
-\item{order}{Table order within the study}
+\item{order}{Table order within the study, \code{NA} for a single domain}
 \item{id}{Table identifier}
 \item{label}{Table label/description}
 \item{class}{CDISC class of the dataset}

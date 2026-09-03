@@ -8,7 +8,7 @@
 #'
 #' @return A tibble with one row per table containing:
 #' \describe{
-#'   \item{order}{Table order within the study}
+#'   \item{order}{Table order within the study, `NA` for a single domain}
 #'   \item{id}{Table identifier}
 #'   \item{label}{Table label/description}
 #'   \item{class}{CDISC class of the dataset}
@@ -51,10 +51,7 @@ create_md_table_study <- function(study) {
 
 #' @noRd
 create_md_table_domain <- function(domain) {
-  mdtable <- apply_template(domain, mdtable_template)
-  mdtable[["order"]] <- 1L
-
-  mdtable
+  apply_template(domain, mdtable_template)
 }
 
 #' @noRd
