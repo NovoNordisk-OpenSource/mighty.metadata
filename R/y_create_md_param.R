@@ -46,9 +46,7 @@ S7::method(create_md_param, mighty_domain) <- function(x) {
 
 #' @noRd
 create_md_param_study <- function(study) {
-  study |>
-    lapply(create_md_param) |>
-    purrr::list_rbind()
+  bind_domains(study, create_md_param)
 }
 
 #' @noRd

@@ -46,13 +46,7 @@ S7::method(create_md_table, mighty_domain) <- function(x) {
 
 #' @noRd
 create_md_table_study <- function(study) {
-  mdtable <- study |>
-    lapply(create_md_table) |>
-    purrr::list_rbind()
-
-  mdtable[["order"]] <- seq_len(nrow(mdtable))
-
-  mdtable
+  bind_domains(study, create_md_table, order = TRUE)
 }
 
 #' @noRd

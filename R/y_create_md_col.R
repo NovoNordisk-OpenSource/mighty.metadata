@@ -53,9 +53,7 @@ S7::method(create_md_col, mighty_domain) <- function(x) {
 
 #' @noRd
 create_md_col_study <- function(study) {
-  study |>
-    lapply(create_md_col) |>
-    purrr::list_rbind()
+  bind_domains(study, create_md_col)
 }
 
 #' @noRd
