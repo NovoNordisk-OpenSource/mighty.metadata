@@ -4,16 +4,15 @@
 #' `study_config()` provides a robust way of working with the `_study.yml`
 #' configuration file in the `{mighty}` framework.
 #'
-#' A new object is initialized by supplying a directory path containing a
-#' `_study.yml` file. The file is automatically validated against the
-#' `study.json` schema when loaded.
+#' A new object is initialized by supplying the path to a `_study.yml` file.
+#' The file is automatically validated against the `study.json` schema when
+#' loaded.
 #'
 #' `study_config()` inherits from `S7schema::S7schema()`. You can validate
 #' an object at any time by calling `validate()` and use `write_config()` to
 #' save it back as a yaml file.
 #'
-#' @param path `character(1)` path to a directory containing a `_study.yml`
-#'   file.
+#' @param file `character(1)` path to a `_study.yml` file.
 #'
 #' @return A `study_config` S7 object extending [S7schema::S7schema].
 #' \describe{
@@ -31,14 +30,14 @@
 #'
 #' @section Write Config:
 #' Use [write_config()] to serialize a `study_config()` object back to a
-#' `_study.yml` file. Supply `path` to write to a specific directory;
-#' defaults to the directory the object was loaded from.
+#' `_study.yml` file. Supply `path` to write to a specific file; defaults to
+#' the file the object was loaded from.
 #'
 #' @seealso [mighty_study], [mighty_config], [mighty_domain], [write_config()]
 #'
 #' @examples
 #' x <- study_config(
-#'   path = system.file("examples", package = "mighty.metadata")
+#'   file = system.file("examples", "_study.yml", package = "mighty.metadata")
 #' )
 #'
 #' # Custom print method gives a small overview
@@ -47,22 +46,19 @@
 #' # Underlying object is a `list`
 #' str(x)
 #'
-#' # Write back to a directory
-#' tmp <- tempdir()
+#' # Write back to a file
+#' tmp <- tempfile(fileext = ".yml")
 #' write_config(x, path = tmp)
 #'
 #' @name study_config
 NULL
 
 #' @noRd
-construct_study_config <- function(path) {
-  schema <- system.file("schema", "study.json", package = "mighty.metadata")
-  file <- find_yml(path = path, name = "_study", schema = schema)
-
+construct_study_config <- function(file) {
   S7::new_object(
     .parent = S7schema::S7schema(
       file = file,
-      schema = schema
+      schema = system.file("schema", "study.json", package = "mighty.metadata")
     )
   )
 }

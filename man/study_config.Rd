@@ -4,11 +4,10 @@
 \alias{study_config}
 \title{Study Config}
 \usage{
-study_config(path)
+study_config(file)
 }
 \arguments{
-\item{path}{\code{character(1)} path to a directory containing a \verb{_study.yml}
-file.}
+\item{file}{\code{character(1)} path to a \verb{_study.yml} file.}
 }
 \value{
 A \code{study_config} S7 object extending \link[S7schema:S7schema]{S7schema::S7schema}.
@@ -21,9 +20,9 @@ A \code{study_config} S7 object extending \link[S7schema:S7schema]{S7schema::S7s
 \code{study_config()} provides a robust way of working with the \verb{_study.yml}
 configuration file in the \code{{mighty}} framework.
 
-A new object is initialized by supplying a directory path containing a
-\verb{_study.yml} file. The file is automatically validated against the
-\code{study.json} schema when loaded.
+A new object is initialized by supplying the path to a \verb{_study.yml} file.
+The file is automatically validated against the \code{study.json} schema when
+loaded.
 
 \code{study_config()} inherits from \code{S7schema::S7schema()}. You can validate
 an object at any time by calling \code{validate()} and use \code{write_config()} to
@@ -40,13 +39,13 @@ Study-level properties are used by \code{\link[=resolve_includes]{resolve_includ
 \section{Write Config}{
 
 Use \code{\link[=write_config]{write_config()}} to serialize a \code{study_config()} object back to a
-\verb{_study.yml} file. Supply \code{path} to write to a specific directory;
-defaults to the directory the object was loaded from.
+\verb{_study.yml} file. Supply \code{path} to write to a specific file; defaults to
+the file the object was loaded from.
 }
 
 \examples{
 x <- study_config(
-  path = system.file("examples", package = "mighty.metadata")
+  file = system.file("examples", "_study.yml", package = "mighty.metadata")
 )
 
 # Custom print method gives a small overview
@@ -55,8 +54,8 @@ print(x)
 # Underlying object is a `list`
 str(x)
 
-# Write back to a directory
-tmp <- tempdir()
+# Write back to a file
+tmp <- tempfile(fileext = ".yml")
 write_config(x, path = tmp)
 
 }

@@ -4,16 +4,15 @@
 #' `mighty_config()` provides a robust way of working with the `_mighty.yml`
 #' configuration file in the `{mighty}` framework.
 #'
-#' A new object is initialized by supplying a directory path containing a
-#' `_mighty.yml` file. The file is automatically validated against the
-#' `mighty.json` schema when loaded.
+#' A new object is initialized by supplying the path to a `_mighty.yml` file.
+#' The file is automatically validated against the `mighty.json` schema when
+#' loaded.
 #'
 #' `mighty_config()` inherits from `S7schema::S7schema()`. You can validate
 #' an object at any time by calling `validate()` and use `write_config()` to
 #' save it back as a yaml file.
 #'
-#' @param path `character(1)` path to a directory containing a `_mighty.yml`
-#'   file.
+#' @param file `character(1)` path to a `_mighty.yml` file.
 #'
 #' @return A `mighty_config` S7 object extending [S7schema::S7schema].
 #' \describe{
@@ -36,14 +35,14 @@
 #'
 #' @section Write Config:
 #' Use [write_config()] to serialize a `mighty_config()` object back to a
-#' `_mighty.yml` file. Supply `path` to write to a specific directory;
-#' defaults to the directory the object was loaded from.
+#' `_mighty.yml` file. Supply `path` to write to a specific file; defaults to
+#' the file the object was loaded from.
 #'
 #' @seealso [mighty_study], [study_config], [mighty_domain], [write_config()]
 #'
 #' @examples
 #' x <- mighty_config(
-#'   path = system.file("examples", package = "mighty.metadata")
+#'   file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
 #' )
 #'
 #' # Custom print method gives a small overview
@@ -52,22 +51,19 @@
 #' # Underlying object is a `list`
 #' str(x)
 #'
-#' # Write back to a directory
-#' tmp <- tempdir()
+#' # Write back to a file
+#' tmp <- tempfile(fileext = ".yml")
 #' write_config(x, path = tmp)
 #'
 #' @name mighty_config
 NULL
 
 #' @noRd
-construct_mighty_config <- function(path) {
-  schema <- system.file("schema", "mighty.json", package = "mighty.metadata")
-  file <- find_yml(path = path, name = "_mighty", schema = schema)
-
+construct_mighty_config <- function(file) {
   S7::new_object(
     .parent = S7schema::S7schema(
       file = file,
-      schema = schema
+      schema = system.file("schema", "mighty.json", package = "mighty.metadata")
     )
   )
 }
