@@ -1,6 +1,6 @@
 test_that("mighty_documents() validates schema", {
   docs <- mighty_documents(
-    x = list(
+    .data = list(
       list(
         id = "DOC001",
         title = "A title",

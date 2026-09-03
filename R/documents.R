@@ -14,13 +14,13 @@
 #' where documents are saved to `_documents.yml`.
 #'
 #' @param file `character(1)` path to `_documents.yml`.
-#' @param x `list()` of document entries.
+#' @param .data `list()` of document entries.
 #'
 #' @return An object of class `mighty_documents`.
 #'
 #' @examples
 #' docs <- mighty_documents(
-#'   x = list(
+#'   .data = list(
 #'     list(
 #'       id = "DOC001",
 #'       title = "Statistical Analysis Plan",
@@ -43,12 +43,12 @@
 NULL
 
 #' @noRd
-construct_mighty_documents <- function(file = NULL, x = NULL) {
+construct_mighty_documents <- function(file = NULL, .data = NULL) {
   schema <- system.file("schema", "documents.json", package = "mighty.metadata")
   parent <- if (!is.null(file)) {
     S7schema::S7schema(file = file, schema = schema)
   } else {
-    S7schema::S7schema(.data = x, schema = schema)
+    S7schema::S7schema(.data = .data, schema = schema)
   }
   S7::new_object(.parent = parent)
 }
