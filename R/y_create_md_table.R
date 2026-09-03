@@ -46,7 +46,7 @@ S7::method(create_md_table, mighty_domain) <- function(x) {
 
 #' @noRd
 create_md_table_study <- function(study) {
-  bind_domains(study, create_md_table, order = TRUE)
+  bind_entries(study, create_md_table, order = TRUE)
 }
 
 #' @noRd

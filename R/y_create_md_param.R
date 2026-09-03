@@ -46,7 +46,7 @@ S7::method(create_md_param, mighty_domain) <- function(x) {
 
 #' @noRd
 create_md_param_study <- function(study) {
-  bind_domains(study, create_md_param)
+  bind_entries(study, create_md_param)
 }
 
 #' @noRd
@@ -57,13 +57,15 @@ create_md_param_domain <- function(domain) {
 
   mdtable <- create_md_table(domain)
 
-  mdparam <- domain[["parameters"]] |>
-    lapply(FUN = apply_template, template = mdparam_template) |>
-    purrr::list_rbind()
+  mdparam <- bind_entries(
+    x = domain[["parameters"]],
+    fun = apply_template,
+    template = mdparam_template,
+    order = TRUE
+  )
 
   mdparam[["table_id"]] <- mdtable[["id"]]
   mdparam[["table_label"]] <- mdtable[["label"]]
-  mdparam[["order"]] <- seq_len(nrow(mdparam))
 
   apply_template(mdparam, mdparam_template)
 }

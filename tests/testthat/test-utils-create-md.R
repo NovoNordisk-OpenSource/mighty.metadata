@@ -1,10 +1,10 @@
-test_that("bind_domains()", {
+test_that("bind_entries()", {
   study <- test_path("test_study") |>
     mighty_study()
 
   fun <- \(domain) tibble::tibble(id = domain[["id"]], order = 1L)
 
-  bound <- bind_domains(study, fun)
+  bound <- bind_entries(study, fun)
 
   expect_s3_class(object = bound, class = "tbl_df")
   expect_equal(object = nrow(bound), expected = length(study))
@@ -17,9 +17,34 @@ test_that("bind_domains()", {
   expect_equal(object = bound[["order"]], expected = rep(1L, nrow(bound)))
 
   expect_equal(
-    object = bind_domains(study, fun, order = TRUE)[["order"]],
+    object = bind_entries(study, fun, order = TRUE)[["order"]],
     expected = seq_along(study)
   )
+})
+
+test_that("bind_entries() passes arguments on to fun", {
+  template <- tibble::tibble(a = character(), order = integer())
+
+  bound <- bind_entries(
+    x = list(list(a = "x"), list(a = "y")),
+    fun = apply_template,
+    template = template,
+    order = TRUE
+  )
+
+  expect_equal(object = bound[["a"]], expected = c("x", "y"))
+  expect_equal(object = bound[["order"]], expected = c(1L, 2L))
+})
+
+test_that("bind_entries() drops entries that fun returns NULL for", {
+  bound <- bind_entries(
+    x = c("x", NA, "y"),
+    fun = \(a) if (is.na(a)) NULL else tibble::tibble(a = a),
+    order = TRUE
+  )
+
+  expect_equal(object = bound[["a"]], expected = c("x", "y"))
+  expect_equal(object = bound[["order"]], expected = c(1L, 2L))
 })
 
 test_that("apply_template()", {

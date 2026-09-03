@@ -57,22 +57,22 @@ S7::method(create_md_values, mighty_domain) <- function(x) {
 
 #' @noRd
 create_md_values_study <- function(study) {
-  bind_domains(study, create_md_values)
+  bind_entries(study, create_md_values)
 }
 
 #' @noRd
 create_md_values_domain <- function(domain) {
   mdparam <- create_md_param(domain)
 
-  mdvalues <- seq_len(nrow(mdparam)) |>
-    lapply(FUN = \(i) {
+  mdvalues <- bind_entries(
+    x = seq_len(nrow(mdparam)),
+    fun = \(i) {
       create_md_values_param(
         parameter = domain[["parameters"]][[i]],
         param = mdparam[i, ]
       )
-    }) |>
-    Filter(f = Negate(is.null)) |>
-    purrr::list_rbind()
+    }
+  )
 
   apply_template(mdvalues, mdvalues_template)
 }
@@ -83,16 +83,18 @@ create_md_values_param <- function(parameter, param) {
     return(NULL)
   }
 
-  mdvalues <- parameter[["columns"]] |>
-    lapply(FUN = apply_template, template = mdvalues_template) |>
-    purrr::list_rbind()
+  mdvalues <- bind_entries(
+    x = parameter[["columns"]],
+    fun = apply_template,
+    template = mdvalues_template,
+    order = TRUE
+  )
 
   mdvalues[["table_id"]] <- param[["table_id"]]
   mdvalues[["table_label"]] <- param[["table_label"]]
   mdvalues[["param_order"]] <- param[["order"]]
   mdvalues[["param_id"]] <- param[["id"]]
   mdvalues[["param_label"]] <- param[["label"]]
-  mdvalues[["order"]] <- seq_len(nrow(mdvalues))
 
   mdvalues
 }

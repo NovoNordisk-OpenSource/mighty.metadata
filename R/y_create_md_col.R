@@ -53,21 +53,23 @@ S7::method(create_md_col, mighty_domain) <- function(x) {
 
 #' @noRd
 create_md_col_study <- function(study) {
-  bind_domains(study, create_md_col)
+  bind_entries(study, create_md_col)
 }
 
 #' @noRd
 create_md_col_domain <- function(domain) {
   mdtable <- create_md_table(domain)
 
-  mdcol <- domain[["columns"]] |>
-    lapply(FUN = apply_template, template = mdcol_template) |>
-    purrr::list_rbind()
+  mdcol <- bind_entries(
+    x = domain[["columns"]],
+    fun = apply_template,
+    template = mdcol_template,
+    order = TRUE
+  )
 
   mdcol[["table_id"]] <- mdtable[["id"]]
   mdcol[["table_label"]] <- mdtable[["label"]]
   mdcol[["key"]] <- mdcol[["id"]] %in% mdtable[["keys"]][[1]]
-  mdcol[["order"]] <- seq_len(nrow(mdcol))
 
   apply_template(mdcol, mdcol_template)
 }

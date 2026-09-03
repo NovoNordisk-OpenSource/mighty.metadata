@@ -1,15 +1,14 @@
-#' Bind the metadata of each domain in a study
+#' Bind the metadata of each entry of a parent
 #'
-#' Applies `fun` to every domain in `study` and row binds the resulting data
-#' frames into a single metadata data set.
+#' Applies `fun` to every entry of `x`, e.g. every domain of a study or every
+#' column of a domain, and row binds the resulting data frames into a single
+#' metadata data set. Further arguments are passed on to `fun`.
 #'
-#' Set `order = TRUE` to renumber `order` across the whole study. Leave it
-#' `FALSE` when `order` is scoped to the parent data set, e.g. columns within
-#' a table, as the domain level numbering is then already correct.
+#' Set `order = TRUE` to number `order` by position within `x`.
 #' @noRd
-bind_domains <- function(study, fun, order = FALSE) {
-  bound <- study |>
-    lapply(FUN = fun) |>
+bind_entries <- function(x, fun, ..., order = FALSE) {
+  bound <- x |>
+    lapply(FUN = fun, ...) |>
     purrr::list_rbind()
 
   if (order) {
