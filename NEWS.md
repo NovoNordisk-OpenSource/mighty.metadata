@@ -1,5 +1,8 @@
 # mighty.metadata (development version)
 
+* Added `mighty_config()` class for the `_mighty.yml` configuration file (#25).
+  The `@mighty` property of `mighty_study()` now holds a `mighty_config()`
+  object instead of a plain list, and is `NULL` when no `_mighty.yml` exists.
 * Added `study_config()` class for the `_study.yml` configuration file (#26).
   The `@study` property of `mighty_study()` now holds a `study_config()`
   object instead of a plain list, and is `NULL` when no `_study.yml` exists.
