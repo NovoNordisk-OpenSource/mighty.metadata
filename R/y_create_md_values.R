@@ -74,10 +74,6 @@ create_md_values_domain <- function(domain) {
     Filter(f = Negate(is.null)) |>
     purrr::list_rbind()
 
-  if (!nrow(mdvalues)) {
-    return(mdvalues_template)
-  }
-
   apply_template(mdvalues, mdvalues_template)
 }
 

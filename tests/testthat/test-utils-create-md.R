@@ -40,9 +40,14 @@ test_that("apply_template()", {
     expected = tibble::tibble(a = "x", b = 1L)
   )
 
-  # An empty data frame returns the template itself
+  # A data frame without rows returns the template itself
   expect_equal(
     object = apply_template(tibble::tibble(), template),
+    expected = template
+  )
+
+  expect_equal(
+    object = apply_template(tibble::tibble(a = character()), template),
     expected = template
   )
 

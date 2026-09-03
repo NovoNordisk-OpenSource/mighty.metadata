@@ -27,11 +27,16 @@ bind_domains <- function(study, fun, order = FALSE) {
 #'
 #' `x` is either a data frame, or a single metadata entry such as a
 #' [mighty_domain] or a column definition. Entries are turned into a one row
-#' data frame by [new_md_row()] first.
+#' data frame by [new_md_row()] first. An `x` without any rows returns the
+#' empty `template`.
 #' @noRd
 apply_template <- function(x, template) {
   if (!is.data.frame(x)) {
     x <- new_md_row(x, template)
+  }
+
+  if (!nrow(x)) {
+    return(template)
   }
 
   purrr::list_rbind(list(template, x))[names(template)]
