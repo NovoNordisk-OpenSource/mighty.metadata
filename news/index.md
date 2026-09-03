@@ -2,6 +2,26 @@
 
 ## mighty.metadata (development version)
 
+- Added
+  [`mighty_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md)
+  class for the `_mighty.yml` configuration file
+  ([\#25](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/25)).
+  The `@mighty` property of
+  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  now holds a
+  [`mighty_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md)
+  object instead of a plain list, and is `NULL` when no `_mighty.yml`
+  exists.
+- Added
+  [`study_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md)
+  class for the `_study.yml` configuration file
+  ([\#26](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/26)).
+  The `@study` property of
+  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  now holds a
+  [`study_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md)
+  object instead of a plain list, and is `NULL` when no `_study.yml`
+  exists.
 - Added validation for column dependencies in
   [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
   ([\#12](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/12)).

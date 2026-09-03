@@ -15,7 +15,7 @@ mighty framework configuration."><meta property="og:image" content="https://novo
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,11 +89,11 @@ mighty framework configuration.</p>
 Access via e.g. <code>study$adsl</code>.</p></dd>
 
 <dt><code>@study</code></dt>
-<dd><p>Study-level properties from <code>_study.yml</code>, or empty list
-if no properties file exists.</p></dd>
+<dd><p>A <a href="study_config.html">study_config</a> object loaded from <code>_study.yml</code>, or
+<code>NULL</code> if no properties file exists.</p></dd>
 
 <dt><code>@mighty</code></dt>
-<dd><p>A <code>mighty_config</code> object loaded from <code>_mighty.yml</code>, or
+<dd><p>A <a href="mighty_config.html">mighty_config</a> object loaded from <code>_mighty.yml</code>, or
 <code>NULL</code> if no configuration file exists.</p></dd>
 
 <dt><code>@path</code></dt>
@@ -115,13 +115,14 @@ if no properties file exists.</p></dd>
 
 <p>Use <code><a href="write_config.html">write_config()</a></code> to serialize a <code>mighty_study()</code> object back to YAML
 files. Each domain is written as a separate file, plus <code>_mighty.yml</code> and
-<code>_study.yml</code> when non-empty. If <code>path</code> is <code>NULL</code>, files are written to
-<code>x@path</code>.</p>
+<code>_study.yml</code> when <code>@mighty</code> and <code>@study</code> are not <code>NULL</code>. If <code>path</code> is
+<code>NULL</code>, files are written to <code>x@path</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="mighty_domain.html">mighty_domain</a>, <code><a href="write_config.html">write_config()</a></code>, <code><a href="populate_sparse.html">populate_sparse()</a></code>,
-<code><a href="populate_core.html">populate_core()</a></code>, <code><a href="create_md_col.html">create_md_col()</a></code></p></div>
+    <div class="dont-index"><p><a href="mighty_domain.html">mighty_domain</a>, <a href="mighty_config.html">mighty_config</a>, <a href="study_config.html">study_config</a>,
+<code><a href="write_config.html">write_config()</a></code>, <code><a href="populate_sparse.html">populate_sparse()</a></code>, <code><a href="populate_core.html">populate_core()</a></code>,
+<code><a href="create_md_col.html">create_md_col()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -144,9 +145,9 @@ files. Each domain is written as a separate file, plus <code>_mighty.yml</code> 
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Access study-level properties</span></span></span>
 <span class="r-in"><span><span class="va">study</span><span class="op">@</span><span class="va">study</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $study_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "example_study"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">&lt;mighty.metadata::study_config&gt;</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Study ID: example_study</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Fields: `study_id`</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Access mighty framework configuration</span></span></span>
 <span class="r-in"><span><span class="va">study</span><span class="op">@</span><span class="va">mighty</span></span></span>

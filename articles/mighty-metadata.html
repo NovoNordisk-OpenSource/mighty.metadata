@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -354,21 +354,27 @@ parameter:</p>
 <span><span class="va">study</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">&lt;mighty.metadata::mighty_study/list/S7_object&gt;</span></span></span>
 <span><span class="co">#&gt; @ mighty: <span style="color: #0000BB;">&lt;mighty.metadata::mighty_config&gt;</span></span></span>
-<span><span class="co">#&gt; @ study: `study_id`</span></span>
+<span><span class="co">#&gt; @ study: <span style="color: #0000BB;">&lt;mighty.metadata::study_config&gt;</span></span></span>
 <span><span class="co">#&gt; $ ADAE: <span style="color: #0000BB;">&lt;mighty.metadata::mighty_domain&gt;</span></span></span>
 <span><span class="co">#&gt; $ ADSL: <span style="color: #0000BB;">&lt;mighty.metadata::mighty_domain&gt;</span></span></span>
 <span><span class="co">#&gt; $ ADVS: <span style="color: #0000BB;">&lt;mighty.metadata::mighty_domain&gt;</span></span></span></code></pre></div>
 <p>Access individual domains with <code>$</code>. Study-level properties
-from <code>_study.yml</code> are stored in <code>@study</code> and
-mighty framework configuration from <code>_mighty.yml</code> is stored
-in <code>@mighty</code>. The <code>@</code> operator accesses properties
-of S7 objects:</p>
+from <code>_study.yml</code> are stored in <code>@study</code> as a
+<code><a href="../reference/study_config.html">study_config()</a></code> object and mighty framework configuration
+from <code>_mighty.yml</code> is stored in <code>@mighty</code> as a
+<code><a href="../reference/mighty_config.html">mighty_config()</a></code> object. Both are <code>NULL</code> when the
+corresponding file is absent. The <code>@</code> operator accesses
+properties of S7 objects:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "ADAE" "ADSL" "ADVS"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">study</span><span class="op">@</span><span class="va">study</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 1</span></span>
+<span><span class="co">#&gt; &lt;mighty.metadata::study_config&gt; List of 1</span></span>
 <span><span class="co">#&gt;  $ study_id: chr "example_study"</span></span>
+<span><span class="co">#&gt;  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"</span></span>
+<span><span class="co">#&gt;  @ validator: &lt;S7schema::validator&gt;</span></span>
+<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x561f094b8438&gt; </span></span>
+<span><span class="co">#&gt;  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">study</span><span class="op">@</span><span class="va">mighty</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;mighty.metadata::mighty_config&gt; List of 2</span></span>
 <span><span class="co">#&gt;  $ external_data:List of 3</span></span>
@@ -384,7 +390,7 @@ of S7 objects:</p>
 <span><span class="co">#&gt;  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."</span></span>
 <span><span class="co">#&gt;  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"</span></span>
 <span><span class="co">#&gt;  @ validator: &lt;S7schema::validator&gt;</span></span>
-<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x556b7aadc858&gt; </span></span>
+<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x561f0992ff08&gt; </span></span>
 <span><span class="co">#&gt;  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"</span></span></code></pre></div>
 <p>The <code>_study.yml</code> file provides the <code>study_id</code>.
 The <code>_mighty.yml</code> file provides <code>external_data</code>

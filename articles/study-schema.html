@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,9 @@
     
     
 <p><code>_study.yml</code> provides study-level properties for a study
-directory — the study identifier and an optional description. The file
+directory — the study identifier and an optional description. Load it
+with <code><a href="../reference/study_config.html">study_config()</a></code>, either directly or as the
+<code>@study</code> property of <code><a href="../reference/mighty_study.html">mighty_study()</a></code>. The file
 structure is defined by a <a href="https://json-schema.org" class="external-link">JSON-schema</a> accessible with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"schema"</span>, <span class="st">"study.json"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span></span></code></pre></div>

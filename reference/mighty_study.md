@@ -39,13 +39,17 @@ A `mighty_study` S7 object extending `list`:
 
 - `@study`:
 
-  Study-level properties from `_study.yml`, or empty list if no
-  properties file exists.
+  A
+  [study_config](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md)
+  object loaded from `_study.yml`, or `NULL` if no properties file
+  exists.
 
 - `@mighty`:
 
-  A `mighty_config` object loaded from `_mighty.yml`, or `NULL` if no
-  configuration file exists.
+  A
+  [mighty_config](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md)
+  object loaded from `_mighty.yml`, or `NULL` if no configuration file
+  exists.
 
 - `@path`:
 
@@ -75,11 +79,14 @@ Use
 [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 to serialize a `mighty_study()` object back to YAML files. Each domain
 is written as a separate file, plus `_mighty.yml` and `_study.yml` when
-non-empty. If `path` is `NULL`, files are written to `x@path`.
+`@mighty` and `@study` are not `NULL`. If `path` is `NULL`, files are
+written to `x@path`.
 
 ## See also
 
 [mighty_domain](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md),
+[mighty_config](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md),
+[study_config](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md),
 [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md),
 [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md),
 [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md),
@@ -106,9 +113,9 @@ study$ADVS
 
 # Access study-level properties
 study@study
-#> $study_id
-#> [1] "example_study"
-#> 
+#> <mighty.metadata::study_config>
+#> Study ID: example_study
+#> Fields: `study_id`
 
 # Access mighty framework configuration
 study@mighty

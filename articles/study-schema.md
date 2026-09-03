@@ -1,8 +1,12 @@
 # Study specifications
 
 `_study.yml` provides study-level properties for a study directory — the
-study identifier and an optional description. The file structure is
-defined by a [JSON-schema](https://json-schema.org) accessible with:
+study identifier and an optional description. Load it with
+[`study_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md),
+either directly or as the `@study` property of
+[`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md).
+The file structure is defined by a
+[JSON-schema](https://json-schema.org) accessible with:
 
 ``` r
 

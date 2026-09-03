@@ -24,7 +24,9 @@ resolve_includes(x, info = list())
   [`list()`](https://rdrr.io/r/base/list.html) Named list of values used
   to evaluate `include` expressions. For
   [mighty_study](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md),
-  merged into `x@study`.
+  merged into the
+  [study_config](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md)
+  held in `x@study`.
 
 ## Value
 
