@@ -17,9 +17,9 @@ A \code{mighty_study} S7 object extending \code{list}:
 \describe{
 \item{List elements}{\link{mighty_domain} objects, named by their \code{id} field.
 Access via e.g. \code{study$adsl}.}
-\item{\verb{@study}}{Study-level properties from \verb{_study.yml}, or empty list
-if no properties file exists.}
-\item{\verb{@mighty}}{A \code{mighty_config} object loaded from \verb{_mighty.yml}, or
+\item{\verb{@study}}{A \link{study_config} object loaded from \verb{_study.yml}, or
+\code{NULL} if no properties file exists.}
+\item{\verb{@mighty}}{A \link{mighty_config} object loaded from \verb{_mighty.yml}, or
 \code{NULL} if no configuration file exists.}
 \item{\verb{@path}}{The source directory path as \code{character(1)}.}
 }
@@ -45,8 +45,8 @@ The function scans the directory for files matching \verb{*.yaml} or \verb{*.yml
 
 Use \code{\link[=write_config]{write_config()}} to serialize a \code{mighty_study()} object back to YAML
 files. Each domain is written as a separate file, plus \verb{_mighty.yml} and
-\verb{_study.yml} when non-empty. If \code{path} is \code{NULL}, files are written to
-\code{x@path}.
+\verb{_study.yml} when \verb{@mighty} and \verb{@study} are not \code{NULL}. If \code{path} is
+\code{NULL}, files are written to \code{x@path}.
 }
 
 \examples{
@@ -79,6 +79,7 @@ write_config(study, path = tmp)
 
 }
 \seealso{
-\link{mighty_domain}, \code{\link[=write_config]{write_config()}}, \code{\link[=populate_sparse]{populate_sparse()}},
-\code{\link[=populate_core]{populate_core()}}, \code{\link[=create_md_col]{create_md_col()}}
+\link{mighty_domain}, \link{mighty_config}, \link{study_config},
+\code{\link[=write_config]{write_config()}}, \code{\link[=populate_sparse]{populate_sparse()}}, \code{\link[=populate_core]{populate_core()}},
+\code{\link[=create_md_col]{create_md_col()}}
 }

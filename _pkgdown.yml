@@ -11,6 +11,7 @@ reference:
     contents:
       - mighty_study
       - mighty_config
+      - study_config
       - resolve_includes
       - resolve_subsets
       - populate_core

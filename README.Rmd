@@ -104,7 +104,8 @@ advs |>
 
 `mighty_study()` loads every YAML file from a directory. Each file becomes a
 named `mighty_domain`. The optional `_study.yml` provides study-level
-properties and `_mighty.yml` provides mighty framework configuration.
+properties as a `study_config` and `_mighty.yml` provides mighty framework
+configuration as a `mighty_config`.
 
 ```{r}
 study <- mighty_study(
@@ -119,8 +120,8 @@ names(study)
 ```
 
 ```{r}
-str(study@study)
-str(study@mighty)
+study@study
+study@mighty
 ```
 
 ## Useful links
