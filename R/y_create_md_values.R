@@ -80,7 +80,7 @@ create_md_values_domain <- function(domain) {
     return(mdvalues_template)
   }
 
-  purrr::list_rbind(list(mdvalues_template, mdvalues))[names(mdvalues_template)]
+  apply_template(mdvalues, mdvalues_template)
 }
 
 #' @noRd

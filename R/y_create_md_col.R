@@ -78,7 +78,7 @@ create_md_col_domain <- function(domain) {
   mdcol[["key"]] <- mdcol[["id"]] %in% mdtable[["keys"]][[1]]
   mdcol[["order"]] <- seq_len(nrow(mdcol))
 
-  purrr::list_rbind(list(mdcol_template, mdcol))[mdcol_cols]
+  apply_template(mdcol, mdcol_template)
 }
 
 #' @noRd

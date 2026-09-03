@@ -73,7 +73,7 @@ create_md_param_domain <- function(domain) {
   mdparam[["table_label"]] <- mdtable[["label"]]
   mdparam[["order"]] <- seq_len(nrow(mdparam))
 
-  purrr::list_rbind(list(mdparam_template, mdparam))[mdparam_cols]
+  apply_template(mdparam, mdparam_template)
 }
 
 #' @noRd
