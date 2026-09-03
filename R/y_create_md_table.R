@@ -63,7 +63,7 @@ create_md_table_domain <- function(domain) {
   mdtable <- do.call(what = tibble::tibble, args = entries)
   mdtable[["order"]] <- 1L
 
-  purrr::list_rbind(list(mdtable_template, mdtable))
+  purrr::list_rbind(list(mdtable_template, mdtable))[names(mdtable_template)]
 }
 
 #' @noRd

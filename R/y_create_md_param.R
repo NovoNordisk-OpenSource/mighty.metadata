@@ -57,6 +57,7 @@ create_md_param_domain <- function(domain) {
     return(mdparam_template)
   }
 
+  mdtable <- create_md_table(domain)
   mdparam_cols <- names(mdparam_template)
 
   mdparam <- domain[["parameters"]] |>
@@ -68,11 +69,11 @@ create_md_param_domain <- function(domain) {
     }) |>
     purrr::list_rbind()
 
-  mdparam[["table_id"]] <- domain[["id"]]
-  mdparam[["table_label"]] <- domain[["label"]]
+  mdparam[["table_id"]] <- mdtable[["id"]]
+  mdparam[["table_label"]] <- mdtable[["label"]]
   mdparam[["order"]] <- seq_len(nrow(mdparam))
 
-  purrr::list_rbind(list(mdparam_template, mdparam))
+  purrr::list_rbind(list(mdparam_template, mdparam))[mdparam_cols]
 }
 
 #' @noRd

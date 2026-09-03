@@ -64,10 +64,15 @@ create_md_values_study <- function(study) {
 
 #' @noRd
 create_md_values_domain <- function(domain) {
-  parameters <- domain[["parameters"]]
+  mdparam <- create_md_param(domain)
 
-  mdvalues <- seq_along(parameters) |>
-    lapply(FUN = \(i) create_md_values_param(parameters[[i]], order = i)) |>
+  mdvalues <- seq_len(nrow(mdparam)) |>
+    lapply(FUN = \(i) {
+      create_md_values_param(
+        parameter = domain[["parameters"]][[i]],
+        param = mdparam[i, ]
+      )
+    }) |>
     Filter(f = Negate(is.null)) |>
     purrr::list_rbind()
 
@@ -75,14 +80,11 @@ create_md_values_domain <- function(domain) {
     return(mdvalues_template)
   }
 
-  mdvalues[["table_id"]] <- domain[["id"]]
-  mdvalues[["table_label"]] <- domain[["label"]]
-
-  purrr::list_rbind(list(mdvalues_template, mdvalues))
+  purrr::list_rbind(list(mdvalues_template, mdvalues))[names(mdvalues_template)]
 }
 
 #' @noRd
-create_md_values_param <- function(parameter, order) {
+create_md_values_param <- function(parameter, param) {
   if (!length(parameter[["columns"]])) {
     return(NULL)
   }
@@ -99,9 +101,11 @@ create_md_values_param <- function(parameter, order) {
     }) |>
     purrr::list_rbind()
 
-  mdvalues[["param_order"]] <- order
-  mdvalues[["param_id"]] <- parameter[["id"]]
-  mdvalues[["param_label"]] <- parameter[["label"]] %||% NA_character_
+  mdvalues[["table_id"]] <- param[["table_id"]]
+  mdvalues[["table_label"]] <- param[["table_label"]]
+  mdvalues[["param_order"]] <- param[["order"]]
+  mdvalues[["param_id"]] <- param[["id"]]
+  mdvalues[["param_label"]] <- param[["label"]]
   mdvalues[["order"]] <- seq_len(nrow(mdvalues))
 
   mdvalues

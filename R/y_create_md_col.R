@@ -60,6 +60,7 @@ create_md_col_study <- function(study) {
 
 #' @noRd
 create_md_col_domain <- function(domain) {
+  mdtable <- create_md_table(domain)
   mdcol_cols <- names(mdcol_template)
 
   mdcol <- domain$columns |>
@@ -72,12 +73,12 @@ create_md_col_domain <- function(domain) {
     }) |>
     purrr::list_rbind()
 
-  mdcol[["table_id"]] <- domain[["id"]]
-  mdcol[["table_label"]] <- domain[["label"]]
-  mdcol[["key"]] <- mdcol[["id"]] %in% domain[["keys"]]
+  mdcol[["table_id"]] <- mdtable[["id"]]
+  mdcol[["table_label"]] <- mdtable[["label"]]
+  mdcol[["key"]] <- mdcol[["id"]] %in% mdtable[["keys"]][[1]]
   mdcol[["order"]] <- seq_len(nrow(mdcol))
 
-  purrr::list_rbind(list(mdcol_template, mdcol))
+  purrr::list_rbind(list(mdcol_template, mdcol))[mdcol_cols]
 }
 
 #' @noRd
