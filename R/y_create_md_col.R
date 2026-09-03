@@ -25,13 +25,14 @@
 #'   \item{comment}{Comment}
 #' }
 #'
-#' @seealso [mighty_study], [populate_sparse()], [populate_core()]
+#' @seealso [mighty_study], [populate_sparse()], [populate_core()],
+#'   [create_md_table()], [create_md_param()], [create_md_values()]
 #'
 #' @examples
 #' study <- mighty_study(
 #'   path = system.file("examples", package = "mighty.metadata")
 #' )
-#' mdcol <- create_md_col(study)
+#' create_md_col(study)
 #'
 #' @export
 create_md_col <- S7::new_generic(

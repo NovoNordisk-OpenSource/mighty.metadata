@@ -380,13 +380,34 @@ list_columns(resolved$ADVS)
 
 `include` works on parameters and rows too, not just columns.
 
-## Creating a Flat Column Table
+## Creating Flat Metadata Tables
 
-`create_md_col()` flattens the study's column specifications into a single
-tibble. This is the format consumed by downstream mighty tools.
+A set of `create_md_*()` functions flattens the study specifications into
+tibbles. This is the format consumed by downstream mighty tools.
+
+`create_md_table()` gives one row per dataset:
+
+```{r}
+create_md_table(study)
+```
+
+`create_md_col()` gives one row per column:
 
 ```{r}
 create_md_col(study)
+```
+
+`create_md_param()` gives one row per BDS parameter:
+
+```{r}
+create_md_param(study)
+```
+
+`create_md_values()` gives one row per column defined inside a parameter,
+i.e. the value level metadata:
+
+```{r}
+create_md_values(study)
 ```
 
 ## Next Steps
@@ -394,7 +415,8 @@ create_md_col(study)
 This vignette covered the core workflows: `mighty_domain()` for single datasets,
 `mighty_study()` for collections, `populate_core()` and `populate_sparse()` for
 metadata propagation, `write_config()` for saving changes, `resolve_includes()`
-for conditional specifications, and `create_md_col()` for flat output.
+for conditional specifications, and the `create_md_*()` functions for flat
+output.
 
 To learn more:
 

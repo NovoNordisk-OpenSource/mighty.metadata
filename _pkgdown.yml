@@ -16,7 +16,10 @@ reference:
       - resolve_subsets
       - populate_core
       - populate_sparse
+      - create_md_table
       - create_md_col
+      - create_md_param
+      - create_md_values
   - title: Domain level metadata
     description: |
       Work with metadata for a single ADaM data set.

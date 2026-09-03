@@ -81,5 +81,6 @@ write_config(study, path = tmp)
 \seealso{
 \link{mighty_domain}, \link{mighty_config}, \link{study_config},
 \code{\link[=write_config]{write_config()}}, \code{\link[=populate_sparse]{populate_sparse()}}, \code{\link[=populate_core]{populate_core()}},
-\code{\link[=create_md_col]{create_md_col()}}
+\code{\link[=create_md_table]{create_md_table()}}, \code{\link[=create_md_col]{create_md_col()}}, \code{\link[=create_md_param]{create_md_param()}},
+\code{\link[=create_md_values]{create_md_values()}}
 }
