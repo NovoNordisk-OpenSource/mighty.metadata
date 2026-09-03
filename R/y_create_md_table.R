@@ -51,13 +51,10 @@ create_md_table_study <- function(study) {
 
 #' @noRd
 create_md_table_domain <- function(domain) {
-  entries <- domain[names(domain) %in% names(mdtable_template)]
-  entries[["keys"]] <- list(unlist(entries[["keys"]], use.names = FALSE))
-
-  mdtable <- do.call(what = tibble::tibble, args = entries)
+  mdtable <- apply_template(domain, mdtable_template)
   mdtable[["order"]] <- 1L
 
-  apply_template(mdtable, mdtable_template)
+  mdtable
 }
 
 #' @noRd

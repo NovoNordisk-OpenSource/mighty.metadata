@@ -56,15 +56,9 @@ create_md_param_domain <- function(domain) {
   }
 
   mdtable <- create_md_table(domain)
-  mdparam_cols <- names(mdparam_template)
 
   mdparam <- domain[["parameters"]] |>
-    lapply(FUN = \(x) {
-      do.call(
-        what = tibble::tibble,
-        args = x[names(x) %in% mdparam_cols]
-      )
-    }) |>
+    lapply(FUN = apply_template, template = mdparam_template) |>
     purrr::list_rbind()
 
   mdparam[["table_id"]] <- mdtable[["id"]]

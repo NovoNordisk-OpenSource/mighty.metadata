@@ -87,16 +87,8 @@ create_md_values_param <- function(parameter, param) {
     return(NULL)
   }
 
-  mdvalues_cols <- names(mdvalues_template)
-
   mdvalues <- parameter[["columns"]] |>
-    lapply(FUN = \(x) {
-      x <- purrr::list_flatten(x)
-      do.call(
-        what = tibble::tibble,
-        args = x[names(x) %in% mdvalues_cols]
-      )
-    }) |>
+    lapply(FUN = apply_template, template = mdvalues_template) |>
     purrr::list_rbind()
 
   mdvalues[["table_id"]] <- param[["table_id"]]

@@ -59,16 +59,9 @@ create_md_col_study <- function(study) {
 #' @noRd
 create_md_col_domain <- function(domain) {
   mdtable <- create_md_table(domain)
-  mdcol_cols <- names(mdcol_template)
 
-  mdcol <- domain$columns |>
-    lapply(FUN = \(x) {
-      x <- purrr::list_flatten(x)
-      do.call(
-        what = tibble::tibble,
-        args = x[names(x) %in% mdcol_cols]
-      )
-    }) |>
+  mdcol <- domain[["columns"]] |>
+    lapply(FUN = apply_template, template = mdcol_template) |>
     purrr::list_rbind()
 
   mdcol[["table_id"]] <- mdtable[["id"]]
