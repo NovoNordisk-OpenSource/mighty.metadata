@@ -4,10 +4,15 @@
 \alias{study_config}
 \title{Study Config}
 \usage{
-study_config(file)
+study_config(file, .data)
 }
 \arguments{
-\item{file}{\code{character(1)} path to a \verb{_study.yml} file.}
+\item{file}{\code{character(1)} path to a \verb{_study.yml} file. Mutually exclusive
+with \code{.data}.}
+
+\item{.data}{\code{list} holding a \verb{_study.yml} configuration already in memory.
+Mutually exclusive with \code{file}. The resulting object has \verb{@file} set to
+\code{NULL}, so \code{\link[=write_config]{write_config()}} requires an explicit \code{path}.}
 }
 \value{
 A \code{study_config} S7 object extending \link[S7schema:S7schema]{S7schema::S7schema}.
@@ -20,9 +25,9 @@ A \code{study_config} S7 object extending \link[S7schema:S7schema]{S7schema::S7s
 \code{study_config()} provides a robust way of working with the \verb{_study.yml}
 configuration file in the \code{{mighty}} framework.
 
-A new object is initialized by supplying the path to a \verb{_study.yml} file.
-The file is automatically validated against the \code{study.json} schema when
-loaded.
+A new object is initialized by supplying either the path to a \verb{_study.yml}
+file or an in-memory \code{list} of the same content. Both are automatically
+validated against the \code{study.json} schema.
 
 \code{study_config()} inherits from \code{S7schema::S7schema()}. You can validate
 an object at any time by calling \code{validate()} and use \code{write_config()} to
@@ -57,6 +62,14 @@ str(x)
 # Write back to a file
 tmp <- tempfile(fileext = ".yml")
 write_config(x, path = tmp)
+
+# Or build one in memory
+y <- study_config(
+  .data = list(study_id = "example_study", study_description = "A study")
+)
+
+# In-memory objects have no file, so `write_config()` needs a `path`
+y@file
 
 }
 \seealso{
