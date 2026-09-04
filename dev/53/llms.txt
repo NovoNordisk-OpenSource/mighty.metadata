@@ -186,14 +186,6 @@ Work with ADaM metadata for an entire study.
   : Populate Core Variables
 - [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
   : Populate Predecessor Metadata
-- [`create_md_table()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_table.md)
-  : Create Metadata Dataset Table
-- [`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)
-  : Create Metadata Column Table
-- [`create_md_param()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_param.md)
-  : Create Metadata Parameter Table
-- [`create_md_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_values.md)
-  : Create Metadata Value Table
 
 ## Domain level metadata
 
@@ -222,6 +214,19 @@ Work with metadata for a single ADaM data set.
   [`update_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md)
   [`select_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md)
   : Update parameters in your metadata
+
+## Metadata data sets
+
+Flatten a study or a single data set into tabular metadata.
+
+- [`create_md_table()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_table.md)
+  : Create Metadata Dataset Table
+- [`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)
+  : Create Metadata Column Table
+- [`create_md_param()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_param.md)
+  : Create Metadata Parameter Table
+- [`create_md_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_values.md)
+  : Create Metadata Value Table
 
 ## Utilities
 
