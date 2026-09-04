@@ -26,7 +26,8 @@
 #' }
 #'
 #' @seealso [mighty_study], [populate_sparse()], [populate_core()],
-#'   [create_md_table()], [create_md_param()], [create_md_values()]
+#'   [create_md()], [create_md_table()], [create_md_param()],
+#'   [create_md_values()]
 #'
 #' @examples
 #' study <- mighty_study(

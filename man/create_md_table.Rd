@@ -34,6 +34,6 @@ create_md_table(study)
 
 }
 \seealso{
-\link{mighty_study}, \code{\link[=create_md_col]{create_md_col()}}, \code{\link[=create_md_param]{create_md_param()}},
-\code{\link[=create_md_values]{create_md_values()}}
+\link{mighty_study}, \code{\link[=create_md]{create_md()}}, \code{\link[=create_md_col]{create_md_col()}},
+\code{\link[=create_md_param]{create_md_param()}}, \code{\link[=create_md_values]{create_md_values()}}
 }

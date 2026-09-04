@@ -42,5 +42,6 @@ create_md_col(study)
 }
 \seealso{
 \link{mighty_study}, \code{\link[=populate_sparse]{populate_sparse()}}, \code{\link[=populate_core]{populate_core()}},
-\code{\link[=create_md_table]{create_md_table()}}, \code{\link[=create_md_param]{create_md_param()}}, \code{\link[=create_md_values]{create_md_values()}}
+\code{\link[=create_md]{create_md()}}, \code{\link[=create_md_table]{create_md_table()}}, \code{\link[=create_md_param]{create_md_param()}},
+\code{\link[=create_md_values]{create_md_values()}}
 }

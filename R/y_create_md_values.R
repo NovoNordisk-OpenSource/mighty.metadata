@@ -29,8 +29,8 @@
 #'   \item{comment}{Comment}
 #' }
 #'
-#' @seealso [mighty_study], [create_md_table()], [create_md_col()],
-#'   [create_md_param()]
+#' @seealso [mighty_study], [create_md()], [create_md_table()],
+#'   [create_md_col()], [create_md_param()]
 #'
 #' @examples
 #' study <- mighty_study(

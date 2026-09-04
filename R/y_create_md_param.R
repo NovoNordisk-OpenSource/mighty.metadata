@@ -18,8 +18,8 @@
 #'   \item{label}{Parameter label (`PARAM`)}
 #' }
 #'
-#' @seealso [mighty_study], [create_md_table()], [create_md_col()],
-#'   [create_md_values()]
+#' @seealso [mighty_study], [create_md()], [create_md_table()],
+#'   [create_md_col()], [create_md_values()]
 #'
 #' @examples
 #' study <- mighty_study(
