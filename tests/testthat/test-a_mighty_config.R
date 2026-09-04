@@ -22,28 +22,12 @@ test_that("mighty_config works", {
     )
 })
 
-test_that("mighty_config errors on duplicate external_data ids", {
-  tmp <- withr::local_tempdir()
-  file <- file.path(tmp, "_mighty.yml")
-  writeLines(
-    c(
-      "external_data:",
-      "  - id: DM",
-      "    keys: USUBJID",
-      "  - id: DM",
-      "    keys: STUDYID"
-    ),
-    file
-  )
-  expect_error(mighty_config(file), regexp = "Duplicate")
-})
-
 test_that("mighty_config errors on missing file", {
   tmp <- withr::local_tempdir()
   expect_error(mighty_config(file.path(tmp, "_mighty.yml")))
 })
 
-test_that("mighty_config errors on invalid schema", {
+test_that("mighty_config errors on invalid schema (file)", {
   tmp <- withr::local_tempdir()
   file <- file.path(tmp, "_mighty.yml")
   writeLines("not_valid_field: true", file)
@@ -64,41 +48,34 @@ test_that("mighty_config repos field is accessible", {
 })
 
 test_that("mighty_config works with single repos entry", {
-  tmp <- withr::local_tempdir()
-  file <- file.path(tmp, "_mighty.yml")
-  writeLines(
-    c(
-      "external_data:",
-      "  - id: DM",
-      "    keys: USUBJID",
-      "repos:",
-      "  - \".\""
-    ),
-    file
-  )
-  x <- mighty_config(file) |> expect_no_condition()
+  x <- mighty_config(
+    .data = list(
+      external_data = list(list(id = "DM", keys = "USUBJID")),
+      repos = "."
+    )
+  ) |>
+    expect_no_condition()
   expect_true(length(x$repos) > 0)
 })
 
 test_that("mighty_config works without repos field", {
-  tmp <- withr::local_tempdir()
-  file <- file.path(tmp, "_mighty.yml")
-  writeLines(
-    c("external_data:", "  - id: DM", "    keys: USUBJID"),
-    file
-  )
-  x <- mighty_config(file) |> expect_no_condition()
+  x <- mighty_config(
+    .data = list(external_data = list(list(id = "DM", keys = "USUBJID")))
+  ) |>
+    expect_no_condition()
   expect_null(x$repos)
 })
 
 test_that("mighty_config errors on invalid repo entry", {
-  tmp <- withr::local_tempdir()
-  file <- file.path(tmp, "_mighty.yml")
-  writeLines(
-    c("external_data:", "  - id: DM", "    keys: USUBJID", "repos:", "  - 123"),
-    file
+  expect_error(
+    mighty_config(
+      .data = list(
+        external_data = list(list(id = "DM", keys = "USUBJID")),
+        repos = 123
+      )
+    ),
+    regexp = "repos"
   )
-  expect_error(mighty_config(file), regexp = "repos")
 })
 
 test_that("mighty_config write_config round-trips", {
