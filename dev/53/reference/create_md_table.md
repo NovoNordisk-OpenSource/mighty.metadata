@@ -61,6 +61,7 @@ A tibble with one row per table containing:
 ## See also
 
 [mighty_study](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md),
+[`create_md()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md.md),
 [`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md),
 [`create_md_param()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_param.md),
 [`create_md_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_values.md)

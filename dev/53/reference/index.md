@@ -51,6 +51,8 @@ Work with metadata for a single ADaM data set.
 
 Flatten a study or a single data set into tabular metadata.
 
+- [`create_md()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md.md)
+  : Create All Metadata Data Sets
 - [`create_md_table()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_table.md)
   : Create Metadata Dataset Table
 - [`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)

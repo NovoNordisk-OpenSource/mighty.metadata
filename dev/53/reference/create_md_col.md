@@ -91,6 +91,7 @@ A tibble with one row per column containing:
 [mighty_study](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md),
 [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md),
 [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md),
+[`create_md()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md.md),
 [`create_md_table()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_table.md),
 [`create_md_param()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_param.md),
 [`create_md_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_values.md)

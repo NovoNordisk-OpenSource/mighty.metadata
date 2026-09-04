@@ -11,6 +11,8 @@
   level metadata, complementing
   [`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)
   ([\#11](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/11)).
+  [`create_md()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md.md)
+  returns all four as a named list.
 
 - Added
   [`mighty_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md)
