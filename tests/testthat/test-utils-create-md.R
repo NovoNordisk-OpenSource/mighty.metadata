@@ -47,6 +47,37 @@ test_that("bind_entries() drops entries that fun returns NULL for", {
   expect_equal(object = bound[["order"]], expected = c(1L, 2L))
 })
 
+test_that("copy_columns()", {
+  y <- tibble::tibble(id = "ADVS", label = "Vital Signs", keys = list("A"))
+
+  copied <- copy_columns(
+    x = tibble::tibble(id = c("AVAL", "AVALC")),
+    y = y,
+    cols = c("id", "label"),
+    prefix = "table_"
+  )
+
+  expect_equal(
+    object = copied,
+    expected = tibble::tibble(
+      id = c("AVAL", "AVALC"),
+      table_id = c("ADVS", "ADVS"),
+      table_label = c("Vital Signs", "Vital Signs")
+    )
+  )
+
+  # Without a prefix the name is kept, overwriting any column already in x
+  expect_equal(
+    object = copy_columns(
+      x = tibble::tibble(id = "AVAL", label = NA_character_),
+      y = y,
+      cols = "label",
+      prefix = ""
+    ),
+    expected = tibble::tibble(id = "AVAL", label = "Vital Signs")
+  )
+})
+
 test_that("apply_template()", {
   template <- tibble::tibble(a = character(), b = integer())
 

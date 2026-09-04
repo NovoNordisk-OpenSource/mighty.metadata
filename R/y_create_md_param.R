@@ -64,8 +64,12 @@ create_md_param_domain <- function(domain) {
     order = TRUE
   )
 
-  mdparam[["table_id"]] <- mdtable[["id"]]
-  mdparam[["table_label"]] <- mdtable[["label"]]
+  mdparam <- copy_columns(
+    x = mdparam,
+    y = mdtable,
+    cols = c("id", "label"),
+    prefix = "table_"
+  )
 
   apply_template(mdparam, mdparam_template)
 }

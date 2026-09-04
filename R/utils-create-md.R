@@ -18,6 +18,19 @@ bind_entries <- function(x, fun, ..., order = FALSE) {
   bound
 }
 
+#' Copy renamed columns between metadata data sets
+#'
+#' Adds the `cols` of the single row `y` to every row of `x`, so that a
+#' metadata data set carries the context of the data set it was derived from,
+#' e.g. the table a column belongs to. Each copy is named `prefix` followed by
+#' the name it has in `y`, so pass `prefix = ""` to keep the names as they are.
+#' @noRd
+copy_columns <- function(x, y, cols, prefix) {
+  x[paste0(prefix, cols)] <- y[cols]
+
+  x
+}
+
 #' Apply a metadata template to a metadata entry
 #'
 #' Binds `x` onto `template` so that columns missing from `x` are added with

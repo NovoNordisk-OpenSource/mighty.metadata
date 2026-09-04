@@ -67,8 +67,13 @@ create_md_col_domain <- function(domain) {
     order = TRUE
   )
 
-  mdcol[["table_id"]] <- mdtable[["id"]]
-  mdcol[["table_label"]] <- mdtable[["label"]]
+  mdcol <- copy_columns(
+    x = mdcol,
+    y = mdtable,
+    cols = c("id", "label"),
+    prefix = "table_"
+  )
+
   mdcol[["key"]] <- mdcol[["id"]] %in% mdtable[["keys"]][[1]]
 
   apply_template(mdcol, mdcol_template)

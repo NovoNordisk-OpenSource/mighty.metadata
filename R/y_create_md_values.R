@@ -90,11 +90,9 @@ create_md_values_param <- function(parameter, param) {
     order = TRUE
   )
 
-  mdvalues[["table_id"]] <- param[["table_id"]]
-  mdvalues[["table_label"]] <- param[["table_label"]]
-  mdvalues[["param_order"]] <- param[["order"]]
-  mdvalues[["param_id"]] <- param[["id"]]
-  mdvalues[["param_label"]] <- param[["label"]]
+  mdvalues <- mdvalues |>
+    copy_columns(y = param, cols = c("table_id", "table_label"), prefix = "") |>
+    copy_columns(y = param, cols = c("order", "id", "label"), prefix = "param_")
 
   mdvalues
 }
