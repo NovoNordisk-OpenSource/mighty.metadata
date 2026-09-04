@@ -38,7 +38,8 @@
 #'
 #' @seealso [mighty_domain], [mighty_config], [study_config],
 #'   [write_config()], [populate_sparse()], [populate_core()],
-#'   [create_md_col()]
+#'   [create_md_table()], [create_md_col()], [create_md_param()],
+#'   [create_md_values()]
 #'
 #' @examples
 #' # Load example study

@@ -1,5 +1,10 @@
 # mighty.metadata (development version)
 
+* Added `create_md_table()`, `create_md_param()`, and `create_md_values()` to
+  create metadata data sets for tables, BDS parameters, and value level
+  metadata, complementing `create_md_col()` (#11). `create_md()` returns all
+  four as a named list.
+
 * Added `mighty_config()` class for the `_mighty.yml` configuration file (#25).
   The `@mighty` property of `mighty_study()` now holds a `mighty_config()`
   object instead of a plain list, and is `NULL` when no `_mighty.yml` exists.

@@ -16,7 +16,6 @@ reference:
       - resolve_subsets
       - populate_core
       - populate_sparse
-      - create_md_col
   - title: Domain level metadata
     description: |
       Work with metadata for a single ADaM data set.
@@ -25,6 +24,15 @@ reference:
       - columns
       - rows
       - parameters
+  - title: Metadata data sets
+    description: |
+      Flatten a study or a single data set into tabular metadata.
+    contents:
+      - create_md
+      - create_md_table
+      - create_md_col
+      - create_md_param
+      - create_md_values
   - title: Utilities
     contents:
       - write_config
