@@ -3,7 +3,8 @@
 #' @description
 #' `mighty_domain()` provides a robust way of working with ADaM metadata in the `{mighty}` framework.
 #'
-#' A new object is initialized by supplying an existing yaml metadata file.
+#' A new object is initialized by supplying either an existing yaml metadata
+#' file or an in-memory `list` of the same content.
 #' This package provides helpers to update column, parameter, and row entries.
 #' See the references below for help:
 #'
@@ -19,6 +20,10 @@
 #' `write_config()` to save it as a yaml file again.
 #'
 #' @param file `character(1)` path to a yaml file defining an ADaM dataset.
+#'   Mutually exclusive with `.data`.
+#' @param .data `list` holding an ADaM dataset specification already in memory.
+#'   Mutually exclusive with `file`. The resulting object has `@file` set to
+#'   `NULL`, so [write_config()] requires an explicit `path`.
 #'
 #' @return A `mighty_domain` S7 object extending [S7schema::S7schema].
 #'   The underlying list contains the parsed and validated YAML metadata
@@ -36,15 +41,33 @@
 #' # Underlying object is a `list`
 #' str(x)
 #'
+#' # Or build one in memory
+#' y <- mighty_domain(
+#'   .data = list(
+#'     id = "ADVS",
+#'     label = "Vital Signs Analysis Dataset",
+#'     class = "BASIC DATA STRUCTURE",
+#'     structure = "One record per parameter, per visit, per subject",
+#'     keys = c("USUBJID", "PARAMCD"),
+#'     columns = list(
+#'       list(id = "USUBJID", label = "Unique Subject Identifier")
+#'     )
+#'   )
+#' )
+#'
+#' # In-memory objects have no file, so `write_config()` needs a `path`
+#' y@file
+#'
 #' @name mighty_domain
 NULL
 
 #' @noRd
-construct_mighty_domain <- function(file) {
+construct_mighty_domain <- function(file, .data) {
   S7::new_object(
     .parent = S7schema::S7schema(
       file = file,
-      schema = system.file("schema", "adam.json", package = "mighty.metadata")
+      schema = system.file("schema", "adam.json", package = "mighty.metadata"),
+      .data = .data
     )
   )
 }

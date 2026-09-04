@@ -60,6 +60,17 @@ test_that("study_config write_config round-trips", {
   expect_equal(S7::S7_data(x2), S7::S7_data(x))
 })
 
+test_that("study_config works with in-memory data", {
+  x <- study_config(
+    .data = list(study_id = "example_study", study_description = "A study")
+  )
+
+  expect_true(S7::S7_inherits(x, study_config))
+  expect_equal(x$study_id, "example_study")
+  expect_equal(x$study_description, "A study")
+  expect_null(x@file)
+})
+
 test_that("study_config write_config uses @file when path is NULL", {
   tmp <- withr::local_tempdir()
   file <- file.path(tmp, "_study.yml")

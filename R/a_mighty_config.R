@@ -4,15 +4,19 @@
 #' `mighty_config()` provides a robust way of working with the `_mighty.yml`
 #' configuration file in the `{mighty}` framework.
 #'
-#' A new object is initialized by supplying the path to a `_mighty.yml` file.
-#' The file is automatically validated against the `mighty.json` schema when
-#' loaded.
+#' A new object is initialized by supplying either the path to a `_mighty.yml`
+#' file or an in-memory `list` of the same content. Both are automatically
+#' validated against the `mighty.json` schema.
 #'
 #' `mighty_config()` inherits from `S7schema::S7schema()`. You can validate
 #' an object at any time by calling `validate()` and use `write_config()` to
 #' save it back as a yaml file.
 #'
-#' @param file `character(1)` path to a `_mighty.yml` file.
+#' @param file `character(1)` path to a `_mighty.yml` file. Mutually exclusive
+#'   with `.data`.
+#' @param .data `list` holding a `_mighty.yml` configuration already in memory.
+#'   Mutually exclusive with `file`. The resulting object has `@file` set to
+#'   `NULL`, so [write_config()] requires an explicit `path`.
 #'
 #' @return A `mighty_config` S7 object extending [S7schema::S7schema].
 #' \describe{
@@ -55,15 +59,31 @@
 #' tmp <- tempfile(fileext = ".yml")
 #' write_config(x, path = tmp)
 #'
+#' # Or build one in memory
+#' y <- mighty_config(
+#'   .data = list(
+#'     external_data = list(list(id = "DM", keys = "USUBJID")),
+#'     repos = "."
+#'   )
+#' )
+#'
+#' # In-memory objects have no file, so `write_config()` needs a `path`
+#' y@file
+#'
 #' @name mighty_config
 NULL
 
 #' @noRd
-construct_mighty_config <- function(file) {
+construct_mighty_config <- function(file, .data) {
   S7::new_object(
     .parent = S7schema::S7schema(
       file = file,
-      schema = system.file("schema", "mighty.json", package = "mighty.metadata")
+      schema = system.file(
+        "schema",
+        "mighty.json",
+        package = "mighty.metadata"
+      ),
+      .data = .data
     )
   )
 }

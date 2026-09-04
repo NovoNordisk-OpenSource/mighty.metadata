@@ -4,10 +4,15 @@
 \alias{mighty_domain}
 \title{Mighty Domain}
 \usage{
-mighty_domain(file)
+mighty_domain(file, .data)
 }
 \arguments{
-\item{file}{\code{character(1)} path to a yaml file defining an ADaM dataset.}
+\item{file}{\code{character(1)} path to a yaml file defining an ADaM dataset.
+Mutually exclusive with \code{.data}.}
+
+\item{.data}{\code{list} holding an ADaM dataset specification already in memory.
+Mutually exclusive with \code{file}. The resulting object has \verb{@file} set to
+\code{NULL}, so \code{\link[=write_config]{write_config()}} requires an explicit \code{path}.}
 }
 \value{
 A \code{mighty_domain} S7 object extending \link[S7schema:S7schema]{S7schema::S7schema}.
@@ -18,7 +23,8 @@ and \code{rows}.
 \description{
 \code{mighty_domain()} provides a robust way of working with ADaM metadata in the \code{{mighty}} framework.
 
-A new object is initialized by supplying an existing yaml metadata file.
+A new object is initialized by supplying either an existing yaml metadata
+file or an in-memory \code{list} of the same content.
 This package provides helpers to update column, parameter, and row entries.
 See the references below for help:
 \itemize{
@@ -44,5 +50,22 @@ print(x)
 
 # Underlying object is a `list`
 str(x)
+
+# Or build one in memory
+y <- mighty_domain(
+  .data = list(
+    id = "ADVS",
+    label = "Vital Signs Analysis Dataset",
+    class = "BASIC DATA STRUCTURE",
+    structure = "One record per parameter, per visit, per subject",
+    keys = c("USUBJID", "PARAMCD"),
+    columns = list(
+      list(id = "USUBJID", label = "Unique Subject Identifier")
+    )
+  )
+)
+
+# In-memory objects have no file, so `write_config()` needs a `path`
+y@file
 
 }
