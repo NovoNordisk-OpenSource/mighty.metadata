@@ -64,17 +64,16 @@ create_md_values_study <- function(study) {
 create_md_values_domain <- function(domain) {
   mdparam <- create_md_param(domain)
 
-  mdvalues <- bind_entries(
-    x = seq_len(nrow(mdparam)),
-    fun = \(i) {
-      create_md_values_param(
-        parameter = domain[["parameters"]][[i]],
-        param = mdparam[i, ]
-      )
-    }
-  )
-
-  apply_template(mdvalues, mdvalues_template)
+  seq_len(nrow(mdparam)) |>
+    bind_entries(
+      fun = \(i) {
+        create_md_values_param(
+          parameter = domain[["parameters"]][[i]],
+          param = mdparam[i, ]
+        )
+      }
+    ) |>
+    apply_template(template = mdvalues_template)
 }
 
 #' @noRd
@@ -83,18 +82,14 @@ create_md_values_param <- function(parameter, param) {
     return(NULL)
   }
 
-  mdvalues <- bind_entries(
-    x = parameter[["columns"]],
-    fun = apply_template,
-    template = mdvalues_template,
-    order = TRUE
-  )
-
-  mdvalues <- mdvalues |>
+  parameter[["columns"]] |>
+    bind_entries(
+      fun = apply_template,
+      template = mdvalues_template,
+      order = TRUE
+    ) |>
     copy_columns(y = param, cols = c("table_id", "table_label"), prefix = "") |>
     copy_columns(y = param, cols = c("order", "id", "label"), prefix = "param_")
-
-  mdvalues
 }
 
 #' @noRd

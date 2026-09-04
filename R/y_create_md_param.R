@@ -57,21 +57,14 @@ create_md_param_domain <- function(domain) {
 
   mdtable <- create_md_table(domain)
 
-  mdparam <- bind_entries(
-    x = domain[["parameters"]],
-    fun = apply_template,
-    template = mdparam_template,
-    order = TRUE
-  )
-
-  mdparam <- copy_columns(
-    x = mdparam,
-    y = mdtable,
-    cols = c("id", "label"),
-    prefix = "table_"
-  )
-
-  apply_template(mdparam, mdparam_template)
+  domain[["parameters"]] |>
+    bind_entries(
+      fun = apply_template,
+      template = mdparam_template,
+      order = TRUE
+    ) |>
+    copy_columns(y = mdtable, cols = c("id", "label"), prefix = "table_") |>
+    apply_template(template = mdparam_template)
 }
 
 #' @noRd
