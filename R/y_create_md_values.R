@@ -64,32 +64,35 @@ create_md_values_study <- function(study) {
 create_md_values_domain <- function(domain) {
   mdparam <- create_md_param(domain)
 
-  seq_len(nrow(mdparam)) |>
-    bind_entries(
-      fun = \(i) {
-        create_md_values_param(
-          parameter = domain[["parameters"]][[i]],
-          param = mdparam[i, ]
-        )
-      }
-    ) |>
+  mdvalues <- bind_entries(
+    x = domain[["parameters"]],
+    fun = create_md_values_param
+  )
+
+  param <- mdparam[match(mdvalues[["param_id"]], mdparam[["id"]]), ]
+
+  mdvalues |>
+    copy_columns(y = param, cols = c("table_id", "table_label"), prefix = "") |>
+    copy_columns(y = param, cols = c("order", "label"), prefix = "param_") |>
     apply_template(template = mdvalues_template)
 }
 
 #' @noRd
-create_md_values_param <- function(parameter, param) {
+create_md_values_param <- function(parameter) {
   if (!length(parameter[["columns"]])) {
     return(NULL)
   }
 
-  parameter[["columns"]] |>
-    bind_entries(
-      fun = apply_template,
-      template = mdvalues_template,
-      order = TRUE
-    ) |>
-    copy_columns(y = param, cols = c("table_id", "table_label"), prefix = "") |>
-    copy_columns(y = param, cols = c("order", "id", "label"), prefix = "param_")
+  mdvalues <- bind_entries(
+    x = parameter[["columns"]],
+    fun = apply_template,
+    template = mdvalues_template,
+    order = TRUE
+  )
+
+  mdvalues[["param_id"]] <- parameter[["id"]]
+
+  mdvalues
 }
 
 #' @noRd
