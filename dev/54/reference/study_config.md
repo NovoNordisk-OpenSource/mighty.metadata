@@ -91,7 +91,7 @@ str(x)
 #>  $ study_id: chr "example_study"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5627b311bef0> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x56427d7ca998> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 
 # Write back to a file
