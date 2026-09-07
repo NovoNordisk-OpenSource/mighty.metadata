@@ -3,7 +3,7 @@
 `mighty_documents()` creates an S7 object for storing document metadata.
 The class inherits from
 [`S7::class_list`](https://rconsortium.github.io/S7/reference/base_classes.html)
-and represents the contents of `documents.yml` as a list of document
+and represents the contents of `_documents.yml` as a list of document
 entries.
 
 The object is validated on creation and when
@@ -18,7 +18,7 @@ Writing to YAML is done via
 [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 on a
 [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
-object, where documents are saved to `documents.yml`.
+object, where documents are saved to `_documents.yml`.
 
 Functions to list, select, remove, add, and update documents in your
 `mighty_documents()` object (or through `mighty_study@documents`).
@@ -26,7 +26,7 @@ Functions to list, select, remove, add, and update documents in your
 ## Usage
 
 ``` r
-mighty_documents(file = NULL, x = NULL)
+mighty_documents(file = NULL, .data = NULL)
 
 list_documents(x)
 
@@ -50,7 +50,11 @@ update_document(x, id, ...)
 
 - file:
 
-  `character(1)` path to `documents.yml`.
+  `character(1)` path to `_documents.yml`.
+
+- .data:
+
+  [`list()`](https://rdrr.io/r/base/list.html) of document entries.
 
 - x:
 
@@ -100,7 +104,7 @@ An object of class `mighty_documents`.
 
 ``` r
 docs <- mighty_documents(
-  x = list(
+  .data = list(
     list(
       id = "DOC001",
       title = "Statistical Analysis Plan",
@@ -116,7 +120,7 @@ print(docs)
 #> Documents: 1 entry
 #> IDs: `DOC001`
 
-# Write documents.yml through mighty_study
+# Write _documents.yml through mighty_study
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )

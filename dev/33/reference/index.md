@@ -8,6 +8,8 @@ Work with ADaM metadata for an entire study.
   : Mighty Study
 - [`mighty_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md)
   : Mighty Config
+- [`study_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md)
+  : Study Config
 - [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md)
   : Resolve conditional metadata items
 - [`resolve_subsets()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_subsets.md)
