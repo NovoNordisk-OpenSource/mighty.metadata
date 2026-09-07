@@ -1,0 +1,15 @@
+---
+- id: SUPPDOC001
+  title: Analysis Reviewer Guide Protocol
+  doctype: suppdoc
+  href: ./docs/arg-protocol.pdf
+
+- id: COMMENT001
+  title: ADAE comment details
+  doctype: comment
+  href: ./docs/adae-comment.pdf
+
+- id: METHOD001
+  title: BMI derivation method
+  doctype: method
+  href: ./programs/bmi-derivation.sas

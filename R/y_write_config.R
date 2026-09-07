@@ -45,6 +45,12 @@ write_mighty_study <- function(study, path) {
       path = match_yml(path = path, name = "_study")
     )
   }
+  if (length(study@documents)) {
+    write_config(
+      x = study@documents,
+      path = match_yml(path = path, name = "_documents")
+    )
+  }
 
   for (i in seq_along(study)) {
     write_config(

@@ -1,5 +1,8 @@
 # mighty.metadata (development version)
 
+* added `mighty_documents()` class with schema validation and document manipulation helpers:
+  `list_documents()`, `select_document()`, `add_document()`, `update_document()`, `remove_documents()` (#27)
+* added study-level documents support via `_documents.yml` and new `study@documents` property (#27)
 * `mighty_domain()`, `mighty_config()`, and `study_config()` now accept a
   `.data` argument to build an object from an in-memory `list` instead of a
   yaml file (#51). `file` and `.data` are mutually exclusive. Objects built
