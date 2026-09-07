@@ -10,7 +10,7 @@
 \alias{update_document}
 \title{Mighty Documents}
 \usage{
-mighty_documents(file = NULL, x = NULL)
+mighty_documents(file = NULL, .data = NULL)
 
 list_documents(x)
 
@@ -30,7 +30,9 @@ add_document(
 update_document(x, id, ...)
 }
 \arguments{
-\item{file}{\code{character(1)} path to \code{documents.yml}.}
+\item{file}{\code{character(1)} path to \verb{_documents.yml}.}
+
+\item{.data}{\code{list()} of document entries.}
 
 \item{x}{A \code{mighty_documents()} or \code{mighty_study()} object.}
 
@@ -58,7 +60,7 @@ An object of class \code{mighty_documents}.
 \description{
 \code{mighty_documents()} creates an S7 object for storing document metadata.
 The class inherits from \code{S7::class_list} and represents the contents of
-\code{documents.yml} as a list of document entries.
+\verb{_documents.yml} as a list of document entries.
 
 The object is validated on creation and when \code{validate()} is called.
 Validation includes:
@@ -68,14 +70,14 @@ Validation includes:
 }
 
 Writing to YAML is done via \code{write_config()} on a \code{mighty_study()} object,
-where documents are saved to \code{documents.yml}.
+where documents are saved to \verb{_documents.yml}.
 
 Functions to list, select, remove, add, and update documents in
 your \code{mighty_documents()} object (or through \code{mighty_study@documents}).
 }
 \examples{
 docs <- mighty_documents(
-  x = list(
+  .data = list(
     list(
       id = "DOC001",
       title = "Statistical Analysis Plan",
@@ -88,7 +90,7 @@ docs <- mighty_documents(
 # Custom print method gives a small overview
 print(docs)
 
-# Write documents.yml through mighty_study
+# Write _documents.yml through mighty_study
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
