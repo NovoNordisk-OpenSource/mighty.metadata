@@ -15,7 +15,8 @@ write_config(x, path = NULL)
 
 \item{path}{Destination to write to. A file for \link{mighty_config} and
 \link{study_config}, a directory for \link{mighty_study}. If \code{NULL}, defaults to the
-source the object was loaded from.}
+source the object was loaded from. Objects built from \code{.data} have \verb{@file}
+set to \code{NULL}, so \code{path} must be supplied explicitly for those.}
 }
 \value{
 Invisibly returns \code{x}.

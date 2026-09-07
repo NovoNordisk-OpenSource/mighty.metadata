@@ -1,5 +1,10 @@
 # mighty.metadata (development version)
 
+* `mighty_domain()`, `mighty_config()`, and `study_config()` now accept a
+  `.data` argument to build an object from an in-memory `list` instead of a
+  yaml file (#51). `file` and `.data` are mutually exclusive. Objects built
+  from `.data` have `@file` set to `NULL` and need an explicit `path` in
+  `write_config()`.
 * Added `mighty_config()` class for the `_mighty.yml` configuration file (#25).
   The `@mighty` property of `mighty_study()` now holds a `mighty_config()`
   object instead of a plain list, and is `NULL` when no `_mighty.yml` exists.
