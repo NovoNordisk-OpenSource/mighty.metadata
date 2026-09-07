@@ -2,6 +2,18 @@
 
 ## mighty.metadata (development version)
 
+- added
+  [`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  class with schema validation and document manipulation helpers:
+  [`list_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
+  [`select_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
+  [`add_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
+  [`update_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
+  [`remove_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  ([\#27](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/27))
+- added study-level documents support via `_documents.yml` and new
+  `study@documents` property
+  ([\#27](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/27))
 - [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md),
   [`mighty_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md),
   and

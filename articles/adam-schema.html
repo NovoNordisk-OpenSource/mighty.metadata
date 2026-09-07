@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -176,31 +176,37 @@ with:</p>
 <td align="left">No</td>
 </tr>
 <tr class="odd">
+<td align="left">documents</td>
+<td align="left">Document references for the dataset</td>
+<td align="left"><a href="#documents">documents</a></td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
 <td align="left">usecore</td>
 <td align="left">Flag to populate with core variables from ADSL</td>
 <td align="left">boolean</td>
 <td align="left">No</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">population</td>
 <td align="left">Population and base domain used to create the
 dataset</td>
 <td align="left"><a href="#population">mighty/population</a></td>
 <td align="left">No</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">columns</td>
 <td align="left">Columns in the dataset</td>
 <td align="left"><a href="#columns">columns</a></td>
 <td align="left">Yes</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">rows</td>
 <td align="left">Row derivations for mighty</td>
 <td align="left"><a href="#rows">rows</a></td>
 <td align="left">No</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">parameters</td>
 <td align="left">Parameters in a BDS dataset</td>
 <td align="left"><a href="#parameters">parameters</a></td>
@@ -364,6 +370,12 @@ conditionally required (Cond) or permissible (Perm)</td>
 <td align="left">comment</td>
 <td align="left">Comment to the column (free text)</td>
 <td align="left">string</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="left">documents</td>
+<td align="left">Document references for the column</td>
+<td align="left"><a href="#documents">documents</a></td>
 <td align="left">No</td>
 </tr>
 </tbody>
@@ -1069,6 +1081,84 @@ component</td>
 </div>
 </div>
 </div>
+<div class="section level3">
+<h3 id="document_reference">document_reference<a class="anchor" aria-label="anchor" href="#document_reference"></a>
+</h3>
+<p>Reference to a study-level document by id</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Type</th>
+<th align="left">Required</th>
+<th align="left">Additional Properties</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">object</td>
+<td align="left">id</td>
+<td align="left">No</td>
+</tr></tbody>
+</table>
+<div class="section level4">
+<h4 id="properties-9">Properties<a class="anchor" aria-label="anchor" href="#properties-9"></a>
+</h4>
+<table class="table">
+<colgroup>
+<col width="5%">
+<col width="50%">
+<col width="7%">
+<col width="26%">
+<col width="9%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Name</th>
+<th align="left">Description</th>
+<th align="left">Type</th>
+<th align="left">One Of</th>
+<th align="left">Required</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">id</td>
+<td align="left">Document id as defined in _documents.yaml</td>
+<td align="left">string</td>
+<td align="left">NULL</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="left">page</td>
+<td align="left">Optional page reference in the target document</td>
+<td align="left"></td>
+<td align="left">integer, 1 , string</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level3">
+<h3 id="documents">documents<a class="anchor" aria-label="anchor" href="#documents"></a>
+</h3>
+<p>List of document references</p>
+<table class="table">
+<colgroup>
+<col width="12%">
+<col width="39%">
+<col width="20%">
+<col width="27%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Type</th>
+<th align="left">Items</th>
+<th align="left">Min Items</th>
+<th align="left">Unique Items</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">array</td>
+<td align="left"><a href="#document_reference">document_reference</a></td>
+<td align="left">1</td>
+<td align="left">Yes</td>
+</tr></tbody>
+</table>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -1077,7 +1167,7 @@ component</td>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Aksel Thomsen, Ari Siggaard Knoph, Matthew Phelps, Giulia Pais, Michael Hedegaard Thomsen.</p>
+  <p>Developed by Aksel Thomsen, Ari Siggaard Knoph, Matthew Phelps, Giulia Pais, Katarzyna Graczyk, Michael Hedegaard Thomsen.</p>
 </div>
 
 <div class="pkgdown-footer-right">

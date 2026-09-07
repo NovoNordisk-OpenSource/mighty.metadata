@@ -271,6 +271,7 @@ The directory can contain `_study.yml` (study-level properties) and
 
 study_path <- system.file("examples", package = "mighty.metadata")
 study <- mighty_study(study_path)
+#> → No `_documents.yml` file found
 study
 #> <mighty.metadata::mighty_study/list/S7_object>
 #> @ mighty: <mighty.metadata::mighty_config>
@@ -298,7 +299,7 @@ str(study@study)
 #>  $ study_id: chr "example_study"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5654a40e0bd8> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x561ab0e04568> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 str(study@mighty)
 #> <mighty.metadata::mighty_config> List of 2
@@ -315,7 +316,7 @@ str(study@mighty)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5654a46c4de8> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x561ab113b708> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 ```
 
@@ -407,6 +408,7 @@ Here is the full pipeline in one block:
 ``` r
 
 study <- mighty_study(study_path)
+#> → No `_documents.yml` file found
 
 # Mark ADSL core variables
 study$ADSL <- study$ADSL |>
@@ -433,6 +435,7 @@ after loading:
 ``` r
 
 study <- mighty_study(study_path, populate = TRUE)
+#> → No `_documents.yml` file found
 ```
 
 ### Saving a Study
@@ -462,6 +465,7 @@ against the study’s `@study` values.
 ``` r
 
 study <- mighty_study(study_path)
+#> → No `_documents.yml` file found
 
 study$ADVS <- study$ADVS |>
   update_column(

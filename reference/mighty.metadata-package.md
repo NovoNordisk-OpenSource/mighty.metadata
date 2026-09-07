@@ -32,6 +32,8 @@ Authors:
 
 - Giulia Pais <egzp@novonordisk.com>
 
+- Katarzyna Graczyk <vzgc@novonordisk.com>
+
 - Michael Hedegaard Thomsen <mhzt@novonordisk.com>
 
 Other contributors:
