@@ -13,7 +13,7 @@ a method that writes every domain plus _mighty.yml and _study.yml."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,8 @@ a method that writes every domain plus <code>_mighty.yml</code> and <code>_study
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
 <dd><p>Destination to write to. A file for <a href="mighty_config.html">mighty_config</a> and
 <a href="study_config.html">study_config</a>, a directory for <a href="mighty_study.html">mighty_study</a>. If <code>NULL</code>, defaults to the
-source the object was loaded from.</p></dd>
+source the object was loaded from. Objects built from <code>.data</code> have <code>@file</code>
+set to <code>NULL</code>, so <code>path</code> must be supplied explicitly for those.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -2,6 +2,16 @@
 
 ## mighty.metadata (development version)
 
+- [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md),
+  [`mighty_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md),
+  and
+  [`study_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md)
+  now accept a `.data` argument to build an object from an in-memory
+  `list` instead of a yaml file
+  ([\#51](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/51)).
+  `file` and `.data` are mutually exclusive. Objects built from `.data`
+  have `@file` set to `NULL` and need an explicit `path` in
+  [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md).
 - Added
   [`mighty_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md)
   class for the `_mighty.yml` configuration file
