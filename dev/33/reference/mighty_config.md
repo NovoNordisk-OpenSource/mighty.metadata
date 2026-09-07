@@ -3,9 +3,9 @@
 `mighty_config()` provides a robust way of working with the
 `_mighty.yml` configuration file in the `{mighty}` framework.
 
-A new object is initialized by supplying the path to a `_mighty.yml`
-file. The file is automatically validated against the `mighty.json`
-schema when loaded.
+A new object is initialized by supplying either the path to a
+`_mighty.yml` file or an in-memory `list` of the same content. Both are
+automatically validated against the `mighty.json` schema.
 
 `mighty_config()` inherits from
 [`S7schema::S7schema()`](https://novonordisk-opensource.github.io/S7schema/reference/S7schema.html).
@@ -18,14 +18,20 @@ to save it back as a yaml file.
 ## Usage
 
 ``` r
-mighty_config(file)
+mighty_config(file, .data)
 ```
 
 ## Arguments
 
 - file:
 
-  `character(1)` path to a `_mighty.yml` file.
+  `character(1)` path to a `_mighty.yml` file. Mutually exclusive with
+  `.data`.
+
+- .data:
+
+  `list` holding a `_mighty.yml` configuration already in memory.
+  Mutually exclusive with `file`.
 
 ## Value
 
@@ -98,10 +104,21 @@ str(x)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x556c12bc2470> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5623ad863410> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 
 # Write back to a file
 tmp <- tempfile(fileext = ".yml")
 write_config(x, path = tmp)
+
+# Or build one in memory
+mighty_config(
+  .data = list(
+    external_data = list(list(id = "DM", keys = "USUBJID")),
+    repos = "."
+  )
+)
+#> <mighty.metadata::mighty_config>
+#> External data: 1 source (`DM`)
+#> Repos: 1 (`.`)
 ```

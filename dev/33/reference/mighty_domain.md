@@ -3,9 +3,10 @@
 `mighty_domain()` provides a robust way of working with ADaM metadata in
 the `{mighty}` framework.
 
-A new object is initialized by supplying an existing yaml metadata file.
-This package provides helpers to update column, parameter, and row
-entries. See the references below for help:
+A new object is initialized by supplying either an existing yaml
+metadata file or an in-memory `list` of the same content. This package
+provides helpers to update column, parameter, and row entries. See the
+references below for help:
 
 - [`help("columns")`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md)
 
@@ -28,14 +29,20 @@ to save it as a yaml file again.
 ## Usage
 
 ``` r
-mighty_domain(file)
+mighty_domain(file, .data)
 ```
 
 ## Arguments
 
 - file:
 
-  `character(1)` path to a yaml file defining an ADaM dataset.
+  `character(1)` path to a yaml file defining an ADaM dataset. Mutually
+  exclusive with `.data`.
+
+- .data:
+
+  `list` holding an ADaM dataset specification already in memory.
+  Mutually exclusive with `file`.
 
 ## Value
 
@@ -156,6 +163,24 @@ str(x)
 #>   .. .. .. ..$ method: chr "Numeric representation of AVALC"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/adam.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x556c1a35b230> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5623af4dfc80> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/advs.yml"
+
+# Or build one in memory
+mighty_domain(
+  .data = list(
+    id = "ADVS",
+    label = "Vital Signs Analysis Dataset",
+    class = "BASIC DATA STRUCTURE",
+    structure = "One record per parameter, per visit, per subject",
+    keys = c("USUBJID", "PARAMCD"),
+    columns = list(
+      list(id = "USUBJID", label = "Unique Subject Identifier")
+    )
+  )
+)
+#> <mighty.metadata::mighty_domain>
+#> ADVS: Vital Signs Analysis Dataset
+#> Class: BASIC DATA STRUCTURE
+#> Keys: USUBJID and PARAMCD
 ```

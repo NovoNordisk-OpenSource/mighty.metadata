@@ -3,9 +3,9 @@
 `study_config()` provides a robust way of working with the `_study.yml`
 configuration file in the `{mighty}` framework.
 
-A new object is initialized by supplying the path to a `_study.yml`
-file. The file is automatically validated against the `study.json`
-schema when loaded.
+A new object is initialized by supplying either the path to a
+`_study.yml` file or an in-memory `list` of the same content. Both are
+automatically validated against the `study.json` schema.
 
 `study_config()` inherits from
 [`S7schema::S7schema()`](https://novonordisk-opensource.github.io/S7schema/reference/S7schema.html).
@@ -18,14 +18,20 @@ to save it back as a yaml file.
 ## Usage
 
 ``` r
-study_config(file)
+study_config(file, .data)
 ```
 
 ## Arguments
 
 - file:
 
-  `character(1)` path to a `_study.yml` file.
+  `character(1)` path to a `_study.yml` file. Mutually exclusive with
+  `.data`.
+
+- .data:
+
+  `list` holding a `_study.yml` configuration already in memory.
+  Mutually exclusive with `file`.
 
 ## Value
 
@@ -85,10 +91,18 @@ str(x)
 #>  $ study_id: chr "example_study"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x556c181f5c00> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5623aa931398> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 
 # Write back to a file
 tmp <- tempfile(fileext = ".yml")
 write_config(x, path = tmp)
+
+# Or build one in memory
+study_config(
+  .data = list(study_id = "example_study", study_description = "A study")
+)
+#> <mighty.metadata::study_config>
+#> Study ID: example_study
+#> Fields: `study_id` and `study_description`
 ```
