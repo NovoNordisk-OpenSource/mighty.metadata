@@ -35,7 +35,7 @@ write_config() to save it as a yaml file again.'><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,8 +107,7 @@ Mutually exclusive with <code>.data</code>.</p></dd>
 
 <dt id="arg--data">.data<a class="anchor" aria-label="anchor" href="#arg--data"></a></dt>
 <dd><p><code>list</code> holding an ADaM dataset specification already in memory.
-Mutually exclusive with <code>file</code>. The resulting object has <code>@file</code> set to
-<code>NULL</code>, so <code><a href="write_config.html">write_config()</a></code> requires an explicit <code>path</code>.</p></dd>
+Mutually exclusive with <code>file</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -229,11 +228,11 @@ and <code>rows</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. .. ..$ method: chr "Numeric representation of AVALC"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/adam.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ validator: &lt;S7schema::validator&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x555fb1203c10&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x5627b1dff560&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/advs.yml"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or build one in memory</span></span></span>
-<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">mighty_domain</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu">mighty_domain</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  .data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    id <span class="op">=</span> <span class="st">"ADVS"</span>,</span></span>
 <span class="r-in"><span>    label <span class="op">=</span> <span class="st">"Vital Signs Analysis Dataset"</span>,</span></span>
@@ -245,10 +244,10 @@ and <code>rows</code>.</p>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># In-memory objects have no file, so `write_config()` needs a `path`</span></span></span>
-<span class="r-in"><span><span class="va">y</span><span class="op">@</span><span class="va">file</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">&lt;mighty.metadata::mighty_domain&gt;</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ADVS: Vital Signs Analysis Dataset</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Class: BASIC DATA STRUCTURE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Keys: USUBJID and PARAMCD</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

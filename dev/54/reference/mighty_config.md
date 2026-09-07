@@ -31,10 +31,7 @@ mighty_config(file, .data)
 - .data:
 
   `list` holding a `_mighty.yml` configuration already in memory.
-  Mutually exclusive with `file`. The resulting object has `@file` set
-  to `NULL`, so
-  [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
-  requires an explicit `path`.
+  Mutually exclusive with `file`.
 
 ## Value
 
@@ -107,7 +104,7 @@ str(x)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x555faa37dcc0> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5627aad653d8> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 
 # Write back to a file
@@ -115,14 +112,13 @@ tmp <- tempfile(fileext = ".yml")
 write_config(x, path = tmp)
 
 # Or build one in memory
-y <- mighty_config(
+mighty_config(
   .data = list(
     external_data = list(list(id = "DM", keys = "USUBJID")),
     repos = "."
   )
 )
-
-# In-memory objects have no file, so `write_config()` needs a `path`
-y@file
-#> NULL
+#> <mighty.metadata::mighty_config>
+#> External data: 1 source (`DM`)
+#> Repos: 1 (`.`)
 ```

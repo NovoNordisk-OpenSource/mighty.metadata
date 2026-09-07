@@ -42,10 +42,7 @@ mighty_domain(file, .data)
 - .data:
 
   `list` holding an ADaM dataset specification already in memory.
-  Mutually exclusive with `file`. The resulting object has `@file` set
-  to `NULL`, so
-  [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
-  requires an explicit `path`.
+  Mutually exclusive with `file`.
 
 ## Value
 
@@ -166,11 +163,11 @@ str(x)
 #>   .. .. .. ..$ method: chr "Numeric representation of AVALC"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/adam.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x555fb1203c10> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5627b1dff560> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/advs.yml"
 
 # Or build one in memory
-y <- mighty_domain(
+mighty_domain(
   .data = list(
     id = "ADVS",
     label = "Vital Signs Analysis Dataset",
@@ -182,8 +179,8 @@ y <- mighty_domain(
     )
   )
 )
-
-# In-memory objects have no file, so `write_config()` needs a `path`
-y@file
-#> NULL
+#> <mighty.metadata::mighty_domain>
+#> ADVS: Vital Signs Analysis Dataset
+#> Class: BASIC DATA STRUCTURE
+#> Keys: USUBJID and PARAMCD
 ```

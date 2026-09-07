@@ -31,10 +31,7 @@ study_config(file, .data)
 - .data:
 
   `list` holding a `_study.yml` configuration already in memory.
-  Mutually exclusive with `file`. The resulting object has `@file` set
-  to `NULL`, so
-  [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
-  requires an explicit `path`.
+  Mutually exclusive with `file`.
 
 ## Value
 
@@ -94,7 +91,7 @@ str(x)
 #>  $ study_id: chr "example_study"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x555fb1bce630> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5627b311bef0> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 
 # Write back to a file
@@ -102,11 +99,10 @@ tmp <- tempfile(fileext = ".yml")
 write_config(x, path = tmp)
 
 # Or build one in memory
-y <- study_config(
+study_config(
   .data = list(study_id = "example_study", study_description = "A study")
 )
-
-# In-memory objects have no file, so `write_config()` needs a `path`
-y@file
-#> NULL
+#> <mighty.metadata::study_config>
+#> Study ID: example_study
+#> Fields: `study_id` and `study_description`
 ```
