@@ -21,7 +21,7 @@
 # check_document_references() errors when domains reference document ids but no docs in _documents.yml
 
     Code
-      study@documents <- mighty_documents()
+      study@documents <- mighty_documents(.data = list())
     Condition
       Error in `abort_on_unknown_document_refs()`:
       ! Unknown document references detected.

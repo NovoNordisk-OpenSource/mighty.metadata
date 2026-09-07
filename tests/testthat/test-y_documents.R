@@ -11,7 +11,7 @@ test_that("list_documents() returns document ids for mighty_study", {
 })
 
 test_that("add_document() works on mighty_documents", {
-  docs <- mighty_documents()
+  docs <- mighty_documents(.data = list())
 
   docs <- add_document(
     docs,
@@ -157,7 +157,7 @@ test_that("check_document_references() returns study unchanged when no doc refs 
 test_that("check_document_references() errors when domains reference document ids but no docs in _documents.yml", {
   study <- mighty_study(test_path("test_study"))
 
-  expect_snapshot(study@documents <- mighty_documents(), error = TRUE)
+  expect_snapshot(study@documents <- mighty_documents(.data = list()), error = TRUE)
 })
 
 test_that("check_document_references() errors when domains reference document ids not defined in _documents.yml", {

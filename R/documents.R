@@ -47,8 +47,10 @@ construct_mighty_documents <- function(file = NULL, .data = NULL) {
   schema <- system.file("schema", "documents.json", package = "mighty.metadata")
   parent <- if (!is.null(file)) {
     S7schema::S7schema(file = file, schema = schema)
-  } else {
+  } else if (!is.null(.data)) {
     S7schema::S7schema(.data = .data, schema = schema)
+  } else {
+    S7schema::S7schema(.data = list(), schema = schema)
   }
   S7::new_object(.parent = parent)
 }
