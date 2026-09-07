@@ -22,8 +22,7 @@
 #' @param file `character(1)` path to a yaml file defining an ADaM dataset.
 #'   Mutually exclusive with `.data`.
 #' @param .data `list` holding an ADaM dataset specification already in memory.
-#'   Mutually exclusive with `file`. The resulting object has `@file` set to
-#'   `NULL`, so [write_config()] requires an explicit `path`.
+#'   Mutually exclusive with `file`.
 #'
 #' @return A `mighty_domain` S7 object extending [S7schema::S7schema].
 #'   The underlying list contains the parsed and validated YAML metadata
@@ -42,7 +41,7 @@
 #' str(x)
 #'
 #' # Or build one in memory
-#' y <- mighty_domain(
+#' mighty_domain(
 #'   .data = list(
 #'     id = "ADVS",
 #'     label = "Vital Signs Analysis Dataset",
@@ -54,9 +53,6 @@
 #'     )
 #'   )
 #' )
-#'
-#' # In-memory objects have no file, so `write_config()` needs a `path`
-#' y@file
 #'
 #' @name mighty_domain
 NULL

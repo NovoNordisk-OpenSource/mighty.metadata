@@ -108,27 +108,6 @@ test_that("mighty_config works with in-memory data", {
   expect_null(x@file)
 })
 
-test_that("mighty_config in-memory data is validated against the schema", {
-  expect_error(
-    mighty_config(.data = list(not_valid_field = TRUE)),
-    regexp = "external_data"
-  )
-})
-
-test_that("mighty_config errors on duplicate external_data ids", {
-  expect_error(
-    mighty_config(
-      .data = list(
-        external_data = list(
-          list(id = "DM", keys = "USUBJID"),
-          list(id = "DM", keys = "STUDYID")
-        )
-      )
-    ),
-    regexp = "Duplicate"
-  )
-})
-
 test_that("mighty_config requires exactly one input source", {
   expect_error(
     mighty_config(

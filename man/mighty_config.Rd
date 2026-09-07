@@ -11,8 +11,7 @@ mighty_config(file, .data)
 with \code{.data}.}
 
 \item{.data}{\code{list} holding a \verb{_mighty.yml} configuration already in memory.
-Mutually exclusive with \code{file}. The resulting object has \verb{@file} set to
-\code{NULL}, so \code{\link[=write_config]{write_config()}} requires an explicit \code{path}.}
+Mutually exclusive with \code{file}.}
 }
 \value{
 A \code{mighty_config} S7 object extending \link[S7schema:S7schema]{S7schema::S7schema}.
@@ -69,15 +68,12 @@ tmp <- tempfile(fileext = ".yml")
 write_config(x, path = tmp)
 
 # Or build one in memory
-y <- mighty_config(
+mighty_config(
   .data = list(
     external_data = list(list(id = "DM", keys = "USUBJID")),
     repos = "."
   )
 )
-
-# In-memory objects have no file, so `write_config()` needs a `path`
-y@file
 
 }
 \seealso{

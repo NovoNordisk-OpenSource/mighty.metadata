@@ -11,8 +11,7 @@ mighty_domain(file, .data)
 Mutually exclusive with \code{.data}.}
 
 \item{.data}{\code{list} holding an ADaM dataset specification already in memory.
-Mutually exclusive with \code{file}. The resulting object has \verb{@file} set to
-\code{NULL}, so \code{\link[=write_config]{write_config()}} requires an explicit \code{path}.}
+Mutually exclusive with \code{file}.}
 }
 \value{
 A \code{mighty_domain} S7 object extending \link[S7schema:S7schema]{S7schema::S7schema}.
@@ -52,7 +51,7 @@ print(x)
 str(x)
 
 # Or build one in memory
-y <- mighty_domain(
+mighty_domain(
   .data = list(
     id = "ADVS",
     label = "Vital Signs Analysis Dataset",
@@ -64,8 +63,5 @@ y <- mighty_domain(
     )
   )
 )
-
-# In-memory objects have no file, so `write_config()` needs a `path`
-y@file
 
 }

@@ -15,8 +15,7 @@
 #' @param file `character(1)` path to a `_mighty.yml` file. Mutually exclusive
 #'   with `.data`.
 #' @param .data `list` holding a `_mighty.yml` configuration already in memory.
-#'   Mutually exclusive with `file`. The resulting object has `@file` set to
-#'   `NULL`, so [write_config()] requires an explicit `path`.
+#'   Mutually exclusive with `file`.
 #'
 #' @return A `mighty_config` S7 object extending [S7schema::S7schema].
 #' \describe{
@@ -60,15 +59,12 @@
 #' write_config(x, path = tmp)
 #'
 #' # Or build one in memory
-#' y <- mighty_config(
+#' mighty_config(
 #'   .data = list(
 #'     external_data = list(list(id = "DM", keys = "USUBJID")),
 #'     repos = "."
 #'   )
 #' )
-#'
-#' # In-memory objects have no file, so `write_config()` needs a `path`
-#' y@file
 #'
 #' @name mighty_config
 NULL

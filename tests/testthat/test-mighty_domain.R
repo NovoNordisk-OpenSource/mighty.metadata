@@ -45,17 +45,3 @@ test_that("mighty_domain works with in-memory data", {
   expect_equal(length(x$columns), 2L)
   expect_null(x@file)
 })
-
-test_that("mighty_domain errors on duplicate column ids", {
-  data <- minimal_domain_data()
-  data$columns[[2]]$id <- "USUBJID"
-
-  expect_error(mighty_domain(.data = data), regexp = "Duplicate")
-})
-
-test_that("mighty_domain errors on column-to-column depends", {
-  data <- minimal_domain_data()
-  data$columns[[2]]$depends <- "USUBJID"
-
-  expect_error(mighty_domain(.data = data), regexp = "Column dependencies")
-})

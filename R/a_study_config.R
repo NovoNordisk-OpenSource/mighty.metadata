@@ -15,8 +15,7 @@
 #' @param file `character(1)` path to a `_study.yml` file. Mutually exclusive
 #'   with `.data`.
 #' @param .data `list` holding a `_study.yml` configuration already in memory.
-#'   Mutually exclusive with `file`. The resulting object has `@file` set to
-#'   `NULL`, so [write_config()] requires an explicit `path`.
+#'   Mutually exclusive with `file`.
 #'
 #' @return A `study_config` S7 object extending [S7schema::S7schema].
 #' \describe{
@@ -55,12 +54,9 @@
 #' write_config(x, path = tmp)
 #'
 #' # Or build one in memory
-#' y <- study_config(
+#' study_config(
 #'   .data = list(study_id = "example_study", study_description = "A study")
 #' )
-#'
-#' # In-memory objects have no file, so `write_config()` needs a `path`
-#' y@file
 #'
 #' @name study_config
 NULL
