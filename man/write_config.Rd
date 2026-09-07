@@ -2,31 +2,30 @@
 % Please edit documentation in R/y_write_config.R
 \name{write_config}
 \alias{write_config}
-\alias{write_config,mighty.metadata::mighty_config-method}
 \alias{write_config,mighty.metadata::mighty_study-method}
 \title{Write a mighty object to YAML}
 \usage{
-write_config(x, path = NULL)
-
-## S7 method for class <mighty.metadata::mighty_config>
 write_config(x, path = NULL)
 
 ## S7 method for class <mighty.metadata::mighty_study>
 write_config(x, path = NULL)
 }
 \arguments{
-\item{x}{A \link{mighty_config} or \link{mighty_study} object.}
+\item{x}{A \link{mighty_config}, \link{study_config}, or \link{mighty_study} object.}
 
-\item{path}{Directory to write to. If \code{NULL}, defaults to the source
-directory the object was loaded from.}
+\item{path}{Destination to write to. A file for \link{mighty_config} and
+\link{study_config}, a directory for \link{mighty_study}. If \code{NULL}, defaults to the
+source the object was loaded from.}
 }
 \value{
 Invisibly returns \code{x}.
 }
 \description{
-Methods for the \code{\link[S7schema:write_config]{S7schema::write_config()}} generic that serialize
-\link{mighty_config} and \link{mighty_study} objects back to YAML files.
+Serializes \link{mighty_config}, \link{study_config}, and \link{mighty_study} objects back
+to YAML files. \link{mighty_config} and \link{study_config} inherit the
+\code{\link[S7schema:write_config]{S7schema::write_config()}} method of their parent class; \link{mighty_study} adds
+a method that writes every domain plus \verb{_mighty.yml} and \verb{_study.yml}.
 }
 \seealso{
-\link{mighty_config}, \link{mighty_study}
+\link{mighty_config}, \link{study_config}, \link{mighty_study}
 }

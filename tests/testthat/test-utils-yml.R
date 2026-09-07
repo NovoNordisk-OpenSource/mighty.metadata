@@ -43,19 +43,6 @@ test_that("find_yml() errors on invalid YAML", {
   )
 })
 
-test_that("read_yml() returns empty list for NULL", {
-  expect_equal(read_yml(file = NULL), list())
-})
-
-test_that("read_yml() returns parsed YAML for valid path", {
-  file <- test_path("test_study", "_study.yml")
-
-  result <- read_yml(file = file)
-
-  expect_type(result, "list")
-  expect_equal(result$study_id, "test_study")
-})
-
 test_that("match_yml() returns default .yml path when no file exists", {
   tmp <- withr::local_tempdir()
 
@@ -88,31 +75,4 @@ test_that("match_yml() errors on multiple files", {
     match_yml(path = tmp, name = "_study"),
     "Only one `_study` file allowed"
   )
-})
-
-test_that("write_yml() writes YAML content to new file in empty dir", {
-  tmp <- withr::local_tempdir()
-
-  write_yml(x = list(study_id = "test"), path = tmp, name = "_study")
-
-  expect_true(file.exists(file.path(tmp, "_study.yml")))
-})
-
-test_that("write_yml() overwrites existing .yaml file", {
-  tmp <- withr::local_tempdir()
-  writeLines("study_id: old", file.path(tmp, "_study.yaml"))
-
-  write_yml(x = list(study_id = "new"), path = tmp, name = "_study")
-
-  result <- yaml::read_yaml(file.path(tmp, "_study.yaml"))
-  expect_equal(result$study_id, "new")
-})
-
-test_that("write_yml() returns invisible(x)", {
-  tmp <- withr::local_tempdir()
-  x <- list(study_id = "test")
-
-  result <- write_yml(x = x, path = tmp, name = "_study")
-
-  expect_equal(result, x)
 })

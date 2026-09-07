@@ -15,8 +15,10 @@ knitr::opts_chunk$set(
 ```
 
 `_study.yml` provides study-level properties for a study directory --- the
-study identifier and an optional description. The file structure is defined by a
-[JSON-schema](https://json-schema.org) accessible with:
+study identifier and an optional description. Load it with `study_config()`,
+either directly or as the `@study` property of `mighty_study()`. The file
+structure is defined by a [JSON-schema](https://json-schema.org) accessible
+with:
 
 ```r
 system.file("schema", "study.json", package = "mighty.metadata")

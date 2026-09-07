@@ -234,8 +234,10 @@ study
 ```
 
 Access individual domains with `$`. Study-level properties from `_study.yml`
-are stored in `@study` and mighty framework configuration from `_mighty.yml` is stored
-in `@mighty`. The `@` operator accesses properties of S7 objects:
+are stored in `@study` as a `study_config()` object and mighty framework
+configuration from `_mighty.yml` is stored in `@mighty` as a `mighty_config()`
+object. Both are `NULL` when the corresponding file is absent. The `@` operator
+accesses properties of S7 objects:
 
 ```{r}
 names(study)

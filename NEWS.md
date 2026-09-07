@@ -3,6 +3,12 @@
 * added `mighty_documents()` class with schema validation and document manipulation helpers:
   `list_documents()`, `select_document()`, `add_document()`, `update_document()`, `remove_documents()` (#27)
 * added study-level documents support via `_documents.yml` and new `study@documents` property (#27)
+* Added `mighty_config()` class for the `_mighty.yml` configuration file (#25).
+  The `@mighty` property of `mighty_study()` now holds a `mighty_config()`
+  object instead of a plain list, and is `NULL` when no `_mighty.yml` exists.
+* Added `study_config()` class for the `_study.yml` configuration file (#26).
+  The `@study` property of `mighty_study()` now holds a `study_config()`
+  object instead of a plain list, and is `NULL` when no `_study.yml` exists.
 * Added validation for column dependencies in `mighty_domain()` (#12).
 * Added validation for naming pattern in `mighty_study()` (#2).
 * Added `resolve_subsets()` generic to resolve the `rows.row.subset`

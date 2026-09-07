@@ -107,8 +107,8 @@ advs |>
 
 `mighty_study()` loads every YAML file from a directory. Each file
 becomes a named `mighty_domain`. The optional `_study.yml` provides
-study-level properties and `_mighty.yml` provides mighty framework
-configuration.
+study-level properties as a `study_config` and `_mighty.yml` provides
+mighty framework configuration as a `mighty_config`.
 
 ``` r
 study <- mighty_study(
@@ -117,8 +117,8 @@ study <- mighty_study(
 
 study
 #> <mighty.metadata::mighty_study/list/S7_object>
-#> @ mighty: `external_data`
-#> @ study: `study_id`
+#> @ mighty: <mighty.metadata::mighty_config>
+#> @ study: <mighty.metadata::study_config>
 #> $ ADAE: <mighty.metadata::mighty_domain>
 #> $ ADSL: <mighty.metadata::mighty_domain>
 #> $ ADVS: <mighty.metadata::mighty_domain>
@@ -130,21 +130,14 @@ names(study)
 ```
 
 ``` r
-str(study@study)
-#> List of 1
-#>  $ study_id: chr "example_study"
-str(study@mighty)
-#> List of 1
-#>  $ external_data:List of 3
-#>   ..$ :List of 2
-#>   .. ..$ id  : chr "DM"
-#>   .. ..$ keys: chr [1:2] "STUDYID" "USUBJID"
-#>   ..$ :List of 2
-#>   .. ..$ id  : chr "VS"
-#>   .. ..$ keys: chr [1:2] "STUDYID" "USUBJID"
-#>   ..$ :List of 2
-#>   .. ..$ id  : chr "AE"
-#>   .. ..$ keys: chr [1:2] "STUDYID" "USUBJID"
+study@study
+#> <mighty.metadata::study_config>
+#> Study ID: example_study
+#> Fields: `study_id`
+study@mighty
+#> <mighty.metadata::mighty_config>
+#> External data: 3 sources (`DM`, `VS`, and `AE`)
+#> Repos: 2 (`NovoNordisk-OpenSource/mighty.standards/components@main` and `.`)
 ```
 
 ## Useful links

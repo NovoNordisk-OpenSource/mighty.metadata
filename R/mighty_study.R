@@ -16,9 +16,9 @@
 #' \describe{
 #'   \item{List elements}{[mighty_domain] objects, named by their `id` field.
 #'     Access via e.g. `study$adsl`.}
-#'   \item{`@study`}{Study-level properties from `_study.yml`, or empty list
-#'     if no properties file exists.}
-#'   \item{`@mighty`}{A `mighty_config` object loaded from `_mighty.yml`, or
+#'   \item{`@study`}{A [study_config] object loaded from `_study.yml`, or
+#'     `NULL` if no properties file exists.}
+#'   \item{`@mighty`}{A [mighty_config] object loaded from `_mighty.yml`, or
 #'     `NULL` if no configuration file exists.}
 #'   \item{`@documents`}{Study-level document metadata from `_documents.yml`,
 #'     or empty list if no documents file exists.}
@@ -37,11 +37,12 @@
 #' @section Write Study Metadata:
 #' Use [write_config()] to serialize a `mighty_study()` object back to YAML
 #' files. Each domain is written as a separate file, plus `_mighty.yml` and
-#' `_study.yml` when non-empty. If `path` is `NULL`, files are written to
-#' `x@path`.
+#' `_study.yml` when `@mighty` and `@study` are not `NULL`. If `path` is
+#' `NULL`, files are written to `x@path`.
 #'
-#' @seealso [mighty_domain], [write_config()], [populate_sparse()],
-#'   [populate_core()], [create_md_col()]
+#' @seealso [mighty_domain], [mighty_config], [study_config],
+#'   [write_config()], [populate_sparse()], [populate_core()],
+#'   [create_md_col()]
 #'
 #' @examples
 #' # Load example study
@@ -116,12 +117,10 @@ construct_mighty_study <- function(path, populate = FALSE) {
     FUN.VALUE = character(1)
   )
 
-  mighty <- if (is.null(mighty_file)) NULL else mighty_config(path = path)
-
   study <- S7::new_object(
     .parent = entries,
-    mighty = mighty,
-    study = read_yml(file = study_file),
+    mighty = if (is.null(mighty_file)) NULL else mighty_config(mighty_file),
+    study = if (is.null(study_file)) NULL else study_config(study_file),
     documents = mighty_documents(file = documents_file),
     path = path
   )
@@ -147,19 +146,6 @@ validate_datasets <- function(files) {
       "Please change the file name or remove file from specifications directory."
     ))
   }
-}
-
-#' @noRd
-validate_study <- function(value) {
-  if (length(value) > 0) {
-    schema <- system.file(
-      "schema",
-      "study.json",
-      package = "mighty.metadata"
-    )
-    S7schema::validate_list(value, schema)
-  }
-  NULL
 }
 
 #' @noRd
@@ -189,10 +175,7 @@ mighty_study <- S7::new_class(
       class = NULL | mighty_config
     ),
     study = S7::new_property(
-      class = S7::class_list,
-      validator = \(value) {
-        validate_study(value = value)
-      }
+      class = NULL | study_config
     ),
     documents = S7::new_property(
       class = S7::class_list,
@@ -239,8 +222,8 @@ print_mighty_study <- function(x, ...) {
   }
 
   study <- NULL
-  if (length(x@study)) {
-    study <- "@ study: {.code {names(x@study)}}"
+  if (!is.null(x@study)) {
+    study <- "@ study: {.cls {class(x@study)[[1]]}}"
   }
 
   documents <- NULL
