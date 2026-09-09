@@ -51,3 +51,4 @@ articles:
       - articles/adr-documents_metadata
       - articles/adr-mapping_sheet
       - articles/adr-pooling
+      - articles/adr-codelists_metadata
