@@ -1,0 +1,91 @@
+# Changelog
+
+## mighty.metadata (development version)
+
+- added optional study-level `standards` and `terminology` fields to
+  `_study.yml` and `study.json`
+  ([\#48](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/48)).
+  Each entry requires an `id` and a `version`. Missing fields and empty
+  lists are both valid and mean no entries. Only the structure is
+  validated; domain-semantic checks are left to consuming packages.
+
+- added
+  [`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  class with schema validation and document manipulation helpers:
+  [`list_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
+  [`select_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
+  [`add_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
+  [`update_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
+  [`remove_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  ([\#27](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/27))
+
+- added study-level documents support via `_documents.yml` and new
+  `study@documents` property
+  ([\#27](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/27))
+
+- [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md),
+  [`mighty_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md),
+  and
+  [`study_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md)
+  now accept a `.data` argument to build an object from an in-memory
+  `list` instead of a yaml file
+  ([\#51](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/51)).
+  `file` and `.data` are mutually exclusive. Objects built from `.data`
+  have `@file` set to `NULL` and need an explicit `path` in
+  [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md).
+
+- Added
+  [`mighty_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md)
+  class for the `_mighty.yml` configuration file
+  ([\#25](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/25)).
+  The `@mighty` property of
+  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  now holds a
+  [`mighty_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md)
+  object instead of a plain list, and is `NULL` when no `_mighty.yml`
+  exists.
+
+- Added
+  [`study_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md)
+  class for the `_study.yml` configuration file
+  ([\#26](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/26)).
+  The `@study` property of
+  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  now holds a
+  [`study_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md)
+  object instead of a plain list, and is `NULL` when no `_study.yml`
+  exists.
+
+- Added validation for column dependencies in
+  [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
+  ([\#12](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/12)).
+
+- Added validation for naming pattern in
+  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  ([\#2](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/2)).
+
+- Added
+  [`resolve_subsets()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_subsets.md)
+  generic to resolve the `rows.row.subset` property, rewriting
+  `component.with.domain` to a `.mighty_subset(domain, "subset")` marker
+  call matching the marker syntax
+  `mighty.component::mighty_component$render()` (\>= 0.1.0.9003)
+  expects.
+
+## mighty.metadata 0.1.0
+
+CRAN release: 2026-05-15
+
+- Initial CRAN submission.
+- Core classes:
+  [`mighty_domain()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
+  for single ADaM datasets and
+  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  for full studies.
+- Column, parameter, and row manipulation verbs: `list_*()`, `add_*()`,
+  `remove_*()`, `update_*()`, `select_*()`, `move_*()`.
+- Study-level operations:
+  [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md),
+  [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md),
+  and
+  [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md).
