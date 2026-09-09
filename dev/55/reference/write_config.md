@@ -20,6 +20,9 @@ adds a method that writes every domain plus `_mighty.yml` and
 
 ``` r
 write_config(x, path = NULL)
+
+## S7 method for class <mighty.metadata::mighty_study>
+write_config(x, path = NULL)
 ```
 
 ## Arguments
