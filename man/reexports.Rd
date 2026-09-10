@@ -11,8 +11,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{S7}{\code{\link[S7:validate]{validate()}}}
-
-  \item{S7schema}{\code{\link[S7schema:write_config]{write_config()}}}
+  \item{S7}{\code{\link[S7]{validate}}}
 }}
 

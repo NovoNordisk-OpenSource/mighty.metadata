@@ -18,6 +18,10 @@ A \code{study_config} S7 object extending \link[S7schema:S7schema]{S7schema::S7s
 \describe{
 \item{\code{study_id}}{Unique identifier of the study.}
 \item{\code{study_description}}{Optional description of the study.}
+\item{\code{standards}}{Optional list of standards, each with \code{id} and
+\code{version}.}
+\item{\code{terminology}}{Optional list of controlled terminologies, each with
+\code{id} and \code{version}.}
 }
 }
 \description{
@@ -36,6 +40,10 @@ save it back as a yaml file.
 The \verb{_study.yml} file is validated against the \code{study.json} schema on load.
 The file must contain a \code{study_id} field. Additional study-level properties
 are allowed and are kept as-is.
+
+The optional \code{standards} and \code{terminology} fields describe the standards and
+controlled terminologies applied in the study; see
+\code{vignette("study-schema")}.
 
 Study-level properties are used by \code{\link[=resolve_includes]{resolve_includes()}} to evaluate the
 \code{include} conditions of domains, columns, parameters, and rows.
