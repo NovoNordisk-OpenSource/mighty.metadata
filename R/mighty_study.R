@@ -78,6 +78,10 @@
 #' @name mighty_study
 NULL
 
+#' Valid dataset file name prefixes (case-insensitive).
+#' @noRd
+ALLOWED_DATASET_PREFIXES <- c("AD", "MD")
+
 #' @noRd
 construct_mighty_study <- function(path, populate = FALSE) {
   mighty_schema <- system.file(
@@ -136,7 +140,14 @@ construct_mighty_study <- function(path, populate = FALSE) {
 
 #' @noRd
 validate_datasets <- function(files) {
-  files_names <- files[!startsWith(toupper(basename(files)), "AD")]
+  has_valid_prefix <- \(file) {
+    file |>
+      basename() |>
+      toupper() |>
+      startsWith(ALLOWED_DATASET_PREFIXES) |>
+      any()
+  }
+  files_names <- purrr::discard(files, has_valid_prefix)
 
   if (length(files_names) > 0) {
     cli::cli_abort(paste0(
