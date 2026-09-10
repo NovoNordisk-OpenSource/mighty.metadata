@@ -31,7 +31,7 @@
 #' - Files named `_mighty.yml` or `_mighty.yaml` are treated as mighty framework config
 #' - File named `_documents.yml` is treated as study documents metadata
 #' - All other YAML files must follow ADaM naming conventions (starting with
-#'   `ad`) and are loaded as [mighty_domain] objects
+#'   `ad` or `md`) and are loaded as [mighty_domain] objects
 #' - Only one `_mighty.yml`, one `_study.yml` and one `_documents.yml` file is allowed per directory
 #'
 #' @section Write Study Metadata:

@@ -41,7 +41,7 @@ The function scans the directory for files matching \verb{*.yaml} or \verb{*.yml
 \item Files named \verb{_mighty.yml} or \verb{_mighty.yaml} are treated as mighty framework config
 \item File named \verb{_documents.yml} is treated as study documents metadata
 \item All other YAML files must follow ADaM naming conventions (starting with
-\code{ad}) and are loaded as \link{mighty_domain} objects
+\code{ad} or \code{md}) and are loaded as \link{mighty_domain} objects
 \item Only one \verb{_mighty.yml}, one \verb{_study.yml} and one \verb{_documents.yml} file is allowed per directory
 }
 }
