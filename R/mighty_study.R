@@ -31,7 +31,7 @@
 #' - Files named `_mighty.yml` or `_mighty.yaml` are treated as mighty framework config
 #' - File named `_documents.yml` is treated as study documents metadata
 #' - All other YAML files must follow ADaM naming conventions (starting with
-#'   `ad`) and are loaded as [mighty_domain] objects
+#'   `ad` or `md`) and are loaded as [mighty_domain] objects
 #' - Only one `_mighty.yml`, one `_study.yml` and one `_documents.yml` file is allowed per directory
 #'
 #' @section Write Study Metadata:
@@ -77,6 +77,10 @@
 #'
 #' @name mighty_study
 NULL
+
+#' Valid dataset file name prefixes (case-insensitive).
+#' @noRd
+ALLOWED_DATASET_PREFIXES <- c("AD", "MD")
 
 #' @noRd
 construct_mighty_study <- function(path, populate = FALSE) {
@@ -136,7 +140,10 @@ construct_mighty_study <- function(path, populate = FALSE) {
 
 #' @noRd
 validate_datasets <- function(files) {
-  files_names <- files[!startsWith(toupper(basename(files)), "AD")]
+  files_names <- purrr::discard(
+    files,
+    \(file) has_prefix(basename(file), ALLOWED_DATASET_PREFIXES)
+  )
 
   if (length(files_names) > 0) {
     cli::cli_abort(paste0(

@@ -1,5 +1,7 @@
 # mighty.metadata (development version)
 
+* Added `filter_domains()` to filter a `mighty_study` to domains matching a given prefix (default `"AD"`) (#46).
+* `mighty_study()` now accepts `MD*` dataset files alongside `AD*` in the specifications directory (#46).
 * added `mighty_documents()` class with schema validation and document manipulation helpers:
   `list_documents()`, `select_document()`, `add_document()`, `update_document()`, `remove_documents()` (#27)
 * added study-level documents support via `_documents.yml` and new `study@documents` property (#27)
