@@ -21,12 +21,20 @@
 #' \describe{
 #'   \item{`study_id`}{Unique identifier of the study.}
 #'   \item{`study_description`}{Optional description of the study.}
+#'   \item{`standards`}{Optional list of standards, each with `id` and
+#'     `version`.}
+#'   \item{`terminology`}{Optional list of controlled terminologies, each with
+#'     `id` and `version`.}
 #' }
 #'
 #' @details
 #' The `_study.yml` file is validated against the `study.json` schema on load.
 #' The file must contain a `study_id` field. Additional study-level properties
 #' are allowed and are kept as-is.
+#'
+#' The optional `standards` and `terminology` fields describe the standards and
+#' controlled terminologies applied in the study; see
+#' `vignette("study-schema")`.
 #'
 #' Study-level properties are used by [resolve_includes()] to evaluate the
 #' `include` conditions of domains, columns, parameters, and rows.
