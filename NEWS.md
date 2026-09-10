@@ -1,5 +1,6 @@
 # mighty.metadata (development version)
 
+* `mighty_study()` now accepts `MD*` dataset files alongside `AD*` in the specifications directory (#46).
 * added `mighty_documents()` class with schema validation and document manipulation helpers:
   `list_documents()`, `select_document()`, `add_document()`, `update_document()`, `remove_documents()` (#27)
 * added study-level documents support via `_documents.yml` and new `study@documents` property (#27)
