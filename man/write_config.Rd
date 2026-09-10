@@ -2,8 +2,12 @@
 % Please edit documentation in R/y_write_config.R
 \name{write_config}
 \alias{write_config}
+\alias{write_config,mighty.metadata::mighty_study-method}
 \title{Write a mighty object to YAML}
 \usage{
+write_config(x, path = NULL)
+
+## S7 method for class <mighty.metadata::mighty_study>
 write_config(x, path = NULL)
 }
 \arguments{
