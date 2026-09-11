@@ -1,1 +1,15 @@
 study_id: example_study
+
+standards:
+  - id: ADaM-IG
+    version: 1.1
+
+terminology:
+  - id: ADAM
+    version: 2025-08-06
+  - id: SDTM
+    version: 2025-08-06
+  - id: MedDRA
+    version: 22.1
+  - id: WHODrug
+    version: 2023 JAN

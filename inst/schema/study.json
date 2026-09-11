@@ -12,10 +12,40 @@
     "study_description": {
       "description": "Description of the study",
       "type": "string"
+    },
+    "standards": {
+      "description": "Standards applied in the study",
+      "type": "array",
+      "items": { "$ref": "#/definitions/versioned_entry" }
+    },
+    "terminology": {
+      "description": "Controlled terminologies applied in the study",
+      "type": "array",
+      "items": { "$ref": "#/definitions/versioned_entry" }
     }
   },
   "required": [
     "study_id"
   ],
-  "additionalProperties": true
+  "additionalProperties": true,
+  "definitions": {
+    "versioned_entry": {
+      "description": "Entry identified by an id and a version",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Identifier of the entry",
+          "type": "string"
+        },
+        "version": {
+          "description": "Version of the entry",
+          "anyOf": [
+            { "type": "string" },
+            { "type": "number" }
+          ]
+        }
+      },
+      "required": ["id", "version"]
+    }
+  }
 }

@@ -32,7 +32,13 @@ find_yml <- function(path, name, schema) {
     return(NULL)
   }
 
-  S7schema::validate_yaml(files, schema)
+  # Validate the R-parsed list rather than calling
+  # `S7schema::validate_yaml()`, which parses in JavaScript where js-yaml
+  # resolves values like `version: 2025-08-06` to a timestamp and then fails
+  # the string check. Reading in R keeps such values as strings.
+  S7schema::validate_list(yaml::read_yaml(files), schema)
+
+  files
 }
 
 #' @noRd

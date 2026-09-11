@@ -21,12 +21,20 @@
 #' \describe{
 #'   \item{`study_id`}{Unique identifier of the study.}
 #'   \item{`study_description`}{Optional description of the study.}
+#'   \item{`standards`}{Optional list of standards, each with `id` and
+#'     `version`.}
+#'   \item{`terminology`}{Optional list of controlled terminologies, each with
+#'     `id` and `version`.}
 #' }
 #'
 #' @details
 #' The `_study.yml` file is validated against the `study.json` schema on load.
 #' The file must contain a `study_id` field. Additional study-level properties
 #' are allowed and are kept as-is.
+#'
+#' The optional `standards` and `terminology` fields describe the standards and
+#' controlled terminologies applied in the study; see
+#' `vignette("study-schema")`.
 #'
 #' Study-level properties are used by [resolve_includes()] to evaluate the
 #' `include` conditions of domains, columns, parameters, and rows.
@@ -63,12 +71,27 @@ NULL
 
 #' @noRd
 construct_study_config <- function(file, .data) {
+  schema <- system.file("schema", "study.json", package = "mighty.metadata")
+
+  # `S7schema(file =)` validates the yaml in JavaScript, where js-yaml's
+  # default schema resolves `version: 2025-08-06` to a timestamp and the
+  # string check then fails. Reading the file in R keeps such values as
+  # strings, so read first and validate the resulting list instead.
+  if (!missing(file) && !is.null(file)) {
+    if (!file.exists(file)) {
+      cli::cli_abort("Illegal file reference {.file {file}}")
+    }
+    .data <- yaml::read_yaml(file)
+  } else {
+    file <- NULL
+  }
+
+  S7schema::validate_list(.data, schema)
+
   S7::new_object(
-    .parent = S7schema::S7schema(
-      file = file,
-      schema = system.file("schema", "study.json", package = "mighty.metadata"),
-      .data = .data
-    )
+    .parent = .data,
+    schema = schema,
+    file = file
   )
 }
 

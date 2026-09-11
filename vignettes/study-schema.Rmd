@@ -15,10 +15,10 @@ knitr::opts_chunk$set(
 ```
 
 `_study.yml` provides study-level properties for a study directory --- the
-study identifier and an optional description. Load it with `study_config()`,
-either directly or as the `@study` property of `mighty_study()`. The file
-structure is defined by a [JSON-schema](https://json-schema.org) accessible
-with:
+study identifier, an optional description, and the standards and terminologies
+applied in the study. Load it with `study_config()`, either directly or as the
+`@study` property of `mighty_study()`. The file structure is defined by a
+[JSON-schema](https://json-schema.org) accessible with:
 
 ```r
 system.file("schema", "study.json", package = "mighty.metadata")
@@ -32,3 +32,34 @@ S7schema::document_schema(
   header_start_level = 1
 )
 ```
+
+## Standards and terminology
+
+`standards` and `terminology` are optional lists describing the standards and
+controlled terminologies applied in the study. Each entry requires an `id` and
+a `version`:
+
+```yaml
+study_id: example_study
+
+standards:
+  - id: ADaM-IG
+    version: 1.1
+
+terminology:
+  - id: MedDRA
+    version: 22.1
+  - id: WHODrug
+    version: 2023 JAN
+```
+
+Omitting a field and supplying an empty list (`standards: []`) are equivalent
+and mean that no entries are defined.
+
+Note that yaml infers types, so `version: 1.10` is read as the number `1.1` and
+loses its trailing zero. Quote versions where the exact literal matters:
+`version: '1.10'`.
+
+Only the structure is validated here --- presence, shape, and required fields.
+Domain-semantic checks, such as whether a submitted version actually exists,
+are the responsibility of the consuming package.
