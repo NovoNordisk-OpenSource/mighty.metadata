@@ -38,7 +38,8 @@
           "type": "string"
         },
         "version": {
-          "description": "Version of the entry"
+          "description": "Version of the entry", 
+          "type": ["string", "number"]
         }
       },
       "required": ["id", "version"]
