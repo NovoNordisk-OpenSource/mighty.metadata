@@ -43,10 +43,10 @@ Entry identified by an id and a version
 
 #### Properties
 
-| Name    | Description             | Type   | Required |
-|:--------|:------------------------|:-------|:---------|
-| id      | Identifier of the entry | string | Yes      |
-| version | Version of the entry    |        | Yes      |
+| Name    | Description             | Type   | Any Of         | Required |
+|:--------|:------------------------|:-------|:---------------|:---------|
+| id      | Identifier of the entry | string | NULL           | Yes      |
+| version | Version of the entry    |        | string, number | Yes      |
 
 ### Standards and terminology
 
