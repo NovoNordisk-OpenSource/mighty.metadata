@@ -33,6 +33,7 @@ Imports:
     S7schema (>= 0.1.2),
     stats,
     tibble,
+    yaml,
     zephyr
 Suggests:
     knitr,
