@@ -38,8 +38,11 @@
           "type": "string"
         },
         "version": {
-          "description": "Version of the entry", 
-          "type": ["string", "number"]
+          "description": "Version of the entry",
+          "anyOf": [
+            { "type": "string" },
+            { "type": "number" }
+          ]
         }
       },
       "required": ["id", "version"]

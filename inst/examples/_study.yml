@@ -6,9 +6,9 @@ standards:
 
 terminology:
   - id: ADAM
-    version: 2025-08-06
+    version: "2025-08-06"
   - id: SDTM
-    version: 2025-08-06
+    version: "2025-08-06"
   - id: MedDRA
     version: 22.1
   - id: WHODrug
