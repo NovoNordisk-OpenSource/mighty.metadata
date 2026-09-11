@@ -105,7 +105,7 @@ test_that("study_config accepts standards and terminology", {
   expect_equal(x$terminology[[2]]$version, "2023 JAN")
 })
 
-test_that("quoted versions keep trailing zeros through a round-trip", {
+test_that("write_config() preserves quoted version strings with trailing zeros", {
   tmp <- withr::local_tempdir()
   file <- file.path(tmp, "_study.yml")
 
