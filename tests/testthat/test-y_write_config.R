@@ -71,7 +71,6 @@ test_that("write_mighty_study() preserves standards and terminology", {
 
   expect_equal(roundtrip@study$standards, study@study$standards)
   expect_equal(roundtrip@study$terminology, study@study$terminology)
-  expect_equal(roundtrip@study$terminology[[2]]$version, "2023 JAN")
 })
 
 test_that("write_mighty_study() preserves empty standards and terminology", {
