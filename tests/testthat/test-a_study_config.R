@@ -164,6 +164,32 @@ test_that("study_config errors on standards or terminology missing id/version", 
   )
 })
 
+test_that("study_config accepts unquoted versions as written", {
+  tmp <- withr::local_tempdir()
+  file <- file.path(tmp, "_study.yml")
+
+  writeLines(
+    c(
+      "study_id: a",
+      "standards:",
+      "  - id: ADaM-IG",
+      "    version: 1.1",
+      "terminology:",
+      "  - id: ADAM",
+      "    version: 2025-08-06",
+      "  - id: WHODrug",
+      "    version: 2023 JAN"
+    ),
+    file
+  )
+
+  x <- expect_no_condition(study_config(file))
+
+  expect_equal(x$standards[[1]]$version, 1.1)
+  expect_equal(x$terminology[[1]]$version, "2025-08-06")
+  expect_equal(x$terminology[[2]]$version, "2023 JAN")
+})
+
 test_that("study_config errors when standards is not an array of objects", {
   expect_error(
     study_config(.data = list(study_id = "a", standards = "ADaM-IG")),

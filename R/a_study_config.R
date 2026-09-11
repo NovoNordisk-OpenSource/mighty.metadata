@@ -71,6 +71,22 @@ NULL
 
 #' @noRd
 construct_study_config <- function(file, .data) {
+  # `S7schema(file =)` parses the yaml in JavaScript, where js-yaml's default
+  # schema resolves `version: 2025-08-06` to a timestamp. Reading it in R
+  # keeps such values as strings, so validate the parsed data instead.
+  if (!missing(file) && !is.null(file)) {
+    if (!file.exists(file)) {
+      cli::cli_abort("Illegal file reference {.file {file}}")
+    }
+
+    x <- S7schema::S7schema(
+      .data = yaml::read_yaml(file),
+      schema = system.file("schema", "study.json", package = "mighty.metadata")
+    )
+    x@file <- file
+    return(S7::new_object(.parent = x))
+  }
+
   S7::new_object(
     .parent = S7schema::S7schema(
       file = file,
