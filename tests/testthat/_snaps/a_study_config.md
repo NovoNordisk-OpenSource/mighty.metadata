@@ -5,5 +5,5 @@
     Message
       <study_config>
       Study ID: example_study
-      Fields: `study_id`
+      Fields: `study_id`, `standards`, and `terminology`
 

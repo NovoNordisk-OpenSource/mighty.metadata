@@ -69,6 +69,7 @@ codelist
 dataformat
 dataframe
 dplyr
+emph
 entr
 formalstandardname
 formalstandardversion
@@ -110,6 +111,7 @@ usecore
 usethis
 whereclause
 whereclauses
+winslash
 withr
 xlink
 xmlcodelist
