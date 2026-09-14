@@ -20,3 +20,11 @@
       @ mighty: <mighty_config>
       $ ADSL: <mighty_domain>
 
+# validate_datasets() error on incorrect file name
+
+    Code
+      validate_datasets(files)
+    Condition
+      Error in `validate_datasets()`:
+      ! Incorrect file name detected: _test.yaml in (path: 'example'). Dataset file names are expected to start with "AD" or "MD" (case-insensitive). Please change the file name or remove file from specifications directory.
+

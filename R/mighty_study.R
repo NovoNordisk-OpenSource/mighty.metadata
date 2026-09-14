@@ -140,13 +140,14 @@ construct_mighty_study <- function(path, populate = FALSE) {
 
 #' @noRd
 validate_datasets <- function(files) {
-  files_names <- files[!has_prefix(basename(files), ALLOWED_DATASET_PREFIXES)]
+  invalid_filenames <- files[!has_prefix(basename(files), ALLOWED_DATASET_PREFIXES)]
 
-  if (length(files_names) > 0) {
+  if (length(invalid_filenames) > 0) {
     cli::cli_abort(paste0(
       "Incorrect file name detected: ",
-      "{.list {basename(files_names)}}",
-      " in (path: {.path {unique(dirname(files_names))}}). ",
+      "{.list {basename(invalid_filenames)}}",
+      " in (path: {.path {unique(dirname(invalid_filenames))}}). ",
+      "Dataset file names are expected to start with {.or {.val {ALLOWED_DATASET_PREFIXES}}} (case-insensitive). ",
       "Please change the file name or remove file from specifications directory."
     ))
   }

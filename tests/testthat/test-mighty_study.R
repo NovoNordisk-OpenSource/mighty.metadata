@@ -139,7 +139,7 @@ test_that("validate_path() errors on NA", {
 
 test_that("validate_datasets() error on incorrect file name", {
   files <- c("example/adae.yaml", "example/advs.yaml", "example/_test.yaml")
-  expect_error(validate_datasets(files))
+  expect_snapshot(validate_datasets(files), error = TRUE)
 })
 
 test_that("validate_datasets() accepts AD* dataset file names", {
