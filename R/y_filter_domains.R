@@ -8,7 +8,7 @@
 #' @param prefix `character()` one or more prefixes to keep (case-insensitive).
 #'   Defaults to `"AD"` to keep only ADaM domains.
 #'
-#' @returns `invisible(x)`
+#' @returns A `mighty_study` object.
 #'
 #' @examples
 #' study <- mighty_study(
@@ -19,10 +19,6 @@
 #' study |>
 #'   filter_domains()
 #'
-#' @name filter_domains
-NULL
-
-#' @rdname filter_domains
 #' @export
 filter_domains <- S7::new_generic(
   name = "filter_domains",
