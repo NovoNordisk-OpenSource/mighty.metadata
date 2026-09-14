@@ -33,20 +33,16 @@ find_yml <- function(path, name, schema) {
   }
 
   # S7SCHEMA-WORKAROUND (start) -- remove once S7schema parses yaml in R.
-  # Validate the R-parsed list rather than calling
-  # `S7schema::validate_yaml()`, which parses in JavaScript where js-yaml
-  # resolves values like `version: 2025-08-06` to a timestamp and then fails
-  # the string check. Reading in R keeps such values as strings.
+  # js-yaml resolves values like `version: 2025-08-06` to a timestamp, failing
+  # the string check; reading in R keeps them as strings.
   # Revert to: S7schema::validate_yaml(files, schema)
-  # Guarded by tests/testthat/test-s7schema-workaround.R
   S7schema::validate_list(yaml::read_yaml(files), schema)
   # S7SCHEMA-WORKAROUND (end)
 
   files
 }
 
-# S7SCHEMA-WORKAROUND -- mirrors the internal `S7schema:::check_file()`.
-# Remove together with the other `S7SCHEMA-WORKAROUND` blocks.
+# S7SCHEMA-WORKAROUND -- port of the internal `S7schema:::check_file()`.
 #' @noRd
 check_file <- function(file, ext = NULL) {
   if (length(file) != 1L) {

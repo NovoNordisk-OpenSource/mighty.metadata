@@ -36,16 +36,16 @@ test_that("upstream S7schema still mis-parses unquoted dates (bug is live)", {
 })
 
 test_that("find_yml() accepts unquoted date versions", {
-  # `utils-yml.R` carries a second, independent workaround block.
   file <- write_dated_study()
 
+  # On Windows `tempdir()` yields backslashes that `file.path()` keeps, while
+  # `list.files()` normalises them.
   find_yml(dirname(file), "_study", study_schema()) |>
-    expect_equal(file)
+    normalizePath(winslash = "/") |>
+    expect_equal(normalizePath(file, winslash = "/"))
 })
 
 test_that("write_config() quotes dates so the round-trip survives", {
-  # If `to_yaml()` ever stops quoting, files written by this package would no
-  # longer parse back as strings.
   x <- study_config(file = write_dated_study())
   out <- file.path(withr::local_tempdir(), "_study.yml")
 
@@ -56,7 +56,6 @@ test_that("write_config() quotes dates so the round-trip survives", {
 })
 
 test_that("workaround constructor matches S7schema() on argument handling", {
-  # Every check upstream performs before parsing must still be performed here.
   expect_error(study_config(), "must be supplied")
   expect_error(
     study_config(file = "a.yml", .data = list(study_id = "a")),
@@ -71,7 +70,6 @@ test_that("workaround constructor matches S7schema() on argument handling", {
 })
 
 test_that("workaround still enforces the schema and sets properties", {
-  # Validating ourselves risks silently skipping validation altogether.
   expect_error(study_config(.data = list(not_study_id = "x")), "study_id")
   expect_error(study_config(.data = list(study_id = 1L)), "study_id")
 

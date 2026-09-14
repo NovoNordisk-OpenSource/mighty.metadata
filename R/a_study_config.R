@@ -74,16 +74,13 @@ construct_study_config <- function(file, .data) {
   schema <- system.file("schema", "study.json", package = "mighty.metadata")
 
   # S7SCHEMA-WORKAROUND (start) -- remove once S7schema parses yaml in R.
-  # This block mirrors `S7schema::S7schema()`'s constructor, with the single
-  # difference that it validates the R-parsed list instead of the file:
-  # `validate_yaml()` parses in JavaScript, where js-yaml resolves
-  # `version: 2025-08-06` to a timestamp and the `"type": "string"` check
-  # then fails. Reading in R keeps such values as strings.
+  # Mirrors `S7schema::S7schema()`, except that it validates the R-parsed list
+  # instead of the file: `validate_yaml()` parses in JavaScript, where js-yaml
+  # resolves `version: 2025-08-06` to a timestamp and the string check fails.
   # Revert to:
   #   S7::new_object(.parent = S7schema::S7schema(
   #     file = file, schema = schema, .data = .data
   #   ))
-  # Guarded by tests/testthat/test-s7schema-workaround.R
   rlang::check_exclusive(file, .data)
 
   if (!rlang::is_missing(file)) {
