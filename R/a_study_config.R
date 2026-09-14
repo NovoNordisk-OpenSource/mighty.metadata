@@ -73,13 +73,26 @@ NULL
 construct_study_config <- function(file, .data) {
   schema <- system.file("schema", "study.json", package = "mighty.metadata")
 
-  # `S7schema(file =)` validates the yaml in JavaScript, where js-yaml's
-  # default schema resolves `version: 2025-08-06` to a timestamp and the
-  # string check then fails. Reading the file in R keeps such values as
-  # strings, so read first and validate the resulting list instead.
-  if (!missing(file) && !is.null(file)) {
-    if (!file.exists(file)) {
-      cli::cli_abort("Illegal file reference {.file {file}}")
+  # S7SCHEMA-WORKAROUND (start) -- remove once S7schema parses yaml in R.
+  # This block mirrors `S7schema::S7schema()`'s constructor, with the single
+  # difference that it validates the R-parsed list instead of the file:
+  # `validate_yaml()` parses in JavaScript, where js-yaml resolves
+  # `version: 2025-08-06` to a timestamp and the `"type": "string"` check
+  # then fails. Reading in R keeps such values as strings.
+  # Revert to:
+  #   S7::new_object(.parent = S7schema::S7schema(
+  #     file = file, schema = schema, .data = .data
+  #   ))
+  # Guarded by tests/testthat/test-s7schema-workaround.R
+  rlang::check_exclusive(file, .data)
+
+  if (!rlang::is_missing(file)) {
+    valid <- check_file(file, ext = c("yml", "yaml"))
+    if (!isTRUE(valid)) {
+      cli::cli_abort(c(
+        "Illegal file reference {.file {file}}",
+        rlang::set_names(valid, "i")
+      ))
     }
     .data <- yaml::read_yaml(file)
   } else {
@@ -93,6 +106,7 @@ construct_study_config <- function(file, .data) {
     schema = schema,
     file = file
   )
+  # S7SCHEMA-WORKAROUND (end)
 }
 
 #' @rdname study_config
