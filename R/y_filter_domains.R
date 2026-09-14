@@ -32,10 +32,7 @@ filter_domains <- S7::new_generic(
 
 #' @noRd
 S7::method(filter_domains, mighty_study) <- function(x, prefix = "AD") {
-  domains_to_remove <- purrr::discard(
-    names(x),
-    \(domain_name) has_prefix(domain_name, prefix)
-  )
+  domains_to_remove <- names(x)[!has_prefix(names(x), prefix)]
 
   x[domains_to_remove] <- NULL
 

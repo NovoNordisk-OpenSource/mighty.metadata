@@ -208,13 +208,15 @@ check_column_dependencies <- function(domain) {
   ))
 }
 
-#' Check if a single string starts with any of the given prefixes (case-insensitive)
-#' @param x `character()` string to check.
-#' @param prefix `character()` one or more prefixes to match against.
+#' Check if strings start with any of the given prefixes (case-insensitive)
+#' @param x `character()` strings to check.
+#' @param prefix `character()` one or more prefixes to match against (case-insensitive).
+#' @returns `logical()` of the same length as `x`.
 #' @noRd
 has_prefix <- function(x, prefix) {
+  prefixes <- paste(toupper(prefix), collapse = "|")
+  pattern <- sprintf("^(%s)", prefixes)
   x |>
     toupper() |>
-    startsWith(toupper(prefix)) |>
-    any()
+    grepl(pattern = pattern)
 }

@@ -140,10 +140,7 @@ construct_mighty_study <- function(path, populate = FALSE) {
 
 #' @noRd
 validate_datasets <- function(files) {
-  files_names <- purrr::discard(
-    files,
-    \(file) has_prefix(basename(file), ALLOWED_DATASET_PREFIXES)
-  )
+  files_names <- files[!has_prefix(basename(files), ALLOWED_DATASET_PREFIXES)]
 
   if (length(files_names) > 0) {
     cli::cli_abort(paste0(
