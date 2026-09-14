@@ -39,7 +39,7 @@ test_that("find_yml() accepts unquoted date versions", {
   file <- write_dated_study()
 
   # On Windows `tempdir()` yields backslashes that `file.path()` keeps, while
-  # `list.files()` normalises them.
+  # `list.files()` returns forward slashes.
   find_yml(dirname(file), "_study", study_schema()) |>
     normalizePath(winslash = "/") |>
     expect_equal(normalizePath(file, winslash = "/"))
