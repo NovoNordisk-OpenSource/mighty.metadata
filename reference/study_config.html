@@ -21,7 +21,7 @@ save it back as a yaml file."><meta property="og:image" content="https://novonor
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9009</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9010</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,6 +100,14 @@ Mutually exclusive with <code>file</code>.</p></dd>
 <dt><code>study_description</code></dt>
 <dd><p>Optional description of the study.</p></dd>
 
+<dt><code>standards</code></dt>
+<dd><p>Optional list of standards, each with <code>id</code> and
+<code>version</code>.</p></dd>
+
+<dt><code>terminology</code></dt>
+<dd><p>Optional list of controlled terminologies, each with
+<code>id</code> and <code>version</code>.</p></dd>
+
 
 </dl></div>
     <div class="section level2">
@@ -107,6 +115,9 @@ Mutually exclusive with <code>file</code>.</p></dd>
     <p>The <code>_study.yml</code> file is validated against the <code>study.json</code> schema on load.
 The file must contain a <code>study_id</code> field. Additional study-level properties
 are allowed and are kept as-is.</p>
+<p>The optional <code>standards</code> and <code>terminology</code> fields describe the standards and
+controlled terminologies applied in the study; see
+<code><a href="../articles/study-schema.html">vignette("study-schema")</a></code>.</p>
 <p>Study-level properties are used by <code><a href="resolve_includes.html">resolve_includes()</a></code> to evaluate the
 <code>include</code> conditions of domains, columns, parameters, and rows.</p>
     </div>
@@ -133,15 +144,32 @@ the file the object was loaded from.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">&lt;mighty.metadata::study_config&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Study ID: example_study</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Fields: `study_id`</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Fields: `study_id`, `standards`, and `terminology`</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Underlying object is a `list`</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;mighty.metadata::study_config&gt; List of 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ study_id: chr "example_study"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;mighty.metadata::study_config&gt; List of 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ study_id   : chr "example_study"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ standards  :List of 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id     : chr "ADaM-IG"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ version: num 1.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ terminology:List of 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id     : chr "ADAM"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ version: chr "2025-08-06"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id     : chr "SDTM"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ version: chr "2025-08-06"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id     : chr "MedDRA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ version: num 22.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ :List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id     : chr "WHODrug"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ version: chr "2023 JAN"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ validator: &lt;S7schema::validator&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x55b3c94d03d0&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x5581ab9f1b90&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Write back to a file</span></span></span>

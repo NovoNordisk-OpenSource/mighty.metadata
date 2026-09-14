@@ -46,11 +46,24 @@ A `study_config` S7 object extending
 
   Optional description of the study.
 
+- `standards`:
+
+  Optional list of standards, each with `id` and `version`.
+
+- `terminology`:
+
+  Optional list of controlled terminologies, each with `id` and
+  `version`.
+
 ## Details
 
 The `_study.yml` file is validated against the `study.json` schema on
 load. The file must contain a `study_id` field. Additional study-level
 properties are allowed and are kept as-is.
+
+The optional `standards` and `terminology` fields describe the standards
+and controlled terminologies applied in the study; see
+[`vignette("study-schema")`](https://novonordisk-opensource.github.io/mighty.metadata/articles/study-schema.md).
 
 Study-level properties are used by
 [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md)
@@ -83,15 +96,32 @@ x <- study_config(
 print(x)
 #> <mighty.metadata::study_config>
 #> Study ID: example_study
-#> Fields: `study_id`
+#> Fields: `study_id`, `standards`, and `terminology`
 
 # Underlying object is a `list`
 str(x)
-#> <mighty.metadata::study_config> List of 1
-#>  $ study_id: chr "example_study"
+#> <mighty.metadata::study_config> List of 3
+#>  $ study_id   : chr "example_study"
+#>  $ standards  :List of 1
+#>   ..$ :List of 2
+#>   .. ..$ id     : chr "ADaM-IG"
+#>   .. ..$ version: num 1.1
+#>  $ terminology:List of 4
+#>   ..$ :List of 2
+#>   .. ..$ id     : chr "ADAM"
+#>   .. ..$ version: chr "2025-08-06"
+#>   ..$ :List of 2
+#>   .. ..$ id     : chr "SDTM"
+#>   .. ..$ version: chr "2025-08-06"
+#>   ..$ :List of 2
+#>   .. ..$ id     : chr "MedDRA"
+#>   .. ..$ version: num 22.1
+#>   ..$ :List of 2
+#>   .. ..$ id     : chr "WHODrug"
+#>   .. ..$ version: chr "2023 JAN"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55b3c94d03d0> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5581ab9f1b90> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 
 # Write back to a file
