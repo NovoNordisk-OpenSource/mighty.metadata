@@ -316,7 +316,7 @@ str(study@study)
 #>   .. ..$ version: chr "2023 JAN"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55c7052e5738> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5561f6cfa540> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 str(study@mighty)
 #> <mighty.metadata::mighty_config> List of 2
@@ -333,7 +333,7 @@ str(study@mighty)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55c702550048> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5561f3ea6c00> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 ```
 
