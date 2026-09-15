@@ -242,3 +242,44 @@ test_that("eval_include()", {
   eval_include("{y + z > 10}", info) |>
     expect_true()
 })
+
+test_that("resolve_includes() - drops columns inside parameters", {
+  domain <- test_path("test_study", "advs.yml") |>
+    mighty_domain() |>
+    update_parameter(
+      id = "BMI",
+      columns = list(
+        list(id = "AVAL", include = TRUE),
+        list(id = "AVISITN", include = FALSE)
+      )
+    )
+
+  result <- domain |>
+    resolve_includes() |>
+    select_parameter("BMI")
+
+  result[["columns"]] |>
+    list_ids() |>
+    expect_contains("AVAL") |>
+    expect_no_match("^AVISITN$")
+})
+
+test_that("resolve_includes() - removes include field from kept parameter columns", {
+  domain <- test_path("test_study", "advs.yml") |>
+    mighty_domain() |>
+    update_parameter(
+      id = "BMI",
+      columns = list(
+        list(id = "AVAL", include = TRUE)
+      )
+    )
+
+  result <- domain |>
+    resolve_includes() |>
+    select_parameter("BMI")
+
+  result[["columns"]] |>
+    get_id("AVAL") |>
+    names() |>
+    expect_no_match("^include$")
+})
