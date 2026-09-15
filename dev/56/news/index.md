@@ -11,6 +11,12 @@
   now accepts `MD*` dataset files alongside `AD*` in the specifications
   directory
   ([\#46](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/46)).
+- added optional study-level `standards` and `terminology` fields to
+  `_study.yml` and `study.json`
+  ([\#48](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/48)).
+  Each entry requires an `id` and a `version`. Missing fields and empty
+  lists are both valid and mean no entries. Only the structure is
+  validated; domain-semantic checks are left to consuming packages.
 - added
   [`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   class with schema validation and document manipulation helpers:

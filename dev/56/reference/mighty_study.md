@@ -124,7 +124,7 @@ study$ADVS
 study@study
 #> <mighty.metadata::study_config>
 #> Study ID: example_study
-#> Fields: `study_id`
+#> Fields: `study_id`, `standards`, and `terminology`
 
 # Access mighty framework configuration
 study@mighty
