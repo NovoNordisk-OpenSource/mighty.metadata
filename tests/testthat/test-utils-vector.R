@@ -178,3 +178,15 @@ test_that("check_column_dependencies()", {
     check_column_dependencies() |>
     expect_error("Column dependencies must reference")
 })
+
+test_that("has_prefix() matches a single prefix", {
+  expect_true(has_prefix("ADAE.yaml", "AD"))
+  expect_false(has_prefix("ZZZ.yaml", "AD"))
+})
+
+test_that("has_prefix() matches any of multiple prefixes", {
+  expect_equal(
+    has_prefix(c("ADAE.yaml", "MDCOL.yaml", "ZZZ.yaml"), c("AD", "MD")),
+    c(TRUE, TRUE, FALSE)
+  )
+})

@@ -17,6 +17,7 @@ reference:
       - populate_core
       - populate_sparse
       - create_md_col
+      - filter_domains
   - title: Domain level metadata
     description: |
       Work with metadata for a single ADaM data set.

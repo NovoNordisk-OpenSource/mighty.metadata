@@ -1,6 +1,8 @@
 # mighty.metadata (development version)
 
 * `resolve_includes()` now recurses into `include` fields on columns within parameters (#52).
+* Added `filter_domains()` to filter a `mighty_study` to domains matching a given prefix (default `"AD"`) (#46).
+* `mighty_study()` now accepts `MD*` dataset files alongside `AD*` in the specifications directory (#46).
 * added optional study-level `standards` and `terminology` fields to
   `_study.yml` and `study.json` (#48). Each entry requires an `id` and a
   `version`. Missing fields and empty lists are both valid and mean no entries.
