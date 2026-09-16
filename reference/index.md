@@ -20,6 +20,8 @@ Work with ADaM metadata for an entire study.
   : Populate Predecessor Metadata
 - [`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)
   : Create Metadata Column Table
+- [`filter_domains()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/filter_domains.md)
+  : Filter domains in a study
 
 ## Domain level metadata
 

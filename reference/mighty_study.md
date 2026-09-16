@@ -74,7 +74,7 @@ The function scans the directory for files matching `*.yaml` or `*.yml`:
 - File named `_documents.yml` is treated as study documents metadata
 
 - All other YAML files must follow ADaM naming conventions (starting
-  with `ad`) and are loaded as
+  with `ad` or `md`) and are loaded as
   [mighty_domain](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
   objects
 
