@@ -85,8 +85,18 @@ includes_resolve_domain <- function(domain, info = list()) {
   }
   domain$columns <- includes_resolve_list(domain$columns, info)
   domain$rows <- includes_resolve_list(domain$rows, info)
-  domain$parameters <- includes_resolve_list(domain$parameters, info)
+  domain$parameters <- includes_resolve_parameters(domain$parameters, info)
   validate(domain)
+}
+
+#' @noRd
+includes_resolve_parameters <- function(params, info) {
+  params <- includes_resolve_list(params, info)
+  if (is.null(params)) return(NULL)
+  lapply(params, function(param) {
+    param[["columns"]] <- includes_resolve_list(param[["columns"]], info)
+    param
+  })
 }
 
 #' @noRd
