@@ -5,6 +5,15 @@
 - [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md)
   now recurses into `include` fields on columns within parameters
   ([\#52](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/52)).
+- Added
+  [`filter_domains()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/filter_domains.md)
+  to filter a `mighty_study` to domains matching a given prefix (default
+  `"AD"`)
+  ([\#46](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/46)).
+- [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  now accepts `MD*` dataset files alongside `AD*` in the specifications
+  directory
+  ([\#46](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/46)).
 - added optional study-level `standards` and `terminology` fields to
   `_study.yml` and `study.json`
   ([\#48](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/48)).
