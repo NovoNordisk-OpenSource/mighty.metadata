@@ -53,11 +53,15 @@ The schema for codelists metadata is defined in `inst/schema/codelists.json` and
   "label": "codelist label",
   "description": "description",
   "datatype": "text" | "integer" | "float",
-  "values": [
+  "operations": [
     {
-      "code": "coded value",
-      "decode": "decode text",
-      "operation": "KEEP" | "ADD" | "TAKE"
+      "operation": "KEEP" | "ADD" | "TAKE",
+      "values": [
+        {
+          "code": "coded value",
+          "decode": "decode text"
+        }
+      ]
     }
   ]
 }
@@ -72,13 +76,13 @@ Codelists are referenced from column metadata using the existing `codelist` stri
 ```yaml
 # codelists.yaml
 - id: AGEU
-  values:
-    - code: YEARS
-      decode: Years
-      operation: KEEP
-    - code: DAYS
-      decode: Days
-      operation: KEEP
+  operations:
+    - operation: KEEP
+      values:
+        - code: YEARS
+          decode: Years
+        - code: DAYS
+          decode: Days
 
 # in domain yaml
 columns:
@@ -108,13 +112,40 @@ The `operation` field controls how `mighty.toolbox` uses the value entry relativ
 * `ADD` — add sponsor-defined values to an ADaM globally defined codelist, or define a codelist entirely through `ADD` entries when no GCMD source exists
 * `TAKE` — add SDTM controlled terminology codelist value into ADaM CT even when that codelist value is not used in SDTM define.xml
 
+### Combining KEEP and TAKE on the same codelist
+
+A codelist entry may declare both `KEEP` and `TAKE` operation groups. This arises when a study needs to narrow a GCMD codelist to a specific subset of values (`KEEP`) *and* include one or more SDTM controlled terminology values that are absent from the SDTM define.xml and would otherwise be excluded from the ADaM define.xml.
+
+Example: a codelist is restricted to two values via `KEEP`, but one additional SDTM CT value needs to appear in the ADaM define.xml:
+
+```yaml
+- id: AGEU
+  operations:
+    - operation: KEEP
+      values:
+        - code: YEARS
+          decode: Years
+        - code: DAYS
+          decode: Days
+    - operation: TAKE
+      values:
+        - code: MONTHS
+          decode: Months
+```
+
+The following restrictions apply:
+
+* `ADD` and `KEEP`/`TAKE` are mutually exclusive on the same codelist (enforced by `validate_mighty_codelists`): `KEEP` and `TAKE` operate on codelists present in GCMD, while `ADD` is only valid for codelists absent from GCMD — attempting `ADD` on a GCMD codelist is ignored with a warning by `mighty.toolbox` (already implemented).
+* `code` must be unique across all operation groups within a codelist (enforced by `validate_mighty_codelists`).
+
 ### Validation and checks
 
 **Schema-level** (`codelists.json` enforces these automatically):
 
-* Required fields at codelist level: `id`, `values`
+* Required fields at codelist level: `id`, `operations`
 * Optional fields at codelist level: `label`, `description`, `datatype` — required only for sponsor-defined codelists not present in GCMD; omitted for GCMD codelists where `mighty.toolbox` retrieves these from GCMD
-* Required fields at value level: `code`, `operation`
+* Required fields at operation level: `operation`, `values`
+* Required fields at value level: `code`
 * Optional fields at value level: `decode`
 * Valid `operation` enum: `KEEP`, `ADD`, `TAKE`
 * Valid `datatype` enum: `text`, `integer`, `float`
@@ -122,7 +153,7 @@ The `operation` field controls how `mighty.toolbox` uses the value entry relativ
 **Class-level** (`validate_mighty_codelists`):
 
 * `id` values must be unique across all codelists in the file
-* `code` must be unique within each codelist
+* `code` must be unique within each codelist across all operations
 * Every codelist defined in `codelists.yaml` must be referenced by at least one column in the domain metadata
 
 ### Classes
@@ -159,9 +190,14 @@ codelists |>
     label = "Region",
     description = "Geographical regions used in the study",
     datatype = "text",
-    values = list(
-      list(code = "EUROPE", decode = "Europe", operation = "ADD"),
-      list(code = "NORTH AMERICA", decode = "North America", operation = "ADD")
+    operations = list(
+      list(
+        operation = "ADD",
+        values = list(
+          list(code = "EUROPE", decode = "Europe"),
+          list(code = "NORTH AMERICA", decode = "North America")
+        )
+      )
     )
   )
 
@@ -177,21 +213,29 @@ codelists |>
 codelists |>
   add_codelist_value(
     codelist_id = "AGEU",
+    operation = "KEEP",
     code = "MONTHS",
-    decode = "Months",
-    operation = "KEEP"
+    decode = "Months"
   )
 
 # Remove a value from a codelist
 codelists |>
   remove_codelist_value(codelist_id = "AGEU", code = "MONTHS")
 
-# Update a value
+# Update a value's decode text
 codelists |>
   update_codelist_value(
     codelist_id = "AGEU",
     code = "MONTHS",
     decode = "Month"
+  )
+
+# Move a value to a different operation group
+codelists |>
+  update_codelist_value(
+    codelist_id = "AGEU",
+    code = "MONTHS",
+    operation = "TAKE"
   )
 ```
 
