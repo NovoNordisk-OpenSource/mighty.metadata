@@ -4,10 +4,14 @@
 \alias{mighty_domain}
 \title{Mighty Domain}
 \usage{
-mighty_domain(file)
+mighty_domain(file, .data)
 }
 \arguments{
-\item{file}{\code{character(1)} path to a yaml file defining an ADaM dataset.}
+\item{file}{\code{character(1)} path to a yaml file defining an ADaM dataset.
+Mutually exclusive with \code{.data}.}
+
+\item{.data}{\code{list} holding an ADaM dataset specification already in memory.
+Mutually exclusive with \code{file}.}
 }
 \value{
 A \code{mighty_domain} S7 object extending \link[S7schema:S7schema]{S7schema::S7schema}.
@@ -16,9 +20,11 @@ including \code{id}, \code{label}, \code{class}, \code{keys}, \code{columns}, \c
 and \code{rows}.
 }
 \description{
-\code{mighty_domain()} provides a robust way of working with ADaM metadata in the \code{{mighty}} framework.
+\code{mighty_domain()} provides a robust way of working with ADaM metadata
+in the \code{{mighty}} framework.
 
-A new object is initialized by supplying an existing yaml metadata file.
+A new object is initialized by supplying either an existing yaml metadata
+file or an in-memory \code{list} of the same content.
 This package provides helpers to update column, parameter, and row entries.
 See the references below for help:
 \itemize{
@@ -28,8 +34,8 @@ See the references below for help:
 }
 
 \code{mighty_domain()} inherits from \code{S7schema::S7schema()} and the yaml file is
-automatically validated when loaded. The helper functions above also always validates
-the new configuration before returning.
+automatically validated when loaded. The helper functions above also always
+validates the new configuration before returning.
 
 You can at anytime validate an object by calling \code{validate()} and use
 \code{write_config()} to save it as a yaml file again.
@@ -44,5 +50,19 @@ print(x)
 
 # Underlying object is a `list`
 str(x)
+
+# Or build one in memory
+mighty_domain(
+  .data = list(
+    id = "ADVS",
+    label = "Vital Signs Analysis Dataset",
+    class = "BASIC DATA STRUCTURE",
+    structure = "One record per parameter, per visit, per subject",
+    keys = c("USUBJID", "PARAMCD"),
+    columns = list(
+      list(id = "USUBJID", label = "Unique Subject Identifier")
+    )
+  )
+)
 
 }

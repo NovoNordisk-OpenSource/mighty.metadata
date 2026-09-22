@@ -207,3 +207,16 @@ check_column_dependencies <- function(domain) {
     "i" = "Domain: {.field {domain$id}}"
   ))
 }
+
+#' Check if strings start with any of the given prefixes (case-insensitive)
+#' @param x `character()` strings to check.
+#' @param prefix `character()` one or more prefixes to match against (case-insensitive).
+#' @returns `logical()` of the same length as `x`.
+#' @noRd
+has_prefix <- function(x, prefix) {
+  prefixes <- paste(toupper(prefix), collapse = "|")
+  pattern <- sprintf("^(%s)", prefixes)
+  x |>
+    toupper() |>
+    grepl(pattern = pattern)
+}

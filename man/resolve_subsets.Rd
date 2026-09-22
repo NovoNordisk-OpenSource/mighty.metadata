@@ -19,9 +19,10 @@ field is removed after resolution.
 }
 \details{
 The row's \code{component.with.domain} is rewritten to
-\verb{<domain>[with(<domain>, <subset>), ]}, so the action applies only to rows
-matching the R expression given in \code{subset}. A \code{component} with a
-\code{with.domain} entry is required.
+\verb{.mighty_subset(<domain>, "<subset>")}, a marker call that
+\code{mighty.component::mighty_component$render()} recognizes and expands into
+code that applies the action only to rows matching the R expression given
+in \code{subset}. A \code{component} with a \code{with.domain} entry is required.
 }
 \examples{
 study <- mighty_study(
@@ -39,7 +40,7 @@ study$ADAE <- add_row(
   subset = "STUDYID == 'STUDY1'"
 )
 
-# `subset` is folded into `component.with.domain`
+# `subset` is folded into `component.with.domain` as a `.mighty_subset()` marker call
 study |>
   resolve_subsets() |>
   getElement("ADAE") |>

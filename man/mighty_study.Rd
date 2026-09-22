@@ -17,36 +17,40 @@ A \code{mighty_study} S7 object extending \code{list}:
 \describe{
 \item{List elements}{\link{mighty_domain} objects, named by their \code{id} field.
 Access via e.g. \code{study$adsl}.}
-\item{\verb{@study}}{Study-level properties from \verb{_study.yml}, or empty list
-if no properties file exists.}
-\item{\verb{@mighty}}{A \code{mighty_config} object loaded from \verb{_mighty.yml}, or
+\item{\verb{@study}}{A \link{study_config} object loaded from \verb{_study.yml}, or
+\code{NULL} if no properties file exists.}
+\item{\verb{@mighty}}{A \link{mighty_config} object loaded from \verb{_mighty.yml}, or
 \code{NULL} if no configuration file exists.}
+\item{\verb{@documents}}{Study-level document metadata from \verb{_documents.yml},
+or empty list if no documents file exists.}
 \item{\verb{@path}}{The source directory path as \code{character(1)}.}
 }
 }
 \description{
 Creates a \code{mighty_study} object by loading all YAML metadata files from a
-directory. Each YAML file (except \verb{_mighty.yml} and \verb{_study.yml}) is parsed
-as a \link{mighty_domain} object. The optional \verb{_study.yml} file provides
+directory. Each YAML file (except \verb{_mighty.yml},\verb{_study.yml} and \verb{_documents.yml})
+is parsed as a \link{mighty_domain} object. The optional \verb{_study.yml} file provides
 study-level properties and the optional \verb{_mighty.yml} file provides
-mighty framework configuration.
+mighty framework configuration, and optional \verb{_documents.yml}
+provides study-level documents metadata.
 }
 \details{
 The function scans the directory for files matching \verb{*.yaml} or \verb{*.yml}:
 \itemize{
 \item Files named \verb{_study.yml} or \verb{_study.yaml} are treated as study properties
 \item Files named \verb{_mighty.yml} or \verb{_mighty.yaml} are treated as mighty framework config
+\item File named \verb{_documents.yml} is treated as study documents metadata
 \item All other YAML files must follow ADaM naming conventions (starting with
-\code{ad}) and are loaded as \link{mighty_domain} objects
-\item Only one \verb{_mighty.yml} and one \verb{_study.yml} file is allowed per directory
+\code{ad} or \code{md}) and are loaded as \link{mighty_domain} objects
+\item Only one \verb{_mighty.yml}, one \verb{_study.yml} and one \verb{_documents.yml} file is allowed per directory
 }
 }
 \section{Write Study Metadata}{
 
 Use \code{\link[=write_config]{write_config()}} to serialize a \code{mighty_study()} object back to YAML
 files. Each domain is written as a separate file, plus \verb{_mighty.yml} and
-\verb{_study.yml} when non-empty. If \code{path} is \code{NULL}, files are written to
-\code{x@path}.
+\verb{_study.yml} when \verb{@mighty} and \verb{@study} are not \code{NULL}. If \code{path} is
+\code{NULL}, files are written to \code{x@path}.
 }
 
 \examples{
@@ -67,6 +71,9 @@ study@study
 # Access mighty framework configuration
 study@mighty
 
+# Access study-level documents metadata
+study@documents
+
 # Load and populate in one step
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata"),
@@ -79,6 +86,7 @@ write_config(study, path = tmp)
 
 }
 \seealso{
-\link{mighty_domain}, \code{\link[=write_config]{write_config()}}, \code{\link[=populate_sparse]{populate_sparse()}},
-\code{\link[=populate_core]{populate_core()}}, \code{\link[=create_md_col]{create_md_col()}}
+\link{mighty_domain}, \link{mighty_config}, \link{study_config},
+\code{\link[=write_config]{write_config()}}, \code{\link[=populate_sparse]{populate_sparse()}}, \code{\link[=populate_core]{populate_core()}},
+\code{\link[=create_md_col]{create_md_col()}}
 }

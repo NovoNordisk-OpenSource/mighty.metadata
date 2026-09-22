@@ -1,12 +1,10 @@
 # YAML Utilities
 #
-# Internal helpers for finding, reading, and writing YAML files.
+# Internal helpers for locating and validating YAML files.
 #
 # @param path `character(1)` Directory to search or write to.
 # @param name `character(1)` File name prefix (e.g. `"_mighty"`).
 # @param schema `character(1)` Path to the JSON schema file.
-# @param file `character(1)` or `NULL`. Path to a YAML file.
-# @param x Object to write (converted via `S7schema::to_yaml()`).
 
 #' @noRd
 list_yml <- function(path, name) {
@@ -34,15 +32,34 @@ find_yml <- function(path, name, schema) {
     return(NULL)
   }
 
-  S7schema::validate_yaml(files, schema)
+  # S7SCHEMA-WORKAROUND (start) -- remove once S7schema parses yaml in R.
+  # js-yaml resolves values like `version: 2025-08-06` to a timestamp, failing
+  # the string check; reading in R keeps them as strings.
+  # Revert to: S7schema::validate_yaml(files, schema)
+  S7schema::validate_list(yaml::read_yaml(files), schema)
+  # S7SCHEMA-WORKAROUND (end)
+
+  files
 }
 
+# S7SCHEMA-WORKAROUND -- port of the internal `S7schema:::check_file()`.
 #' @noRd
-read_yml <- function(file) {
-  if (is.null(file)) {
-    return(list())
+check_file <- function(file, ext = NULL) {
+  if (length(file) != 1L) {
+    return(cli::format_message(
+      "Only exactly {.emph one} file can be referenced"
+    ))
   }
-  yaml::read_yaml(file = file)
+
+  if (!file.exists(file)) {
+    return(cli::format_message("File does not exist"))
+  }
+
+  if (!is.null(ext) && !tools::file_ext(file) %in% ext) {
+    return(cli::format_message("Extension must be one of {.emph {ext}}"))
+  }
+
+  TRUE
 }
 
 #' @noRd
@@ -54,15 +71,4 @@ match_yml <- function(path, name) {
   }
 
   files
-}
-
-#' @noRd
-write_yml <- function(x, path, name) {
-  cat(
-    S7schema::to_yaml(x),
-    file = match_yml(path, name),
-    sep = ""
-  )
-
-  invisible(x)
 }

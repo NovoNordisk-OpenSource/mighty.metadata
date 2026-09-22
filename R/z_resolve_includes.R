@@ -9,7 +9,8 @@
 #'
 #' @param x A [mighty_study] or [mighty_domain] object.
 #' @param info `list()` Named list of values used to evaluate `include`
-#'   expressions. For [mighty_study], merged into `x@study`.
+#'   expressions. For [mighty_study], merged into the [study_config] held in
+#'   `x@study`.
 #' @returns The input object with conditional items resolved.
 #' @examples
 #' study <- mighty_study(
@@ -54,12 +55,15 @@ S7::method(resolve_includes, mighty_domain) <- function(x, info = list()) {
 
 #' @noRd
 includes_resolve_study <- function(study, info = list()) {
-  study@study[names(info)] <- info
+  if (!is.null(study@study)) {
+    study@study[names(info)] <- info
+    info <- study@study
+  }
 
   result <- lapply(
     X = study,
     FUN = resolve_includes,
-    info = study@study
+    info = info
   )
 
   dropped_domains <- names(result)[purrr::map_lgl(result, is.null)]

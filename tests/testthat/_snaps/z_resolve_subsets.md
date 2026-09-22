@@ -3,10 +3,10 @@
     Code
       elements[grepl(pattern = "with\\.domain$", x = names(elements))]
     Output
-                ADAE.rows.component.with.domain 
-      "ADAE[with(ADAE, STUDYID == 'STUDY1'), ]" 
-                ADAE.rows.component.with.domain 
-      "ADAE[with(ADAE, STUDYID == 'STUDY2'), ]" 
-                ADSL.rows.component.with.domain 
-                 "ADSL[with(ADSL, AGE > 50), ]" 
+                      ADAE.rows.component.with.domain 
+      ".mighty_subset(ADAE, \"STUDYID == 'STUDY1'\")" 
+                      ADAE.rows.component.with.domain 
+      ".mighty_subset(ADAE, \"STUDYID == 'STUDY2'\")" 
+                      ADSL.rows.component.with.domain 
+                 ".mighty_subset(ADSL, \"AGE > 50\")" 
 

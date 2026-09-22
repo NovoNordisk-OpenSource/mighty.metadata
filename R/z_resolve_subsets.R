@@ -5,9 +5,10 @@
 #' field is removed after resolution.
 #'
 #' The row's `component.with.domain` is rewritten to
-#' `<domain>[with(<domain>, <subset>), ]`, so the action applies only to rows
-#' matching the R expression given in `subset`. A `component` with a
-#' `with.domain` entry is required.
+#' `.mighty_subset(<domain>, "<subset>")`, a marker call that
+#' `mighty.component::mighty_component$render()` recognizes and expands into
+#' code that applies the action only to rows matching the R expression given
+#' in `subset`. A `component` with a `with.domain` entry is required.
 #'
 #' @param x A [mighty_study] or [mighty_domain] object.
 #' @returns The input object with row subsets resolved.
@@ -27,7 +28,7 @@
 #'   subset = "STUDYID == 'STUDY1'"
 #' )
 #'
-#' # `subset` is folded into `component.with.domain`
+#' # `subset` is folded into `component.with.domain` as a `.mighty_subset()` marker call
 #' study |>
 #'   resolve_subsets() |>
 #'   getElement("ADAE") |>
@@ -63,7 +64,18 @@ resolve_subsets_study <- function(study) {
 
 #' @noRd
 resolve_subsets_domain <- function(domain) {
-  domain$rows <- resolve_subsets_list(domain$rows)
+  rows <- resolve_subsets_list(domain$rows)
+
+  if (
+    !identical(rows, domain$rows) &&
+      !rlang::is_installed("mighty.component", version = "0.1.0.9003")
+  ) {
+    zephyr::msg_warning(
+      "Resolving row subsets requires {.pkg mighty.component} (>= 0.1.0.9003)"
+    )
+  }
+
+  domain$rows <- rows
   validate(domain)
 }
 
@@ -121,7 +133,7 @@ resolve_subset_component <- function(component, subset) {
       domain = component[["with"]][["domain"]],
       subset = subset
     ),
-    "{domain}[with({domain}, {subset}), ]"
+    '.mighty_subset({domain}, "{subset}")'
   ) |>
     as.character()
 
