@@ -34,7 +34,7 @@ Codelists in `define.xml` describe the allowed values for a given column. They a
 Codelist values are primarily sourced from GCMD (Global Controlled Metadata Dictionary). Retrieval of codelists from GCMD is handled by `mighty.toolbox`. Studies often need to customize these or define codelists not present in GCMD at all:
 
 * **KEEP** — retain only a subset of values from a GCMD codelist (e.g. restrict `COUNTRY` to the countries enrolled in the study)
-* **ADD** — add sponsor-defined values to an ADaM globally defined codelist (e.g. a new derived parameter), or define a codelist that does not exist in GCMD entirely through `ADD` entries. `mighty.toolbox` blocks `ADD` for non-extensible CDISC codelists.
+* **ADD** — define a sponsor-defined codelist that does not exist in GCMD entirely through `ADD` entries. `mighty.toolbox` blocks `ADD` for any codelist already present in GCMD.
 * **TAKE** — add SDTM controlled terminology codelist value into ADaM CT even when that codelist value is not used in SDTM define.xml, bypassing the restriction that applies to `ADD`. Currently not supported in `mighty.toolbox` but planned for a future release; the schema includes `TAKE` early given the known user need.
 
 Currently `mighty.metadata` supports only a free-text `codelist` string on column entries, which produces the correct codelist reference in `define.xml`. However it provides no mechanism to declare value-level overrides. This is currently only supported with the `source_codelists` sheet in the Excel CST file.
@@ -109,7 +109,7 @@ The gcmd folder field will be defined in `inst/schema/study.json`.
 The `operation` field controls how `mighty.toolbox` uses the value entry relative to the GCMD source:
 
 * `KEEP` — subset values from GCMD
-* `ADD` — add sponsor-defined values to an ADaM globally defined codelist, or define a codelist entirely through `ADD` entries when no GCMD source exists
+* `ADD` — define a sponsor-defined codelist not present in GCMD entirely through `ADD` entries
 * `TAKE` — add SDTM controlled terminology codelist value into ADaM CT even when that codelist value is not used in SDTM define.xml
 
 ### Combining KEEP and TAKE on the same codelist
@@ -142,13 +142,18 @@ The following restrictions apply:
 
 **Schema-level** (`codelists.json` enforces these automatically):
 
-* Required fields at codelist level: `id`, `operations`
-* Optional fields at codelist level: `label`, `description`, `datatype` — required only for sponsor-defined codelists not present in GCMD; omitted for GCMD codelists where `mighty.toolbox` retrieves these from GCMD
-* Required fields at operation level: `operation`, `values`
-* Required fields at value level: `code`
-* Optional fields at value level: `decode`
-* Valid `operation` enum: `KEEP`, `ADD`, `TAKE`
-* Valid `datatype` enum: `text`, `integer`, `float`
+* Codelist level:
+  * Required: `id`, `operations`
+  * Required for `ADD` codelists: `label`, `description`, `datatype` — no GCMD source exists, so must be declared explicitly
+  * Optional for `KEEP`/`TAKE` codelists: `label`, `description`, `datatype` — retrieved from GCMD by `mighty.toolbox`
+  * Valid `datatype` enum: `text`, `integer`, `float`
+* Operation level:
+  * Required: `operation`, `values`
+  * Valid `operation` enum: `KEEP`, `ADD`, `TAKE`
+* Value level:
+  * Required: `code`
+  * Required for `ADD` values: `decode` — no GCMD source exists, so must be declared explicitly
+  * Optional for `KEEP`/`TAKE` values: `decode` — retrieved from GCMD by `mighty.toolbox`; if populated, ignored with a warning (already implemented in `mighty.toolbox`)
 
 **Class-level** (`validate_mighty_codelists`):
 
