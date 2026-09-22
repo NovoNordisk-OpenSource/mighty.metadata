@@ -175,9 +175,19 @@ An S7 class `mighty_codelists` will be defined for the list of codelists. The cl
 * Codelists are defined in a `codelists.yaml` file in the study folder, validated against `inst/schema/codelists.json`
 * A new `R/mighty_codelists.R` file defines the `mighty_codelists` S7 class
 * CRUD methods follow the pattern of `y_columns.R`:
-  * Codelist level: `add_codelist`, `remove_codelist`, `update_codelist`
-  * Value level: `add_codelist_value`, `remove_codelist_value`, `update_codelist_value`
-* `add_codelist` requires at least one value — a codelist entry with no values has no purpose in `codelists.yaml`
+  * Codelist level:
+    * `add_codelist(id, label, description, datatype, operations)` — adds a new codelist; requires at least one operation group with at least one codelist value
+    * `remove_codelist(id)` — removes the codelist and all its contents
+    * `update_codelist(id, ...)` — updates codelist-level fields (`label`, `description`, `datatype`)
+  * Operation level:
+    * `add_codelist_operation(codelist_id, operation, values)` — adds a new operation group to an existing codelist; requires at least one codelist value
+    * `remove_codelist_operation(codelist_id, operation)` — removes the operation group and all its values
+    * `rename_codelist_operation(codelist_id, operation, rename_to)` — changes the operation type of an existing group, moving all its values to the renamed type
+    * `update_codelist_operation(codelist_id, operation, values)` — replaces all values in an existing operation group
+  * Value level:
+    * `add_codelist_value(codelist_id, operation, code, ...)` — adds a value to an operation group; creates the group implicitly if it does not exist yet
+    * `remove_codelist_value(codelist_id, code)` — removes a value; removes the operation group implicitly if it was the last codelist value
+    * `update_codelist_value(codelist_id, code, ...)` — updates value-level fields (`decode`); accepts an optional `operation` argument to move the value to a different group, creating the target group if needed and removing the source group if it becomes empty
 * `move_codelist_value` is omitted — value ordering is implicit from list position
 * All mutating methods call `S7::validate()` after modification
 * `mighty_study` auto-detects `codelists.yaml` on construction and populates the `codelists` property
@@ -208,6 +218,39 @@ codelists |>
 # Update codelist-level fields
 codelists |>
   update_codelist(id = "REGION", description = "Geographical regions used in the trial")
+
+# Add a new operation group with initial values to an existing codelist
+codelists |>
+  add_codelist_operation(
+    codelist_id = "AGEU",
+    operation = "TAKE",
+    values = list(
+      list(code = "MONTHS", decode = "Months")
+    )
+  )
+
+# Remove an operation group and all its values
+codelists |>
+  remove_codelist_operation(codelist_id = "AGEU", operation = "TAKE")
+
+# Rename an operation group type
+codelists |>
+  rename_codelist_operation(
+    codelist_id = "AGEU",
+    operation = "KEEP",
+    rename_to = "TAKE"
+  )
+
+# Replace all values in an operation group
+codelists |>
+  update_codelist_operation(
+    codelist_id = "AGEU",
+    operation = "KEEP",
+    values = list(
+      list(code = "YEARS", decode = "Years"),
+      list(code = "WEEKS", decode = "Weeks")
+    )
+  )
 
 # Retain a specific value from a GCMD codelist
 codelists |>
