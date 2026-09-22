@@ -3,9 +3,9 @@
 `mighty_config()` provides a robust way of working with the
 `_mighty.yml` configuration file in the `{mighty}` framework.
 
-A new object is initialized by supplying a directory path containing a
-`_mighty.yml` file. The file is automatically validated against the
-`mighty.json` schema when loaded.
+A new object is initialized by supplying either the path to a
+`_mighty.yml` file or an in-memory `list` of the same content. Both are
+automatically validated against the `mighty.json` schema.
 
 `mighty_config()` inherits from
 [`S7schema::S7schema()`](https://novonordisk-opensource.github.io/S7schema/reference/S7schema.html).
@@ -18,14 +18,20 @@ to save it back as a yaml file.
 ## Usage
 
 ``` r
-mighty_config(path)
+mighty_config(file, .data)
 ```
 
 ## Arguments
 
-- path:
+- file:
 
-  `character(1)` path to a directory containing a `_mighty.yml` file.
+  `character(1)` path to a `_mighty.yml` file. Mutually exclusive with
+  `.data`.
+
+- .data:
+
+  `list` holding a `_mighty.yml` configuration already in memory.
+  Mutually exclusive with `file`.
 
 ## Value
 
@@ -59,12 +65,13 @@ look for shared components. Each entry is either a local path (e.g.
 Use
 [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 to serialize a `mighty_config()` object back to a `_mighty.yml` file.
-Supply `path` to write to a specific directory; defaults to the
-directory the object was loaded from.
+Supply `path` to write to a specific file; defaults to the file the
+object was loaded from.
 
 ## See also
 
 [mighty_study](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md),
+[study_config](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md),
 [mighty_domain](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md),
 [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 
@@ -72,7 +79,7 @@ directory the object was loaded from.
 
 ``` r
 x <- mighty_config(
-  path = system.file("examples", package = "mighty.metadata")
+  file = system.file("examples", "_mighty.yml", package = "mighty.metadata")
 )
 
 # Custom print method gives a small overview
@@ -97,10 +104,21 @@ str(x)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5570e4a4e9f8> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x561a2ecacd90> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 
-# Write back to a directory
-tmp <- tempdir()
+# Write back to a file
+tmp <- tempfile(fileext = ".yml")
 write_config(x, path = tmp)
+
+# Or build one in memory
+mighty_config(
+  .data = list(
+    external_data = list(list(id = "DM", keys = "USUBJID")),
+    repos = "."
+  )
+)
+#> <mighty.metadata::mighty_config>
+#> External data: 1 source (`DM`)
+#> Repos: 1 (`.`)
 ```

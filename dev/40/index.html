@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9011</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,7 @@
     <li><a class="dropdown-item" href="articles/adr.html">ADR: Package design and scope</a></li>
     <li><a class="dropdown-item" href="articles/adr-mighty_toolbox_integration.html">ADR: mighty.toolbox integration</a></li>
     <li><a class="dropdown-item" href="articles/adr-documents_metadata.html">ADR: documents metadata structure</a></li>
+    <li><a class="dropdown-item" href="articles/adr-mapping_sheet.html">ADR: Mapping Sheet Structure</a></li>
     <li><a class="dropdown-item" href="articles/adr-pooling.html">ADR: Specifying pooled specifications</a></li>
     <li><a class="dropdown-item" href="articles/adr-codelists_metadata.html">ADR: codelists metadata structure</a></li>
   </ul>
@@ -148,7 +149,7 @@
 <div class="section level3">
 <h3 id="work-with-a-full-study">Work with a full study<a class="anchor" aria-label="anchor" href="#work-with-a-full-study"></a>
 </h3>
-<p><code><a href="reference/mighty_study.html">mighty_study()</a></code> loads every YAML file from a directory. Each file becomes a named <code>mighty_domain</code>. The optional <code>_study.yml</code> provides study-level properties and <code>_mighty.yml</code> provides mighty framework configuration.</p>
+<p><code><a href="reference/mighty_study.html">mighty_study()</a></code> loads every YAML file from a directory. Each file becomes a named <code>mighty_domain</code>. The optional <code>_study.yml</code> provides study-level properties as a <code>study_config</code> and <code>_mighty.yml</code> provides mighty framework configuration as a <code>mighty_config</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mighty_study.html">mighty_study</a></span><span class="op">(</span></span>
 <span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span></span>
@@ -156,8 +157,8 @@
 <span></span>
 <span><span class="va">study</span></span>
 <span><span class="co">#&gt; &lt;mighty.metadata::mighty_study/list/S7_object&gt;</span></span>
-<span><span class="co">#&gt; @ mighty: `external_data`</span></span>
-<span><span class="co">#&gt; @ study: `study_id`</span></span>
+<span><span class="co">#&gt; @ mighty: &lt;mighty.metadata::mighty_config&gt;</span></span>
+<span><span class="co">#&gt; @ study: &lt;mighty.metadata::study_config&gt;</span></span>
 <span><span class="co">#&gt; $ ADAE: &lt;mighty.metadata::mighty_domain&gt;</span></span>
 <span><span class="co">#&gt; $ ADSL: &lt;mighty.metadata::mighty_domain&gt;</span></span>
 <span><span class="co">#&gt; $ ADVS: &lt;mighty.metadata::mighty_domain&gt;</span></span></code></pre></div>
@@ -165,21 +166,14 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "ADAE" "ADSL" "ADVS"</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">study</span><span class="op">@</span><span class="va">study</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 1</span></span>
-<span><span class="co">#&gt;  $ study_id: chr "example_study"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">study</span><span class="op">@</span><span class="va">mighty</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 1</span></span>
-<span><span class="co">#&gt;  $ external_data:List of 3</span></span>
-<span><span class="co">#&gt;   ..$ :List of 2</span></span>
-<span><span class="co">#&gt;   .. ..$ id  : chr "DM"</span></span>
-<span><span class="co">#&gt;   .. ..$ keys: chr [1:2] "STUDYID" "USUBJID"</span></span>
-<span><span class="co">#&gt;   ..$ :List of 2</span></span>
-<span><span class="co">#&gt;   .. ..$ id  : chr "VS"</span></span>
-<span><span class="co">#&gt;   .. ..$ keys: chr [1:2] "STUDYID" "USUBJID"</span></span>
-<span><span class="co">#&gt;   ..$ :List of 2</span></span>
-<span><span class="co">#&gt;   .. ..$ id  : chr "AE"</span></span>
-<span><span class="co">#&gt;   .. ..$ keys: chr [1:2] "STUDYID" "USUBJID"</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">study</span><span class="op">@</span><span class="va">study</span></span>
+<span><span class="co">#&gt; &lt;mighty.metadata::study_config&gt;</span></span>
+<span><span class="co">#&gt; Study ID: example_study</span></span>
+<span><span class="co">#&gt; Fields: `study_id`</span></span>
+<span><span class="va">study</span><span class="op">@</span><span class="va">mighty</span></span>
+<span><span class="co">#&gt; &lt;mighty.metadata::mighty_config&gt;</span></span>
+<span><span class="co">#&gt; External data: 3 sources (`DM`, `VS`, and `AE`)</span></span>
+<span><span class="co">#&gt; Repos: 2 (`NovoNordisk-OpenSource/mighty.standards/components@main` and `.`)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -233,6 +227,7 @@
 <li>Ari Siggaard Knoph <br><small class="roles"> Author </small>   </li>
 <li>Matthew Phelps <br><small class="roles"> Author </small>   </li>
 <li>Giulia Pais <br><small class="roles"> Author </small>   </li>
+<li>Katarzyna Graczyk <br><small class="roles"> Author </small>   </li>
 <li>Michael Hedegaard Thomsen <br><small class="roles"> Author </small>   </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
@@ -250,7 +245,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Aksel Thomsen, Ari Siggaard Knoph, Matthew Phelps, Giulia Pais, Michael Hedegaard Thomsen.</p>
+  <p>Developed by Aksel Thomsen, Ari Siggaard Knoph, Matthew Phelps, Giulia Pais, Katarzyna Graczyk, Michael Hedegaard Thomsen.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -5,13 +5,14 @@ articles:
   adam-schema: adam-schema.html
   articles/adr-codelists_metadata: adr-codelists_metadata.html
   articles/adr-documents_metadata: adr-documents_metadata.html
+  articles/adr-mapping_sheet: adr-mapping_sheet.html
   articles/adr-mighty_toolbox_integration: adr-mighty_toolbox_integration.html
   articles/adr-pooling: adr-pooling.html
   articles/adr: adr.html
   mighty-metadata: mighty-metadata.html
   mighty-schema: mighty-schema.html
   study-schema: study-schema.html
-last_built: 2026-08-10T13:12Z
+last_built: 2026-09-22T10:02Z
 urls:
   reference: https://novonordisk-opensource.github.io/mighty.metadata/reference
   article: https://novonordisk-opensource.github.io/mighty.metadata/articles

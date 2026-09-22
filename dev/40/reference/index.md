@@ -8,6 +8,8 @@ Work with ADaM metadata for an entire study.
   : Mighty Study
 - [`mighty_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md)
   : Mighty Config
+- [`study_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md)
+  : Study Config
 - [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md)
   : Resolve conditional metadata items
 - [`resolve_subsets()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_subsets.md)
@@ -18,6 +20,8 @@ Work with ADaM metadata for an entire study.
   : Populate Predecessor Metadata
 - [`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)
   : Create Metadata Column Table
+- [`filter_domains()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/filter_domains.md)
+  : Filter domains in a study
 
 ## Domain level metadata
 
@@ -46,6 +50,18 @@ Work with metadata for a single ADaM data set.
   [`update_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md)
   [`select_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md)
   : Update parameters in your metadata
+
+## Documents metadata
+
+Manage study-level document catalog and references.
+
+- [`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  [`list_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  [`select_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  [`remove_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  [`add_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  [`update_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  : Mighty Documents
 
 ## Utilities
 

@@ -271,27 +271,53 @@ The directory can contain `_study.yml` (study-level properties) and
 
 study_path <- system.file("examples", package = "mighty.metadata")
 study <- mighty_study(study_path)
+#> → No `_documents.yml` file found
 study
 #> <mighty.metadata::mighty_study/list/S7_object>
 #> @ mighty: <mighty.metadata::mighty_config>
-#> @ study: `study_id`
+#> @ study: <mighty.metadata::study_config>
 #> $ ADAE: <mighty.metadata::mighty_domain>
 #> $ ADSL: <mighty.metadata::mighty_domain>
 #> $ ADVS: <mighty.metadata::mighty_domain>
 ```
 
 Access individual domains with `$`. Study-level properties from
-`_study.yml` are stored in `@study` and mighty framework configuration
-from `_mighty.yml` is stored in `@mighty`. The `@` operator accesses
-properties of S7 objects:
+`_study.yml` are stored in `@study` as a
+[`study_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md)
+object and mighty framework configuration from `_mighty.yml` is stored
+in `@mighty` as a
+[`mighty_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_config.md)
+object. Both are `NULL` when the corresponding file is absent. The `@`
+operator accesses properties of S7 objects:
 
 ``` r
 
 names(study)
 #> [1] "ADAE" "ADSL" "ADVS"
 str(study@study)
-#> List of 1
-#>  $ study_id: chr "example_study"
+#> <mighty.metadata::study_config> List of 3
+#>  $ study_id   : chr "example_study"
+#>  $ standards  :List of 1
+#>   ..$ :List of 2
+#>   .. ..$ id     : chr "ADaM-IG"
+#>   .. ..$ version: num 1.1
+#>  $ terminology:List of 4
+#>   ..$ :List of 2
+#>   .. ..$ id     : chr "ADAM"
+#>   .. ..$ version: chr "2025-08-06"
+#>   ..$ :List of 2
+#>   .. ..$ id     : chr "SDTM"
+#>   .. ..$ version: chr "2025-08-06"
+#>   ..$ :List of 2
+#>   .. ..$ id     : chr "MedDRA"
+#>   .. ..$ version: num 22.1
+#>   ..$ :List of 2
+#>   .. ..$ id     : chr "WHODrug"
+#>   .. ..$ version: chr "2023 JAN"
+#>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
+#>  @ validator: <S7schema::validator>
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5648f69c8fc0> 
+#>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 str(study@mighty)
 #> <mighty.metadata::mighty_config> List of 2
 #>  $ external_data:List of 3
@@ -307,7 +333,7 @@ str(study@mighty)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x56230214beb0> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5648f3b11c20> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 ```
 
@@ -399,6 +425,7 @@ Here is the full pipeline in one block:
 ``` r
 
 study <- mighty_study(study_path)
+#> → No `_documents.yml` file found
 
 # Mark ADSL core variables
 study$ADSL <- study$ADSL |>
@@ -425,6 +452,7 @@ after loading:
 ``` r
 
 study <- mighty_study(study_path, populate = TRUE)
+#> → No `_documents.yml` file found
 ```
 
 ### Saving a Study
@@ -454,6 +482,7 @@ against the study’s `@study` values.
 ``` r
 
 study <- mighty_study(study_path)
+#> → No `_documents.yml` file found
 
 study$ADVS <- study$ADVS |>
   update_column(

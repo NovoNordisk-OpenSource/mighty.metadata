@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9011</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,6 +49,7 @@
     <li><a class="dropdown-item" href="../articles/adr.html">ADR: Package design and scope</a></li>
     <li><a class="dropdown-item" href="../articles/adr-mighty_toolbox_integration.html">ADR: mighty.toolbox integration</a></li>
     <li><a class="dropdown-item" href="../articles/adr-documents_metadata.html">ADR: documents metadata structure</a></li>
+    <li><a class="dropdown-item" href="../articles/adr-mapping_sheet.html">ADR: Mapping Sheet Structure</a></li>
     <li><a class="dropdown-item" href="../articles/adr-pooling.html">ADR: Specifying pooled specifications</a></li>
     <li><a class="dropdown-item" href="../articles/adr-codelists_metadata.html">ADR: codelists metadata structure</a></li>
   </ul>
@@ -351,24 +352,48 @@ parameter:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span></span>
 <span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span><span class="op">)</span></span>
+<span><span class="co">#&gt; → No `_documents.yml` file found</span></span>
 <span><span class="va">study</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">&lt;mighty.metadata::mighty_study/list/S7_object&gt;</span></span></span>
 <span><span class="co">#&gt; @ mighty: <span style="color: #0000BB;">&lt;mighty.metadata::mighty_config&gt;</span></span></span>
-<span><span class="co">#&gt; @ study: `study_id`</span></span>
+<span><span class="co">#&gt; @ study: <span style="color: #0000BB;">&lt;mighty.metadata::study_config&gt;</span></span></span>
 <span><span class="co">#&gt; $ ADAE: <span style="color: #0000BB;">&lt;mighty.metadata::mighty_domain&gt;</span></span></span>
 <span><span class="co">#&gt; $ ADSL: <span style="color: #0000BB;">&lt;mighty.metadata::mighty_domain&gt;</span></span></span>
 <span><span class="co">#&gt; $ ADVS: <span style="color: #0000BB;">&lt;mighty.metadata::mighty_domain&gt;</span></span></span></code></pre></div>
 <p>Access individual domains with <code>$</code>. Study-level properties
-from <code>_study.yml</code> are stored in <code>@study</code> and
-mighty framework configuration from <code>_mighty.yml</code> is stored
-in <code>@mighty</code>. The <code>@</code> operator accesses properties
-of S7 objects:</p>
+from <code>_study.yml</code> are stored in <code>@study</code> as a
+<code><a href="../reference/study_config.html">study_config()</a></code> object and mighty framework configuration
+from <code>_mighty.yml</code> is stored in <code>@mighty</code> as a
+<code><a href="../reference/mighty_config.html">mighty_config()</a></code> object. Both are <code>NULL</code> when the
+corresponding file is absent. The <code>@</code> operator accesses
+properties of S7 objects:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "ADAE" "ADSL" "ADVS"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">study</span><span class="op">@</span><span class="va">study</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 1</span></span>
-<span><span class="co">#&gt;  $ study_id: chr "example_study"</span></span>
+<span><span class="co">#&gt; &lt;mighty.metadata::study_config&gt; List of 3</span></span>
+<span><span class="co">#&gt;  $ study_id   : chr "example_study"</span></span>
+<span><span class="co">#&gt;  $ standards  :List of 1</span></span>
+<span><span class="co">#&gt;   ..$ :List of 2</span></span>
+<span><span class="co">#&gt;   .. ..$ id     : chr "ADaM-IG"</span></span>
+<span><span class="co">#&gt;   .. ..$ version: num 1.1</span></span>
+<span><span class="co">#&gt;  $ terminology:List of 4</span></span>
+<span><span class="co">#&gt;   ..$ :List of 2</span></span>
+<span><span class="co">#&gt;   .. ..$ id     : chr "ADAM"</span></span>
+<span><span class="co">#&gt;   .. ..$ version: chr "2025-08-06"</span></span>
+<span><span class="co">#&gt;   ..$ :List of 2</span></span>
+<span><span class="co">#&gt;   .. ..$ id     : chr "SDTM"</span></span>
+<span><span class="co">#&gt;   .. ..$ version: chr "2025-08-06"</span></span>
+<span><span class="co">#&gt;   ..$ :List of 2</span></span>
+<span><span class="co">#&gt;   .. ..$ id     : chr "MedDRA"</span></span>
+<span><span class="co">#&gt;   .. ..$ version: num 22.1</span></span>
+<span><span class="co">#&gt;   ..$ :List of 2</span></span>
+<span><span class="co">#&gt;   .. ..$ id     : chr "WHODrug"</span></span>
+<span><span class="co">#&gt;   .. ..$ version: chr "2023 JAN"</span></span>
+<span><span class="co">#&gt;  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"</span></span>
+<span><span class="co">#&gt;  @ validator: &lt;S7schema::validator&gt;</span></span>
+<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x5648f69c8fc0&gt; </span></span>
+<span><span class="co">#&gt;  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">study</span><span class="op">@</span><span class="va">mighty</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;mighty.metadata::mighty_config&gt; List of 2</span></span>
 <span><span class="co">#&gt;  $ external_data:List of 3</span></span>
@@ -384,7 +409,7 @@ of S7 objects:</p>
 <span><span class="co">#&gt;  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."</span></span>
 <span><span class="co">#&gt;  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"</span></span>
 <span><span class="co">#&gt;  @ validator: &lt;S7schema::validator&gt;</span></span>
-<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x56230214beb0&gt; </span></span>
+<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x5648f3b11c20&gt; </span></span>
 <span><span class="co">#&gt;  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"</span></span></code></pre></div>
 <p>The <code>_study.yml</code> file provides the <code>study_id</code>.
 The <code>_mighty.yml</code> file provides <code>external_data</code>
@@ -464,6 +489,7 @@ across the study, filling in only missing properties.</p>
 <p>Here is the full pipeline in one block:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span><span class="op">)</span></span>
+<span><span class="co">#&gt; → No `_documents.yml` file found</span></span>
 <span></span>
 <span><span class="co"># Mark ADSL core variables</span></span>
 <span><span class="va">study</span><span class="op">$</span><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">study</span><span class="op">$</span><span class="va">ADSL</span> <span class="op">|&gt;</span></span>
@@ -483,7 +509,8 @@ call. Passing <code>populate = TRUE</code> is equivalent to calling
 <code><a href="../reference/populate_core.html">populate_core()</a></code> then <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code> after
 loading:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span>, populate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span>, populate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; → No `_documents.yml` file found</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="saving-a-study">Saving a Study<a class="anchor" aria-label="anchor" href="#saving-a-study"></a>
@@ -510,6 +537,7 @@ loading:</p>
 values.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span><span class="op">)</span></span>
+<span><span class="co">#&gt; → No `_documents.yml` file found</span></span>
 <span></span>
 <span><span class="va">study</span><span class="op">$</span><span class="va">ADVS</span> <span class="op">&lt;-</span> <span class="va">study</span><span class="op">$</span><span class="va">ADVS</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/columns.html">update_column</a></span><span class="op">(</span></span>
@@ -589,7 +617,7 @@ reference</a> lists all available functions</li>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Aksel Thomsen, Ari Siggaard Knoph, Matthew Phelps, Giulia Pais, Michael Hedegaard Thomsen.</p>
+  <p>Developed by Aksel Thomsen, Ari Siggaard Knoph, Matthew Phelps, Giulia Pais, Katarzyna Graczyk, Michael Hedegaard Thomsen.</p>
 </div>
 
 <div class="pkgdown-footer-right">
