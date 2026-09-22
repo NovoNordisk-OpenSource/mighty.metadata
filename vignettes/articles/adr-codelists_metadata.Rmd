@@ -124,13 +124,10 @@ Example: a codelist is restricted to two values via `KEEP`, but one additional S
     - operation: KEEP
       values:
         - code: YEARS
-          decode: Years
         - code: DAYS
-          decode: Days
     - operation: TAKE
       values:
         - code: MONTHS
-          decode: Months
 ```
 
 The following restrictions apply:
@@ -225,13 +222,17 @@ codelists |>
 codelists |>
   update_codelist(id = "REGION", description = "Geographical regions used in the trial")
 
+# Select a single codelist entry
+codelists |>
+  select_codelist(id = "REGION")
+
 # Add a new operation group with initial values to an existing codelist
 codelists |>
   add_codelist_operation(
     codelist_id = "AGEU",
     operation = "TAKE",
     values = list(
-      list(code = "MONTHS", decode = "Months")
+      list(code = "MONTHS")
     )
   )
 
@@ -286,6 +287,10 @@ codelists |>
     code = "MONTHS",
     operation = "TAKE"
   )
+
+# Move a value to a new position within its operation group
+codelists |>
+  move_codelist_value(codelist_id = "AGEU", code = "YEARS", .pos = 2)
 ```
 
 ## Testing Strategy
