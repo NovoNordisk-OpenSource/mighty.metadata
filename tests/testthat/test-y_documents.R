@@ -136,9 +136,11 @@ test_that("mighty_documents print() summarizes document ids and entry count", {
 test_that("mighty_study() enforces mighty_documents type for @documents", {
   study <- mighty_study(test_path("test_study"))
 
+  # S7 < 0.2.0 renders class names unqualified, newer versions qualify them
+  # with the package, so match only the version-stable part of the message.
   expect_error(
     study@documents <- list(),
-    "<mighty.metadata::mighty_study>@documents must be <mighty.metadata::mighty_documents>, not <list>"
+    "@documents must be .*mighty_documents.*, not <list>"
   )
 })
 
