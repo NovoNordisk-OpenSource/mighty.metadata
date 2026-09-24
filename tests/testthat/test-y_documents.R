@@ -152,8 +152,7 @@ test_that("mighty_study() reads _documents.yml", {
   )
 })
 
-test_that("check_document_references() returns study unchanged when no doc refs in domains and no docs in _documents.yml", {
-  # nolint: line_length_linter
+test_that("check_document_references() returns study unchanged when no doc refs in domains and no docs in _documents.yml", { # nolint: line_length_linter
   tmpdir <- withr::local_tempdir()
   file.copy(test_path("test_study/adsl.yml"), tmpdir) # adsl.yml has no document references
   study <- mighty_study(tmpdir)
@@ -163,8 +162,7 @@ test_that("check_document_references() returns study unchanged when no doc refs 
     expect_equal(study)
 })
 
-test_that("check_document_references() returns study unchanged when no doc refs in domains but docs exist in _documents.yml", {
-  # nolint: line_length_linter
+test_that("check_document_references() returns study unchanged when no doc refs in domains but docs exist in _documents.yml", { # nolint: line_length_linter
   tmpdir <- withr::local_tempdir()
   file.copy(test_path("test_study/adsl.yml"), tmpdir) # adsl.yml has no document references
   file.copy(test_path("test_study/_documents.yml"), tmpdir)
