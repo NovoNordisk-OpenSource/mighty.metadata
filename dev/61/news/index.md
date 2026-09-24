@@ -2,6 +2,9 @@
 
 ## mighty.metadata (development version)
 
+- [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md)
+  now recurses into `include` fields on columns within parameters
+  ([\#52](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/52)).
 - Added
   [`filter_domains()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/filter_domains.md)
   to filter a `mighty_study` to domains matching a given prefix (default

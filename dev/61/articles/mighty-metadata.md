@@ -316,7 +316,7 @@ str(study@study)
 #>   .. ..$ version: chr "2023 JAN"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55c227bcf7c8> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5581dbb98ad0> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 str(study@mighty)
 #> <mighty.metadata::mighty_config> List of 2
@@ -333,7 +333,7 @@ str(study@mighty)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55c223cff7d0> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x5581d7cc52f8> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 ```
 
@@ -512,7 +512,8 @@ list_columns(resolved$ADVS)
 #>  [7] "PARAMCD"  "PARAM"    "AVAL"     "AVALC"
 ```
 
-`include` works on parameters and rows too, not just columns.
+`include` can be applied to columns, rows, parameters, and individual
+columns within a parameter.
 
 ## Creating a Flat Column Table
 
