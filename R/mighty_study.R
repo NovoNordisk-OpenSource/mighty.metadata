@@ -21,7 +21,7 @@
 #'   \item{`@mighty`}{A [mighty_config] object loaded from `_mighty.yml`, or
 #'     `NULL` if no configuration file exists.}
 #'   \item{`@documents`}{Study-level document metadata from `_documents.yml`,
-#'     or empty list if no documents file exists.}
+#'     or an empty `mighty_documents` if no documents file exists.}
 #'   \item{`@path`}{The source directory path as `character(1)`.}
 #' }
 #'

@@ -13,8 +13,10 @@
 #' Writing to YAML is done via `write_config()` on a `mighty_study()` object,
 #' where documents are saved to `_documents.yml`.
 #'
-#' @param file `character(1)` path to `_documents.yml`.
-#' @param .data `list()` of document entries.
+#' @param file `character(1)` path to `_documents.yml`. Optional; mutually
+#'   exclusive with `.data`.
+#' @param .data `list()` of document entries. Optional; mutually exclusive
+#'   with `file`. Supplying neither returns an empty `mighty_documents`.
 #'
 #' @return An object of class `mighty_documents`.
 #'
