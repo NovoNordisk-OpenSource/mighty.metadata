@@ -378,7 +378,7 @@ resolved <- resolve_includes(study, info = list(study_id = "other"))
 list_columns(resolved$ADVS)
 ```
 
-`include` works on parameters and rows too, not just columns.
+`include` can be applied to columns, rows, parameters, and individual columns within a parameter.
 
 ## Creating a Flat Column Table
 
