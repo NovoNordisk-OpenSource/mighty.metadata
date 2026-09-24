@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9011</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9012</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -391,7 +391,7 @@ properties of S7 objects:</p>
 <span><span class="co">#&gt;   .. ..$ version: chr "2023 JAN"</span></span>
 <span><span class="co">#&gt;  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"</span></span>
 <span><span class="co">#&gt;  @ validator: &lt;S7schema::validator&gt;</span></span>
-<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x55f6c4443ca8&gt; </span></span>
+<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x56427916da10&gt; </span></span>
 <span><span class="co">#&gt;  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">study</span><span class="op">@</span><span class="va">mighty</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;mighty.metadata::mighty_config&gt; List of 2</span></span>
@@ -408,7 +408,7 @@ properties of S7 objects:</p>
 <span><span class="co">#&gt;  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."</span></span>
 <span><span class="co">#&gt;  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"</span></span>
 <span><span class="co">#&gt;  @ validator: &lt;S7schema::validator&gt;</span></span>
-<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x55f6c158e9f0&gt; </span></span>
+<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x5642762a9790&gt; </span></span>
 <span><span class="co">#&gt;  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"</span></span></code></pre></div>
 <p>The <code>_study.yml</code> file provides the <code>study_id</code>.
 The <code>_mighty.yml</code> file provides <code>external_data</code>
@@ -556,8 +556,8 @@ condition is <code>TRUE</code> and the column is kept:</p>
 <span><span class="fu"><a href="../reference/columns.html">list_columns</a></span><span class="op">(</span><span class="va">resolved</span><span class="op">$</span><span class="va">ADVS</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "USUBJID"  "SAFFL"    "TRTP"     "VISITNUM" "AVISITN"  "AVISIT"  </span></span>
 <span><span class="co">#&gt;  [7] "PARAMCD"  "PARAM"    "AVAL"     "AVALC"</span></span></code></pre></div>
-<p><code>include</code> works on parameters and rows too, not just
-columns.</p>
+<p><code>include</code> can be applied to columns, rows, parameters, and
+individual columns within a parameter.</p>
 </div>
 <div class="section level2">
 <h2 id="creating-a-flat-column-table">Creating a Flat Column Table<a class="anchor" aria-label="anchor" href="#creating-a-flat-column-table"></a>
