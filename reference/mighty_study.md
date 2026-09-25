@@ -54,8 +54,8 @@ A `mighty_study` S7 object extending `list`:
 
 - `@documents`:
 
-  Study-level document metadata from `_documents.yml`, or empty list if
-  no documents file exists.
+  Study-level document metadata from `_documents.yml`, or an empty
+  `mighty_documents` if no documents file exists.
 
 - `@path`:
 

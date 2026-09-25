@@ -26,7 +26,7 @@ Functions to list, select, remove, add, and update documents in your
 ## Usage
 
 ``` r
-mighty_documents(file = NULL, .data = NULL)
+mighty_documents(file, .data)
 
 list_documents(x)
 
@@ -50,11 +50,14 @@ update_document(x, id, ...)
 
 - file:
 
-  `character(1)` path to `_documents.yml`.
+  `character(1)` path to `_documents.yml`. Optional; mutually exclusive
+  with `.data`.
 
 - .data:
 
   [`list()`](https://rdrr.io/r/base/list.html) of document entries.
+  Optional; mutually exclusive with `file`. Supplying neither returns an
+  empty `mighty_documents`.
 
 - x:
 
