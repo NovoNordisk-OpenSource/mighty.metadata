@@ -33,7 +33,7 @@ S7schema::document_schema(
 )
 ```
 
-## Standards and terminology
+# Standards and terminology
 
 `standards` and `terminology` are optional lists describing the standards and
 controlled terminologies applied in the study. Each entry requires an `id` and
