@@ -1,0 +1,216 @@
+# ADR: mighty.toolbox integration
+
+## Status
+
+|  |  |
+|----|----|
+| Package | mighty.metadata |
+| Status | Approved |
+| Version | 0.2.1 |
+| Description | ADR for how mighty.metadata should integrate with mighty.toolbox |
+
+## Success criteria
+
+- `mighty.toolbox` is able to generate a `define.xml` using metadata
+  created with `mighty.metadata`
+- We know how the `mighty.metadata` metadata is provided to
+  `mighty.toolbox` e.g. path to folder with YAML files or R object
+- We know if things fall into `mighty.metadata` scope or
+  `mighty.toolbox` scope
+- Outline of the programming interface e.g. user facing functions
+
+## Context
+
+1.  [`mighty.metadata::mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+    would provide the potential R object
+2.  [Planned utility function to create metadata datasets similar to
+    existing sheets in the CST file and “md”
+    datasets](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/11)
+3.  We want to make it easy to map `mighty.metadata` metadata into a
+    list of data.frames (structure already used by `mighty.toolbox`)
+4.  `mighty.toolbox::generate_define_xml()` has the `metadata_path`
+    argument which currently accepts a path to an `.xlsx` file or a
+    folder with `YAML`
+5.  [Current schema of one metadata
+    domain](https://github.com/NovoNordisk-OpenSource/mighty.metadata/blob/main/inst/schema/adam.json)
+6.  YAML metadata is planned to be version controlled, so it will always
+    be saved to disk
+7.  When dealing with pooled metadata - one yaml file might define the
+    same domain in multiple studies and a user would subset metadata
+    manually before using it
+8.  Metadata can be in a “populated” state or not -
+    [`mighty.metadata::populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
+    and
+    [`mighty.metadata::populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)
+    are used to populate predecessor columns along with inherited
+    metadata - these operations are assumed to be idempotent  
+9.  `mighty.metadata` is missing some fields required by
+    `mighty.toolbox`:
+    - mighty.metadata drops whereclauses that don’t use EQ as a
+      comparator in source_values
+    - xmlcodelist information does not get included in column_metadata
+      in YAML files
+    - Origin and Origindescription are missing in value metadata
+    - include_in_submission/include_in_trial columns get ignored
+    - [Equivalent of ‘Mapping’ sheet from the CST
+      file](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/5)
+
+## Decisions
+
+`mighty.toolbox` needs
+[`mighty.metadata::mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+for the integration
+
+#### Pass a `mighty.metadata::mighty_study()` object
+
+``` r
+
+mighty.metadata::mighty_study("path/to/folder") |>
+  mighty.toolbox::generate_define_xml()
+```
+
+later info from the object would be retrieved through `@` properties
+
+Pros:
+
+- Simple and user friendly interface
+- Support pooled metadata as users can subset the metadata before
+  passing it to `mighty.toolbox::generate_define_xml()`
+
+Cons:
+
+- Requires `mighty.toolbox` to change the name of the input parameter
+  e.g. to `metadata` or `x` (but users already sometimes asked about
+  reading metadata as a separate step or we can just accept either a
+  path or an object) - we could avoid a parameter name change if we call
+  [`mighty.metadata::mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  internally
+- Need to add `mighty.metadata` to Suggests (as we need to create an
+  object for testing) - it’s ok because both are internally developed
+  packages and need to aligned anyways
+- Validating the correctness of a `mighty_study` object can be tricky
+  e.g. making sure it’s fully populated (Mitigation: as it’s an
+  idempotent operation we can just redo it, or `mighty.metadata` could
+  export a validation function)
+
+## Consequences
+
+N/A
+
+### Changes to current content
+
+N/A
+
+## Alternatives Considered
+
+### How to pass `mighty.metadata` metadata to `mighty.toolbox`
+
+#### Pass the folder with `YAML` files to `mighty.toolbox::generate_define_xml()` and use `mighty.metadata::mighty_study()` under the hood
+
+``` r
+
+mighty.toolbox::generate_define_xml(metadata_path = "folder_with_yaml_metadata") # mighty.metadata::mighty_study() used under the hood
+```
+
+Pros:
+
+- That’s how it currently works, so we avoid a breaking parameter change
+- We keep control over how the files are read e.g. in the CST file empty
+  columns are read as logical by `openxlsx2` which can cause issues with
+  joins when the same column is not empty in another sheet, so giving
+  users too much flexibility might be problematic
+
+Cons:
+
+- Need to add `mighty.metadata` to Imports if we call
+  [`mighty.metadata::mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  directly (as we need to create an object for testing) - it’s ok
+  because both are internally developed packages and need to be aligned
+  anyways
+- Metadata subsetting would need to happen in
+  `mighty.toolbox::generate_define_xml()` - as users cannot provide the
+  subsetted object themselves
+
+#### Create a CST file based on the YAML files and pass it to `mighty.toolbox`
+
+Pros:
+
+- No changes needed to `mighty.toolbox` as it already accepts CST files
+
+Cons:
+
+- Having to maintain the CST format (which we don’t want to use directly
+  anymore)
+- Having to maintain the conversion to the CST format
+- If define.xml requirements change it might impact the CST format (so
+  we are updating 2 formats at once) - deal-breaker
+
+## Implementation Details
+
+See [Decisions](#decisions) for general interface.
+
+### On parameters and Whereclauses
+
+- `mighty.metadata` will support only ‘EQ’-like whereclauses
+- All logic supporting different comparators will be removed
+- Parameters are identified only via id
+- If multiple conditions apply they need to be all listed as EQ clauses
+- The variable for comparison is always `PARAMCD`
+
+Given the following example:
+
+``` yaml
+parameters:
+   - id: BMIDER
+     label: "Body mass index"
+     columns:
+      - id: AVAL
+        origin: Derived
+        method: "Derivation Method"
+```
+
+`mighty.toolbox` will interpret the `id: BMIDER` as the whereclause
+`PARAMCD EQ 'BMIDER'`. Multiple whereclauses are listed like this:
+
+``` yaml
+parameters:
+  - id: A
+    label: "A"
+    columns:
+    - id: AVAL
+      origin: Derived
+      method: "Derivation method A"
+  - id: B
+    label: "B"
+    columns:
+    - id: AVAL
+      origin: Derived
+      method: "Derivation method B"
+```
+
+Due to mentioned restrictions, logical `AND` is not supported -
+whereclauses in the form `PARAMCD EQ 'A' AND PARAMCD EQ 'B'` would
+always resolve to `FALSE`.
+
+## Testing Strategy
+
+- Test in `mighty.toolbox` using `mighty.metadata` metadata
+- (If possible) CI in `mighty.metadata` informing about breaking
+  `mighty.toolbox`
+
+## Risks
+
+Packages are more coupled with each other
+
+## Compliance Considerations
+
+- All development on GitHub using Pull Requests for merges to main
+  branch, and standard ATMOS branch protection rules.
+- R CMD Check is required to pass on all relevant platforms before a PR
+  is approved.
+
+## References
+
+- [mighty.metadata](https://github.com/NovoNordisk-OpenSource/mighty.metadata)
+- mighty.toolbox (internal package)
+- [r.workflows](https://github.com/NovoNordisk-OpenSource/r.workflows)
