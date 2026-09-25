@@ -63,7 +63,7 @@
         {
           "type": "character",
           "attributes": {},
-          "value": [null]
+          "value": ["Derived"]
         },
         {
           "type": "character",
