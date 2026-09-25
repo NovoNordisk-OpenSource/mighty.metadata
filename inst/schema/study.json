@@ -38,11 +38,8 @@
           "type": "string"
         },
         "version": {
-          "description": "Version of the entry",
-          "anyOf": [
-            { "type": "string" },
-            { "type": "number" }
-          ]
+          "description": "Version of the entry. Must be a string; quote values that look like numbers (e.g. '27.0')",
+          "type": "string"
         }
       },
       "required": ["id", "version"]
