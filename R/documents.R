@@ -13,8 +13,10 @@
 #' Writing to YAML is done via `write_config()` on a `mighty_study()` object,
 #' where documents are saved to `_documents.yml`.
 #'
-#' @param file `character(1)` path to `_documents.yml`.
-#' @param .data `list()` of document entries.
+#' @param file `character(1)` path to `_documents.yml`. Optional; mutually
+#'   exclusive with `.data`.
+#' @param .data `list()` of document entries. Optional; mutually exclusive
+#'   with `file`. Supplying neither returns an empty `mighty_documents`.
 #'
 #' @return An object of class `mighty_documents`.
 #'
@@ -43,16 +45,14 @@
 NULL
 
 #' @noRd
-construct_mighty_documents <- function(file = NULL, .data = NULL) {
+construct_mighty_documents <- function(file, .data) {
   schema <- system.file("schema", "documents.json", package = "mighty.metadata")
-  parent <- if (!is.null(file)) {
-    S7schema::S7schema(file = file, schema = schema)
-  } else if (!is.null(.data)) {
-    S7schema::S7schema(.data = .data, schema = schema)
-  } else {
-    S7schema::S7schema(.data = list(), schema = schema)
+  if (rlang::is_missing(file) && rlang::is_missing(.data)) {
+    .data <- list()
   }
-  S7::new_object(.parent = parent)
+  S7::new_object(
+    .parent = S7schema::S7schema(file = file, schema = schema, .data = .data)
+  )
 }
 
 #' @noRd
