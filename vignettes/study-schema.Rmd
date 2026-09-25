@@ -44,11 +44,11 @@ study_id: example_study
 
 standards:
   - id: ADaM-IG
-    version: 1.1
+    version: '1.1'
 
 terminology:
   - id: MedDRA
-    version: 22.1
+    version: '22.1'
   - id: WHODrug
     version: 2023 JAN
 ```
@@ -56,9 +56,9 @@ terminology:
 Omitting a field and supplying an empty list (`standards: []`) are equivalent
 and mean that no entries are defined.
 
-Note that yaml infers types, so `version: 1.10` is read as the number `1.1` and
-loses its trailing zero. Quote versions where the exact literal matters:
-`version: '1.10'`.
+`version` must be a string. Since yaml infers types, unquoted values that look
+like numbers (e.g. `version: 27.0`) are read as numbers and fail validation.
+Quote them to keep the exact literal: `version: '27.0'`.
 
 Only the structure is validated here --- presence, shape, and required fields.
 Domain-semantic checks, such as whether a submitted version actually exists,
