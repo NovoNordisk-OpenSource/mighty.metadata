@@ -48,7 +48,7 @@ Entry identified by an id and a version
 | id | Identifier of the entry | string | Yes |
 | version | Version of the entry. Must be a string; quote values that look like numbers (e.g. ‘27.0’) | string | Yes |
 
-### Standards and terminology
+## Standards and terminology
 
 `standards` and `terminology` are optional lists describing the
 standards and controlled terminologies applied in the study. Each entry
