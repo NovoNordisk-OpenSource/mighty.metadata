@@ -8,7 +8,8 @@
 #' @param x A [mighty_config], [study_config], or [mighty_study] object.
 #' @param path Destination to write to. A file for [mighty_config] and
 #'   [study_config], a directory for [mighty_study]. If `NULL`, defaults to the
-#'   source the object was loaded from.
+#'   source the object was loaded from. Objects built from `.data` have `@file`
+#'   set to `NULL`, so `path` must be supplied explicitly for those.
 #'
 #' @returns Invisibly returns `x`.
 #'
@@ -42,6 +43,12 @@ write_mighty_study <- function(study, path) {
     write_config(
       x = study@study,
       path = match_yml(path = path, name = "_study")
+    )
+  }
+  if (length(study@documents)) {
+    write_config(
+      x = study@documents,
+      path = match_yml(path = path, name = "_documents")
     )
   }
 

@@ -4,26 +4,37 @@
 #' `study_config()` provides a robust way of working with the `_study.yml`
 #' configuration file in the `{mighty}` framework.
 #'
-#' A new object is initialized by supplying the path to a `_study.yml` file.
-#' The file is automatically validated against the `study.json` schema when
-#' loaded.
+#' A new object is initialized by supplying either the path to a `_study.yml`
+#' file or an in-memory `list` of the same content. Both are automatically
+#' validated against the `study.json` schema.
 #'
 #' `study_config()` inherits from `S7schema::S7schema()`. You can validate
 #' an object at any time by calling `validate()` and use `write_config()` to
 #' save it back as a yaml file.
 #'
-#' @param file `character(1)` path to a `_study.yml` file.
+#' @param file `character(1)` path to a `_study.yml` file. Mutually exclusive
+#'   with `.data`.
+#' @param .data `list` holding a `_study.yml` configuration already in memory.
+#'   Mutually exclusive with `file`.
 #'
 #' @return A `study_config` S7 object extending [S7schema::S7schema].
 #' \describe{
 #'   \item{`study_id`}{Unique identifier of the study.}
 #'   \item{`study_description`}{Optional description of the study.}
+#'   \item{`standards`}{Optional list of standards, each with `id` and
+#'     `version`.}
+#'   \item{`terminology`}{Optional list of controlled terminologies, each with
+#'     `id` and `version`.}
 #' }
 #'
 #' @details
 #' The `_study.yml` file is validated against the `study.json` schema on load.
 #' The file must contain a `study_id` field. Additional study-level properties
 #' are allowed and are kept as-is.
+#'
+#' The optional `standards` and `terminology` fields describe the standards and
+#' controlled terminologies applied in the study; see
+#' `vignette("study-schema")`.
 #'
 #' Study-level properties are used by [resolve_includes()] to evaluate the
 #' `include` conditions of domains, columns, parameters, and rows.
@@ -50,17 +61,49 @@
 #' tmp <- tempfile(fileext = ".yml")
 #' write_config(x, path = tmp)
 #'
+#' # Or build one in memory
+#' study_config(
+#'   .data = list(study_id = "example_study", study_description = "A study")
+#' )
+#'
 #' @name study_config
 NULL
 
 #' @noRd
-construct_study_config <- function(file) {
+construct_study_config <- function(file, .data) {
+  schema <- system.file("schema", "study.json", package = "mighty.metadata")
+
+  # S7SCHEMA-WORKAROUND (start) -- remove once S7schema parses yaml in R.
+  # Mirrors `S7schema::S7schema()`, except that it validates the R-parsed list
+  # instead of the file: `validate_yaml()` parses in JavaScript, where js-yaml
+  # resolves `version: 2025-08-06` to a timestamp and the string check fails.
+  # Revert to:
+  #   S7::new_object(.parent = S7schema::S7schema(
+  #     file = file, schema = schema, .data = .data
+  #   ))
+  rlang::check_exclusive(file, .data)
+
+  if (!rlang::is_missing(file)) {
+    valid <- check_file(file, ext = c("yml", "yaml"))
+    if (!isTRUE(valid)) {
+      cli::cli_abort(c(
+        "Illegal file reference {.file {file}}",
+        rlang::set_names(valid, "i")
+      ))
+    }
+    .data <- yaml::read_yaml(file)
+  } else {
+    file <- NULL
+  }
+
+  S7schema::validate_list(.data, schema)
+
   S7::new_object(
-    .parent = S7schema::S7schema(
-      file = file,
-      schema = system.file("schema", "study.json", package = "mighty.metadata")
-    )
+    .parent = .data,
+    schema = schema,
+    file = file
   )
+  # S7SCHEMA-WORKAROUND (end)
 }
 
 #' @rdname study_config

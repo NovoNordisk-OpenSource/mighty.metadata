@@ -4,25 +4,33 @@
 \alias{study_config}
 \title{Study Config}
 \usage{
-study_config(file)
+study_config(file, .data)
 }
 \arguments{
-\item{file}{\code{character(1)} path to a \verb{_study.yml} file.}
+\item{file}{\code{character(1)} path to a \verb{_study.yml} file. Mutually exclusive
+with \code{.data}.}
+
+\item{.data}{\code{list} holding a \verb{_study.yml} configuration already in memory.
+Mutually exclusive with \code{file}.}
 }
 \value{
 A \code{study_config} S7 object extending \link[S7schema:S7schema]{S7schema::S7schema}.
 \describe{
 \item{\code{study_id}}{Unique identifier of the study.}
 \item{\code{study_description}}{Optional description of the study.}
+\item{\code{standards}}{Optional list of standards, each with \code{id} and
+\code{version}.}
+\item{\code{terminology}}{Optional list of controlled terminologies, each with
+\code{id} and \code{version}.}
 }
 }
 \description{
 \code{study_config()} provides a robust way of working with the \verb{_study.yml}
 configuration file in the \code{{mighty}} framework.
 
-A new object is initialized by supplying the path to a \verb{_study.yml} file.
-The file is automatically validated against the \code{study.json} schema when
-loaded.
+A new object is initialized by supplying either the path to a \verb{_study.yml}
+file or an in-memory \code{list} of the same content. Both are automatically
+validated against the \code{study.json} schema.
 
 \code{study_config()} inherits from \code{S7schema::S7schema()}. You can validate
 an object at any time by calling \code{validate()} and use \code{write_config()} to
@@ -32,6 +40,10 @@ save it back as a yaml file.
 The \verb{_study.yml} file is validated against the \code{study.json} schema on load.
 The file must contain a \code{study_id} field. Additional study-level properties
 are allowed and are kept as-is.
+
+The optional \code{standards} and \code{terminology} fields describe the standards and
+controlled terminologies applied in the study; see
+\code{vignette("study-schema")}.
 
 Study-level properties are used by \code{\link[=resolve_includes]{resolve_includes()}} to evaluate the
 \code{include} conditions of domains, columns, parameters, and rows.
@@ -57,6 +69,11 @@ str(x)
 # Write back to a file
 tmp <- tempfile(fileext = ".yml")
 write_config(x, path = tmp)
+
+# Or build one in memory
+study_config(
+  .data = list(study_id = "example_study", study_description = "A study")
+)
 
 }
 \seealso{

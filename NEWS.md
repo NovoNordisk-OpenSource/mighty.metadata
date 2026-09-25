@@ -4,7 +4,22 @@
   create metadata data sets for tables, BDS parameters, and value level
   metadata, complementing `create_md_col()` (#11). `create_md()` returns all
   four as a named list.
-
+* `resolve_includes()` now recurses into `include` fields on columns within parameters (#52).
+* Added `filter_domains()` to filter a `mighty_study` to domains matching a given prefix (default `"AD"`) (#46).
+* `mighty_study()` now accepts `MD*` dataset files alongside `AD*` in the specifications directory (#46).
+* added optional study-level `standards` and `terminology` fields to
+  `_study.yml` and `study.json` (#48). Each entry requires an `id` and a
+  `version`. Missing fields and empty lists are both valid and mean no entries.
+  Only the structure is validated; domain-semantic checks are left to consuming
+  packages.
+* added `mighty_documents()` class with schema validation and document manipulation helpers:
+  `list_documents()`, `select_document()`, `add_document()`, `update_document()`, `remove_documents()` (#27)
+* added study-level documents support via `_documents.yml` and new `study@documents` property (#27)
+* `mighty_domain()`, `mighty_config()`, and `study_config()` now accept a
+  `.data` argument to build an object from an in-memory `list` instead of a
+  yaml file (#51). `file` and `.data` are mutually exclusive. Objects built
+  from `.data` have `@file` set to `NULL` and need an explicit `path` in
+  `write_config()`.
 * Added `mighty_config()` class for the `_mighty.yml` configuration file (#25).
   The `@mighty` property of `mighty_study()` now holds a `mighty_config()`
   object instead of a plain list, and is `NULL` when no `_mighty.yml` exists.

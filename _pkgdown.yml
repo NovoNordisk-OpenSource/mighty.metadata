@@ -16,6 +16,8 @@ reference:
       - resolve_subsets
       - populate_core
       - populate_sparse
+      - create_md_col
+      - filter_domains
   - title: Domain level metadata
     description: |
       Work with metadata for a single ADaM data set.
@@ -33,6 +35,11 @@ reference:
       - create_md_col
       - create_md_param
       - create_md_values
+  - title: Documents metadata
+    description: |
+      Manage study-level document catalog and references.
+    contents:
+      - documents
   - title: Utilities
     contents:
       - write_config

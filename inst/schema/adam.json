@@ -37,6 +37,10 @@
       "description": "Comment to the dataset",
       "type": "string"
     },
+    "documents": {
+      "description": "Document references for the dataset",
+      "$ref": "#/definitions/documents"
+    },
     "usecore": {
       "description": "Flag to populate with core variables from ADSL",
       "type": "boolean"
@@ -144,6 +148,10 @@
         "comment": {
           "description": "Comment to the column (free text)",
           "type": "string"
+        },
+        "documents": {
+          "description": "Document references for the column",
+          "$ref": "#/definitions/documents"
         }
       },
       "required": [
@@ -461,6 +469,41 @@
         ],
         "additionalProperties": false
       }
+    },
+    "document_reference": {
+      "description": "Reference to a study-level document by id",
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Document id as defined in _documents.yaml",
+          "type": "string"
+        },
+        "page": {
+          "description": "Optional page reference in the target document",
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "documents": {
+      "description": "List of document references",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/document_reference"
+      },
+      "minItems": 1,
+      "uniqueItems": true
     }
   }
 }
