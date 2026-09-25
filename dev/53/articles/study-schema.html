@@ -178,11 +178,16 @@ structure is defined by a <a href="https://json-schema.org" class="external-link
 <h4 id="properties-1">Properties<a class="anchor" aria-label="anchor" href="#properties-1"></a>
 </h4>
 <table class="table">
+<colgroup>
+<col width="7%">
+<col width="78%">
+<col width="6%">
+<col width="7%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">Name</th>
 <th align="left">Description</th>
 <th align="left">Type</th>
-<th align="left">Any Of</th>
 <th align="left">Required</th>
 </tr></thead>
 <tbody>
@@ -190,23 +195,23 @@ structure is defined by a <a href="https://json-schema.org" class="external-link
 <td align="left">id</td>
 <td align="left">Identifier of the entry</td>
 <td align="left">string</td>
-<td align="left">NULL</td>
 <td align="left">Yes</td>
 </tr>
 <tr class="even">
 <td align="left">version</td>
-<td align="left">Version of the entry</td>
-<td align="left"></td>
-<td align="left">string, number</td>
+<td align="left">Version of the entry. Must be a string; quote values
+that look like numbers (e.g. ‘27.0’)</td>
+<td align="left">string</td>
 <td align="left">Yes</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<div class="section level3">
-<h3 id="standards-and-terminology">Standards and terminology<a class="anchor" aria-label="anchor" href="#standards-and-terminology"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="standards-and-terminology">Standards and terminology<a class="anchor" aria-label="anchor" href="#standards-and-terminology"></a>
+</h2>
 <p><code>standards</code> and <code>terminology</code> are optional
 lists describing the standards and controlled terminologies applied in
 the study. Each entry requires an <code>id</code> and a
@@ -215,23 +220,23 @@ the study. Each entry requires an <code>id</code> and a
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">standards</span><span class="kw">:</span></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> ADaM-IG</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="at">    </span><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="fl">1.1</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="at">    </span><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="st">'1.1'</span></span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">terminology</span><span class="kw">:</span></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> MedDRA</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="at">    </span><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="fl">22.1</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="at">    </span><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="st">'22.1'</span></span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> WHODrug</span></span>
 <span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="at">    </span><span class="fu">version</span><span class="kw">:</span><span class="at"> 2023 JAN</span></span></code></pre></div>
 <p>Omitting a field and supplying an empty list
 (<code>standards: []</code>) are equivalent and mean that no entries are
 defined.</p>
-<p>Note that yaml infers types, so <code>version: 1.10</code> is read as
-the number <code>1.1</code> and loses its trailing zero. Quote versions
-where the exact literal matters: <code>version: '1.10'</code>.</p>
+<p><code>version</code> must be a string. Since yaml infers types,
+unquoted values that look like numbers (e.g. <code>version: 27.0</code>)
+are read as numbers and fail validation. Quote them to keep the exact
+literal: <code>version: '27.0'</code>.</p>
 <p>Only the structure is validated here — presence, shape, and required
 fields. Domain-semantic checks, such as whether a submitted version
 actually exists, are the responsibility of the consuming package.</p>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
