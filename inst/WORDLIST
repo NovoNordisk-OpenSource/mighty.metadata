@@ -17,11 +17,13 @@ AVALC
 AVISIT
 AVISITN
 Aksel
+Bakalo
 BMIDER
 BMIGRP
 CDISC
 CRAN
 Codelist
+Codelists
 Esben
 GCMD
 Giulia
@@ -32,6 +34,7 @@ Knoph
 Katarzyna
 MYVAR
 Moelgaard
+Nataliia
 Nordisk
 OCCDS
 PARAMCD
@@ -65,7 +68,10 @@ WSTCIR
 accomodate
 advs
 cdisc
+codedvaluechar
+codedvaluenum
 codelist
+codelists
 dataformat
 dataframe
 dplyr
