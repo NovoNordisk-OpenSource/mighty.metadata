@@ -20,6 +20,9 @@
   Each entry requires an `id` and a `version`. Missing fields and empty
   lists are both valid and mean no entries. Only the structure is
   validated; domain-semantic checks are left to consuming packages.
+- `version` in `standards` and `terminology` must now be a string.
+  Unquoted numeric versions (e.g. `27.0`) fail validation instead of
+  silently becoming `27`; quote them in `_study.yml`.
 - added
   [`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   class with schema validation and document manipulation helpers:

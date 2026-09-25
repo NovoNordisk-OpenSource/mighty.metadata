@@ -105,7 +105,7 @@ str(x)
 #>  $ standards  :List of 1
 #>   ..$ :List of 2
 #>   .. ..$ id     : chr "ADaM-IG"
-#>   .. ..$ version: num 1.1
+#>   .. ..$ version: chr "1.1"
 #>  $ terminology:List of 4
 #>   ..$ :List of 2
 #>   .. ..$ id     : chr "ADAM"
@@ -115,13 +115,13 @@ str(x)
 #>   .. ..$ version: chr "2025-08-06"
 #>   ..$ :List of 2
 #>   .. ..$ id     : chr "MedDRA"
-#>   .. ..$ version: num 22.1
+#>   .. ..$ version: chr "22.1"
 #>   ..$ :List of 2
 #>   .. ..$ id     : chr "WHODrug"
 #>   .. ..$ version: chr "2023 JAN"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x562d336168d8> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55eb80ac81f0> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 
 # Write back to a file

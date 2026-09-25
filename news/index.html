@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9013</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9014</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,8 @@
 <li>
 <code><a href="../reference/mighty_study.html">mighty_study()</a></code> now accepts <code>MD*</code> dataset files alongside <code>AD*</code> in the specifications directory (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/46" class="external-link">#46</a>).</li>
 <li>added optional study-level <code>standards</code> and <code>terminology</code> fields to <code>_study.yml</code> and <code>study.json</code> (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/48" class="external-link">#48</a>). Each entry requires an <code>id</code> and a <code>version</code>. Missing fields and empty lists are both valid and mean no entries. Only the structure is validated; domain-semantic checks are left to consuming packages.</li>
+<li>
+<code>version</code> in <code>standards</code> and <code>terminology</code> must now be a string. Unquoted numeric versions (e.g. <code>27.0</code>) fail validation instead of silently becoming <code>27</code>; quote them in <code>_study.yml</code>.</li>
 <li>added <code><a href="../reference/documents.html">mighty_documents()</a></code> class with schema validation and document manipulation helpers: <code><a href="../reference/documents.html">list_documents()</a></code>, <code><a href="../reference/documents.html">select_document()</a></code>, <code><a href="../reference/documents.html">add_document()</a></code>, <code><a href="../reference/documents.html">update_document()</a></code>, <code><a href="../reference/documents.html">remove_documents()</a></code> (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/27" class="external-link">#27</a>)</li>
 <li>added study-level documents support via <code>_documents.yml</code> and new <code>study@documents</code> property (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/27" class="external-link">#27</a>)</li>
 <li>

@@ -300,7 +300,7 @@ str(study@study)
 #>  $ standards  :List of 1
 #>   ..$ :List of 2
 #>   .. ..$ id     : chr "ADaM-IG"
-#>   .. ..$ version: num 1.1
+#>   .. ..$ version: chr "1.1"
 #>  $ terminology:List of 4
 #>   ..$ :List of 2
 #>   .. ..$ id     : chr "ADAM"
@@ -310,13 +310,13 @@ str(study@study)
 #>   .. ..$ version: chr "2025-08-06"
 #>   ..$ :List of 2
 #>   .. ..$ id     : chr "MedDRA"
-#>   .. ..$ version: num 22.1
+#>   .. ..$ version: chr "22.1"
 #>   ..$ :List of 2
 #>   .. ..$ id     : chr "WHODrug"
 #>   .. ..$ version: chr "2023 JAN"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55d24b2f4f68> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55d76cb11918> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 str(study@mighty)
 #> <mighty.metadata::mighty_config> List of 2
@@ -333,7 +333,7 @@ str(study@mighty)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55d247421860> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55d768ce5ea0> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 ```
 
