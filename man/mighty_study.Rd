@@ -22,7 +22,7 @@ Access via e.g. \code{study$adsl}.}
 \item{\verb{@mighty}}{A \link{mighty_config} object loaded from \verb{_mighty.yml}, or
 \code{NULL} if no configuration file exists.}
 \item{\verb{@documents}}{Study-level document metadata from \verb{_documents.yml},
-or empty list if no documents file exists.}
+or an empty \code{mighty_documents} if no documents file exists.}
 \item{\verb{@path}}{The source directory path as \code{character(1)}.}
 }
 }
