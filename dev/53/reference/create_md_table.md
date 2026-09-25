@@ -72,6 +72,7 @@ A tibble with one row per table containing:
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
+#> → No `_documents.yml` file found
 create_md_table(study)
 #> # A tibble: 3 × 8
 #>   order id    label                       class subclass structure keys  comment

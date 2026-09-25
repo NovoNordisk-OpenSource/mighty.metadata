@@ -44,7 +44,9 @@ write_config(x, path = NULL)
   [study_config](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md),
   a directory for
   [mighty_study](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md).
-  If `NULL`, defaults to the source the object was loaded from.
+  If `NULL`, defaults to the source the object was loaded from. Objects
+  built from `.data` have `@file` set to `NULL`, so `path` must be
+  supplied explicitly for those.
 
 ## Value
 

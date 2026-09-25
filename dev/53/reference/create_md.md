@@ -66,6 +66,7 @@ A named list of tibbles:
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
+#> → No `_documents.yml` file found
 create_md(study)
 #> $mdtable
 #> # A tibble: 3 × 8

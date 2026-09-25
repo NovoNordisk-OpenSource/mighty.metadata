@@ -105,6 +105,7 @@ A tibble with one row per parameter column containing:
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
+#> → No `_documents.yml` file found
 create_md_values(study)
 #> # A tibble: 3 × 15
 #>   table_id table_label param_order param_id param_label order id    label origin

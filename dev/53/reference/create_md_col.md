@@ -102,6 +102,7 @@ A tibble with one row per column containing:
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
+#> → No `_documents.yml` file found
 create_md_col(study)
 #> # A tibble: 32 × 15
 #>    table_id table_label      order id    label origin key   is_core core  method

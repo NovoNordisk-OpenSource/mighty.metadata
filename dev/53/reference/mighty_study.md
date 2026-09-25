@@ -1,12 +1,13 @@
 # Mighty Study
 
 Creates a `mighty_study` object by loading all YAML metadata files from
-a directory. Each YAML file (except `_mighty.yml` and `_study.yml`) is
-parsed as a
+a directory. Each YAML file (except `_mighty.yml`,`_study.yml` and
+`_documents.yml`) is parsed as a
 [mighty_domain](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
 object. The optional `_study.yml` file provides study-level properties
 and the optional `_mighty.yml` file provides mighty framework
-configuration.
+configuration, and optional `_documents.yml` provides study-level
+documents metadata.
 
 ## Usage
 
@@ -51,6 +52,11 @@ A `mighty_study` S7 object extending `list`:
   object loaded from `_mighty.yml`, or `NULL` if no configuration file
   exists.
 
+- `@documents`:
+
+  Study-level document metadata from `_documents.yml`, or an empty
+  `mighty_documents` if no documents file exists.
+
 - `@path`:
 
   The source directory path as `character(1)`.
@@ -65,13 +71,15 @@ The function scans the directory for files matching `*.yaml` or `*.yml`:
 - Files named `_mighty.yml` or `_mighty.yaml` are treated as mighty
   framework config
 
+- File named `_documents.yml` is treated as study documents metadata
+
 - All other YAML files must follow ADaM naming conventions (starting
-  with `ad`) and are loaded as
+  with `ad` or `md`) and are loaded as
   [mighty_domain](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
   objects
 
-- Only one `_mighty.yml` and one `_study.yml` file is allowed per
-  directory
+- Only one `_mighty.yml`, one `_study.yml` and one `_documents.yml` file
+  is allowed per directory
 
 ## Write Study Metadata
 
@@ -102,6 +110,7 @@ written to `x@path`.
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
+#> → No `_documents.yml` file found
 
 # List tables with metadata
 names(study)
@@ -118,7 +127,7 @@ study$ADVS
 study@study
 #> <mighty.metadata::study_config>
 #> Study ID: example_study
-#> Fields: `study_id`
+#> Fields: `study_id`, `standards`, and `terminology`
 
 # Access mighty framework configuration
 study@mighty
@@ -126,11 +135,18 @@ study@mighty
 #> External data: 3 sources (`DM`, `VS`, and `AE`)
 #> Repos: 2 (`NovoNordisk-OpenSource/mighty.standards/components@main` and `.`)
 
+# Access study-level documents metadata
+study@documents
+#> <mighty.metadata::mighty_documents>
+#> Documents: 0 entries
+#> IDs:
+
 # Load and populate in one step
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata"),
   populate = TRUE
 )
+#> → No `_documents.yml` file found
 
 # Write study back to YAML
 tmp <- tempdir()

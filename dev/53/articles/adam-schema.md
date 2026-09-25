@@ -32,6 +32,7 @@ Common schema for ADaM dataset specification in the mightyverse
 | structure | Text description of the structure of the dataset | string | Yes |
 | keys | Key variables for the dataset | [keys](#keys) | Yes |
 | comment | Comment to the dataset | string | No |
+| documents | Document references for the dataset | [documents](#documents) | No |
 | usecore | Flag to populate with core variables from ADSL | boolean | No |
 | population | Population and base domain used to create the dataset | [mighty/population](#population) | No |
 | columns | Columns in the dataset | [columns](#columns) | Yes |
@@ -81,6 +82,7 @@ Specification of a single column
 | depends | dependencies required to create the column | [mighty/depends](#depends) | No |
 | core | Describes whether a variable is required (Req), conditionally required (Cond) or permissible (Perm) | [cdisc/core](#core) | No |
 | comment | Comment to the column (free text) | string | No |
+| documents | Document references for the column | [documents](#documents) | No |
 
 ### rows
 
@@ -303,3 +305,26 @@ mighty component used to carry out the desired derivation
 |:---|:---|:---|:---|
 | id | ID of the component. Either name of standard or file path to local component. | string | Yes |
 | with | named list of input arguments needed to render component | object | No |
+
+### document_reference
+
+Reference to a study-level document by id
+
+| Type   | Required | Additional Properties |
+|:-------|:---------|:----------------------|
+| object | id       | No                    |
+
+#### Properties
+
+| Name | Description | Type | One Of | Required |
+|:---|:---|:---|:---|:---|
+| id | Document id as defined in \_documents.yaml | string | NULL | Yes |
+| page | Optional page reference in the target document |  | integer, 1 , string | No |
+
+### documents
+
+List of document references
+
+| Type  | Items                                     | Min Items | Unique Items |
+|:------|:------------------------------------------|:----------|:-------------|
+| array | [document_reference](#document_reference) | 1         | Yes          |
