@@ -26,6 +26,15 @@ reference:
       - columns
       - rows
       - parameters
+  - title: Metadata data sets
+    description: |
+      Flatten a study or a single data set into tabular metadata.
+    contents:
+      - create_md
+      - create_md_table
+      - create_md_col
+      - create_md_param
+      - create_md_values
   - title: Documents metadata
     description: |
       Manage study-level document catalog and references.
