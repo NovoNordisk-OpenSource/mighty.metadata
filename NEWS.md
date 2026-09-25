@@ -12,6 +12,9 @@
   `version`. Missing fields and empty lists are both valid and mean no entries.
   Only the structure is validated; domain-semantic checks are left to consuming
   packages.
+* `version` in `standards` and `terminology` must now be a string. Unquoted
+  numeric versions (e.g. `27.0`) fail validation instead of silently becoming
+  `27`; quote them in `_study.yml`.
 * added `mighty_documents()` class with schema validation and document manipulation helpers:
   `list_documents()`, `select_document()`, `add_document()`, `update_document()`, `remove_documents()` (#27)
 * added study-level documents support via `_documents.yml` and new `study@documents` property (#27)

@@ -90,7 +90,7 @@ test_that("study_config accepts standards and terminology", {
   x <- study_config(
     .data = list(
       study_id = "a",
-      standards = list(list(id = "ADaM-IG", version = 1.1)),
+      standards = list(list(id = "ADaM-IG", version = "1.1")),
       terminology = list(
         list(id = "ADAM", version = "2025-08-06"),
         list(id = "WHODrug", version = "2023 JAN")
@@ -164,16 +164,13 @@ test_that("study_config errors on standards or terminology missing id/version", 
   )
 })
 
-test_that("study_config accepts unquoted versions as written", {
+test_that("study_config accepts unquoted non-numeric versions as written", {
   tmp <- withr::local_tempdir()
   file <- file.path(tmp, "_study.yml")
 
   writeLines(
     c(
       "study_id: a",
-      "standards:",
-      "  - id: ADaM-IG",
-      "    version: 1.1",
       "terminology:",
       "  - id: ADAM",
       "    version: 2025-08-06",
@@ -185,9 +182,71 @@ test_that("study_config accepts unquoted versions as written", {
 
   x <- expect_no_condition(study_config(file))
 
-  expect_equal(x$standards[[1]]$version, 1.1)
   expect_equal(x$terminology[[1]]$version, "2025-08-06")
   expect_equal(x$terminology[[2]]$version, "2023 JAN")
+})
+
+test_that("study_config errors on numeric versions", {
+  tmp <- withr::local_tempdir()
+  file <- file.path(tmp, "_study.yml")
+
+  writeLines(
+    c("study_id: a", "terminology:", "  - id: MedDRA", "    version: 27.0"),
+    file
+  )
+  expect_error(study_config(file), regexp = "must be string")
+
+  expect_error(
+    study_config(
+      .data = list(
+        study_id = "a",
+        standards = list(list(id = "ADaM-IG", version = 1.1))
+      )
+    ),
+    regexp = "must be string"
+  )
+})
+
+test_that("unquoted date and quoted number versions work in the same file", {
+  tmp <- withr::local_tempdir()
+  file <- file.path(tmp, "_study.yml")
+
+  writeLines(
+    c(
+      "study_id: a",
+      "terminology:",
+      "  - id: SDTM",
+      "    version: 2025-08-06",
+      "  - id: MedDRA",
+      "    version: '27.0'"
+    ),
+    file
+  )
+
+  x <- expect_no_condition(study_config(file))
+  expect_equal(x$terminology[[1]]$version, "2025-08-06")
+  expect_equal(x$terminology[[2]]$version, "27.0")
+
+  out <- file.path(tmp, "out.yml")
+  write_config(x, path = out)
+  expect_equal(S7::S7_data(study_config(out)), S7::S7_data(x))
+})
+
+test_that("quoted numeric-looking versions survive a round-trip", {
+  tmp <- withr::local_tempdir()
+  file <- file.path(tmp, "_study.yml")
+
+  writeLines(
+    c("study_id: a", "terminology:", "  - id: MedDRA", "    version: '27.0'"),
+    file
+  )
+
+  x <- study_config(file)
+  expect_equal(x$terminology[[1]]$version, "27.0")
+
+  out <- file.path(tmp, "out.yml")
+  write_config(x, path = out)
+  expect_equal(study_config(out)$terminology[[1]]$version, "27.0")
 })
 
 test_that("study_config errors when standards is not an array of objects", {
@@ -207,7 +266,10 @@ test_that("study_config errors when terminology is not an array of objects", {
 test_that("study_config errors when an entry id is not a string", {
   expect_error(
     study_config(
-      .data = list(study_id = "a", standards = list(list(id = 1, version = 1)))
+      .data = list(
+        study_id = "a",
+        standards = list(list(id = 1, version = "1"))
+      )
     ),
     regexp = "id must be string"
   )
@@ -222,7 +284,7 @@ test_that("study_config round-trips standards and terminology", {
       "study_id: a",
       "standards:",
       "  - id: ADaM-IG",
-      "    version: 1.1",
+      "    version: '1.1'",
       "terminology:",
       "  - id: ADAM",
       "    version: '2025-08-06'",

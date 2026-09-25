@@ -53,10 +53,10 @@ test_that("write_mighty_study() preserves standards and terminology", {
       "study_id: test_study",
       "standards:",
       "  - id: ADaM-IG",
-      "    version: 1.1",
+      "    version: '1.1'",
       "terminology:",
       "  - id: MedDRA",
-      "    version: 22.1",
+      "    version: '22.1'",
       "  - id: WHODrug",
       "    version: 2023 JAN"
     ),
