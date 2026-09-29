@@ -32,6 +32,8 @@ Knoph
 Katarzyna
 MYVAR
 Moelgaard
+NOCOLS
+NOLABEL
 Nordisk
 OCCDS
 PARAMCD
@@ -80,6 +82,8 @@ knitr
 mapequal
 mdcol
 mdparam
+mdtable
+mdvalues
 mightyverse
 multiarch
 myvar
@@ -106,6 +110,7 @@ suppdoc
 tablelabel
 testthat
 tibble
+tibbles
 tidyr
 ungroup
 usecore

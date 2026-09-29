@@ -1,5 +1,9 @@
 # mighty.metadata (development version)
 
+* Added `create_md_table()`, `create_md_param()`, and `create_md_values()` to
+  create metadata data sets for tables, BDS parameters, and value level
+  metadata, complementing `create_md_col()` (#11). `create_md()` returns all
+  four as a named list.
 * `resolve_includes()` now recurses into `include` fields on columns within parameters (#52).
 * Added `filter_domains()` to filter a `mighty_study` to domains matching a given prefix (default `"AD"`) (#46).
 * `mighty_study()` now accepts `MD*` dataset files alongside `AD*` in the specifications directory (#46).

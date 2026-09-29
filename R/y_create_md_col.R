@@ -25,13 +25,15 @@
 #'   \item{comment}{Comment}
 #' }
 #'
-#' @seealso [mighty_study], [populate_sparse()], [populate_core()]
+#' @seealso [mighty_study], [populate_sparse()], [populate_core()],
+#'   [create_md()], [create_md_table()], [create_md_param()],
+#'   [create_md_values()]
 #'
 #' @examples
 #' study <- mighty_study(
 #'   path = system.file("examples", package = "mighty.metadata")
 #' )
-#' mdcol <- create_md_col(study)
+#' create_md_col(study)
 #'
 #' @export
 create_md_col <- S7::new_generic(
@@ -52,31 +54,25 @@ S7::method(create_md_col, mighty_domain) <- function(x) {
 
 #' @noRd
 create_md_col_study <- function(study) {
-  study |>
-    lapply(create_md_col) |>
-    purrr::list_rbind()
+  bind_entries(study, create_md_col)
 }
 
 #' @noRd
 create_md_col_domain <- function(domain) {
-  mdcol_cols <- names(mdcol_template)
+  mdtable <- create_md_table(domain)
 
-  mdcol <- domain$columns |>
-    lapply(FUN = \(x) {
-      x <- purrr::list_flatten(x)
-      do.call(
-        what = tibble::tibble,
-        args = x[names(x) %in% mdcol_cols]
-      )
-    }) |>
-    purrr::list_rbind()
+  mdcol <- bind_entries(
+    x = domain[["columns"]],
+    fun = apply_template,
+    template = mdcol_template,
+    order = TRUE
+  )
 
-  mdcol[["table_id"]] <- domain[["id"]]
-  mdcol[["table_label"]] <- domain[["label"]]
-  mdcol[["key"]] <- mdcol[["id"]] %in% domain[["keys"]]
-  mdcol[["order"]] <- seq_len(nrow(mdcol))
+  mdcol[["key"]] <- mdcol[["id"]] %in% mdtable[["keys"]][[1]]
 
-  purrr::list_rbind(list(mdcol_template, mdcol))
+  mdcol |>
+    copy_columns(y = mdtable, cols = c("id", "label"), prefix = "table_") |>
+    apply_template(template = mdcol_template)
 }
 
 #' @noRd
