@@ -234,6 +234,24 @@ The intent is for this to correspond to
   </CodeListItem>
 ```
 
+#### Use Case 5: Refering to an external dictionary
+
+This case is handled by the `terminology` definitions in the `_study.yml` and refencing the dictionary in the column definition:
+
+```yaml
+study_id: example_study
+
+terminology:
+  - id: MedDRA
+    version: 22.1
+```
+
+```yaml
+columns:
+  - id: AEDECOD
+    label: Dictionary-Derviced Term
+    codelist: MEDDRA
+```
 
 ### Combining KEEP and TAKE on the same codelist
 
