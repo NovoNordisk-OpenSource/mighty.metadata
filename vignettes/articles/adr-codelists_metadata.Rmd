@@ -1,7 +1,9 @@
 ---
 title: "ADR: codelists metadata structure"
 date: "2026-07-03"
-author: "Nataliia Bakalo"
+author:
+  - "Nataliia Bakalo"
+  - "Ryszard Szymanski"
 ---
 
 |             |                                                                                               |
@@ -17,10 +19,28 @@ author: "Nataliia Bakalo"
 * The schema is compliant with `mighty.toolbox` needs for codelist metadata
 * `mighty.toolbox` is able to apply value-level codelist overrides (KEEP, ADD, TAKE) defined in `codelists.yaml` when generating `define.xml`
 
+> **Note:** The way codelists are retrieved is not in scope of this ADR. It touches on the topic, but it focuses on user facing syntax and how to define codelists and their values. The codelist retrieval should be covered by a separate ADR.
+
 ## Context
 
-Codelists in `define.xml` describe the allowed values for a given column. They are rendered as `<CodeList>` elements containing one or more `<CodeListItem>` entries, each with a `CodedValue` and an optional `<Decode>` translated text:
+Codelists in the `define.xml` describe the allowed values for a given column. They are rendered as `<CodeList>` elements containing one or more `<CodeListItem>`/`<EnumeratedItem>` entries or a single `<ExternalCodeList>` entry.
 
+* `<CodeListItem>` is used when it's useful to provide the decodes of the coded values
+* `<EnumeratedItem>` is used when it's just an enumeration of allowed values
+* `<ExternalCodelist>` is used when the codelist is provided by a third party e.g. MedDRA
+
+Currently `mighty.toolbox` uses `<CodeListItem>` whenever the codelist source provides decode values, if there are no decodes provided for all codelist values, they are generated as `<EnumeratedItem>` nodes
+
+
+### Case 1: CodeListItem Entries
+
+Each `<CodeListItem>` contains the:
+* `CodedValue` attribute
+* optional `OrderNumber` attribute - defines the display order of the item within the CodeList
+* optional `Rank` attribute - defines the numeric significance of the item
+* optional `def:ExtendedValue` attribute indicating if it's a value used by the sponsor to extend external controlled terminology
+* optional `<Decode>` translated text
+* optional `<Alias>` node referring to the NCI code
 ```xml
 <CodeList OID="CL.REGION" Name="Codelist for region" DataType="text" SASFormatName="$REGION">
   <CodeListItem CodedValue="EUROPE" OrderNumber="1" Rank="10">
@@ -28,6 +48,31 @@ Codelists in `define.xml` describe the allowed values for a given column. They a
       <TranslatedText xml:lang="en">Europe</TranslatedText>
     </Decode>
   </CodeListItem>
+</CodeList>
+```
+
+### Case 2: EnumeratedItem entries
+
+Each `<EnumeratedItem>` contains the:
+* `CodedValue` attribute
+* optional `<Alias>` node referring to the NCI code 
+
+```xml
+<CodeList OID="CL.ACN" Name="Action Taken with Study Treatment" DataType="text">
+  <EnumeratedItem CodedValue="YEARS">
+      <Alias Context="nci:ExtCodeID" Name="C29848"/>
+  </EnumeratedItem>
+  <Alias Context="nci:ExtCodeID" Name="C66781"/>
+</CodeList>
+```
+
+### Case 3: ExternalCodeList entry
+Each `<ExternalCodeList>` contains the:
+* `Dictionary` attribute
+* `Version` attribute
+```xml
+<CodeList OID="CL.MEDDRA" Name="MedDRA Dictionary" DataType="text" SASFormatName="$MEDDRA">
+  <ExternalCodeList Dictionary="MedDRA" Version="22.1"/>
 </CodeList>
 ```
 
@@ -53,36 +98,46 @@ The schema for codelists metadata is defined in `inst/schema/codelists.json` and
   "label": "codelist label",
   "description": "description",
   "datatype": "text" | "integer" | "float",
-  "operations": [
+  "values": [
     {
-      "operation": "KEEP" | "ADD" | "TAKE",
-      "values": [
-        {
-          "code": "coded value",
-          "decode": "decode text"
-        }
-      ]
+      "code": "coded value",
+      "decode": "decode text",
+      "rank": "rank value"
     }
-  ]
+  ],
+  "subset": [
+    {
+      "code": "coded value"
+    }
+  ],
+  "restore": [
+    {
+      "code": "coded value"
+    }
+  ],
+  "extend": [
+    {
+      "code": "coded value",
+      "decode": "decode text"
+    }
+  ]  
 }
 ```
 
 The `code` field replaces the separate `codedvaluechar` / `codedvaluenum` columns from the Excel `source_codelists` sheet. Since `datatype` is declared at the codelist level and applies uniformly to all values, a single `code` field is sufficient.
 
-The `decode` field maps directly to the `<Decode><TranslatedText>` element in `define.xml`.
+The `decode` field maps directly to the `<Decode><TranslatedText>` element in `define.xml` and is optional.
+
+The `rank` corresponds to the `Rank` from the CST and is also optional.
 
 Codelists are referenced from column metadata using the existing `codelist` string field — no change to `adam.json` is required:
 
 ```yaml
 # codelists.yaml
 - id: AGEU
-  operations:
-    - operation: KEEP
-      values:
-        - code: YEARS
-          decode: Years
-        - code: DAYS
-          decode: Days
+  subset:
+    - code: YEARS
+    - code: DAYS
 
 # in domain yaml
 columns:
@@ -91,39 +146,113 @@ columns:
     codelist: AGEU
 ```
 
+
 ### GCMD input
 
 GCMD input configuration is not part of `study.yaml` or `codelists.yaml`. It will be controlled by the `connector` package via `connector.yaml`, which will manage connections to external data sources including GCMD. `mighty.toolbox` will then retrieve GCMD data directly from `connector.yaml`. No GCMD configuration needs to be declared in `mighty.metadata`.
 
-### Operation values
+> **Note:** Currently the codelist retrieval is handled by `mighty.toolbox`. However, open source users might need to retrievie codelists in a different way. This can be supported by allowing users to define their own codelist provider implementation. At the same time this raises the question how should this resposibility be divided between `mighty.metadata` and `mighty.toolbox` e.g. should `mighty.metadata` be the place where the codelist provider is defined and used to prepare all codelists to be ingested by `mighty.toolbox`? This should be decided in a separate ADR
 
-The `operation` field controls how `mighty.toolbox` uses the value entry relative to the GCMD source:
+### ADD/KEEP/TAKE operations
 
-* `KEEP` — subset values from GCMD
-* `ADD` — define a sponsor-defined codelist not present in GCMD entirely through `ADD` entries
-* `TAKE` — add SDTM controlled terminology codelist value into ADaM CT even when that codelist value is not used in SDTM define.xml
+Different sections of the codelist definition correspond to the ADD/KEEP/TAKE mechanisms from the CST file.
+
+* `values` is the ADD equivalent - it's used to define non standard codelists
+* `subset` is the KEEP equivalent - it's used to subset values from GCMD
+* `restore` add SDTM controlled terminology codelist value into ADaM CT even when that codelist value is not used in SDTM define.xml
+* `extend` add a code list value to an extensible codelist (not support by the CST, as this use case is handled by GCMD itself)
+
+> *Note:* The idea of being able to define all codelists manually was considered. However, supporting all parameters would require users to manually provide NCI codes and keep track of which values come from the CDISC CT and which ones are extended values leading to poor UX. Instead, the metadata describes the desired state of codelists (how the users wants to change/extend or which one the user wants to create), while the actual retrieval is handled by codelist providers.
+
+#### Use Case 1: Defining a non-standard codelist
+
+Let's consider a non-standard region codelist
+```xml
+<CodeList OID="CL.REGION" Name="Codelist for region" DataType="text" SASFormatName="$REGION" def:IsNonStandard="Yes">
+  <Description>
+    <TranslatedText xml:lang="en">Region codelist</TranslatedText>
+  </Description>
+  <CodeListItem CodedValue="EUROPE" OrderNumber="1" Rank="10">
+    <Decode>
+      <TranslatedText xml:lang="en">Europe</TranslatedText>
+    </Decode>
+  </CodeListItem>
+</CodeList>
+```
+
+This would be defined in `mighty.metadata` as:
+```yaml
+- id: Region
+  label: Codelist for region
+  description: Region codelist
+  values:
+    - code: EUROPE
+      decode: Europe
+      rank: 10
+```
+
+
+#### Use Case 2: Subsetting a codelist
+
+Let's consider the AGEU codelist which has DAYS, HOURS, MONTHS, WEEKS, YEARS values. 
+
+To narrow it down to just YEARS, the `mighty.metadata` definition is:
+```yaml
+- id: AGEU
+  subset:
+    - code: YEARS
+```
+
+#### Use Case 3: Bringing back a value that was filtered out by the SDTM Define
+
+Let's assume that we use the AGEU codelist and the SDTM define narrowed it to down to just WEEKS, YEARS, but we also need to have MONTHS.
+
+To bring back MONTHS, the `mighty.metadata` definition is:
+```yaml
+- id: AGEU
+  restore:
+    - code: MONTHS
+```
+
+#### Use Case 4: Adding a value to an extensible codelist
+
+Let's assume we are using the LOC codelist and we want to add a new value. The `mighty.metadata` definition would be:
+
+```yaml
+- id: LOC
+  extend:
+    - code: MY CUSTOM LOCATION
+      decode: My Custom Location
+```
+
+The intent is for this to correspond to
+```xml
+  <CodeListItem CodedValue="MY CUSTOM LOCATION" def:ExtendedValue="Yes">
+    <Decode>
+      <TranslatedText xml:lang="en">My Custom Location</TranslatedText>
+    </Decode>
+  </CodeListItem>
+```
+
 
 ### Combining KEEP and TAKE on the same codelist
 
-A codelist entry may declare both `KEEP` and `TAKE` operation groups. This arises when a study needs to narrow a GCMD codelist to a specific subset of values (`KEEP`) *and* include one or more SDTM controlled terminology values that are absent from the SDTM define.xml and would otherwise be excluded from the ADaM define.xml.
+A codelist entry may declare both `subset` and `restore` operation groups. This arises when a study needs to narrow a GCMD codelist to a specific subset of values (`KEEP`) *and* include one or more SDTM controlled terminology values that are absent from the SDTM define.xml and would otherwise be excluded from the ADaM define.xml.
 
-Example: a codelist is restricted to two values via `KEEP`, but one additional SDTM CT value needs to appear in the ADaM define.xml:
+Example: a codelist is restricted to two values via `subset`, but one additional SDTM CT value needs to appear in the ADaM define.xml:
 
 ```yaml
 - id: AGEU
-  operations:
-    - operation: KEEP
-      values:
-        - code: YEARS
-        - code: DAYS
-    - operation: TAKE
-      values:
-        - code: MONTHS
+  subset:
+    - code: YEARS
+    - code: DAYS
+  restore:
+    - code: MONTHS
 ```
 
 The following restrictions apply:
 
-* `ADD` and `KEEP`/`TAKE` are mutually exclusive on the same codelist (enforced by `validate_mighty_codelists`): `KEEP` and `TAKE` operate on codelists present in GCMD, while `ADD` is only valid for codelists absent from GCMD — attempting `ADD` on a GCMD codelist is ignored with a warning by `mighty.toolbox` (already implemented).
+* `values` and `subset`/`restore` are mutually exclusive on the same codelist (enforced by `validate_mighty_codelists`): `subset` and `restore` operate on codelists present in GCMD, while `values` is only valid for codelists absent from GCMD — attempting `values` on a GCMD codelist is ignored with a warning by `mighty.toolbox` (already implemented).
 * `code` must be unique across all operation groups within a codelist (enforced by `validate_mighty_codelists`).
 
 ### Validation and checks
@@ -131,23 +260,22 @@ The following restrictions apply:
 **Schema-level** (`codelists.json` enforces these automatically):
 
 * Codelist level:
-  * Required: `id`, `operations`
-  * Required for `ADD` codelists: `label`, `description`, `datatype` — no GCMD source exists, so must be declared explicitly
-  * Optional for `KEEP`/`TAKE` codelists: `label`, `description`, `datatype` — retrieved from GCMD by `mighty.toolbox`
+  * Required: `id`
+  * Required: One of the `values`, `subset`, `restore`, `extend` to be not empty
+  * Required: `label`, `description`, `datatype` if `values` is not empty
   * Valid `datatype` enum: `text`, `integer`, `float`
-* Operation level:
-  * Required: `operation`, `values`
-  * Valid `operation` enum: `KEEP`, `ADD`, `TAKE`
-* Value level:
+* `values`, `extend` level:
   * Required: `code`
-  * Required for `ADD` values: `decode` — no GCMD source exists, so must be declared explicitly
-  * Optional for `KEEP`/`TAKE` values: `decode` — retrieved from GCMD by `mighty.toolbox`; if populated, ignored with a warning (already implemented in `mighty.toolbox`)
+  * Optional: `decode`
+* `subset`, `restore` level:
+  * Required: `code`
 
 **Class-level** (`validate_mighty_codelists`):
 
 * `id` values must be unique across all codelists in the file
 * `code` must be unique within each codelist across all operations
 * Every codelist defined in `codelists.yaml` must be referenced by at least one column in the domain metadata
+* Every codelist value should have the same fields e.g. all of them or none of them have `decode` values
 
 ### Classes
 
@@ -169,40 +297,31 @@ An S7 class `mighty_codelists` will be defined for the list of codelists. The cl
 * A new `R/mighty_codelists.R` file defines the `mighty_codelists` S7 class
 * CRUD methods follow the pattern of `y_columns.R`:
   * Codelist level:
-    * `add_codelist(id, label, description, datatype, operations)` — adds a new codelist; requires at least one operation group with at least one codelist value
+    * `define_codelist(id, label, description, datatype, code, decode, rank)` — adds a new codelist; requires at least one value to be defined
     * `remove_codelist(id)` — removes the codelist and all its contents
     * `update_codelist(id, ...)` — updates codelist-level fields (`label`, `description`, `datatype`)
     * `select_codelist(id)` — returns a single codelist entry as a list
-  * Operation level:
-    * `add_codelist_operation(codelist_id, operation, values)` — adds a new operation group to an existing codelist; requires at least one codelist value
-    * `remove_codelist_operation(codelist_id, operation)` — removes the operation group and all its values
-    * `rename_codelist_operation(codelist_id, operation, rename_to)` — changes the operation type of an existing group, moving all its values to the renamed type
-    * `update_codelist_operation(codelist_id, operation, values)` — replaces all values in an existing operation group
   * Value level:
-    * `add_codelist_value(codelist_id, operation, code, ...)` — adds a value to an operation group; creates the group implicitly if it does not exist yet
+    * `define_codelist_values(codelist_id, code, decode)` - throws an error if the edited codelist doesn't exist (because in such cases the label, description and datatype need to be defined)
+    * `extend_codelist_values(codelist_id, code, decode)` - creates a codelist if it doesn't exist
+    * `restore_codelist_values(codelist_id, code)` - creates a codelist if it doesn't exist
+    * `subset_codelist_values(codelist_id, code)` - creates a codelist if it doesn't exist
     * `remove_codelist_value(codelist_id, code)` — removes a value; removes the operation group implicitly if it was the last codelist value
-    * `update_codelist_value(codelist_id, code, ...)` — updates value-level fields (`decode`); accepts an optional `operation` argument to move the value to a different group, creating the target group if needed and removing the source group if it becomes empty
-    * `move_codelist_value(codelist_id, code, .pos)` — moves a value to a new position within its operation group; position affects the order of values in `ADD` entries in `define.xml`
+    * `move_codelist_value(codelist_id, code, .pos)` — moves a value to a new position within its operation group; position affects the order of values in `values` entries in `define.xml`
+    * `update_codelist_value(codelist_id, code, decode, rank)` - updates the decode/rank values, `decode` is only supported for extended and defined values and `rank` only for defined values
 * All mutating methods call `S7::validate()` after modification
 * `mighty_study` auto-detects `codelists.yaml` on construction and populates the `codelists` property
 
 ```r
 # Add a new codelist with initial values
 codelists |>
-  add_codelist(
+  define_codelist(
     id = "REGION",
     label = "Region",
     description = "Geographical regions used in the study",
     datatype = "text",
-    operations = list(
-      list(
-        operation = "ADD",
-        values = list(
-          list(code = "EUROPE", decode = "Europe"),
-          list(code = "NORTH AMERICA", decode = "North America")
-        )
-      )
-    )
+    code = c("EUROPE", "NORTH AMERICA"),
+    decode = c("Europe", "North America")
   )
 
 # Remove an entire codelist
@@ -217,49 +336,14 @@ codelists |>
 codelists |>
   select_codelist(id = "REGION")
 
-# Add a new operation group with initial values to an existing codelist
+# Retain a specific set of values from a GCMD codelist
 codelists |>
-  add_codelist_operation(
+  subset_codelist_values(
     codelist_id = "AGEU",
-    operation = "TAKE",
-    values = list(
-      list(code = "MONTHS")
-    )
+    code = c("MONTHS", "YEARS")
   )
 
-# Remove an operation group and all its values
-codelists |>
-  remove_codelist_operation(codelist_id = "AGEU", operation = "TAKE")
-
-# Rename an operation group type
-codelists |>
-  rename_codelist_operation(
-    codelist_id = "AGEU",
-    operation = "KEEP",
-    rename_to = "TAKE"
-  )
-
-# Replace all values in an operation group
-codelists |>
-  update_codelist_operation(
-    codelist_id = "AGEU",
-    operation = "KEEP",
-    values = list(
-      list(code = "YEARS", decode = "Years"),
-      list(code = "WEEKS", decode = "Weeks")
-    )
-  )
-
-# Retain a specific value from a GCMD codelist
-codelists |>
-  add_codelist_value(
-    codelist_id = "AGEU",
-    operation = "KEEP",
-    code = "MONTHS",
-    decode = "Months"
-  )
-
-# Remove a value from a codelist
+# Remove a value from a codelist - it automatically detects from which group it should be removed
 codelists |>
   remove_codelist_value(codelist_id = "AGEU", code = "MONTHS")
 
@@ -269,14 +353,6 @@ codelists |>
     codelist_id = "AGEU",
     code = "MONTHS",
     decode = "Month"
-  )
-
-# Move a value to a different operation group
-codelists |>
-  update_codelist_value(
-    codelist_id = "AGEU",
-    code = "MONTHS",
-    operation = "TAKE"
   )
 
 # Move a value to a new position within its operation group
