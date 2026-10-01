@@ -22,7 +22,7 @@ Access via e.g. \code{study$adsl}.}
 \item{\verb{@mighty}}{A \link{mighty_config} object loaded from \verb{_mighty.yml}, or
 \code{NULL} if no configuration file exists.}
 \item{\verb{@documents}}{Study-level document metadata from \verb{_documents.yml},
-or empty list if no documents file exists.}
+or an empty \code{mighty_documents} if no documents file exists.}
 \item{\verb{@path}}{The source directory path as \code{character(1)}.}
 }
 }
@@ -88,5 +88,6 @@ write_config(study, path = tmp)
 \seealso{
 \link{mighty_domain}, \link{mighty_config}, \link{study_config},
 \code{\link[=write_config]{write_config()}}, \code{\link[=populate_sparse]{populate_sparse()}}, \code{\link[=populate_core]{populate_core()}},
-\code{\link[=create_md_col]{create_md_col()}}
+\code{\link[=create_md_table]{create_md_table()}}, \code{\link[=create_md_col]{create_md_col()}}, \code{\link[=create_md_param]{create_md_param()}},
+\code{\link[=create_md_values]{create_md_values()}}
 }

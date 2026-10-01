@@ -21,7 +21,7 @@
 #'   \item{`@mighty`}{A [mighty_config] object loaded from `_mighty.yml`, or
 #'     `NULL` if no configuration file exists.}
 #'   \item{`@documents`}{Study-level document metadata from `_documents.yml`,
-#'     or empty list if no documents file exists.}
+#'     or an empty `mighty_documents` if no documents file exists.}
 #'   \item{`@path`}{The source directory path as `character(1)`.}
 #' }
 #'
@@ -42,7 +42,8 @@
 #'
 #' @seealso [mighty_domain], [mighty_config], [study_config],
 #'   [write_config()], [populate_sparse()], [populate_core()],
-#'   [create_md_col()]
+#'   [create_md_table()], [create_md_col()], [create_md_param()],
+#'   [create_md_values()]
 #'
 #' @examples
 #' # Load example study
@@ -102,7 +103,11 @@ construct_mighty_study <- function(path, populate = FALSE) {
 
   mighty_file <- find_yml(path = path, name = "_mighty", schema = mighty_schema)
   study_file <- find_yml(path = path, name = "_study", schema = study_schema)
-  documents_file <- find_yml(path = path, name = "_documents", schema = documents_schema)
+  documents_file <- find_yml(
+    path = path,
+    name = "_documents",
+    schema = documents_schema
+  )
 
   entries <- list.files(
     path = path,
@@ -125,7 +130,11 @@ construct_mighty_study <- function(path, populate = FALSE) {
     .parent = entries,
     mighty = if (is.null(mighty_file)) NULL else mighty_config(mighty_file),
     study = if (is.null(study_file)) NULL else study_config(study_file),
-    documents = mighty_documents(file = documents_file),
+    documents = if (is.null(documents_file)) {
+      mighty_documents()
+    } else {
+      mighty_documents(file = documents_file)
+    },
     path = path
   )
 
@@ -140,7 +149,9 @@ construct_mighty_study <- function(path, populate = FALSE) {
 
 #' @noRd
 validate_datasets <- function(files) {
-  invalid_filenames <- files[!has_prefix(basename(files), ALLOWED_DATASET_PREFIXES)]
+  invalid_filenames <- files[
+    !has_prefix(basename(files), ALLOWED_DATASET_PREFIXES)
+  ]
 
   if (length(invalid_filenames) > 0) {
     cli::cli_abort(paste0(
@@ -163,13 +174,6 @@ validate_path <- function(value) {
   }
 }
 
-#' @noRd
-validate_documents <- function(value) {
-  if (!S7::S7_inherits(value, mighty_documents)) {
-    return("@documents must be a mighty_documents object")
-  }
-}
-
 #' @rdname mighty_study
 #' @export
 mighty_study <- S7::new_class(
@@ -183,10 +187,7 @@ mighty_study <- S7::new_class(
       class = NULL | study_config
     ),
     documents = S7::new_property(
-      class = S7::class_list,
-      validator = \(value) {
-        validate_documents(value = value)
-      }
+      class = mighty_documents
     ),
     path = S7::new_property(
       class = S7::class_character,
@@ -235,7 +236,6 @@ print_mighty_study <- function(x, ...) {
   if (length(x@documents)) {
     documents <- paste0("@ documents: ", length(x@documents), " entries")
   }
-
 
   cli::cli_bullets(
     text = c(

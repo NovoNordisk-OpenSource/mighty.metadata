@@ -2,12 +2,18 @@ test_that("list_documents() returns document ids for mighty_documents", {
   docs <- mighty_documents(
     file = test_path("test_study/_documents.yml")
   )
-  expect_identical(list_documents(docs), c("SUPPDOC001", "COMMENT001", "METHOD001"))
+  expect_identical(
+    list_documents(docs),
+    c("SUPPDOC001", "COMMENT001", "METHOD001")
+  )
 })
 
 test_that("list_documents() returns document ids for mighty_study", {
   study <- mighty_study(test_path("test_study"))
-  expect_identical(sort(list_documents(study)), c("COMMENT001", "METHOD001", "SUPPDOC001"))
+  expect_identical(
+    sort(list_documents(study)),
+    c("COMMENT001", "METHOD001", "SUPPDOC001")
+  )
 })
 
 test_that("add_document() works on mighty_documents", {
@@ -19,12 +25,13 @@ test_that("add_document() works on mighty_documents", {
     title = "A title",
     doctype = "suppdoc",
     href = "./doc.pdf"
-  ) |> add_document(
-    id = "DOC002",
-    title = "Another title",
-    doctype = "comment",
-    href = "./comment.txt"
-  )
+  ) |>
+    add_document(
+      id = "DOC002",
+      title = "Another title",
+      doctype = "comment",
+      href = "./comment.txt"
+    )
 
   expect_equal(sort(list_documents(docs)), c("DOC001", "DOC002"))
 })
@@ -48,13 +55,19 @@ test_that("select_document() works on mighty_documents", {
     file = test_path("test_study/_documents.yml")
   )
 
-  expect_equal(select_document(docs, "SUPPDOC001")$title, "Analysis Reviewer Guide Protocol")
+  expect_equal(
+    select_document(docs, "SUPPDOC001")$title,
+    "Analysis Reviewer Guide Protocol"
+  )
 })
 
 test_that("select_document() works on mighty_study", {
   study <- mighty_study(test_path("test_study"))
 
-  expect_equal(select_document(study, "SUPPDOC001")$title, "Analysis Reviewer Guide Protocol")
+  expect_equal(
+    select_document(study, "SUPPDOC001")$title,
+    "Analysis Reviewer Guide Protocol"
+  )
 })
 
 test_that("update_document() works on mighty_documents", {
@@ -86,7 +99,13 @@ test_that("remove_documents() works on mighty_documents", {
 
 test_that("remove_documents() works on mighty_study", {
   study <- mighty_study(test_path("test_study"))
-  study <- add_document(study, id = "EXTRA001", title = "Extra", doctype = "suppdoc", href = "./extra.pdf")
+  study <- add_document(
+    study,
+    id = "EXTRA001",
+    title = "Extra",
+    doctype = "suppdoc",
+    href = "./extra.pdf"
+  )
 
   study <- remove_documents(study, id = "EXTRA001")
 
@@ -117,9 +136,11 @@ test_that("mighty_documents print() summarizes document ids and entry count", {
 test_that("mighty_study() enforces mighty_documents type for @documents", {
   study <- mighty_study(test_path("test_study"))
 
+  # S7 < 0.2.0 renders class names unqualified, newer versions qualify them
+  # with the package, so match only the version-stable part of the message.
   expect_error(
     study@documents <- list(),
-    "@documents must be a mighty_documents object"
+    "@documents must be .*mighty_documents.*, not <list>"
   )
 })
 
@@ -157,7 +178,10 @@ test_that("check_document_references() returns study unchanged when no doc refs 
 test_that("check_document_references() errors when domains reference document ids but no docs in _documents.yml", {
   study <- mighty_study(test_path("test_study"))
 
-  expect_snapshot(study@documents <- mighty_documents(.data = list()), error = TRUE)
+  expect_snapshot(
+    study@documents <- mighty_documents(.data = list()),
+    error = TRUE
+  )
 })
 
 test_that("check_document_references() errors when domains reference document ids not defined in _documents.yml", {

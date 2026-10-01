@@ -10,7 +10,7 @@
 \alias{update_document}
 \title{Mighty Documents}
 \usage{
-mighty_documents(file = NULL, .data = NULL)
+mighty_documents(file, .data)
 
 list_documents(x)
 
@@ -30,9 +30,11 @@ add_document(
 update_document(x, id, ...)
 }
 \arguments{
-\item{file}{\code{character(1)} path to \verb{_documents.yml}.}
+\item{file}{\code{character(1)} path to \verb{_documents.yml}. Optional; mutually
+exclusive with \code{.data}.}
 
-\item{.data}{\code{list()} of document entries.}
+\item{.data}{\code{list()} of document entries. Optional; mutually exclusive
+with \code{file}. Supplying neither returns an empty \code{mighty_documents}.}
 
 \item{x}{A \code{mighty_documents()} or \code{mighty_study()} object.}
 
