@@ -300,7 +300,7 @@ str(study@study)
 #>  $ standards  :List of 1
 #>   ..$ :List of 2
 #>   .. ..$ id     : chr "ADaM-IG"
-#>   .. ..$ version: num 1.1
+#>   .. ..$ version: chr "1.1"
 #>  $ terminology:List of 4
 #>   ..$ :List of 2
 #>   .. ..$ id     : chr "ADAM"
@@ -310,13 +310,13 @@ str(study@study)
 #>   .. ..$ version: chr "2025-08-06"
 #>   ..$ :List of 2
 #>   .. ..$ id     : chr "MedDRA"
-#>   .. ..$ version: num 22.1
+#>   .. ..$ version: chr "22.1"
 #>   ..$ :List of 2
 #>   .. ..$ id     : chr "WHODrug"
 #>   .. ..$ version: chr "2023 JAN"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55bcdfe1fed0> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55b531f5b108> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 str(study@mighty)
 #> <mighty.metadata::mighty_config> List of 2
@@ -333,7 +333,7 @@ str(study@mighty)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55bcdcf68c20> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55b532300490> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 ```
 
@@ -512,13 +512,30 @@ list_columns(resolved$ADVS)
 #>  [7] "PARAMCD"  "PARAM"    "AVAL"     "AVALC"
 ```
 
-`include` works on parameters and rows too, not just columns.
+`include` can be applied to columns, rows, parameters, and individual
+columns within a parameter.
 
-## Creating a Flat Column Table
+## Creating Flat Metadata Tables
+
+A set of `create_md_*()` functions flattens the study specifications
+into tibbles. This is the format consumed by downstream mighty tools.
+
+[`create_md_table()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_table.md)
+gives one row per dataset:
+
+``` r
+
+create_md_table(study)
+#> # A tibble: 3 × 8
+#>   order id    label                       class subclass structure keys  comment
+#>   <int> <chr> <chr>                       <chr> <chr>    <chr>     <lis> <chr>  
+#> 1     1 ADAE  Adverse Events Analysis Da… OCCU… ADVERSE… One reco… <chr> NA     
+#> 2     2 ADSL  Subject-Level Analysis Dat… SUBJ… NA       One reco… <chr> NA     
+#> 3     3 ADVS  Vital Signs Analysis Datas… BASI… NA       One reco… <chr> NA
+```
 
 [`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)
-flattens the study’s column specifications into a single tibble. This is
-the format consumed by downstream mighty tools.
+gives one row per column:
 
 ``` r
 
@@ -541,6 +558,36 @@ create_md_col(study)
 #> #   format_display <chr>, comment <chr>
 ```
 
+[`create_md_param()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_param.md)
+gives one row per BDS parameter:
+
+``` r
+
+create_md_param(study)
+#> # A tibble: 2 × 5
+#>   table_id table_label                  order id     label                   
+#>   <chr>    <chr>                        <int> <chr>  <chr>                   
+#> 1 ADVS     Vital Signs Analysis Dataset     1 BMI    Body Mass Index (kg/m^2)
+#> 2 ADVS     Vital Signs Analysis Dataset     2 BMIGRP Body Mass Index Group
+```
+
+[`create_md_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_values.md)
+gives one row per column defined inside a parameter, i.e. the value
+level metadata:
+
+``` r
+
+create_md_values(study)
+#> # A tibble: 3 × 15
+#>   table_id table_label param_order param_id param_label order id    label origin
+#>   <chr>    <chr>             <int> <chr>    <chr>       <int> <chr> <chr> <chr> 
+#> 1 ADVS     Vital Sign…           1 BMI      Body Mass …     1 AVAL  NA    NA    
+#> 2 ADVS     Vital Sign…           2 BMIGRP   Body Mass …     1 AVALC NA    NA    
+#> 3 ADVS     Vital Sign…           2 BMIGRP   Body Mass …     2 AVAL  NA    NA    
+#> # ℹ 6 more variables: method <chr>, codelist <chr>, format_type <chr>,
+#> #   format_length <int>, format_display <chr>, comment <chr>
+```
+
 ## Next Steps
 
 This vignette covered the core workflows:
@@ -555,9 +602,8 @@ for metadata propagation,
 [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 for saving changes,
 [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md)
-for conditional specifications, and
-[`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)
-for flat output.
+for conditional specifications, and the `create_md_*()` functions for
+flat output.
 
 To learn more:
 

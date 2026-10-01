@@ -9,7 +9,7 @@ of column definitions."><meta property="og:image" content="https://novonordisk-o
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9011</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,7 +120,9 @@ of column definitions.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="mighty_study.html">mighty_study</a>, <code><a href="populate_sparse.html">populate_sparse()</a></code>, <code><a href="populate_core.html">populate_core()</a></code></p></div>
+    <div class="dont-index"><p><a href="mighty_study.html">mighty_study</a>, <code><a href="populate_sparse.html">populate_sparse()</a></code>, <code><a href="populate_core.html">populate_core()</a></code>,
+<code><a href="create_md.html">create_md()</a></code>, <code><a href="create_md_table.html">create_md_table()</a></code>, <code><a href="create_md_param.html">create_md_param()</a></code>,
+<code><a href="create_md_values.html">create_md_values()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -129,7 +131,23 @@ of column definitions.</p>
 <span class="r-in"><span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → No `_documents.yml` file found</span>
-<span class="r-in"><span><span class="va">mdcol</span> <span class="op">&lt;-</span> <span class="fu">create_md_col</span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">create_md_col</span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 32 × 15</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    table_id table_label      order id    label origin key   is_core core  method</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> ADAE     Adverse Events …     1 STUD… Stud… <span style="color: #BB0000;">NA</span>     FALSE <span style="color: #BB0000;">NA</span>      Req   AE.ST…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> ADAE     Adverse Events …     2 USUB… Uniq… <span style="color: #BB0000;">NA</span>     TRUE  <span style="color: #BB0000;">NA</span>      Req   AE.US…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> ADAE     Adverse Events …     3 AESEQ Sequ… <span style="color: #BB0000;">NA</span>     TRUE  <span style="color: #BB0000;">NA</span>      Cond  AE.AE…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> ADAE     Adverse Events …     4 AETE… Repo… <span style="color: #BB0000;">NA</span>     FALSE <span style="color: #BB0000;">NA</span>      Req   AE.AE…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> ADAE     Adverse Events …     5 AEDE… Dict… <span style="color: #BB0000;">NA</span>     FALSE <span style="color: #BB0000;">NA</span>      Cond  AE.AE…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> ADAE     Adverse Events …     6 AEBO… Body… <span style="color: #BB0000;">NA</span>     FALSE <span style="color: #BB0000;">NA</span>      Cond  AE.AE…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> ADAE     Adverse Events …     7 ASTDT Anal… <span style="color: #BB0000;">NA</span>     FALSE <span style="color: #BB0000;">NA</span>      Cond  Deriv…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> ADAE     Adverse Events …     8 AENDT Anal… <span style="color: #BB0000;">NA</span>     FALSE <span style="color: #BB0000;">NA</span>      Cond  Deriv…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> ADAE     Adverse Events …     9 TRTE… Trea… <span style="color: #BB0000;">NA</span>     FALSE <span style="color: #BB0000;">NA</span>      Cond  Deriv…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> ADSL     Subject-Level A…     1 STUD… Stud… <span style="color: #BB0000;">NA</span>     FALSE <span style="color: #BB0000;">NA</span>      Req   DM.ST…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 22 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 5 more variables: codelist &lt;chr&gt;, format_type &lt;chr&gt;, format_length &lt;int&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   format_display &lt;chr&gt;, comment &lt;chr&gt;</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

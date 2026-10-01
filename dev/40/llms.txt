@@ -219,6 +219,21 @@ Work with metadata for a single ADaM data set.
   [`select_parameter()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/parameters.md)
   : Update parameters in your metadata
 
+## Metadata data sets
+
+Flatten a study or a single data set into tabular metadata.
+
+- [`create_md()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md.md)
+  : Create All Metadata Data Sets
+- [`create_md_table()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_table.md)
+  : Create Metadata Dataset Table
+- [`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)
+  : Create Metadata Column Table
+- [`create_md_param()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_param.md)
+  : Create Metadata Parameter Table
+- [`create_md_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_values.md)
+  : Create Metadata Value Table
+
 ## Documents metadata
 
 Manage study-level document catalog and references.

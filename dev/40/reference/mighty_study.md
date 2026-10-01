@@ -54,8 +54,8 @@ A `mighty_study` S7 object extending `list`:
 
 - `@documents`:
 
-  Study-level document metadata from `_documents.yml`, or empty list if
-  no documents file exists.
+  Study-level document metadata from `_documents.yml`, or an empty
+  `mighty_documents` if no documents file exists.
 
 - `@path`:
 
@@ -98,7 +98,10 @@ written to `x@path`.
 [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md),
 [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md),
 [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md),
-[`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)
+[`create_md_table()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_table.md),
+[`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md),
+[`create_md_param()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_param.md),
+[`create_md_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_values.md)
 
 ## Examples
 

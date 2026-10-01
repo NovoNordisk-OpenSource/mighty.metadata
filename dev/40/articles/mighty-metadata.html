@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9011</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -376,7 +376,7 @@ properties of S7 objects:</p>
 <span><span class="co">#&gt;  $ standards  :List of 1</span></span>
 <span><span class="co">#&gt;   ..$ :List of 2</span></span>
 <span><span class="co">#&gt;   .. ..$ id     : chr "ADaM-IG"</span></span>
-<span><span class="co">#&gt;   .. ..$ version: num 1.1</span></span>
+<span><span class="co">#&gt;   .. ..$ version: chr "1.1"</span></span>
 <span><span class="co">#&gt;  $ terminology:List of 4</span></span>
 <span><span class="co">#&gt;   ..$ :List of 2</span></span>
 <span><span class="co">#&gt;   .. ..$ id     : chr "ADAM"</span></span>
@@ -386,13 +386,13 @@ properties of S7 objects:</p>
 <span><span class="co">#&gt;   .. ..$ version: chr "2025-08-06"</span></span>
 <span><span class="co">#&gt;   ..$ :List of 2</span></span>
 <span><span class="co">#&gt;   .. ..$ id     : chr "MedDRA"</span></span>
-<span><span class="co">#&gt;   .. ..$ version: num 22.1</span></span>
+<span><span class="co">#&gt;   .. ..$ version: chr "22.1"</span></span>
 <span><span class="co">#&gt;   ..$ :List of 2</span></span>
 <span><span class="co">#&gt;   .. ..$ id     : chr "WHODrug"</span></span>
 <span><span class="co">#&gt;   .. ..$ version: chr "2023 JAN"</span></span>
 <span><span class="co">#&gt;  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"</span></span>
 <span><span class="co">#&gt;  @ validator: &lt;S7schema::validator&gt;</span></span>
-<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x55bcdfe1fed0&gt; </span></span>
+<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x55b531f5b108&gt; </span></span>
 <span><span class="co">#&gt;  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">study</span><span class="op">@</span><span class="va">mighty</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;mighty.metadata::mighty_config&gt; List of 2</span></span>
@@ -409,7 +409,7 @@ properties of S7 objects:</p>
 <span><span class="co">#&gt;  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."</span></span>
 <span><span class="co">#&gt;  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"</span></span>
 <span><span class="co">#&gt;  @ validator: &lt;S7schema::validator&gt;</span></span>
-<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x55bcdcf68c20&gt; </span></span>
+<span><span class="co">#&gt;  .. @ context:Classes 'V8', 'environment' &lt;environment: 0x55b532300490&gt; </span></span>
 <span><span class="co">#&gt;  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"</span></span></code></pre></div>
 <p>The <code>_study.yml</code> file provides the <code>study_id</code>.
 The <code>_mighty.yml</code> file provides <code>external_data</code>
@@ -557,16 +557,26 @@ condition is <code>TRUE</code> and the column is kept:</p>
 <span><span class="fu"><a href="../reference/columns.html">list_columns</a></span><span class="op">(</span><span class="va">resolved</span><span class="op">$</span><span class="va">ADVS</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "USUBJID"  "SAFFL"    "TRTP"     "VISITNUM" "AVISITN"  "AVISIT"  </span></span>
 <span><span class="co">#&gt;  [7] "PARAMCD"  "PARAM"    "AVAL"     "AVALC"</span></span></code></pre></div>
-<p><code>include</code> works on parameters and rows too, not just
-columns.</p>
+<p><code>include</code> can be applied to columns, rows, parameters, and
+individual columns within a parameter.</p>
 </div>
 <div class="section level2">
-<h2 id="creating-a-flat-column-table">Creating a Flat Column Table<a class="anchor" aria-label="anchor" href="#creating-a-flat-column-table"></a>
+<h2 id="creating-flat-metadata-tables">Creating Flat Metadata Tables<a class="anchor" aria-label="anchor" href="#creating-flat-metadata-tables"></a>
 </h2>
-<p><code><a href="../reference/create_md_col.html">create_md_col()</a></code> flattens the study’s column
-specifications into a single tibble. This is the format consumed by
-downstream mighty tools.</p>
+<p>A set of <code>create_md_*()</code> functions flattens the study
+specifications into tibbles. This is the format consumed by downstream
+mighty tools.</p>
+<p><code><a href="../reference/create_md_table.html">create_md_table()</a></code> gives one row per dataset:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/create_md_table.html">create_md_table</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 8</span></span></span>
+<span><span class="co">#&gt;   order id    label                       class subclass structure keys  comment</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lis&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 ADAE  Adverse Events Analysis Da… OCCU… ADVERSE… One reco… <span style="color: #949494;">&lt;chr&gt;</span> <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2 ADSL  Subject-Level Analysis Dat… SUBJ… <span style="color: #BB0000;">NA</span>       One reco… <span style="color: #949494;">&lt;chr&gt;</span> <span style="color: #BB0000;">NA</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3 ADVS  Vital Signs Analysis Datas… BASI… <span style="color: #BB0000;">NA</span>       One reco… <span style="color: #949494;">&lt;chr&gt;</span> <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
+<p><code><a href="../reference/create_md_col.html">create_md_col()</a></code> gives one row per column:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create_md_col.html">create_md_col</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 32 × 15</span></span></span>
 <span><span class="co">#&gt;    table_id table_label      order id    label origin key   is_core core  method</span></span>
@@ -584,6 +594,26 @@ downstream mighty tools.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 22 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: codelist &lt;chr&gt;, format_type &lt;chr&gt;, format_length &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   format_display &lt;chr&gt;, comment &lt;chr&gt;</span></span></span></code></pre></div>
+<p><code><a href="../reference/create_md_param.html">create_md_param()</a></code> gives one row per BDS parameter:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/create_md_param.html">create_md_param</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 5</span></span></span>
+<span><span class="co">#&gt;   table_id table_label                  order id     label                   </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ADVS     Vital Signs Analysis Dataset     1 BMI    Body Mass Index (kg/m^2)</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ADVS     Vital Signs Analysis Dataset     2 BMIGRP Body Mass Index Group</span></span></code></pre></div>
+<p><code><a href="../reference/create_md_values.html">create_md_values()</a></code> gives one row per column defined
+inside a parameter, i.e. the value level metadata:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/create_md_values.html">create_md_values</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 15</span></span></span>
+<span><span class="co">#&gt;   table_id table_label param_order param_id param_label order id    label origin</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ADVS     Vital Sign…           1 BMI      Body Mass …     1 AVAL  <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ADVS     Vital Sign…           2 BMIGRP   Body Mass …     1 AVALC <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ADVS     Vital Sign…           2 BMIGRP   Body Mass …     2 AVAL  <span style="color: #BB0000;">NA</span>    <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 6 more variables: method &lt;chr&gt;, codelist &lt;chr&gt;, format_type &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   format_length &lt;int&gt;, format_display &lt;chr&gt;, comment &lt;chr&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="next-steps">Next Steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
@@ -593,8 +623,8 @@ downstream mighty tools.</p>
 <code><a href="../reference/mighty_study.html">mighty_study()</a></code> for collections,
 <code><a href="../reference/populate_core.html">populate_core()</a></code> and <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code> for
 metadata propagation, <code><a href="../reference/write_config.html">write_config()</a></code> for saving changes,
-<code><a href="../reference/resolve_includes.html">resolve_includes()</a></code> for conditional specifications, and
-<code><a href="../reference/create_md_col.html">create_md_col()</a></code> for flat output.</p>
+<code><a href="../reference/resolve_includes.html">resolve_includes()</a></code> for conditional specifications, and the
+<code>create_md_*()</code> functions for flat output.</p>
 <p>To learn more:</p>
 <ul>
 <li>

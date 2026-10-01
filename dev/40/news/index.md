@@ -3,6 +3,20 @@
 ## mighty.metadata (development version)
 
 - Added
+  [`create_md_table()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_table.md),
+  [`create_md_param()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_param.md),
+  and
+  [`create_md_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_values.md)
+  to create metadata data sets for tables, BDS parameters, and value
+  level metadata, complementing
+  [`create_md_col()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_col.md)
+  ([\#11](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/11)).
+  [`create_md()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md.md)
+  returns all four as a named list.
+- [`resolve_includes()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_includes.md)
+  now recurses into `include` fields on columns within parameters
+  ([\#52](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/52)).
+- Added
   [`filter_domains()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/filter_domains.md)
   to filter a `mighty_study` to domains matching a given prefix (default
   `"AD"`)
@@ -17,6 +31,9 @@
   Each entry requires an `id` and a `version`. Missing fields and empty
   lists are both valid and mean no entries. Only the structure is
   validated; domain-semantic checks are left to consuming packages.
+- `version` in `standards` and `terminology` must now be a string.
+  Unquoted numeric versions (e.g. `27.0`) fail validation instead of
+  silently becoming `27`; quote them in `_study.yml`.
 - added
   [`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   class with schema validation and document manipulation helpers:

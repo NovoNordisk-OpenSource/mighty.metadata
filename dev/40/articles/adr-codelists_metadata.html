@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9011</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,6 +76,8 @@
       <img src="../logo.png" class="logo" alt=""><h1>ADR: codelists metadata structure</h1>
                         <h4 data-toc-skip class="author">Nataliia
 Bakalo</h4>
+                        <h4 data-toc-skip class="author">Ryszard
+Szymanski</h4>
             
             <h4 data-toc-skip class="date">2026-07-03</h4>
       
@@ -125,15 +127,48 @@ overrides (KEEP, ADD, TAKE) defined in <code>codelists.yaml</code> when
 generating <code>define.xml</code>
 </li>
 </ul>
+<blockquote>
+<p><strong>Note:</strong> The way codelists are retrieved is not in
+scope of this ADR. It touches on the topic, but it focuses on user
+facing syntax and how to define codelists and their values. The codelist
+retrieval should be covered by a separate ADR.</p>
+</blockquote>
 </div>
 <div class="section level2">
 <h2 id="context">Context<a class="anchor" aria-label="anchor" href="#context"></a>
 </h2>
-<p>Codelists in <code>define.xml</code> describe the allowed values for
-a given column. They are rendered as <code>&lt;CodeList&gt;</code>
-elements containing one or more <code>&lt;CodeListItem&gt;</code>
-entries, each with a <code>CodedValue</code> and an optional
-<code>&lt;Decode&gt;</code> translated text:</p>
+<p>Codelists in the <code>define.xml</code> describe the allowed values
+for a given column. They are rendered as <code>&lt;CodeList&gt;</code>
+elements containing one or more
+<code>&lt;CodeListItem&gt;</code>/<code>&lt;EnumeratedItem&gt;</code>
+entries or a single <code>&lt;ExternalCodeList&gt;</code> entry.</p>
+<ul>
+<li>
+<code>&lt;CodeListItem&gt;</code> is used when it’s useful to
+provide the decodes of the coded values</li>
+<li>
+<code>&lt;EnumeratedItem&gt;</code> is used when it’s just an
+enumeration of allowed values</li>
+<li>
+<code>&lt;ExternalCodelist&gt;</code> is used when the codelist is
+provided by a third party e.g. MedDRA</li>
+</ul>
+<p>Currently <code>mighty.toolbox</code> uses
+<code>&lt;CodeListItem&gt;</code> whenever the codelist source provides
+decode values, if there are no decodes provided for all codelist values,
+they are generated as <code>&lt;EnumeratedItem&gt;</code> nodes</p>
+<div class="section level3">
+<h3 id="case-1-codelistitem-entries">Case 1: CodeListItem Entries<a class="anchor" aria-label="anchor" href="#case-1-codelistitem-entries"></a>
+</h3>
+<p>Each <code>&lt;CodeListItem&gt;</code> contains the: *
+<code>CodedValue</code> attribute * optional <code>OrderNumber</code>
+attribute - defines the display order of the item within the CodeList *
+optional <code>Rank</code> attribute - defines the numeric significance
+of the item * optional <code>def:ExtendedValue</code> attribute
+indicating if it’s a value used by the sponsor to extend external
+controlled terminology * optional <code>&lt;Decode&gt;</code> translated
+text * optional <code>&lt;Alias&gt;</code> node referring to the NCI
+code</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>&lt;<span class="kw">CodeList</span> <span class="ot">OID=</span><span class="st">"CL.REGION"</span> <span class="ot">Name=</span><span class="st">"Codelist for region"</span> <span class="ot">DataType=</span><span class="st">"text"</span> <span class="ot">SASFormatName=</span><span class="st">"$REGION"</span>&gt;</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  &lt;<span class="kw">CodeListItem</span> <span class="ot">CodedValue=</span><span class="st">"EUROPE"</span> <span class="ot">OrderNumber=</span><span class="st">"1"</span> <span class="ot">Rank=</span><span class="st">"10"</span>&gt;</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>    &lt;<span class="kw">Decode</span>&gt;</span>
@@ -141,6 +176,28 @@ entries, each with a <code>CodedValue</code> and an optional
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>    &lt;/<span class="kw">Decode</span>&gt;</span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  &lt;/<span class="kw">CodeListItem</span>&gt;</span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>&lt;/<span class="kw">CodeList</span>&gt;</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="case-2-enumerateditem-entries">Case 2: EnumeratedItem entries<a class="anchor" aria-label="anchor" href="#case-2-enumerateditem-entries"></a>
+</h3>
+<p>Each <code>&lt;EnumeratedItem&gt;</code> contains the: *
+<code>CodedValue</code> attribute * optional <code>&lt;Alias&gt;</code>
+node referring to the NCI code</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>&lt;<span class="kw">CodeList</span> <span class="ot">OID=</span><span class="st">"CL.ACN"</span> <span class="ot">Name=</span><span class="st">"Action Taken with Study Treatment"</span> <span class="ot">DataType=</span><span class="st">"text"</span>&gt;</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  &lt;<span class="kw">EnumeratedItem</span> <span class="ot">CodedValue=</span><span class="st">"YEARS"</span>&gt;</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>      &lt;<span class="kw">Alias</span> <span class="ot">Context=</span><span class="st">"nci:ExtCodeID"</span> <span class="ot">Name=</span><span class="st">"C29848"</span>/&gt;</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  &lt;/<span class="kw">EnumeratedItem</span>&gt;</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  &lt;<span class="kw">Alias</span> <span class="ot">Context=</span><span class="st">"nci:ExtCodeID"</span> <span class="ot">Name=</span><span class="st">"C66781"</span>/&gt;</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>&lt;/<span class="kw">CodeList</span>&gt;</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="case-3-externalcodelist-entry">Case 3: ExternalCodeList entry<a class="anchor" aria-label="anchor" href="#case-3-externalcodelist-entry"></a>
+</h3>
+<p>Each <code>&lt;ExternalCodeList&gt;</code> contains the: *
+<code>Dictionary</code> attribute * <code>Version</code> attribute</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>&lt;<span class="kw">CodeList</span> <span class="ot">OID=</span><span class="st">"CL.MEDDRA"</span> <span class="ot">Name=</span><span class="st">"MedDRA Dictionary"</span> <span class="ot">DataType=</span><span class="st">"text"</span> <span class="ot">SASFormatName=</span><span class="st">"$MEDDRA"</span>&gt;</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  &lt;<span class="kw">ExternalCodeList</span> <span class="ot">Dictionary=</span><span class="st">"MedDRA"</span> <span class="ot">Version=</span><span class="st">"22.1"</span>/&gt;</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>&lt;/<span class="kw">CodeList</span>&gt;</span></code></pre></div>
 <p>Codelist values are primarily sourced from GCMD (Global Controlled
 Metadata Dictionary). Retrieval of codelists from GCMD is handled by
 <code>mighty.toolbox</code>. Studies often need to customize these or
@@ -173,6 +230,7 @@ the Excel CST file.</p>
 YAML-based mechanism so that YAML metadata workflows have full codelist
 override support in <code>mighty.toolbox</code>.</p>
 </div>
+</div>
 <div class="section level2">
 <h2 id="decisions">Decisions<a class="anchor" aria-label="anchor" href="#decisions"></a>
 </h2>
@@ -183,23 +241,35 @@ metadata.</p>
 <p>The schema for codelists metadata is defined in
 <code>inst/schema/codelists.json</code> and represents a list where a
 single codelist is defined as follows:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="st">"unique_codelist_id"</span><span class="fu">,</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="dt">"label"</span><span class="fu">:</span> <span class="st">"codelist label"</span><span class="fu">,</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"description"</span><span class="fu">,</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="dt">"datatype"</span><span class="fu">:</span> <span class="st">"text"</span> <span class="er">|</span> <span class="st">"integer"</span> <span class="er">|</span> <span class="st">"float"</span><span class="fu">,</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="dt">"operations"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>    <span class="fu">{</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>      <span class="dt">"operation"</span><span class="fu">:</span> <span class="st">"KEEP"</span> <span class="er">|</span> <span class="st">"ADD"</span> <span class="er">|</span> <span class="st">"TAKE"</span><span class="fu">,</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>      <span class="dt">"values"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>        <span class="fu">{</span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>          <span class="dt">"code"</span><span class="fu">:</span> <span class="st">"coded value"</span><span class="fu">,</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>          <span class="dt">"decode"</span><span class="fu">:</span> <span class="st">"decode text"</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>        <span class="fu">}</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>      <span class="ot">]</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  <span class="ot">]</span></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="st">"unique_codelist_id"</span><span class="fu">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="dt">"label"</span><span class="fu">:</span> <span class="st">"codelist label"</span><span class="fu">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"description"</span><span class="fu">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="dt">"datatype"</span><span class="fu">:</span> <span class="st">"text"</span> <span class="er">|</span> <span class="st">"integer"</span> <span class="er">|</span> <span class="st">"float"</span><span class="fu">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="dt">"values"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>      <span class="dt">"code"</span><span class="fu">:</span> <span class="st">"coded value"</span><span class="fu">,</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>      <span class="dt">"decode"</span><span class="fu">:</span> <span class="st">"decode text"</span><span class="fu">,</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>      <span class="dt">"rank"</span><span class="fu">:</span> <span class="st">"rank value"</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>  <span class="dt">"subset"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>      <span class="dt">"code"</span><span class="fu">:</span> <span class="st">"coded value"</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>  <span class="dt">"restore"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>      <span class="dt">"code"</span><span class="fu">:</span> <span class="st">"coded value"</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>  <span class="dt">"extend"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>      <span class="dt">"code"</span><span class="fu">:</span> <span class="st">"coded value"</span><span class="fu">,</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>      <span class="dt">"decode"</span><span class="fu">:</span> <span class="st">"decode text"</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>  <span class="ot">]</span>  </span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <p>The <code>code</code> field replaces the separate
 <code>codedvaluechar</code> / <code>codedvaluenum</code> columns from
 the Excel <code>source_codelists</code> sheet. Since
@@ -208,25 +278,23 @@ uniformly to all values, a single <code>code</code> field is
 sufficient.</p>
 <p>The <code>decode</code> field maps directly to the
 <code>&lt;Decode&gt;&lt;TranslatedText&gt;</code> element in
-<code>define.xml</code>.</p>
+<code>define.xml</code> and is optional.</p>
+<p>The <code>rank</code> corresponds to the <code>Rank</code> from the
+CST and is also optional.</p>
 <p>Codelists are referenced from column metadata using the existing
 <code>codelist</code> string field — no change to <code>adam.json</code>
 is required:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># codelists.yaml</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AGEU</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="at">  </span><span class="fu">operations</span><span class="kw">:</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">operation</span><span class="kw">:</span><span class="at"> KEEP</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="at">      </span><span class="fu">values</span><span class="kw">:</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> YEARS</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="at">          </span><span class="fu">decode</span><span class="kw">:</span><span class="at"> Years</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> DAYS</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="at">          </span><span class="fu">decode</span><span class="kw">:</span><span class="at"> Days</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co"># in domain yaml</span></span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AGEU</span></span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Age Units</span></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="at">    </span><span class="fu">codelist</span><span class="kw">:</span><span class="at"> AGEU</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># codelists.yaml</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AGEU</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="at">  </span><span class="fu">subset</span><span class="kw">:</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> YEARS</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> DAYS</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co"># in domain yaml</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AGEU</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Age Units</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="at">    </span><span class="fu">codelist</span><span class="kw">:</span><span class="at"> AGEU</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="gcmd-input">GCMD input<a class="anchor" aria-label="anchor" href="#gcmd-input"></a>
 </h3>
@@ -237,56 +305,158 @@ will manage connections to external data sources including GCMD.
 <code>mighty.toolbox</code> will then retrieve GCMD data directly from
 <code>connector.yaml</code>. No GCMD configuration needs to be declared
 in <code>mighty.metadata</code>.</p>
+<blockquote>
+<p><strong>Note:</strong> Currently the codelist retrieval is handled by
+<code>mighty.toolbox</code>. However, open source users might need to
+retrievie codelists in a different way. This can be supported by
+allowing users to define their own codelist provider implementation. At
+the same time this raises the question how should this resposibility be
+divided between <code>mighty.metadata</code> and
+<code>mighty.toolbox</code> e.g. should <code>mighty.metadata</code> be
+the place where the codelist provider is defined and used to prepare all
+codelists to be ingested by <code>mighty.toolbox</code>? This should be
+decided in a separate ADR</p>
+</blockquote>
 </div>
 <div class="section level3">
-<h3 id="operation-values">Operation values<a class="anchor" aria-label="anchor" href="#operation-values"></a>
+<h3 id="addkeeptake-operations">ADD/KEEP/TAKE operations<a class="anchor" aria-label="anchor" href="#addkeeptake-operations"></a>
 </h3>
-<p>The <code>operation</code> field controls how
-<code>mighty.toolbox</code> uses the value entry relative to the GCMD
-source:</p>
+<p>Different sections of the codelist definition correspond to the
+ADD/KEEP/TAKE mechanisms from the CST file.</p>
 <ul>
 <li>
-<code>KEEP</code> — subset values from GCMD</li>
+<code>values</code> is the ADD equivalent - it’s used to define non
+standard codelists</li>
 <li>
-<code>ADD</code> — define a sponsor-defined codelist not present in
-GCMD entirely through <code>ADD</code> entries</li>
+<code>subset</code> is the KEEP equivalent - it’s used to subset
+values from GCMD</li>
 <li>
-<code>TAKE</code> — add SDTM controlled terminology codelist value
+<code>restore</code> add SDTM controlled terminology codelist value
 into ADaM CT even when that codelist value is not used in SDTM
 define.xml</li>
+<li>
+<code>extend</code> add a code list value to an extensible codelist
+(not support by the CST, as this use case is handled by GCMD
+itself)</li>
 </ul>
+<blockquote>
+<p><em>Note:</em> The idea of being able to define all codelists
+manually was considered. However, supporting all parameters would
+require users to manually provide NCI codes and keep track of which
+values come from the CDISC CT and which ones are extended values leading
+to poor UX. Instead, the metadata describes the desired state of
+codelists (how the users wants to change/extend or which one the user
+wants to create), while the actual retrieval is handled by codelist
+providers.</p>
+</blockquote>
+<div class="section level4">
+<h4 id="use-case-1-defining-a-non-standard-codelist">Use Case 1: Defining a non-standard codelist<a class="anchor" aria-label="anchor" href="#use-case-1-defining-a-non-standard-codelist"></a>
+</h4>
+<p>Let’s consider a non-standard region codelist</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>&lt;<span class="kw">CodeList</span> <span class="ot">OID=</span><span class="st">"CL.REGION"</span> <span class="ot">Name=</span><span class="st">"Codelist for region"</span> <span class="ot">DataType=</span><span class="st">"text"</span> <span class="ot">SASFormatName=</span><span class="st">"$REGION"</span> <span class="ot">def:IsNonStandard=</span><span class="st">"Yes"</span>&gt;</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  &lt;<span class="kw">Description</span>&gt;</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>    &lt;<span class="kw">TranslatedText</span> <span class="ot">xml:lang=</span><span class="st">"en"</span>&gt;Region codelist&lt;/<span class="kw">TranslatedText</span>&gt;</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  &lt;/<span class="kw">Description</span>&gt;</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  &lt;<span class="kw">CodeListItem</span> <span class="ot">CodedValue=</span><span class="st">"EUROPE"</span> <span class="ot">OrderNumber=</span><span class="st">"1"</span> <span class="ot">Rank=</span><span class="st">"10"</span>&gt;</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>    &lt;<span class="kw">Decode</span>&gt;</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>      &lt;<span class="kw">TranslatedText</span> <span class="ot">xml:lang=</span><span class="st">"en"</span>&gt;Europe&lt;/<span class="kw">TranslatedText</span>&gt;</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>    &lt;/<span class="kw">Decode</span>&gt;</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  &lt;/<span class="kw">CodeListItem</span>&gt;</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>&lt;/<span class="kw">CodeList</span>&gt;</span></code></pre></div>
+<p>This would be defined in <code>mighty.metadata</code> as:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> Region</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="at">  </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Codelist for region</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="at">  </span><span class="fu">description</span><span class="kw">:</span><span class="at"> Region codelist</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="at">  </span><span class="fu">values</span><span class="kw">:</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> EUROPE</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="at">      </span><span class="fu">decode</span><span class="kw">:</span><span class="at"> Europe</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="at">      </span><span class="fu">rank</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="use-case-2-subsetting-a-codelist">Use Case 2: Subsetting a codelist<a class="anchor" aria-label="anchor" href="#use-case-2-subsetting-a-codelist"></a>
+</h4>
+<p>Let’s consider the AGEU codelist which has DAYS, HOURS, MONTHS,
+WEEKS, YEARS values.</p>
+<p>To narrow it down to just YEARS, the <code>mighty.metadata</code>
+definition is:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AGEU</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="at">  </span><span class="fu">subset</span><span class="kw">:</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> YEARS</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="use-case-3-bringing-back-a-value-that-was-filtered-out-by-the-sdtm-define">Use Case 3: Bringing back a value that was filtered out by the SDTM
+Define<a class="anchor" aria-label="anchor" href="#use-case-3-bringing-back-a-value-that-was-filtered-out-by-the-sdtm-define"></a>
+</h4>
+<p>Let’s assume that we use the AGEU codelist and the SDTM define
+narrowed it to down to just WEEKS, YEARS, but we also need to have
+MONTHS.</p>
+<p>To bring back MONTHS, the <code>mighty.metadata</code> definition
+is:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AGEU</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="at">  </span><span class="fu">restore</span><span class="kw">:</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MONTHS</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="use-case-4-adding-a-value-to-an-extensible-codelist">Use Case 4: Adding a value to an extensible codelist<a class="anchor" aria-label="anchor" href="#use-case-4-adding-a-value-to-an-extensible-codelist"></a>
+</h4>
+<p>Let’s assume we are using the LOC codelist and we want to add a new
+value. The <code>mighty.metadata</code> definition would be:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> LOC</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="at">  </span><span class="fu">extend</span><span class="kw">:</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MY CUSTOM LOCATION</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="at">      </span><span class="fu">decode</span><span class="kw">:</span><span class="at"> My Custom Location</span></span></code></pre></div>
+<p>The intent is for this to correspond to</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode xml"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>  &lt;<span class="kw">CodeListItem</span> <span class="ot">CodedValue=</span><span class="st">"MY CUSTOM LOCATION"</span> <span class="ot">def:ExtendedValue=</span><span class="st">"Yes"</span>&gt;</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>    &lt;<span class="kw">Decode</span>&gt;</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>      &lt;<span class="kw">TranslatedText</span> <span class="ot">xml:lang=</span><span class="st">"en"</span>&gt;My Custom Location&lt;/<span class="kw">TranslatedText</span>&gt;</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>    &lt;/<span class="kw">Decode</span>&gt;</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  &lt;/<span class="kw">CodeListItem</span>&gt;</span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="use-case-5-refering-to-an-external-dictionary">Use Case 5: Refering to an external dictionary<a class="anchor" aria-label="anchor" href="#use-case-5-refering-to-an-external-dictionary"></a>
+</h4>
+<p>This case is handled by the <code>terminology</code> definitions in
+the <code>_study.yml</code> and refencing the dictionary in the column
+definition:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">study_id</span><span class="kw">:</span><span class="at"> example_study</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">terminology</span><span class="kw">:</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> MedDRA</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="at">    </span><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="fl">22.1</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AEDECOD</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Dictionary-Derviced Term</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="at">    </span><span class="fu">codelist</span><span class="kw">:</span><span class="at"> MEDDRA</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="combining-keep-and-take-on-the-same-codelist">Combining KEEP and TAKE on the same codelist<a class="anchor" aria-label="anchor" href="#combining-keep-and-take-on-the-same-codelist"></a>
 </h3>
-<p>A codelist entry may declare both <code>KEEP</code> and
-<code>TAKE</code> operation groups. This arises when a study needs to
+<p>A codelist entry may declare both <code>subset</code> and
+<code>restore</code> operation groups. This arises when a study needs to
 narrow a GCMD codelist to a specific subset of values
 (<code>KEEP</code>) <em>and</em> include one or more SDTM controlled
 terminology values that are absent from the SDTM define.xml and would
 otherwise be excluded from the ADaM define.xml.</p>
 <p>Example: a codelist is restricted to two values via
-<code>KEEP</code>, but one additional SDTM CT value needs to appear in
+<code>subset</code>, but one additional SDTM CT value needs to appear in
 the ADaM define.xml:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AGEU</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="at">  </span><span class="fu">operations</span><span class="kw">:</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">operation</span><span class="kw">:</span><span class="at"> KEEP</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="at">      </span><span class="fu">values</span><span class="kw">:</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> YEARS</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> DAYS</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">operation</span><span class="kw">:</span><span class="at"> TAKE</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="at">      </span><span class="fu">values</span><span class="kw">:</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MONTHS</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AGEU</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="at">  </span><span class="fu">subset</span><span class="kw">:</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> YEARS</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> DAYS</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="at">  </span><span class="fu">restore</span><span class="kw">:</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MONTHS</span></span></code></pre></div>
 <p>The following restrictions apply:</p>
 <ul>
 <li>
-<code>ADD</code> and <code>KEEP</code>/<code>TAKE</code> are
+<code>values</code> and <code>subset</code>/<code>restore</code> are
 mutually exclusive on the same codelist (enforced by
-<code>validate_mighty_codelists</code>): <code>KEEP</code> and
-<code>TAKE</code> operate on codelists present in GCMD, while
-<code>ADD</code> is only valid for codelists absent from GCMD —
-attempting <code>ADD</code> on a GCMD codelist is ignored with a warning
-by <code>mighty.toolbox</code> (already implemented).</li>
+<code>validate_mighty_codelists</code>): <code>subset</code> and
+<code>restore</code> operate on codelists present in GCMD, while
+<code>values</code> is only valid for codelists absent from GCMD —
+attempting <code>values</code> on a GCMD codelist is ignored with a
+warning by <code>mighty.toolbox</code> (already implemented).</li>
 <li>
 <code>code</code> must be unique across all operation groups within
 a codelist (enforced by <code>validate_mighty_codelists</code>).</li>
@@ -300,39 +470,31 @@ these automatically):</p>
 <ul>
 <li>Codelist level:
 <ul>
-<li>Required: <code>id</code>, <code>operations</code>
+<li>Required: <code>id</code>
 </li>
-<li>Required for <code>ADD</code> codelists: <code>label</code>,
-<code>description</code>, <code>datatype</code> — no GCMD source exists,
-so must be declared explicitly</li>
-<li>Optional for <code>KEEP</code>/<code>TAKE</code> codelists:
-<code>label</code>, <code>description</code>, <code>datatype</code> —
-retrieved from GCMD by <code>mighty.toolbox</code>
-</li>
+<li>Required: One of the <code>values</code>, <code>subset</code>,
+<code>restore</code>, <code>extend</code> to be not empty</li>
+<li>Required: <code>label</code>, <code>description</code>,
+<code>datatype</code> if <code>values</code> is not empty</li>
 <li>Valid <code>datatype</code> enum: <code>text</code>,
 <code>integer</code>, <code>float</code>
 </li>
 </ul>
 </li>
-<li>Operation level:
-<ul>
-<li>Required: <code>operation</code>, <code>values</code>
-</li>
-<li>Valid <code>operation</code> enum: <code>KEEP</code>,
-<code>ADD</code>, <code>TAKE</code>
-</li>
-</ul>
-</li>
-<li>Value level:
+<li>
+<code>values</code>, <code>extend</code> level:
 <ul>
 <li>Required: <code>code</code>
 </li>
-<li>Required for <code>ADD</code> values: <code>decode</code> — no GCMD
-source exists, so must be declared explicitly</li>
-<li>Optional for <code>KEEP</code>/<code>TAKE</code> values:
-<code>decode</code> — retrieved from GCMD by
-<code>mighty.toolbox</code>; if populated, ignored with a warning
-(already implemented in <code>mighty.toolbox</code>)</li>
+<li>Optional: <code>decode</code>
+</li>
+</ul>
+</li>
+<li>
+<code>subset</code>, <code>restore</code> level:
+<ul>
+<li>Required: <code>code</code>
+</li>
 </ul>
 </li>
 </ul>
@@ -347,6 +509,8 @@ file</li>
 operations</li>
 <li>Every codelist defined in <code>codelists.yaml</code> must be
 referenced by at least one column in the domain metadata</li>
+<li>Every codelist value should have the same fields e.g. all of them or
+none of them have <code>decode</code> values</li>
 </ul>
 </div>
 <div class="section level3">
@@ -394,9 +558,8 @@ study folder, validated against
 <li>Codelist level:
 <ul>
 <li>
-<code>add_codelist(id, label, description, datatype, operations)</code>
-— adds a new codelist; requires at least one operation group with at
-least one codelist value</li>
+<code>define_codelist(id, label, description, datatype, code, decode, rank)</code>
+— adds a new codelist; requires at least one value to be defined</li>
 <li>
 <code>remove_codelist(id)</code> — removes the codelist and all its
 contents</li>
@@ -409,46 +572,36 @@ fields (<code>label</code>, <code>description</code>,
 as a list</li>
 </ul>
 </li>
-<li>Operation level:
-<ul>
-<li>
-<code>add_codelist_operation(codelist_id, operation, values)</code>
-— adds a new operation group to an existing codelist; requires at least
-one codelist value</li>
-<li>
-<code>remove_codelist_operation(codelist_id, operation)</code> —
-removes the operation group and all its values</li>
-<li>
-<code>rename_codelist_operation(codelist_id, operation, rename_to)</code>
-— changes the operation type of an existing group, moving all its values
-to the renamed type</li>
-<li>
-<code>update_codelist_operation(codelist_id, operation, values)</code>
-— replaces all values in an existing operation group</li>
-</ul>
-</li>
 <li>Value level:
 <ul>
 <li>
-<code>add_codelist_value(codelist_id, operation, code, ...)</code> —
-adds a value to an operation group; creates the group implicitly if it
-does not exist yet</li>
+<code>define_codelist_values(codelist_id, code, decode)</code> -
+throws an error if the edited codelist doesn’t exist (because in such
+cases the label, description and datatype need to be defined)</li>
+<li>
+<code>extend_codelist_values(codelist_id, code, decode)</code> -
+creates a codelist if it doesn’t exist</li>
+<li>
+<code>restore_codelist_values(codelist_id, code)</code> - creates a
+codelist if it doesn’t exist</li>
+<li>
+<code>subset_codelist_values(codelist_id, code)</code> - creates a
+codelist if it doesn’t exist</li>
 <li>
 <code>remove_codelist_value(codelist_id, code)</code> — removes a
 value; removes the operation group implicitly if it was the last
 codelist value</li>
 <li>
-<code>update_codelist_value(codelist_id, code, ...)</code> — updates
-value-level fields (<code>decode</code>); accepts an optional
-<code>operation</code> argument to move the value to a different group,
-creating the target group if needed and removing the source group if it
-becomes empty</li>
-<li>
 <code>move_codelist_value(codelist_id, code, .pos)</code> — moves a
 value to a new position within its operation group; position affects the
-order of values in <code>ADD</code> entries in
+order of values in <code>values</code> entries in
 <code>define.xml</code>
 </li>
+<li>
+<code>update_codelist_value(codelist_id, code, decode, rank)</code>
+- updates the decode/rank values, <code>decode</code> is only supported
+for extended and defined values and <code>rank</code> only for defined
+values</li>
 </ul>
 </li>
 </ul>
@@ -459,23 +612,16 @@ modification</li>
 <code>mighty_study</code> auto-detects <code>codelists.yaml</code>
 on construction and populates the <code>codelists</code> property</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Add a new codelist with initial values</span></span>
 <span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">add_codelist</span><span class="op">(</span></span>
+<span>  <span class="fu">define_codelist</span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"REGION"</span>,</span>
 <span>    label <span class="op">=</span> <span class="st">"Region"</span>,</span>
 <span>    description <span class="op">=</span> <span class="st">"Geographical regions used in the study"</span>,</span>
 <span>    datatype <span class="op">=</span> <span class="st">"text"</span>,</span>
-<span>    operations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        operation <span class="op">=</span> <span class="st">"ADD"</span>,</span>
-<span>        values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"EUROPE"</span>, decode <span class="op">=</span> <span class="st">"Europe"</span><span class="op">)</span>,</span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"NORTH AMERICA"</span>, decode <span class="op">=</span> <span class="st">"North America"</span><span class="op">)</span></span>
-<span>        <span class="op">)</span></span>
-<span>      <span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
+<span>    code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"EUROPE"</span>, <span class="st">"NORTH AMERICA"</span><span class="op">)</span>,</span>
+<span>    decode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Europe"</span>, <span class="st">"North America"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Remove an entire codelist</span></span>
@@ -490,49 +636,14 @@ on construction and populates the <code>codelists</code> property</li>
 <span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">select_codelist</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"REGION"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Add a new operation group with initial values to an existing codelist</span></span>
+<span><span class="co"># Retain a specific set of values from a GCMD codelist</span></span>
 <span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">add_codelist_operation</span><span class="op">(</span></span>
+<span>  <span class="fu">subset_codelist_values</span><span class="op">(</span></span>
 <span>    codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>,</span>
-<span>    operation <span class="op">=</span> <span class="st">"TAKE"</span>,</span>
-<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"MONTHS"</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
+<span>    code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MONTHS"</span>, <span class="st">"YEARS"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Remove an operation group and all its values</span></span>
-<span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">remove_codelist_operation</span><span class="op">(</span>codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>, operation <span class="op">=</span> <span class="st">"TAKE"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Rename an operation group type</span></span>
-<span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">rename_codelist_operation</span><span class="op">(</span></span>
-<span>    codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>,</span>
-<span>    operation <span class="op">=</span> <span class="st">"KEEP"</span>,</span>
-<span>    rename_to <span class="op">=</span> <span class="st">"TAKE"</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Replace all values in an operation group</span></span>
-<span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">update_codelist_operation</span><span class="op">(</span></span>
-<span>    codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>,</span>
-<span>    operation <span class="op">=</span> <span class="st">"KEEP"</span>,</span>
-<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"YEARS"</span>, decode <span class="op">=</span> <span class="st">"Years"</span><span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>code <span class="op">=</span> <span class="st">"WEEKS"</span>, decode <span class="op">=</span> <span class="st">"Weeks"</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Retain a specific value from a GCMD codelist</span></span>
-<span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">add_codelist_value</span><span class="op">(</span></span>
-<span>    codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>,</span>
-<span>    operation <span class="op">=</span> <span class="st">"KEEP"</span>,</span>
-<span>    code <span class="op">=</span> <span class="st">"MONTHS"</span>,</span>
-<span>    decode <span class="op">=</span> <span class="st">"Months"</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Remove a value from a codelist</span></span>
+<span><span class="co"># Remove a value from a codelist - it automatically detects from which group it should be removed</span></span>
 <span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">remove_codelist_value</span><span class="op">(</span>codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="st">"MONTHS"</span><span class="op">)</span></span>
 <span></span>
@@ -542,14 +653,6 @@ on construction and populates the <code>codelists</code> property</li>
 <span>    codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>,</span>
 <span>    code <span class="op">=</span> <span class="st">"MONTHS"</span>,</span>
 <span>    decode <span class="op">=</span> <span class="st">"Month"</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Move a value to a different operation group</span></span>
-<span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">update_codelist_value</span><span class="op">(</span></span>
-<span>    codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>,</span>
-<span>    code <span class="op">=</span> <span class="st">"MONTHS"</span>,</span>
-<span>    operation <span class="op">=</span> <span class="st">"TAKE"</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Move a value to a new position within its operation group</span></span>
