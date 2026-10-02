@@ -124,8 +124,7 @@ codelist is defined as follows:
   "values": [
     {
       "code": "coded value",
-      "decode": "decode text",
-      "rank": "rank value"
+      "decode": "decode text"
     }
   ],
   "subset": [
@@ -154,8 +153,6 @@ all values, a single `code` field is sufficient.
 
 The `decode` field maps directly to the `<Decode><TranslatedText>`
 element in `define.xml` and is optional.
-
-The `rank` corresponds to the `Rank` from the CST and is also optional.
 
 Codelists are referenced from column metadata using the existing
 `codelist` string field — no change to `adam.json` is required:
@@ -223,7 +220,7 @@ Let’s consider a non-standard region codelist
   <Description>
     <TranslatedText xml:lang="en">Region codelist</TranslatedText>
   </Description>
-  <CodeListItem CodedValue="EUROPE" OrderNumber="1" Rank="10">
+  <CodeListItem CodedValue="EUROPE" OrderNumber="1">
     <Decode>
       <TranslatedText xml:lang="en">Europe</TranslatedText>
     </Decode>
@@ -240,7 +237,6 @@ This would be defined in `mighty.metadata` as:
   values:
     - code: EUROPE
       decode: Europe
-      rank: 10
 ```
 
 #### Use Case 2: Subsetting a codelist
@@ -397,7 +393,7 @@ is found in the study folder.
   class
 - CRUD methods follow the pattern of `y_columns.R`:
   - Codelist level:
-    - `define_codelist(id, label, description, datatype, code, decode, rank)`
+    - `define_codelist(id, label, description, datatype, code, decode)`
       — adds a new codelist; requires at least one value to be defined
     - `remove_codelist(id)` — removes the codelist and all its contents
     - `update_codelist(id, ...)` — updates codelist-level fields
@@ -419,9 +415,8 @@ is found in the study folder.
     - `move_codelist_value(codelist_id, code, .pos)` — moves a value to
       a new position within its operation group; position affects the
       order of values in `values` entries in `define.xml`
-    - `update_codelist_value(codelist_id, code, decode, rank)` - updates
-      the decode/rank values, `decode` is only supported for extended
-      and defined values and `rank` only for defined values
+    - `update_codelist_value(codelist_id, code, decode)` - updates the
+      decode values - only supported for extended and defined values
 - All mutating methods call
   [`S7::validate()`](https://rconsortium.github.io/S7/reference/validate.html)
   after modification
