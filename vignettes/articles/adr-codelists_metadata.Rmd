@@ -17,7 +17,7 @@ author:
 
 * `mighty.metadata` declares a json schema for codelists metadata
 * The schema is compliant with `mighty.toolbox` needs for codelist metadata
-* `mighty.toolbox` is able to apply value-level codelist overrides (KEEP, ADD, TAKE) defined in `codelists.yaml` when generating `define.xml`
+* `mighty.toolbox` is able to apply value-level codelist overrides (KEEP, ADD, TAKE) defined in `_codelists.yml` when generating `define.xml`
 
 > **Note:** The way codelists are retrieved is not in scope of this ADR. It touches on the topic, but it focuses on user facing syntax and how to define codelists and their values. The codelist retrieval should be covered by a separate ADR.
 
@@ -88,7 +88,7 @@ Currently `mighty.metadata` supports only a free-text `codelist` string on colum
 
 ## Decisions
 
-Codelist overrides belong in their own `codelists.yaml` file as a list of codelist entries with their value-level instructions. Codelists can then be referenced by `id` from column metadata.
+Codelist overrides belong in their own `_codelists.yml` file as a list of codelist entries with their value-level instructions. Codelists can then be referenced by `id` from column metadata.
 
 The schema for codelists metadata is defined in `inst/schema/codelists.json` and represents a list where a single codelist is defined as follows:
 
@@ -133,7 +133,7 @@ The `rank` corresponds to the `Rank` from the CST and is also optional.
 Codelists are referenced from column metadata using the existing `codelist` string field — no change to `adam.json` is required:
 
 ```yaml
-# codelists.yaml
+# _codelists.yml
 - id: AGEU
   subset:
     - code: YEARS
@@ -149,7 +149,7 @@ columns:
 
 ### GCMD input
 
-GCMD input configuration is not part of `study.yaml` or `codelists.yaml`. It will be controlled by the `connector` package via `connector.yaml`, which will manage connections to external data sources including GCMD. `mighty.toolbox` will then retrieve GCMD data directly from `connector.yaml`. No GCMD configuration needs to be declared in `mighty.metadata`.
+GCMD input configuration is not part of `study.yaml` or `_codelists.yml`. It will be controlled by the `connector` package via `connector.yaml`, which will manage connections to external data sources including GCMD. `mighty.toolbox` will then retrieve GCMD data directly from `connector.yaml`. No GCMD configuration needs to be declared in `mighty.metadata`.
 
 > **Note:** Currently the codelist retrieval is handled by `mighty.toolbox`. However, open source users might need to retrievie codelists in a different way. This can be supported by allowing users to define their own codelist provider implementation. At the same time this raises the question how should this resposibility be divided between `mighty.metadata` and `mighty.toolbox` e.g. should `mighty.metadata` be the place where the codelist provider is defined and used to prepare all codelists to be ingested by `mighty.toolbox`? This should be decided in a separate ADR
 
@@ -292,14 +292,14 @@ The following restrictions apply:
 
 * `id` values must be unique across all codelists in the file
 * `code` must be unique within each codelist across all operations
-* Every codelist defined in `codelists.yaml` must be referenced by at least one column in the domain metadata
+* Every codelist defined in `_codelists.yml` must be referenced by at least one column in the domain metadata
 * Every codelist value should have the same fields e.g. all of them or none of them have `decode` values
 
 ### Classes
 
 An S7 class `mighty_codelists` will be defined for the list of codelists. The class follows the same pattern as `mighty_domain`: a `construct_mighty_codelists()` function, a `validate_mighty_codelists()` function, and class registration via `S7::new_class()`.
 
-`mighty_study` will gain a nullable `codelists` property of class `mighty_codelists | NULL`, auto-populated when a `codelists.yaml` file is found in the study folder.
+`mighty_study` will gain a nullable `codelists` property of class `mighty_codelists | NULL`, auto-populated when a `_codelists.yml` file is found in the study folder.
 
 ## Consequences
 
@@ -311,7 +311,7 @@ An S7 class `mighty_codelists` will be defined for the list of codelists. The cl
 
 ## Implementation Details
 
-* Codelists are defined in a `codelists.yaml` file in the study folder, validated against `inst/schema/codelists.json`
+* Codelists are defined in a `_codelists.yml` file in the study folder, validated against `inst/schema/codelists.json`
 * A new `R/mighty_codelists.R` file defines the `mighty_codelists` S7 class
 * CRUD methods follow the pattern of `y_columns.R`:
   * Codelist level:
@@ -328,7 +328,7 @@ An S7 class `mighty_codelists` will be defined for the list of codelists. The cl
     * `move_codelist_value(codelist_id, code, .pos)` — moves a value to a new position within its operation group; position affects the order of values in `values` entries in `define.xml`
     * `update_codelist_value(codelist_id, code, decode, rank)` - updates the decode/rank values, `decode` is only supported for extended and defined values and `rank` only for defined values
 * All mutating methods call `S7::validate()` after modification
-* `mighty_study` auto-detects `codelists.yaml` on construction and populates the `codelists` property
+* `mighty_study` auto-detects `_codelists.yml` on construction and populates the `codelists` property
 
 ```r
 # Add a new codelist with initial values
@@ -385,7 +385,7 @@ codelists |>
 
 ## Risks
 
-* The nullable `codelists` property on `mighty_study` is non-breaking for `mighty.metadata`, but `mighty.toolbox` code reading `@codelists` must handle `NULL` gracefully when no `codelists.yaml` is present
+* The nullable `codelists` property on `mighty_study` is non-breaking for `mighty.metadata`, but `mighty.toolbox` code reading `@codelists` must handle `NULL` gracefully when no `_codelists.yml` is present
 
 ## Compliance Considerations
 
