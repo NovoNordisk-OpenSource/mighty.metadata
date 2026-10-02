@@ -99,8 +99,7 @@ The schema for codelists metadata is defined in `inst/schema/codelists.json` and
   "values": [
     {
       "code": "coded value",
-      "decode": "decode text",
-      "rank": "rank value"
+      "decode": "decode text"
     }
   ],
   "subset": [
@@ -125,8 +124,6 @@ The schema for codelists metadata is defined in `inst/schema/codelists.json` and
 The `code` field replaces the separate `codedvaluechar` / `codedvaluenum` columns from the Excel `source_codelists` sheet. Since `datatype` is declared at the codelist level and applies uniformly to all values, a single `code` field is sufficient.
 
 The `decode` field maps directly to the `<Decode><TranslatedText>` element in `define.xml` and is optional.
-
-The `rank` corresponds to the `Rank` from the CST and is also optional.
 
 Codelists are referenced from column metadata using the existing `codelist` string field — no change to `adam.json` is required:
 
@@ -170,7 +167,7 @@ Let's consider a non-standard region codelist
   <Description>
     <TranslatedText xml:lang="en">Region codelist</TranslatedText>
   </Description>
-  <CodeListItem CodedValue="EUROPE" OrderNumber="1" Rank="10">
+  <CodeListItem CodedValue="EUROPE" OrderNumber="1">
     <Decode>
       <TranslatedText xml:lang="en">Europe</TranslatedText>
     </Decode>
@@ -186,7 +183,6 @@ This would be defined in `mighty.metadata` as:
   values:
     - code: EUROPE
       decode: Europe
-      rank: 10
 ```
 
 
@@ -313,7 +309,7 @@ An S7 class `mighty_codelists` will be defined for the list of codelists. The cl
 * A new `R/mighty_codelists.R` file defines the `mighty_codelists` S7 class
 * CRUD methods follow the pattern of `y_columns.R`:
   * Codelist level:
-    * `define_codelist(id, label, description, datatype, code, decode, rank)` — adds a new codelist; requires at least one value to be defined
+    * `define_codelist(id, label, description, datatype, code, decode)` — adds a new codelist; requires at least one value to be defined
     * `remove_codelist(id)` — removes the codelist and all its contents
     * `update_codelist(id, ...)` — updates codelist-level fields (`label`, `description`, `datatype`)
     * `select_codelist(id)` — returns a single codelist entry as a list
@@ -324,7 +320,7 @@ An S7 class `mighty_codelists` will be defined for the list of codelists. The cl
     * `subset_codelist_values(codelist_id, code)` - creates a codelist if it doesn't exist
     * `remove_codelist_value(codelist_id, code)` — removes a value; removes the operation group implicitly if it was the last codelist value
     * `move_codelist_value(codelist_id, code, .pos)` — moves a value to a new position within its operation group; position affects the order of values in `values` entries in `define.xml`
-    * `update_codelist_value(codelist_id, code, decode, rank)` - updates the decode/rank values, `decode` is only supported for extended and defined values and `rank` only for defined values
+    * `update_codelist_value(codelist_id, code, decode)` - updates the decode values -  only supported for extended and defined values
 * All mutating methods call `S7::validate()` after modification
 * `mighty_study` auto-detects `_codelists.yml` on construction and populates the `codelists` property
 
