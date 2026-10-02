@@ -181,10 +181,10 @@ which will manage connections to external data sources including GCMD.
 `mighty.metadata`.
 
 > **Note:** Currently the codelist retrieval is handled by
-> `mighty.toolbox`. However, open source users might need to retrievie
+> `mighty.toolbox`. However, open source users might need to retrieve
 > codelists in a different way. This can be supported by allowing users
 > to define their own codelist provider implementation. At the same time
-> this raises the question how should this resposibility be divided
+> this raises the question how should this responsibility be divided
 > between `mighty.metadata` and `mighty.toolbox` e.g. should
 > `mighty.metadata` be the place where the codelist provider is defined
 > and used to prepare all codelists to be ingested by `mighty.toolbox`?
@@ -287,10 +287,10 @@ The intent is for this to correspond to
   </CodeListItem>
 ```
 
-#### Use Case 5: Refering to an external dictionary
+#### Use Case 5: Referring to an external dictionary
 
 This case is handled by the `terminology` definitions in the
-`_study.yml` and refencing the dictionary in the column definition:
+`_study.yml` and referencing the dictionary in the column definition:
 
 ``` yaml
 study_id: example_study
@@ -303,7 +303,7 @@ terminology:
 ``` yaml
 columns:
   - id: AEDECOD
-    label: Dictionary-Derviced Term
+    label: Dictionary-Derived Term
     codelist: MEDDRA
 ```
 

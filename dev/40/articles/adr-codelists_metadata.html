@@ -299,14 +299,14 @@ in <code>mighty.metadata</code>.</p>
 <blockquote>
 <p><strong>Note:</strong> Currently the codelist retrieval is handled by
 <code>mighty.toolbox</code>. However, open source users might need to
-retrievie codelists in a different way. This can be supported by
-allowing users to define their own codelist provider implementation. At
-the same time this raises the question how should this resposibility be
-divided between <code>mighty.metadata</code> and
-<code>mighty.toolbox</code> e.g. should <code>mighty.metadata</code> be
-the place where the codelist provider is defined and used to prepare all
-codelists to be ingested by <code>mighty.toolbox</code>? This should be
-decided in a separate ADR</p>
+retrieve codelists in a different way. This can be supported by allowing
+users to define their own codelist provider implementation. At the same
+time this raises the question how should this responsibility be divided
+between <code>mighty.metadata</code> and <code>mighty.toolbox</code>
+e.g. should <code>mighty.metadata</code> be the place where the codelist
+provider is defined and used to prepare all codelists to be ingested by
+<code>mighty.toolbox</code>? This should be decided in a separate
+ADR</p>
 </blockquote>
 </div>
 <div class="section level3">
@@ -403,10 +403,10 @@ value. The <code>mighty.metadata</code> definition would be:</p>
 <span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  &lt;/<span class="kw">CodeListItem</span>&gt;</span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="use-case-5-refering-to-an-external-dictionary">Use Case 5: Refering to an external dictionary<a class="anchor" aria-label="anchor" href="#use-case-5-refering-to-an-external-dictionary"></a>
+<h4 id="use-case-5-referring-to-an-external-dictionary">Use Case 5: Referring to an external dictionary<a class="anchor" aria-label="anchor" href="#use-case-5-referring-to-an-external-dictionary"></a>
 </h4>
 <p>This case is handled by the <code>terminology</code> definitions in
-the <code>_study.yml</code> and refencing the dictionary in the column
+the <code>_study.yml</code> and referencing the dictionary in the column
 definition:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">study_id</span><span class="kw">:</span><span class="at"> example_study</span></span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
@@ -415,7 +415,7 @@ definition:</p>
 <span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="at">    </span><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="fl">22.1</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
 <span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AEDECOD</span></span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Dictionary-Derviced Term</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Dictionary-Derived Term</span></span>
 <span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="at">    </span><span class="fu">codelist</span><span class="kw">:</span><span class="at"> MEDDRA</span></span></code></pre></div>
 </div>
 </div>
