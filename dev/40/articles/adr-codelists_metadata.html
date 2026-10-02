@@ -123,7 +123,7 @@ metadata</li>
 codelist metadata</li>
 <li>
 <code>mighty.toolbox</code> is able to apply value-level codelist
-overrides (KEEP, ADD, TAKE) defined in <code>codelists.yaml</code> when
+overrides (KEEP, ADD, TAKE) defined in <code>_codelists.yml</code> when
 generating <code>define.xml</code>
 </li>
 </ul>
@@ -234,7 +234,7 @@ override support in <code>mighty.toolbox</code>.</p>
 <div class="section level2">
 <h2 id="decisions">Decisions<a class="anchor" aria-label="anchor" href="#decisions"></a>
 </h2>
-<p>Codelist overrides belong in their own <code>codelists.yaml</code>
+<p>Codelist overrides belong in their own <code>_codelists.yml</code>
 file as a list of codelist entries with their value-level instructions.
 Codelists can then be referenced by <code>id</code> from column
 metadata.</p>
@@ -284,7 +284,7 @@ CST and is also optional.</p>
 <p>Codelists are referenced from column metadata using the existing
 <code>codelist</code> string field — no change to <code>adam.json</code>
 is required:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># codelists.yaml</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># _codelists.yml</span></span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AGEU</span></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="at">  </span><span class="fu">subset</span><span class="kw">:</span></span>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> YEARS</span></span>
@@ -298,12 +298,12 @@ is required:</p>
 <div class="section level3">
 <h3 id="gcmd-input">GCMD input<a class="anchor" aria-label="anchor" href="#gcmd-input"></a>
 </h3>
-<p>GCMD input configuration is not part of <code>study.yaml</code> or
-<code>codelists.yaml</code>. It will be controlled by the
-<code>connector</code> package via <code>connector.yaml</code>, which
+<p>GCMD input configuration is not part of <code>study.yml</code> or
+<code>_codelists.yml</code>. It will be controlled by the
+<code>connector</code> package via <code>connector.yml</code>, which
 will manage connections to external data sources including GCMD.
 <code>mighty.toolbox</code> will then retrieve GCMD data directly from
-<code>connector.yaml</code>. No GCMD configuration needs to be declared
+<code>connector.yml</code>. No GCMD configuration needs to be declared
 in <code>mighty.metadata</code>.</p>
 <blockquote>
 <p><strong>Note:</strong> Currently the codelist retrieval is handled by
@@ -507,7 +507,7 @@ file</li>
 <li>
 <code>code</code> must be unique within each codelist across all
 operations</li>
-<li>Every codelist defined in <code>codelists.yaml</code> must be
+<li>Every codelist defined in <code>_codelists.yml</code> must be
 referenced by at least one column in the domain metadata</li>
 <li>Every codelist value should have the same fields e.g. all of them or
 none of them have <code>decode</code> values</li>
@@ -523,7 +523,7 @@ function, a <code>validate_mighty_codelists()</code> function, and class
 registration via <code><a href="https://rconsortium.github.io/S7/reference/new_class.html" class="external-link">S7::new_class()</a></code>.</p>
 <p><code>mighty_study</code> will gain a nullable <code>codelists</code>
 property of class <code>mighty_codelists | NULL</code>, auto-populated
-when a <code>codelists.yaml</code> file is found in the study
+when a <code>_codelists.yml</code> file is found in the study
 folder.</p>
 </div>
 </div>
@@ -547,7 +547,7 @@ property (nullable, non-breaking)</li>
 <h2 id="implementation-details">Implementation Details<a class="anchor" aria-label="anchor" href="#implementation-details"></a>
 </h2>
 <ul>
-<li>Codelists are defined in a <code>codelists.yaml</code> file in the
+<li>Codelists are defined in a <code>_codelists.yml</code> file in the
 study folder, validated against
 <code>inst/schema/codelists.json</code>
 </li>
@@ -609,7 +609,7 @@ values</li>
 <li>All mutating methods call <code><a href="https://rconsortium.github.io/S7/reference/validate.html" class="external-link">S7::validate()</a></code> after
 modification</li>
 <li>
-<code>mighty_study</code> auto-detects <code>codelists.yaml</code>
+<code>mighty_study</code> auto-detects <code>_codelists.yml</code>
 on construction and populates the <code>codelists</code> property</li>
 </ul>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -679,7 +679,7 @@ overrides are applied correctly when generating
 <code>mighty_study</code> is non-breaking for
 <code>mighty.metadata</code>, but <code>mighty.toolbox</code> code
 reading <code>@codelists</code> must handle <code>NULL</code> gracefully
-when no <code>codelists.yaml</code> is present</li>
+when no <code>_codelists.yml</code> is present</li>
 </ul>
 </div>
 <div class="section level2">
