@@ -21,3 +21,5 @@
   Structure](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-mapping_sheet.md):
 - [ADR: Specifying pooled
   specifications](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-pooling.md):
+- [ADR: codelists metadata
+  structure](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-codelists_metadata.md):
