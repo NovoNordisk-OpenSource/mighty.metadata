@@ -146,7 +146,7 @@ columns:
 
 GCMD input configuration is not part of `study.yml` or `_codelists.yml`. It will be controlled by the `connector` package via `connector.yml`, which will manage connections to external data sources including GCMD. `mighty.toolbox` will then retrieve GCMD data directly from `connector.yml`. No GCMD configuration needs to be declared in `mighty.metadata`.
 
-> **Note:** Currently the codelist retrieval is handled by `mighty.toolbox`. However, open source users might need to retrievie codelists in a different way. This can be supported by allowing users to define their own codelist provider implementation. At the same time this raises the question how should this resposibility be divided between `mighty.metadata` and `mighty.toolbox` e.g. should `mighty.metadata` be the place where the codelist provider is defined and used to prepare all codelists to be ingested by `mighty.toolbox`? This should be decided in a separate ADR
+> **Note:** Currently the codelist retrieval is handled by `mighty.toolbox`. However, open source users might need to retrieve codelists in a different way. This can be supported by allowing users to define their own codelist provider implementation. At the same time this raises the question how should this responsibility be divided between `mighty.metadata` and `mighty.toolbox` e.g. should `mighty.metadata` be the place where the codelist provider is defined and used to prepare all codelists to be ingested by `mighty.toolbox`? This should be decided in a separate ADR
 
 ### ADD/KEEP/TAKE operations
 
@@ -228,9 +228,9 @@ The intent is for this to correspond to
   </CodeListItem>
 ```
 
-#### Use Case 5: Refering to an external dictionary
+#### Use Case 5: Referring to an external dictionary
 
-This case is handled by the `terminology` definitions in the `_study.yml` and refencing the dictionary in the column definition:
+This case is handled by the `terminology` definitions in the `_study.yml` and referencing the dictionary in the column definition:
 
 ```yaml
 study_id: example_study
@@ -243,7 +243,7 @@ terminology:
 ```yaml
 columns:
   - id: AEDECOD
-    label: Dictionary-Derviced Term
+    label: Dictionary-Derived Term
     codelist: MEDDRA
 ```
 
