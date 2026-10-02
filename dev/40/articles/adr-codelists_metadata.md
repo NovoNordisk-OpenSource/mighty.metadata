@@ -16,11 +16,6 @@
   (KEEP, ADD, TAKE) defined in `_codelists.yml` when generating
   `define.xml`
 
-> **Note:** The way codelists are retrieved is not in scope of this ADR.
-> It touches on the topic, but it focuses on user facing syntax and how
-> to define codelists and their values. The codelist retrieval should be
-> covered by a separate ADR.
-
 ## Context
 
 Codelists in the `define.xml` describe the allowed values for a given
