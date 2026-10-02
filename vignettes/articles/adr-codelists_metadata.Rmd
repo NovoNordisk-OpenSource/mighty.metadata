@@ -19,8 +19,6 @@ author:
 * The schema is compliant with `mighty.toolbox` needs for codelist metadata
 * `mighty.toolbox` is able to apply value-level codelist overrides (KEEP, ADD, TAKE) defined in `_codelists.yml` when generating `define.xml`
 
-> **Note:** The way codelists are retrieved is not in scope of this ADR. It touches on the topic, but it focuses on user facing syntax and how to define codelists and their values. The codelist retrieval should be covered by a separate ADR.
-
 ## Context
 
 Codelists in the `define.xml` describe the allowed values for a given column. They are rendered as `<CodeList>` elements containing one or more `<CodeListItem>`/`<EnumeratedItem>` entries or a single `<ExternalCodeList>` entry.
