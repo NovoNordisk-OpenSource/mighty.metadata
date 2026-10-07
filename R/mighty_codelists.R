@@ -68,13 +68,22 @@ CODELIST_GROUPS <- c("values", "subset", "restore", "extend")
 
 #' @noRd
 construct_mighty_codelists <- function(file, .data) {
-  schema <- system.file("schema", "codelists.json", package = "mighty.metadata")
-  if (rlang::is_missing(file) && rlang::is_missing(.data)) {
-    .data <- list()
-  }
-  S7::new_object(
-    .parent = S7schema::S7schema(file = file, schema = schema, .data = .data)
+  rlang::check_exclusive(file, .data, .require = FALSE)
+  codelists_schema <- system.file(
+    "schema",
+    "codelists.json",
+    package = "mighty.metadata"
   )
+  parent <- if (!rlang::is_missing(file)) {
+    S7schema::S7schema(file = file, schema = codelists_schema)
+  } else {
+    # Without input, an empty codelists object is created
+    S7schema::S7schema(
+      .data = if (rlang::is_missing(.data)) list() else .data,
+      schema = codelists_schema
+    )
+  }
+  S7::new_object(.parent = parent)
 }
 
 #' @noRd
@@ -108,8 +117,14 @@ check_codelist_groups <- function(cl) {
       (length(cl[["subset"]]) || length(cl[["restore"]]))
   ) {
     cli::cli_abort(c(
-      "Codelist {.val {cl$id}} cannot combine {.field values} with {.field subset} or {.field restore}.",
-      i = "{.field values} defines a non-standard codelist, while {.field subset} and {.field restore} modify a standard controlled terminology codelist."
+      paste(
+        "Codelist {.val {cl$id}} cannot combine {.field values}",
+        "with {.field subset} or {.field restore}."
+      ),
+      i = paste(
+        "{.field values} defines a non-standard codelist, while {.field subset}",
+        "and {.field restore} modify a standard controlled terminology codelist."
+      )
     ))
   }
   invisible(cl)

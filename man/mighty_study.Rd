@@ -30,11 +30,12 @@ or an empty \code{mighty_documents} if no documents file exists.}
 }
 \description{
 Creates a \code{mighty_study} object by loading all YAML metadata files from a
-directory. Each YAML file (except \verb{_mighty.yml},\verb{_study.yml} and \verb{_documents.yml})
-is parsed as a \link{mighty_domain} object. The optional \verb{_study.yml} file provides
-study-level properties and the optional \verb{_mighty.yml} file provides
-mighty framework configuration, and optional \verb{_documents.yml}
-provides study-level documents metadata.
+directory. Each YAML file (except \verb{_mighty.yml}, \verb{_study.yml}, \verb{_documents.yml}
+and \verb{_codelists.yml}) is parsed as a \link{mighty_domain} object. The optional
+\verb{_study.yml} file provides study-level properties, the optional \verb{_mighty.yml}
+file provides mighty framework configuration, the optional \verb{_documents.yml}
+provides study-level documents metadata, and the optional \verb{_codelists.yml}
+provides study-level codelists metadata.
 }
 \details{
 The function scans the directory for files matching \verb{*.yaml} or \verb{*.yml}:
@@ -45,7 +46,8 @@ The function scans the directory for files matching \verb{*.yaml} or \verb{*.yml
 \item File named \verb{_codelists.yml} is treated as study codelists metadata
 \item All other YAML files must follow ADaM naming conventions (starting with
 \code{ad} or \code{md}) and are loaded as \link{mighty_domain} objects
-\item Only one \verb{_mighty.yml}, one \verb{_study.yml} and one \verb{_documents.yml} file is allowed per directory
+\item Only one \verb{_mighty.yml}, one \verb{_study.yml}, one \verb{_documents.yml} and one
+\verb{_codelists.yml} file is allowed per directory
 }
 }
 \section{Write Study Metadata}{
