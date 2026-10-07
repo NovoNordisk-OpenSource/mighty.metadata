@@ -2,11 +2,12 @@
 #'
 #' @description
 #' Creates a `mighty_study` object by loading all YAML metadata files from a
-#' directory. Each YAML file (except `_mighty.yml`,`_study.yml` and `_documents.yml`)
-#'  is parsed as a [mighty_domain] object. The optional `_study.yml` file provides
-#' study-level properties and the optional `_mighty.yml` file provides
-#' mighty framework configuration, and optional `_documents.yml`
-#' provides study-level documents metadata.
+#' directory. Each YAML file (except `_mighty.yml`, `_study.yml`, `_documents.yml`
+#' and `_codelists.yml`) is parsed as a [mighty_domain] object. The optional
+#' `_study.yml` file provides study-level properties, the optional `_mighty.yml`
+#' file provides mighty framework configuration, the optional `_documents.yml`
+#' provides study-level documents metadata, and the optional `_codelists.yml`
+#' provides study-level codelists metadata.
 #'
 #' @param path `character(1)` path to a directory containing YAML metadata files.
 #' @param populate `logical(1)` if `TRUE`, calls [populate_core()] then
@@ -35,7 +36,8 @@
 #' - File named `_codelists.yml` is treated as study codelists metadata
 #' - All other YAML files must follow ADaM naming conventions (starting with
 #'   `ad` or `md`) and are loaded as [mighty_domain] objects
-#' - Only one `_mighty.yml`, one `_study.yml` and one `_documents.yml` file is allowed per directory
+#' - Only one `_mighty.yml`, one `_study.yml`, one `_documents.yml` and one
+#'   `_codelists.yml` file is allowed per directory
 #'
 #' @section Write Study Metadata:
 #' Use [write_config()] to serialize a `mighty_study()` object back to YAML
