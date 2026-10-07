@@ -23,6 +23,8 @@ Access via e.g. \code{study$adsl}.}
 \code{NULL} if no configuration file exists.}
 \item{\verb{@documents}}{Study-level document metadata from \verb{_documents.yml},
 or an empty \code{mighty_documents} if no documents file exists.}
+\item{\verb{@codelists}}{A \link{mighty_codelists} object loaded from
+\verb{_codelists.yml}, or \code{NULL} if no codelists file exists.}
 \item{\verb{@path}}{The source directory path as \code{character(1)}.}
 }
 }
@@ -40,6 +42,7 @@ The function scans the directory for files matching \verb{*.yaml} or \verb{*.yml
 \item Files named \verb{_study.yml} or \verb{_study.yaml} are treated as study properties
 \item Files named \verb{_mighty.yml} or \verb{_mighty.yaml} are treated as mighty framework config
 \item File named \verb{_documents.yml} is treated as study documents metadata
+\item File named \verb{_codelists.yml} is treated as study codelists metadata
 \item All other YAML files must follow ADaM naming conventions (starting with
 \code{ad} or \code{md}) and are loaded as \link{mighty_domain} objects
 \item Only one \verb{_mighty.yml}, one \verb{_study.yml} and one \verb{_documents.yml} file is allowed per directory

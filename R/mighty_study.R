@@ -22,6 +22,8 @@
 #'     `NULL` if no configuration file exists.}
 #'   \item{`@documents`}{Study-level document metadata from `_documents.yml`,
 #'     or an empty `mighty_documents` if no documents file exists.}
+#'   \item{`@codelists`}{A [mighty_codelists] object loaded from
+#'     `_codelists.yml`, or `NULL` if no codelists file exists.}
 #'   \item{`@path`}{The source directory path as `character(1)`.}
 #' }
 #'
@@ -30,6 +32,7 @@
 #' - Files named `_study.yml` or `_study.yaml` are treated as study properties
 #' - Files named `_mighty.yml` or `_mighty.yaml` are treated as mighty framework config
 #' - File named `_documents.yml` is treated as study documents metadata
+#' - File named `_codelists.yml` is treated as study codelists metadata
 #' - All other YAML files must follow ADaM naming conventions (starting with
 #'   `ad` or `md`) and are loaded as [mighty_domain] objects
 #' - Only one `_mighty.yml`, one `_study.yml` and one `_documents.yml` file is allowed per directory
@@ -109,12 +112,22 @@ construct_mighty_study <- function(path, populate = FALSE) {
     schema = documents_schema
   )
 
+  codelists_file <- find_yml(
+    path = path,
+    name = "_codelists",
+    schema = system.file(
+      "schema",
+      "codelists.json",
+      package = "mighty.metadata"
+    )
+  )
+
   entries <- list.files(
     path = path,
     pattern = "\\.(yaml|yml)$",
     full.names = TRUE
   ) |>
-    setdiff(c(mighty_file, study_file, documents_file))
+    setdiff(c(mighty_file, study_file, documents_file, codelists_file))
 
   validate_datasets(entries)
 
@@ -134,6 +147,11 @@ construct_mighty_study <- function(path, populate = FALSE) {
       mighty_documents()
     } else {
       mighty_documents(file = documents_file)
+    },
+    codelists = if (is.null(codelists_file)) {
+      NULL
+    } else {
+      mighty_codelists(file = codelists_file)
     },
     path = path
   )
@@ -189,6 +207,9 @@ mighty_study <- S7::new_class(
     documents = S7::new_property(
       class = mighty_documents
     ),
+    codelists = S7::new_property(
+      class = NULL | mighty_codelists
+    ),
     path = S7::new_property(
       class = S7::class_character,
       validator = \(value) {
@@ -199,6 +220,7 @@ mighty_study <- S7::new_class(
   constructor = construct_mighty_study,
   validator = function(self) {
     check_document_references(self)
+    check_codelist_references(self)
     NULL
   }
 )
@@ -237,12 +259,18 @@ print_mighty_study <- function(x, ...) {
     documents <- paste0("@ documents: ", length(x@documents), " entries")
   }
 
+  codelists <- NULL
+  if (!is.null(x@codelists)) {
+    codelists <- paste0("@ codelists: ", length(x@codelists), " entries")
+  }
+
   cli::cli_bullets(
     text = c(
       "{.cls {class(x)}}",
       mighty,
       study,
       documents,
+      codelists,
       entries
     )
   )
