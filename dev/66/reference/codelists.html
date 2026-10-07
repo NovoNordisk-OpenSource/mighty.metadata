@@ -169,8 +169,9 @@ with <code>file</code>. Supplying neither returns an empty <code>mighty_codelist
 <dd><p>A <code>mighty_codelists()</code> or <code><a href="mighty_study.html">mighty_study()</a></code> object.</p></dd>
 
 
-<dt id="arg-id-codelist-id">id, codelist_id<a class="anchor" aria-label="anchor" href="#arg-id-codelist-id"></a></dt>
-<dd><p><code>character(1)</code> codelist id.</p></dd>
+<dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
+<dd><p><code>character(1)</code> codelist id. <code>remove_codelist()</code> accepts
+<code><a href="https://rdrr.io/r/base/character.html" class="external-link">character()</a></code> to remove several codelists.</p></dd>
 
 
 <dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
@@ -190,12 +191,17 @@ with <code>file</code>. Supplying neither returns an empty <code>mighty_codelist
 
 
 <dt id="arg-decode">decode<a class="anchor" aria-label="anchor" href="#arg-decode"></a></dt>
-<dd><p><code><a href="https://rdrr.io/r/base/character.html" class="external-link">character()</a></code> decode(s), same length as <code>code</code>, or <code>NULL</code>.</p></dd>
+<dd><p><code><a href="https://rdrr.io/r/base/character.html" class="external-link">character()</a></code> decode(s), same length as <code>code</code>. Optional
+(<code>NULL</code>) except in <code>update_codelist_value()</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Codelist-level fields to update (<code>label</code>, <code>description</code>,
 <code>datatype</code>).</p></dd>
+
+
+<dt id="arg-codelist-id">codelist_id<a class="anchor" aria-label="anchor" href="#arg-codelist-id"></a></dt>
+<dd><p><code>character(1)</code> codelist id.</p></dd>
 
 
 <dt id="arg--pos">.pos<a class="anchor" aria-label="anchor" href="#arg--pos"></a></dt>
@@ -213,8 +219,8 @@ with <code>file</code>. Supplying neither returns an empty <code>mighty_codelist
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Functions to list, select, define, remove, and update codelists and their
-values in your <code>mighty_codelists()</code> object (or through
-<code>mighty_study@codelists</code>).</p>
+values in your <code>mighty_codelists()</code> object or directly on a
+<code><a href="mighty_study.html">mighty_study()</a></code> object.</p>
 <p>Codelist level:</p><ul><li><p><code>define_codelist()</code> adds a new sponsor-defined codelist with <code>values</code>.</p></li>
 <li><p><code>remove_codelist()</code> removes codelist(s) and all their contents.</p></li>
 <li><p><code>update_codelist()</code> updates <code>label</code>, <code>description</code> and <code>datatype</code>.</p></li>

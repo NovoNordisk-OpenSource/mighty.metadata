@@ -88,9 +88,11 @@ update_codelist_value(x, codelist_id, code, decode)
   [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
   object.
 
-- id, codelist_id:
+- id:
 
-  `character(1)` codelist id.
+  `character(1)` codelist id. `remove_codelist()` accepts
+  [`character()`](https://rdrr.io/r/base/character.html) to remove
+  several codelists.
 
 - label:
 
@@ -112,11 +114,16 @@ update_codelist_value(x, codelist_id, code, decode)
 - decode:
 
   [`character()`](https://rdrr.io/r/base/character.html) decode(s), same
-  length as `code`, or `NULL`.
+  length as `code`. Optional (`NULL`) except in
+  `update_codelist_value()`.
 
 - ...:
 
   Codelist-level fields to update (`label`, `description`, `datatype`).
+
+- codelist_id:
+
+  `character(1)` codelist id.
 
 - .pos:
 
@@ -137,8 +144,9 @@ update_codelist_value(x, codelist_id, code, decode)
 ## Details
 
 Functions to list, select, define, remove, and update codelists and
-their values in your `mighty_codelists()` object (or through
-`mighty_study@codelists`).
+their values in your `mighty_codelists()` object or directly on a
+[`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+object.
 
 Codelist level:
 
