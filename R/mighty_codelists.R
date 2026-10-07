@@ -33,7 +33,11 @@
 #' @param .data `list()` of codelist entries. Optional; mutually exclusive
 #'   with `file`. Supplying neither returns an empty `mighty_codelists`.
 #'
-#' @return An object of class `mighty_codelists`.
+#' @returns
+#' - `mighty_codelists()`: an object of class `mighty_codelists`.
+#' - `list_codelists()`: `character()` vector with codelist ids.
+#' - `select_codelist()`: selected codelist entry as a list.
+#' - All other functions: the modified object.
 #'
 #' @examples
 #' cl <- mighty_codelists(

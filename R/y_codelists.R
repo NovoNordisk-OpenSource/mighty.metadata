@@ -1,5 +1,4 @@
-#' Update codelists in your metadata
-#'
+#' @details
 #' Functions to list, select, define, remove, and update codelists and their
 #' values in your `mighty_codelists()` object (or through
 #' `mighty_study@codelists`).
@@ -36,11 +35,6 @@
 #' @param .pos `integer(1)` new position of the value within its group.
 #' @param ... Codelist-level fields to update (`label`, `description`,
 #'   `datatype`).
-#' @returns
-#' - `list_codelists()`: `character()` vector with codelist ids.
-#' - `select_codelist()`: selected codelist entry as a list.
-#' - All other functions: the modified object.
-#'
 #' @examples
 #' cl <- mighty_codelists() |>
 #'   define_codelist(
@@ -69,12 +63,12 @@
 #'   remove_codelist_value(codelist_id = "AGEU", code = "MONTHS") |>
 #'   remove_codelist(id = "LOC")
 #'
-#' @name codelists_crud
+#' @name codelists
 NULL
 
 # Generics ------------------------------------------------------------------
 
-#' @rdname codelists_crud
+#' @rdname codelists
 #' @export
 list_codelists <- S7::new_generic(
   name = "list_codelists",
@@ -82,7 +76,7 @@ list_codelists <- S7::new_generic(
   fun = function(x) S7::S7_dispatch()
 )
 
-#' @rdname codelists_crud
+#' @rdname codelists
 #' @export
 select_codelist <- S7::new_generic(
   name = "select_codelist",
@@ -90,7 +84,7 @@ select_codelist <- S7::new_generic(
   fun = function(x, id) S7::S7_dispatch()
 )
 
-#' @rdname codelists_crud
+#' @rdname codelists
 #' @export
 define_codelist <- S7::new_generic(
   name = "define_codelist",
@@ -100,7 +94,7 @@ define_codelist <- S7::new_generic(
   }
 )
 
-#' @rdname codelists_crud
+#' @rdname codelists
 #' @export
 remove_codelist <- S7::new_generic(
   name = "remove_codelist",
@@ -108,7 +102,7 @@ remove_codelist <- S7::new_generic(
   fun = function(x, id) S7::S7_dispatch()
 )
 
-#' @rdname codelists_crud
+#' @rdname codelists
 #' @export
 update_codelist <- S7::new_generic(
   name = "update_codelist",
@@ -116,7 +110,7 @@ update_codelist <- S7::new_generic(
   fun = function(x, id, ...) S7::S7_dispatch()
 )
 
-#' @rdname codelists_crud
+#' @rdname codelists
 #' @export
 define_codelist_values <- S7::new_generic(
   name = "define_codelist_values",
@@ -124,7 +118,7 @@ define_codelist_values <- S7::new_generic(
   fun = function(x, codelist_id, code, decode = NULL) S7::S7_dispatch()
 )
 
-#' @rdname codelists_crud
+#' @rdname codelists
 #' @export
 extend_codelist_values <- S7::new_generic(
   name = "extend_codelist_values",
@@ -132,7 +126,7 @@ extend_codelist_values <- S7::new_generic(
   fun = function(x, codelist_id, code, decode = NULL) S7::S7_dispatch()
 )
 
-#' @rdname codelists_crud
+#' @rdname codelists
 #' @export
 restore_codelist_values <- S7::new_generic(
   name = "restore_codelist_values",
@@ -140,7 +134,7 @@ restore_codelist_values <- S7::new_generic(
   fun = function(x, codelist_id, code) S7::S7_dispatch()
 )
 
-#' @rdname codelists_crud
+#' @rdname codelists
 #' @export
 subset_codelist_values <- S7::new_generic(
   name = "subset_codelist_values",
@@ -148,7 +142,7 @@ subset_codelist_values <- S7::new_generic(
   fun = function(x, codelist_id, code) S7::S7_dispatch()
 )
 
-#' @rdname codelists_crud
+#' @rdname codelists
 #' @export
 remove_codelist_value <- S7::new_generic(
   name = "remove_codelist_value",
@@ -156,7 +150,7 @@ remove_codelist_value <- S7::new_generic(
   fun = function(x, codelist_id, code) S7::S7_dispatch()
 )
 
-#' @rdname codelists_crud
+#' @rdname codelists
 #' @export
 move_codelist_value <- S7::new_generic(
   name = "move_codelist_value",
@@ -164,7 +158,7 @@ move_codelist_value <- S7::new_generic(
   fun = function(x, codelist_id, code, .pos) S7::S7_dispatch()
 )
 
-#' @rdname codelists_crud
+#' @rdname codelists
 #' @export
 update_codelist_value <- S7::new_generic(
   name = "update_codelist_value",
