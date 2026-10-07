@@ -1,13 +1,14 @@
 # Mighty Study
 
 Creates a `mighty_study` object by loading all YAML metadata files from
-a directory. Each YAML file (except `_mighty.yml`,`_study.yml` and
-`_documents.yml`) is parsed as a
+a directory. Each YAML file (except `_mighty.yml`, `_study.yml`,
+`_documents.yml` and `_codelists.yml`) is parsed as a
 [mighty_domain](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
-object. The optional `_study.yml` file provides study-level properties
-and the optional `_mighty.yml` file provides mighty framework
-configuration, and optional `_documents.yml` provides study-level
-documents metadata.
+object. The optional `_study.yml` file provides study-level properties,
+the optional `_mighty.yml` file provides mighty framework configuration,
+the optional `_documents.yml` provides study-level documents metadata,
+and the optional `_codelists.yml` provides study-level codelists
+metadata.
 
 ## Usage
 
@@ -87,8 +88,8 @@ The function scans the directory for files matching `*.yaml` or `*.yml`:
   [mighty_domain](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
   objects
 
-- Only one `_mighty.yml`, one `_study.yml` and one `_documents.yml` file
-  is allowed per directory
+- Only one `_mighty.yml`, one `_study.yml`, one `_documents.yml` and one
+  `_codelists.yml` file is allowed per directory
 
 ## Write Study Metadata
 
