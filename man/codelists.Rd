@@ -52,7 +52,8 @@ with \code{file}. Supplying neither returns an empty \code{mighty_codelists}.}
 
 \item{x}{A \code{mighty_codelists()} or \code{mighty_study()} object.}
 
-\item{id, codelist_id}{\code{character(1)} codelist id.}
+\item{id}{\code{character(1)} codelist id. \code{remove_codelist()} accepts
+\code{character()} to remove several codelists.}
 
 \item{label}{\code{character(1)} codelist label.}
 
@@ -62,10 +63,13 @@ with \code{file}. Supplying neither returns an empty \code{mighty_codelists}.}
 
 \item{code}{\code{character()} or \code{numeric()} coded value(s).}
 
-\item{decode}{\code{character()} decode(s), same length as \code{code}, or \code{NULL}.}
+\item{decode}{\code{character()} decode(s), same length as \code{code}. Optional
+(\code{NULL}) except in \code{update_codelist_value()}.}
 
 \item{...}{Codelist-level fields to update (\code{label}, \code{description},
 \code{datatype}).}
+
+\item{codelist_id}{\code{character(1)} codelist id.}
 
 \item{.pos}{\code{integer(1)} new position of the value within its group.}
 }
@@ -111,8 +115,8 @@ by at least one column in the domain metadata.
 }
 \details{
 Functions to list, select, define, remove, and update codelists and their
-values in your \code{mighty_codelists()} object (or through
-\code{mighty_study@codelists}).
+values in your \code{mighty_codelists()} object or directly on a
+\code{mighty_study()} object.
 
 Codelist level:
 \itemize{

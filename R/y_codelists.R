@@ -1,7 +1,7 @@
 #' @details
 #' Functions to list, select, define, remove, and update codelists and their
-#' values in your `mighty_codelists()` object (or through
-#' `mighty_study@codelists`).
+#' values in your `mighty_codelists()` object or directly on a
+#' `mighty_study()` object.
 #'
 #' Codelist level:
 #' - `define_codelist()` adds a new sponsor-defined codelist with `values`.
@@ -26,12 +26,15 @@
 #' codelist.
 #'
 #' @param x A `mighty_codelists()` or `mighty_study()` object.
-#' @param id,codelist_id `character(1)` codelist id.
+#' @param id `character(1)` codelist id. `remove_codelist()` accepts
+#'   `character()` to remove several codelists.
+#' @param codelist_id `character(1)` codelist id.
 #' @param label `character(1)` codelist label.
 #' @param description `character(1)` codelist description.
 #' @param datatype `character(1)` one of `"text"`, `"integer"`, `"float"`.
 #' @param code `character()` or `numeric()` coded value(s).
-#' @param decode `character()` decode(s), same length as `code`, or `NULL`.
+#' @param decode `character()` decode(s), same length as `code`. Optional
+#'   (`NULL`) except in `update_codelist_value()`.
 #' @param .pos `integer(1)` new position of the value within its group.
 #' @param ... Codelist-level fields to update (`label`, `description`,
 #'   `datatype`).
