@@ -583,18 +583,38 @@ cl_remove_values <- function(l, codelist_id, code) {
 #' @noRd
 cl_move_value <- function(l, codelist_id, code, .pos) {
   abort_unknown_codelist(l, codelist_id)
+  if (length(code) != 1L) {
+    cli::cli_abort("{.arg code} must be a single value.")
+  }
   idx <- which_ids(l, codelist_id)
   loc <- cl_find_value(l[[idx]], code)
   group <- l[[idx]][[loc$group]]
-  if (length(.pos) != 1L || .pos < 1L || .pos > length(group)) {
-    cli::cli_abort(
-      "{.arg .pos} must be a single integer between 1 and {length(group)}."
-    )
-  }
+  check_position(.pos, max = length(group))
+
   item <- group[[loc$pos]]
   group[[loc$pos]] <- NULL
   l[[idx]][[loc$group]] <- insert_in_vector(group, item, pos = .pos)
   l
+}
+
+#' Check that `pos` is a single whole number between 1 and `max`
+#' @noRd
+check_position <- function(
+  pos,
+  max,
+  arg = ".pos",
+  call = rlang::caller_env()
+) {
+  is_whole_number <- rlang::is_integerish(pos, n = 1L, finite = TRUE)
+  is_in_range <- is_whole_number && pos >= 1L && pos <= max
+
+  if (!is_in_range) {
+    cli::cli_abort(
+      "{.arg {arg}} must be a single integer between 1 and {max}.",
+      call = call
+    )
+  }
+  invisible(pos)
 }
 
 #' @noRd
@@ -609,9 +629,10 @@ cl_update_value <- function(l, codelist_id, code, decode) {
   for (i in seq_along(code)) {
     loc <- cl_find_value(l[[idx]], code[[i]])
     if (!loc$group %in% c("values", "extend")) {
-      cli::cli_abort(
-        "Decode can only be updated for {.field values} or {.field extend} entries; {.val {code[[i]]}} is in {.field {loc$group}}."
-      )
+      cli::cli_abort(paste(
+        "Decode can only be updated for {.field values} or {.field extend} entries;",
+        "{.val {code[[i]]}} is in {.field {loc$group}}."
+      ))
     }
     l[[idx]][[loc$group]][[loc$pos]]$decode <- decode[[i]]
   }
