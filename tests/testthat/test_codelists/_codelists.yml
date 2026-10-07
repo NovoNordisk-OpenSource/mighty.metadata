@@ -1,0 +1,18 @@
+- id: REGION
+  label: Codelist for region
+  description: Region codelist
+  datatype: text
+  values:
+    - code: EUROPE
+      decode: Europe
+
+- id: AGEU
+  subset:
+    - code: YEARS
+  restore:
+    - code: MONTHS
+
+- id: LOC
+  extend:
+    - code: MY CUSTOM LOCATION
+      decode: My Custom Location

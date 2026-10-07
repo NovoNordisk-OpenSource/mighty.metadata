@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/NovoNordisk-OpenSource/mighty.metadata/refs/heads/main/inst/schema/codelists.json",
+  "title": "Mighty Metadata Codelists Specification",
+  "description": "Schema for study-level codelist definitions and value-level overrides referenced from ADaM domain metadata",
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/codelist"
+  },
+  "uniqueItems": true,
+  "definitions": {
+    "code": {
+      "description": "Coded value",
+      "anyOf": [{ "type": "string" }, { "type": "number" }]
+    },
+    "decoded_value": {
+      "type": "object",
+      "properties": {
+        "code": { "$ref": "#/definitions/code" },
+        "decode": {
+          "description": "Decode text rendered as <Decode><TranslatedText> in define.xml",
+          "type": "string"
+        }
+      },
+      "required": ["code"],
+      "additionalProperties": false
+    },
+    "coded_value": {
+      "type": "object",
+      "properties": {
+        "code": { "$ref": "#/definitions/code" }
+      },
+      "required": ["code"],
+      "additionalProperties": false
+    },
+    "codelist": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Unique id used to reference the codelist from column metadata",
+          "type": "string"
+        },
+        "label": {
+          "description": "Codelist label",
+          "type": "string"
+        },
+        "description": {
+          "description": "Codelist description",
+          "type": "string"
+        },
+        "datatype": {
+          "description": "Data type of the coded values",
+          "type": "string",
+          "enum": ["text", "integer", "float"]
+        },
+        "values": {
+          "description": "Values of a sponsor-defined (non-standard) codelist",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/decoded_value" }
+        },
+        "subset": {
+          "description": "Values to keep from a standard controlled terminology codelist",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/coded_value" }
+        },
+        "restore": {
+          "description": "SDTM controlled terminology values to include in the ADaM codelist even when not used in the SDTM define.xml",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/coded_value" }
+        },
+        "extend": {
+          "description": "Values extending an extensible codelist",
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/decoded_value" }
+        }
+      },
+      "required": ["id"],
+      "anyOf": [
+        { "required": ["values"] },
+        { "required": ["subset"] },
+        { "required": ["restore"] },
+        { "required": ["extend"] }
+      ],
+      "if": { "required": ["values"] },
+      "then": { "required": ["label", "description", "datatype"] },
+      "additionalProperties": false
+    }
+  }
+}
