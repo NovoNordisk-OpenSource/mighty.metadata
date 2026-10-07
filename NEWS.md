@@ -1,5 +1,18 @@
 # mighty.metadata (development version)
 
+* added `mighty_codelists()` class and `codelists.json` schema for study-level
+  codelist metadata in `_codelists.yml`, supporting non-standard codelists
+  (`values`) and value-level overrides of standard controlled terminology codelists (`subset`, `restore`,
+  `extend`). New helpers: `list_codelists()`, `select_codelist()`,
+  `define_codelist()`, `remove_codelist()`, `update_codelist()`,
+  `define_codelist_values()`, `subset_codelist_values()`,
+  `restore_codelist_values()`, `extend_codelist_values()`,
+  `remove_codelist_value()`, `move_codelist_value()` and
+  `update_codelist_value()`.
+* `mighty_study()` gains a nullable `@codelists` property, populated from
+  `_codelists.yml` and written back by `write_config()`. Every codelist must be
+  referenced by at least one column `codelist` field.
+
 * Added `create_md_table()`, `create_md_param()`, and `create_md_values()` to
   create metadata data sets for tables, BDS parameters, and value level
   metadata, complementing `create_md_col()` (#11). `create_md()` returns all
