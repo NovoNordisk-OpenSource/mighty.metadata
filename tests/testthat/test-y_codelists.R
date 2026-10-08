@@ -214,6 +214,21 @@ test_that("update_codelist_value() works for values and extend only", {
   )
 })
 
+test_that("update_codelist_value() errors when decode and code lengths differ", {
+  cl <- new_cl(region(
+    list(code = "EU", decode = "Europe"),
+    list(code = "NA", decode = "North America")
+  ))
+  expect_error(
+    update_codelist_value(cl, "REGION", code = c("EU", "NA"), decode = "x"),
+    "must have the same length"
+  )
+  expect_error(
+    update_codelist_value(cl, "REGION", code = "EU", decode = c("x", "y")),
+    "must have the same length"
+  )
+})
+
 test_that("mighty_study() has NULL codelists without _codelists.yml", {
   study <- mighty_study(test_path("test_study"))
   expect_null(study@codelists)
