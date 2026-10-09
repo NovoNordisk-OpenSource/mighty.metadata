@@ -20,7 +20,7 @@
       remove_codelist(cl, "NOPE")
     Condition
       Error in `abort_unknown_codelist()`:
-      ! Codelist "NOPE" does not exist.
+      ! Codelist "NOPE" is not defined in the codelists metadata.
 
 # update_codelist() updates only codelist-level fields
 
@@ -37,7 +37,7 @@
       define_codelist_values(cl, "NOPE", code = "X")
     Condition
       Error in `abort_unknown_codelist()`:
-      ! Codelist "NOPE" does not exist.
+      ! Codelist "NOPE" is not defined in the codelists metadata.
 
 # remove_codelist_value() removes from the right group
 

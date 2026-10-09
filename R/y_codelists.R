@@ -176,7 +176,9 @@ S7::method(list_codelists, mighty_codelists) <- function(x) {
 }
 
 S7::method(select_codelist, mighty_codelists) <- function(x, id) {
-  get_id(S7::S7_data(x), id)
+  l <- S7::S7_data(x)
+  abort_unknown_codelist(l, id)
+  get_id(l, id)
 }
 
 S7::method(define_codelist, mighty_codelists) <- function(
@@ -460,7 +462,9 @@ S7::method(update_codelist_value, mighty_study) <- function(
 abort_unknown_codelist <- function(l, id) {
   missing <- setdiff(id, list_ids(l))
   if (length(missing)) {
-    cli::cli_abort("Codelist {.val {missing}} does not exist.")
+    cli::cli_abort(
+      "Codelist {.val {missing}} is not defined in the codelists metadata."
+    )
   }
   invisible(l)
 }

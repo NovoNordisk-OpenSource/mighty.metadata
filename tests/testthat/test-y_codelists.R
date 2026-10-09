@@ -27,7 +27,10 @@ codes <- function(cl, group) group_codes(cl[[group]])
 test_that("select_codelist() returns entry and errors on unknown id", {
   cl <- new_cl(region(list(code = "EU")))
   expect_equal(select_codelist(cl, "REGION")$label, "Region")
-  expect_error(select_codelist(cl, "NOPE"), "does not exist")
+  expect_error(
+    select_codelist(cl, "NOPE"),
+    "is not defined in the codelists metadata"
+  )
 })
 
 test_that("define_codelist() adds a codelist with values", {
@@ -110,7 +113,7 @@ test_that("update_codelist() validates datatype", {
 test_that("update_codelist() errors on unknown id", {
   expect_error(
     update_codelist(mighty_codelists(), "NOPE", label = "x"),
-    "Codelist \"NOPE\" does not exist"
+    "Codelist \"NOPE\" is not defined in the codelists metadata"
   )
 })
 
@@ -353,7 +356,10 @@ test_that("select_codelist() on mighty_study errors on unknown id", {
     select_codelist(study, "FANCY_CDISC_CODELIST")$subset[[1]]$code,
     "A"
   )
-  expect_error(select_codelist(study, "NOPE"), "does not exist")
+  expect_error(
+    select_codelist(study, "NOPE"),
+    "is not defined in the codelists metadata"
+  )
 })
 
 test_that("mighty_study methods error when codelist is not referenced", {
