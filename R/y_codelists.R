@@ -306,26 +306,19 @@ S7::method(update_codelist_value, mighty_codelists) <- function(
 }
 # mighty_study methods ------------------------------------------------------
 
-#' Codelists of a study, or an empty object when not defined
-#' @noRd
-study_codelists <- function(x) {
-  if (is.null(x@codelists)) mighty_codelists() else x@codelists
-}
-
 #' Apply a codelists method to a study and validate the study
 #' @noRd
 modify_study_codelists <- function(x, generic, ...) {
-  cl <- generic(study_codelists(x), ...)
-  x@codelists <- if (length(cl)) cl else NULL
+  x@codelists <- generic(x@codelists, ...)
   validate(x)
 }
 
 S7::method(list_codelists, mighty_study) <- function(x) {
-  list_codelists(study_codelists(x))
+  list_codelists(x@codelists)
 }
 
 S7::method(select_codelist, mighty_study) <- function(x, id) {
-  select_codelist(study_codelists(x), id)
+  select_codelist(x@codelists, id)
 }
 
 S7::method(define_codelist, mighty_study) <- function(
@@ -671,9 +664,6 @@ collect_codelist_refs <- function(study) {
 #' Every codelist in `_codelists.yml` must be referenced by a column
 #' @noRd
 check_codelist_references <- function(study) {
-  if (is.null(study@codelists)) {
-    return(invisible(study))
-  }
   unused <- setdiff(
     list_codelists(study@codelists),
     collect_codelist_refs(study)

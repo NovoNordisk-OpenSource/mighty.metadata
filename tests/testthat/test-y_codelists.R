@@ -232,9 +232,10 @@ test_that("update_codelist_value() errors when decode and code lengths differ", 
   )
 })
 
-test_that("mighty_study() has NULL codelists without _codelists.yml", {
+test_that("mighty_study() has empty codelists without _codelists.yml", {
   study <- mighty_study(test_path("test_study"))
-  expect_null(study@codelists)
+  expect_s7_class(study@codelists, mighty_codelists)
+  expect_length(study@codelists, 0)
   expect_identical(list_codelists(study), character(0))
 })
 
@@ -281,7 +282,7 @@ test_that("CRUD on mighty_study works and drops empty codelists", {
   study <- suppressMessages(
     remove_codelist_value(study, "FANCY_CDISC_CODELIST", code = "X")
   )
-  expect_null(study@codelists)
+  expect_length(study@codelists, 0)
 })
 
 # mighty_study methods: FANCY_CDISC_CODELIST is the only id referenced in
@@ -343,10 +344,10 @@ test_that("move_codelist_value() works on mighty_study", {
   )
 })
 
-test_that("remove_codelist() on mighty_study sets codelists to NULL when empty", {
+test_that("remove_codelist() on mighty_study leaves empty codelists", {
   study <- mighty_study(local_codelist_study()) |>
     remove_codelist("FANCY_CDISC_CODELIST")
-  expect_null(study@codelists)
+  expect_length(study@codelists, 0)
   expect_identical(list_codelists(study), character(0))
 })
 
@@ -384,7 +385,7 @@ test_that("mighty_study methods error when codelist is not referenced", {
     "not referenced by any column"
   )
   # The study is unchanged after a failed operation
-  expect_null(study@codelists)
+  expect_length(study@codelists, 0)
 })
 
 test_that("write_config() round-trips _codelists.yml", {
@@ -399,7 +400,7 @@ test_that("write_config() round-trips _codelists.yml", {
   )
 })
 
-test_that("write_config() writes no _codelists.yml when codelists is NULL", {
+test_that("write_config() writes no _codelists.yml when codelists is empty", {
   out <- withr::local_tempdir()
   write_config(mighty_study(test_path("test_study")), path = out)
   expect_false(file.exists(file.path(out, "_codelists.yml")))

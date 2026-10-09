@@ -24,7 +24,8 @@ Access via e.g. \code{study$adsl}.}
 \item{\verb{@documents}}{Study-level document metadata from \verb{_documents.yml},
 or an empty \code{mighty_documents} if no documents file exists.}
 \item{\verb{@codelists}}{A \link{mighty_codelists} object loaded from
-\verb{_codelists.yml}, or \code{NULL} if no codelists file exists.}
+\verb{_codelists.yml}, or an empty \code{mighty_codelists} if no codelists file
+exists.}
 \item{\verb{@path}}{The source directory path as \code{character(1)}.}
 }
 }

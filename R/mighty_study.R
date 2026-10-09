@@ -24,7 +24,8 @@
 #'   \item{`@documents`}{Study-level document metadata from `_documents.yml`,
 #'     or an empty `mighty_documents` if no documents file exists.}
 #'   \item{`@codelists`}{A [mighty_codelists] object loaded from
-#'     `_codelists.yml`, or `NULL` if no codelists file exists.}
+#'     `_codelists.yml`, or an empty `mighty_codelists` if no codelists file
+#'     exists.}
 #'   \item{`@path`}{The source directory path as `character(1)`.}
 #' }
 #'
@@ -151,7 +152,7 @@ construct_mighty_study <- function(path, populate = FALSE) {
       mighty_documents(file = documents_file)
     },
     codelists = if (is.null(codelists_file)) {
-      NULL
+      mighty_codelists()
     } else {
       mighty_codelists(file = codelists_file)
     },
@@ -210,7 +211,7 @@ mighty_study <- S7::new_class(
       class = mighty_documents
     ),
     codelists = S7::new_property(
-      class = NULL | mighty_codelists
+      class = mighty_codelists
     ),
     path = S7::new_property(
       class = S7::class_character,
@@ -262,7 +263,7 @@ print_mighty_study <- function(x, ...) {
   }
 
   codelists <- NULL
-  if (!is.null(x@codelists)) {
+  if (length(x@codelists)) {
     codelists <- paste0("@ codelists: ", length(x@codelists), " entries")
   }
 
