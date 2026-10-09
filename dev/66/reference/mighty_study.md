@@ -62,8 +62,8 @@ A `mighty_study` S7 object extending `list`:
 
   A
   [mighty_codelists](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
-  object loaded from `_codelists.yml`, or `NULL` if no codelists file
-  exists.
+  object loaded from `_codelists.yml`, or an empty `mighty_codelists` if
+  no codelists file exists.
 
 - `@path`:
 
