@@ -628,7 +628,7 @@ cl_update_value <- function(l, codelist_id, code, decode) {
   idx <- which_ids(l, codelist_id)
   for (i in seq_along(code)) {
     loc <- cl_find_value(l[[idx]], code[[i]])
-    if (!loc$group %in% c("values", "extend")) {
+    if (!loc$group %in% CODELIST_DECODE_GROUPS) {
       cli::cli_abort(paste(
         "Decode can only be updated for {.field values} or {.field extend} entries;",
         "{.val {code[[i]]}} is in {.field {loc$group}}."

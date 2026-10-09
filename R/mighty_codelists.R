@@ -66,6 +66,10 @@ NULL
 #' @noRd
 CODELIST_GROUPS <- c("values", "subset", "restore", "extend")
 
+#' Operation groups whose entries may carry a `decode`.
+#' @noRd
+CODELIST_DECODE_GROUPS <- c("values", "extend")
+
 #' @noRd
 construct_mighty_codelists <- function(file, .data) {
   rlang::check_exclusive(file, .data, .require = FALSE)
@@ -113,7 +117,8 @@ check_unique_codelist_ids <- function(x) {
 #' @noRd
 check_codelist_groups <- function(cl) {
   has_values <- length(cl[["values"]]) > 0
-  has_gcmd_overrides <- length(cl[["subset"]]) > 0 || length(cl[["restore"]]) > 0
+  has_gcmd_overrides <- length(cl[["subset"]]) > 0 ||
+    length(cl[["restore"]]) > 0
   if (has_values && has_gcmd_overrides) {
     cli::cli_abort(c(
       paste(
@@ -143,7 +148,7 @@ check_unique_codes <- function(cl) {
 
 #' @noRd
 check_consistent_decodes <- function(cl) {
-  for (group in intersect(c("values", "extend"), names(cl))) {
+  for (group in intersect(CODELIST_DECODE_GROUPS, names(cl))) {
     has_decode <- vapply(
       cl[[group]],
       \(v) !is.null(v[["decode"]]),
