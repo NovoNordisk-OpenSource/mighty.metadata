@@ -112,10 +112,9 @@ check_unique_codelist_ids <- function(x) {
 
 #' @noRd
 check_codelist_groups <- function(cl) {
-  if (
-    length(cl[["values"]]) &&
-      (length(cl[["subset"]]) || length(cl[["restore"]]))
-  ) {
+  has_values <- length(cl[["values"]]) > 0
+  has_gcmd_overrides <- length(cl[["subset"]]) > 0 || length(cl[["restore"]]) > 0
+  if (has_values && has_gcmd_overrides) {
     cli::cli_abort(c(
       paste(
         "Codelist {.val {cl$id}} cannot combine {.field values}",
