@@ -40,6 +40,11 @@ reference:
       Manage study-level document catalog and references.
     contents:
       - documents
+  - title: Codelists metadata
+    description: |
+      Manage study-level codelist definitions and value-level overrides.
+    contents:
+      - codelists
   - title: Utilities
     contents:
       - write_config
