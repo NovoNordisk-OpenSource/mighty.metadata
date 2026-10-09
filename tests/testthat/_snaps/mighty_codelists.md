@@ -16,7 +16,7 @@
       Error in `check_unique_codes()`:
       ! Duplicate code values in codelist "A": "X"
 
-# validate_mighty_codelists() rejects values combined with subset/restore
+# validate_mighty_codelists() rejects values combined with subset
 
     Code
       new_cl(list(id = "A", label = "a", description = "a", datatype = "text",
@@ -26,13 +26,32 @@
       ! Codelist "A" cannot combine values with subset or restore.
       i values defines a non-standard codelist, while subset and restore modify a standard controlled terminology codelist.
 
-# validate_mighty_codelists() requires consistent decodes
+# validate_mighty_codelists() rejects values combined with restore
+
+    Code
+      new_cl(list(id = "A", label = "a", description = "a", datatype = "text",
+        values = list(list(code = "X")), restore = list(list(code = "Y"))))
+    Condition
+      Error in `check_codelist_groups()`:
+      ! Codelist "A" cannot combine values with subset or restore.
+      i values defines a non-standard codelist, while subset and restore modify a standard controlled terminology codelist.
+
+# validate_mighty_codelists() rejects mixed decodes in extend
 
     Code
       new_cl(list(id = "A", extend = list(list(code = "X", decode = "x"), list(code = "Y"))))
     Condition
       Error in `check_consistent_decodes()`:
       ! Either all or none of the extend entries in codelist "A" must have a decode.
+
+# validate_mighty_codelists() rejects mixed decodes in values
+
+    Code
+      new_cl(list(id = "A", label = "a", description = "a", datatype = "text",
+        values = list(list(code = "X"), list(code = "Y", decode = "y"))))
+    Condition
+      Error in `check_consistent_decodes()`:
+      ! Either all or none of the values entries in codelist "A" must have a decode.
 
 # mighty_codelists print() summarizes codelists
 

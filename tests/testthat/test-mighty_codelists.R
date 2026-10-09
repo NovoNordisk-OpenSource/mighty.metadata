@@ -1,5 +1,3 @@
-new_cl <- function(...) mighty_codelists(.data = list(...))
-
 test_that("mighty_codelists() reads _codelists.yml", {
   cl <- mighty_codelists(file = test_path("test_codelists/_codelists.yml"))
   expect_s7_class(cl, mighty_codelists)
@@ -24,12 +22,25 @@ test_that("schema accepts any string id", {
   expect_no_error(new_cl(list(id = "CL.AGEU", subset = list(list(code = "X")))))
 })
 
-test_that("schema requires at least one non-empty operation group", {
-  # anyOf reports only its first branch, so contrast with each group alone
+test_that("schema requires at least one operation group", {
+  # anyOf reports only its first branch, hence the `values` message
   expect_error(new_cl(list(id = "A")), "missingProperty: values")
+})
+
+test_that("schema accepts each operation group on its own", {
+  expect_no_error(new_cl(list(
+    id = "A",
+    label = "a",
+    description = "a",
+    datatype = "text",
+    values = list(list(code = "X"))
+  )))
   expect_no_error(new_cl(list(id = "A", subset = list(list(code = "X")))))
   expect_no_error(new_cl(list(id = "A", restore = list(list(code = "X")))))
   expect_no_error(new_cl(list(id = "A", extend = list(list(code = "X")))))
+})
+
+test_that("schema rejects an empty operation group", {
   expect_error(
     new_cl(list(id = "A", subset = list())),
     "must NOT have fewer than 1 items"
@@ -64,11 +75,14 @@ test_that("schema restricts datatype to text, integer, float", {
   )
 })
 
-test_that("schema requires code and rejects decode in subset/restore", {
+test_that("schema requires code in operation group entries", {
   expect_error(
     new_cl(list(id = "A", extend = list(list(decode = "x")))),
     "required property 'code'"
   )
+})
+
+test_that("schema rejects decode in subset/restore", {
   expect_error(
     new_cl(list(id = "A", subset = list(list(code = "X", decode = "x")))),
     "additionalProperty: decode"
@@ -86,12 +100,15 @@ test_that("schema rejects unknown codelist fields", {
   )
 })
 
-test_that("allowed combinations of operation groups validate", {
+test_that("subset can be combined with restore", {
   expect_no_error(new_cl(list(
     id = "A",
     subset = list(list(code = "X")),
     restore = list(list(code = "Y"))
   )))
+})
+
+test_that("values can be combined with extend", {
   expect_no_error(new_cl(list(
     id = "B",
     label = "b",
@@ -130,7 +147,7 @@ test_that("validate_mighty_codelists() detects duplicate codes within a group", 
   )
 })
 
-test_that("validate_mighty_codelists() rejects values combined with subset/restore", {
+test_that("validate_mighty_codelists() rejects values combined with subset", {
   expect_snapshot(
     new_cl(list(
       id = "A",
@@ -142,7 +159,10 @@ test_that("validate_mighty_codelists() rejects values combined with subset/resto
     )),
     error = TRUE
   )
-  expect_error(
+})
+
+test_that("validate_mighty_codelists() rejects values combined with restore", {
+  expect_snapshot(
     new_cl(list(
       id = "A",
       label = "a",
@@ -151,11 +171,11 @@ test_that("validate_mighty_codelists() rejects values combined with subset/resto
       values = list(list(code = "X")),
       restore = list(list(code = "Y"))
     )),
-    "cannot combine"
+    error = TRUE
   )
 })
 
-test_that("validate_mighty_codelists() requires consistent decodes", {
+test_that("validate_mighty_codelists() rejects mixed decodes in extend", {
   expect_snapshot(
     new_cl(list(
       id = "A",
@@ -163,7 +183,10 @@ test_that("validate_mighty_codelists() requires consistent decodes", {
     )),
     error = TRUE
   )
-  expect_error(
+})
+
+test_that("validate_mighty_codelists() rejects mixed decodes in values", {
+  expect_snapshot(
     new_cl(list(
       id = "A",
       label = "a",
@@ -171,7 +194,7 @@ test_that("validate_mighty_codelists() requires consistent decodes", {
       datatype = "text",
       values = list(list(code = "X"), list(code = "Y", decode = "y"))
     )),
-    "Either all or none of the values entries"
+    error = TRUE
   )
 })
 

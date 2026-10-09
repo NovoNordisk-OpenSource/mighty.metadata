@@ -1,4 +1,4 @@
-# define_codelist() works without decodes and errors on duplicates
+# define_codelist() errors on duplicate codelist id
 
     Code
       define_codelist(cl, "NUM", "n", "n", "integer", code = 3)
@@ -6,23 +6,24 @@
       Error in `cl_define()`:
       ! Codelist "NUM" already exists.
 
----
+# define_codelist() errors when decode and code lengths differ
 
     Code
-      define_codelist(cl, "X", "n", "n", "text", code = c("A", "B"), decode = "a")
+      define_codelist(mighty_codelists(), "X", "n", "n", "text", code = c("A", "B"),
+      decode = "a")
     Condition
       Error in `cl_build_values()`:
       ! `decode` must have the same length as `code` (2), not 1.
 
-# remove_codelist() removes a codelist
+# remove_codelist() errors on unknown id
 
     Code
-      remove_codelist(cl, "NOPE")
+      remove_codelist(mighty_codelists(), "NOPE")
     Condition
       Error in `abort_unknown_codelist()`:
       ! Codelist "NOPE" is not defined in the codelists metadata.
 
-# update_codelist() updates only codelist-level fields
+# update_codelist() rejects non codelist-level fields
 
     Code
       update_codelist(cl, "REGION", values = list())
@@ -31,15 +32,15 @@
       ! Only label, description and datatype can be updated.
       x Invalid field: values
 
-# define_codelist_values() appends to existing codelist
+# define_codelist_values() errors on unknown codelist
 
     Code
-      define_codelist_values(cl, "NOPE", code = "X")
+      define_codelist_values(mighty_codelists(), "NOPE", code = "X")
     Condition
       Error in `abort_unknown_codelist()`:
       ! Codelist "NOPE" is not defined in the codelists metadata.
 
-# remove_codelist_value() removes from the right group
+# remove_codelist_value() errors on unknown code
 
     Code
       remove_codelist_value(cl, "AGEU", code = "NOPE")
@@ -47,15 +48,15 @@
       Error in `cl_find_value()`:
       ! Code "NOPE" does not exist in codelist "AGEU".
 
-# move_codelist_value() moves within group
+# move_codelist_value() rejects invalid .pos
 
     Code
-      move_codelist_value(cl, "AGEU", code = "DAYS", .pos = 5)
+      move_codelist_value(cl, "AGEU", code = "A", .pos = 5)
     Condition
       Error in `cl_move_value()`:
-      ! `.pos` must be a single integer between 1 and 2.
+      ! `.pos` must be a single integer between 1 and 3.
 
-# update_codelist_value() works for values and extend only
+# update_codelist_value() rejects subset/restore entries
 
     Code
       update_codelist_value(cl, "AGEU", code = "YEARS", decode = "Y")

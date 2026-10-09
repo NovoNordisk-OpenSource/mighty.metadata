@@ -1,5 +1,3 @@
-new_cl <- function(...) mighty_codelists(.data = list(...))
-
 region <- function(...) {
   list(
     id = "REGION",
@@ -24,9 +22,13 @@ local_codelist_study <- function(env = parent.frame()) {
 
 codes <- function(cl, group) group_codes(cl[[group]])
 
-test_that("select_codelist() returns entry and errors on unknown id", {
+test_that("select_codelist() returns the codelist entry", {
   cl <- new_cl(region(list(code = "EU")))
   expect_equal(select_codelist(cl, "REGION")$label, "Region")
+})
+
+test_that("select_codelist() errors on unknown id", {
+  cl <- new_cl(region(list(code = "EU")))
   expect_error(
     select_codelist(cl, "NOPE"),
     "is not defined in the codelists metadata"
@@ -48,17 +50,25 @@ test_that("define_codelist() adds a codelist with values", {
   expect_equal(new$values[[2]]$decode, "b")
 })
 
-test_that("define_codelist() works without decodes and errors on duplicates", {
+test_that("define_codelist() works without decodes", {
   cl <- mighty_codelists() |>
     define_codelist("NUM", "n", "n", "integer", code = c(1, 2))
   expect_null(select_codelist(cl, "NUM")$values[[1]]$decode)
+})
+
+test_that("define_codelist() errors on duplicate codelist id", {
+  cl <- mighty_codelists() |>
+    define_codelist("NUM", "n", "n", "integer", code = c(1, 2))
   expect_snapshot(
     define_codelist(cl, "NUM", "n", "n", "integer", code = 3),
     error = TRUE
   )
+})
+
+test_that("define_codelist() errors when decode and code lengths differ", {
   expect_snapshot(
     define_codelist(
-      cl,
+      mighty_codelists(),
       "X",
       "n",
       "n",
@@ -88,14 +98,21 @@ test_that("remove_codelist() removes a codelist", {
   cl <- new_cl(list(id = "A", subset = list(list(code = "X")))) |>
     remove_codelist("A")
   expect_length(cl, 0)
-  expect_snapshot(remove_codelist(cl, "NOPE"), error = TRUE)
 })
 
-test_that("update_codelist() updates only codelist-level fields", {
+test_that("remove_codelist() errors on unknown id", {
+  expect_snapshot(remove_codelist(mighty_codelists(), "NOPE"), error = TRUE)
+})
+
+test_that("update_codelist() updates codelist-level fields", {
   cl <- new_cl(region(list(code = "1"))) |>
     update_codelist("REGION", description = "New", datatype = "integer")
   expect_equal(select_codelist(cl, "REGION")$description, "New")
   expect_equal(select_codelist(cl, "REGION")$datatype, "integer")
+})
+
+test_that("update_codelist() rejects non codelist-level fields", {
+  cl <- new_cl(region(list(code = "1")))
   expect_snapshot(update_codelist(cl, "REGION", values = list()), error = TRUE)
 })
 
@@ -121,7 +138,13 @@ test_that("define_codelist_values() appends to existing codelist", {
   cl <- new_cl(region(list(code = "EU", decode = "Europe"))) |>
     define_codelist_values("REGION", code = "AF", decode = "Africa")
   expect_equal(codes(select_codelist(cl, "REGION"), "values"), c("EU", "AF"))
-  expect_snapshot(define_codelist_values(cl, "NOPE", code = "X"), error = TRUE)
+})
+
+test_that("define_codelist_values() errors on unknown codelist", {
+  expect_snapshot(
+    define_codelist_values(mighty_codelists(), "NOPE", code = "X"),
+    error = TRUE
+  )
 })
 
 test_that("define_codelist_values() errors on a subset codelist", {
@@ -132,14 +155,18 @@ test_that("define_codelist_values() errors on a subset codelist", {
   )
 })
 
-test_that("subset/restore/extend create codelists if needed", {
+test_that("subset_codelist_values() and restore_codelist_values() create codelist if needed", {
   cl <- mighty_codelists() |>
     subset_codelist_values("AGEU", code = "YEARS") |>
-    restore_codelist_values("AGEU", code = "MONTHS") |>
-    extend_codelist_values("LOC", code = "X", decode = "x")
+    restore_codelist_values("AGEU", code = "MONTHS")
   ageu <- select_codelist(cl, "AGEU")
   expect_equal(names(ageu), c("id", "subset", "restore"))
   expect_equal(codes(ageu, "restore"), "MONTHS")
+})
+
+test_that("extend_codelist_values() creates codelist if needed", {
+  cl <- mighty_codelists() |>
+    extend_codelist_values("LOC", code = "X", decode = "x")
   expect_equal(select_codelist(cl, "LOC")$extend[[1]]$decode, "x")
 })
 
@@ -153,6 +180,10 @@ test_that("remove_codelist_value() removes from the right group", {
   ageu <- select_codelist(cl, "AGEU")
   expect_null(ageu$restore)
   expect_equal(codes(ageu, "subset"), "YEARS")
+})
+
+test_that("remove_codelist_value() errors on unknown code", {
+  cl <- new_cl(list(id = "AGEU", subset = list(list(code = "YEARS"))))
   expect_snapshot(
     remove_codelist_value(cl, "AGEU", code = "NOPE"),
     error = TRUE
@@ -172,13 +203,9 @@ test_that("move_codelist_value() moves within group", {
   )) |>
     move_codelist_value("AGEU", code = "DAYS", .pos = 1)
   expect_equal(codes(select_codelist(cl, "AGEU"), "subset"), c("DAYS", "YEARS"))
-  expect_snapshot(
-    move_codelist_value(cl, "AGEU", code = "DAYS", .pos = 5),
-    error = TRUE
-  )
 })
 
-test_that("move_codelist_value() rejects invalid .pos and code", {
+test_that("move_codelist_value() rejects invalid .pos", {
   cl <- new_cl(list(
     id = "AGEU",
     subset = list(list(code = "A"), list(code = "B"), list(code = "C"))
@@ -189,11 +216,28 @@ test_that("move_codelist_value() rejects invalid .pos and code", {
       "must be a single integer"
     )
   }
+  expect_snapshot(
+    move_codelist_value(cl, "AGEU", code = "A", .pos = 5),
+    error = TRUE
+  )
+})
+
+test_that("move_codelist_value() rejects multiple codes", {
+  cl <- new_cl(list(
+    id = "AGEU",
+    subset = list(list(code = "A"), list(code = "B"))
+  ))
   expect_error(
     move_codelist_value(cl, "AGEU", code = c("A", "B"), .pos = 1),
     "must be a single value"
   )
-  # Integer-valued doubles remain accepted
+})
+
+test_that("move_codelist_value() accepts integer-valued double .pos", {
+  cl <- new_cl(list(
+    id = "AGEU",
+    subset = list(list(code = "A"), list(code = "B"), list(code = "C"))
+  ))
   moved <- move_codelist_value(cl, "AGEU", code = "C", .pos = 1)
   expect_equal(
     codes(select_codelist(moved, "AGEU"), "subset"),
@@ -201,16 +245,19 @@ test_that("move_codelist_value() rejects invalid .pos and code", {
   )
 })
 
-test_that("update_codelist_value() works for values and extend only", {
+test_that("update_codelist_value() updates decode in values and extend", {
   cl <- new_cl(
     region(list(code = "EU", decode = "Europe")),
-    list(id = "LOC", extend = list(list(code = "X", decode = "x"))),
-    list(id = "AGEU", subset = list(list(code = "YEARS")))
+    list(id = "LOC", extend = list(list(code = "X", decode = "x")))
   ) |>
     update_codelist_value("REGION", code = "EU", decode = "EU new") |>
     update_codelist_value("LOC", code = "X", decode = "x new")
   expect_equal(select_codelist(cl, "REGION")$values[[1]]$decode, "EU new")
   expect_equal(select_codelist(cl, "LOC")$extend[[1]]$decode, "x new")
+})
+
+test_that("update_codelist_value() rejects subset/restore entries", {
+  cl <- new_cl(list(id = "AGEU", subset = list(list(code = "YEARS"))))
   expect_snapshot(
     update_codelist_value(cl, "AGEU", code = "YEARS", decode = "Y"),
     error = TRUE
@@ -274,7 +321,7 @@ test_that("collect_codelist_refs() includes columns in parameters", {
   expect_setequal(collect_codelist_refs(domains), c("UNIT", "RESULT"))
 })
 
-test_that("CRUD on mighty_study works and drops empty codelists", {
+test_that("remove_codelist_value() on mighty_study drops empty codelist", {
   study <- mighty_study(test_path("test_study")) |>
     extend_codelist_values("FANCY_CDISC_CODELIST", code = "X")
   expect_identical(list_codelists(study), "FANCY_CDISC_CODELIST")
