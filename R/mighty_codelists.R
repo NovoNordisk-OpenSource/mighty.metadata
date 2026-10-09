@@ -72,22 +72,9 @@ CODELIST_DECODE_GROUPS <- c("values", "extend")
 
 #' @noRd
 construct_mighty_codelists <- function(file, .data) {
-  rlang::check_exclusive(file, .data, .require = FALSE)
-  codelists_schema <- system.file(
-    "schema",
-    "codelists.json",
-    package = "mighty.metadata"
+  S7::new_object(
+    .parent = construct_s7schema(file, .data, schema_name = "codelists.json")
   )
-  parent <- if (!rlang::is_missing(file)) {
-    S7schema::S7schema(file = file, schema = codelists_schema)
-  } else {
-    # Without input, an empty codelists object is created
-    S7schema::S7schema(
-      .data = if (rlang::is_missing(.data)) list() else .data,
-      schema = codelists_schema
-    )
-  }
-  S7::new_object(.parent = parent)
 }
 
 #' @noRd
