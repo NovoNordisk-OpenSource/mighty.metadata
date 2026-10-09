@@ -154,7 +154,7 @@ check_consistent_decodes <- function(cl) {
       \(v) !is.null(v[["decode"]]),
       logical(1)
     )
-    if (length(unique(has_decode)) > 1L) {
+    if (any(has_decode) && !all(has_decode)) {
       cli::cli_abort(
         "Either all or none of the {.field {group}} entries in codelist {.val {cl$id}} must have a {.field decode}."
       )
