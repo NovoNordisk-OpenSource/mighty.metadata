@@ -78,7 +78,7 @@ construct_study_config <- function(file, .data) {
   # instead of the file: `validate_yaml()` parses in JavaScript, where js-yaml
   # resolves `version: 2025-08-06` to a timestamp and the string check fails.
   # Revert to:
-  #   S7::new_object(.parent = S7schema::S7schema(
+  #   S7::new_object(S7schema::S7schema(
   #     file = file, schema = schema, .data = .data
   #   ))
   rlang::check_exclusive(file, .data)
@@ -96,13 +96,9 @@ construct_study_config <- function(file, .data) {
     file <- NULL
   }
 
-  S7schema::validate_list(.data, schema)
-
-  S7::new_object(
-    .parent = .data,
-    schema = schema,
-    file = file
-  )
+  parent <- S7schema::S7schema(.data = .data, schema = schema)
+  parent@file <- file
+  S7::new_object(parent)
   # S7SCHEMA-WORKAROUND (end)
 }
 

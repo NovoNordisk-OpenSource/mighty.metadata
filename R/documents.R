@@ -51,7 +51,7 @@ construct_mighty_documents <- function(file, .data) {
     .data <- list()
   }
   S7::new_object(
-    .parent = S7schema::S7schema(file = file, schema = schema, .data = .data)
+    S7schema::S7schema(file = file, schema = schema, .data = .data)
   )
 }
 

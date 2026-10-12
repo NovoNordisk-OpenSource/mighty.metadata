@@ -113,7 +113,7 @@ remove_documents <- S7::new_generic(
 
 #' @noRd
 S7::method(remove_documents, mighty_documents) <- function(x, id) {
-  S7::S7_data(x) <- remove_ids(S7::S7_data(x), id)
+  S7::S7_data(x) <- as.list(remove_ids(S7::S7_data(x), id))
   x
 }
 

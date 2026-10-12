@@ -127,7 +127,7 @@ construct_mighty_study <- function(path, populate = FALSE) {
   )
 
   study <- S7::new_object(
-    .parent = entries,
+    entries,
     mighty = if (is.null(mighty_file)) NULL else mighty_config(mighty_file),
     study = if (is.null(study_file)) NULL else study_config(study_file),
     documents = if (is.null(documents_file)) {
