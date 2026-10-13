@@ -321,7 +321,7 @@ An S7 class `mighty_codelists` will be defined for the list of codelists. The cl
     * `remove_codelist_value(id, code)` — removes a value; removes the operation group implicitly if it was the last codelist value
     * `move_codelist_value(id, code, .pos)` — moves a value to a new position within its operation group; position affects the order of values in `values` entries in `define.xml`
     * `update_codelist_value(id, code, decode)` - updates the decode values -  only supported for extended and defined values
-* All mutating methods call `S7::validate()` after modification
+* All mutating methods rely on the validation triggered by `S7::S7_data<-` and `@<-`, so objects are validated once after each modification
 * `mighty_study` auto-detects `_codelists.yml` on construction and populates the `codelists` property
 
 ```r

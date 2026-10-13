@@ -201,20 +201,17 @@ S7::method(add_codelist, mighty_codelists) <- function(
     code = code,
     decode = decode
   )
-  S7::validate(x)
   x
 }
 
 S7::method(remove_codelist, mighty_codelists) <- function(x, id) {
   abort_unknown_codelist(S7::S7_data(x), id)
   S7::S7_data(x) <- as_list_or_empty(remove_ids(S7::S7_data(x), id))
-  S7::validate(x)
   x
 }
 
 S7::method(update_codelist, mighty_codelists) <- function(x, id, ...) {
   S7::S7_data(x) <- cl_update(S7::S7_data(x), id, ...)
-  S7::validate(x)
   x
 }
 
@@ -232,7 +229,6 @@ S7::method(add_codelist_values, mighty_codelists) <- function(
     code,
     decode
   )
-  S7::validate(x)
   x
 }
 
@@ -249,7 +245,6 @@ S7::method(extend_codelist_values, mighty_codelists) <- function(
     code,
     decode
   )
-  S7::validate(x)
   x
 }
 
@@ -259,7 +254,6 @@ S7::method(restore_codelist_values, mighty_codelists) <- function(
   code
 ) {
   S7::S7_data(x) <- cl_add_values(S7::S7_data(x), id, "restore", code)
-  S7::validate(x)
   x
 }
 
@@ -269,7 +263,6 @@ S7::method(subset_codelist_values, mighty_codelists) <- function(
   code
 ) {
   S7::S7_data(x) <- cl_add_values(S7::S7_data(x), id, "subset", code)
-  S7::validate(x)
   x
 }
 
@@ -281,7 +274,6 @@ S7::method(remove_codelist_value, mighty_codelists) <- function(
   S7::S7_data(x) <- as_list_or_empty(
     cl_remove_values(S7::S7_data(x), id, code)
   )
-  S7::validate(x)
   x
 }
 
@@ -292,7 +284,6 @@ S7::method(move_codelist_value, mighty_codelists) <- function(
   .pos
 ) {
   S7::S7_data(x) <- cl_move_value(S7::S7_data(x), id, code, .pos)
-  S7::validate(x)
   x
 }
 
@@ -303,16 +294,17 @@ S7::method(update_codelist_value, mighty_codelists) <- function(
   decode
 ) {
   S7::S7_data(x) <- cl_update_value(S7::S7_data(x), id, code, decode)
-  S7::validate(x)
   x
 }
 # mighty_study methods ------------------------------------------------------
 
-#' Apply a codelists method to a study and validate the study
+#' Apply a codelists method to a study
+#'
+#' Assigning via `@<-` validates `x`, so no explicit `validate()` is needed.
 #' @noRd
 modify_study_codelists <- function(x, generic, ...) {
   x@codelists <- generic(x@codelists, ...)
-  validate(x)
+  x
 }
 
 S7::method(list_codelists, mighty_study) <- function(x) {
