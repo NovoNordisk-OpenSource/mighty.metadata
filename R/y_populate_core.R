@@ -64,6 +64,10 @@ populate_core_domain <- function(domain, study) {
     unlist() |>
     toupper()
 
+  if (!length(core_vars)) {
+        return(domain)
+  }
+
   dup_core_vars <- which(duplicated(core_vars))
   if (length(dup_core_vars)) {
     cli::cli_abort(
