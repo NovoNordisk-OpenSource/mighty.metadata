@@ -11,15 +11,29 @@
 #'
 #' Value level:
 #' - `add_codelist_values()` adds `values` to an existing codelist.
-#' - `extend_codelist_values()`, `restore_codelist_values()` and
-#'   `subset_codelist_values()` add `extend`, `restore` and `subset` entries,
-#'   creating the codelist if it does not exist.
 #' - `remove_codelist_value()` removes value(s) from whichever operation group
 #'   they belong to. Empty groups are dropped, and a codelist left without any
 #'   values is removed.
 #' - `move_codelist_value()` moves a value within its operation group.
 #' - `update_codelist_value()` updates the decode of a `values` or `extend`
 #'   entry.
+#'
+#' Reuse of external codelists:
+#'
+#' Most codelists come from an external source of controlled terminology
+#' (e.g. CDISC CT), retrieved by downstream tooling such as `mighty.toolbox`.
+#' Instead of redefining these codelists, the functions below record how the
+#' study changes them. Support for reusing external codelists is still
+#' maturing. Each function creates the codelist entry if it does not exist.
+#' - `subset_codelist_values()` keeps only the given codes from the external
+#'   codelist (`subset`).
+#' - `restore_codelist_values()` includes SDTM controlled terminology codes
+#'   that would otherwise be excluded from the ADaM define.xml (`restore`).
+#' - `extend_codelist_values()` adds sponsor-defined codes to an extensible
+#'   external codelist (`extend`).
+#'
+#' `subset` and `restore` cannot be combined with `values` on the same
+#' codelist, as `values` defines a sponsor-defined codelist.
 #'
 #' Study level:
 #' - `check_codelist_references()` checks that every codelist in a

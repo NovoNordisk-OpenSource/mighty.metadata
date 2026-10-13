@@ -132,9 +132,6 @@ Codelist level:
 Value level:
 \itemize{
 \item \code{add_codelist_values()} adds \code{values} to an existing codelist.
-\item \code{extend_codelist_values()}, \code{restore_codelist_values()} and
-\code{subset_codelist_values()} add \code{extend}, \code{restore} and \code{subset} entries,
-creating the codelist if it does not exist.
 \item \code{remove_codelist_value()} removes value(s) from whichever operation group
 they belong to. Empty groups are dropped, and a codelist left without any
 values is removed.
@@ -142,6 +139,25 @@ values is removed.
 \item \code{update_codelist_value()} updates the decode of a \code{values} or \code{extend}
 entry.
 }
+
+Reuse of external codelists:
+
+Most codelists come from an external source of controlled terminology
+(e.g. CDISC CT), retrieved by downstream tooling such as \code{mighty.toolbox}.
+Instead of redefining these codelists, the functions below record how the
+study changes them. Support for reusing external codelists is still
+maturing. Each function creates the codelist entry if it does not exist.
+\itemize{
+\item \code{subset_codelist_values()} keeps only the given codes from the external
+codelist (\code{subset}).
+\item \code{restore_codelist_values()} includes SDTM controlled terminology codes
+that would otherwise be excluded from the ADaM define.xml (\code{restore}).
+\item \code{extend_codelist_values()} adds sponsor-defined codes to an extensible
+external codelist (\code{extend}).
+}
+
+\code{subset} and \code{restore} cannot be combined with \code{values} on the same
+codelist, as \code{values} defines a sponsor-defined codelist.
 
 Study level:
 \itemize{
