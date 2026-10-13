@@ -5,10 +5,10 @@
 \alias{mighty_codelists}
 \alias{list_codelists}
 \alias{select_codelist}
-\alias{define_codelist}
+\alias{add_codelist}
 \alias{remove_codelist}
 \alias{update_codelist}
-\alias{define_codelist_values}
+\alias{add_codelist_values}
 \alias{extend_codelist_values}
 \alias{restore_codelist_values}
 \alias{subset_codelist_values}
@@ -24,25 +24,25 @@ list_codelists(x)
 
 select_codelist(x, id)
 
-define_codelist(x, id, label, description, datatype, code, decode = NULL)
+add_codelist(x, id, label, description, datatype, code, decode = NULL)
 
 remove_codelist(x, id)
 
 update_codelist(x, id, ...)
 
-define_codelist_values(x, codelist_id, code, decode = NULL)
+add_codelist_values(x, id, code, decode = NULL)
 
-extend_codelist_values(x, codelist_id, code, decode = NULL)
+extend_codelist_values(x, id, code, decode = NULL)
 
-restore_codelist_values(x, codelist_id, code)
+restore_codelist_values(x, id, code)
 
-subset_codelist_values(x, codelist_id, code)
+subset_codelist_values(x, id, code)
 
-remove_codelist_value(x, codelist_id, code)
+remove_codelist_value(x, id, code)
 
-move_codelist_value(x, codelist_id, code, .pos)
+move_codelist_value(x, id, code, .pos)
 
-update_codelist_value(x, codelist_id, code, decode)
+update_codelist_value(x, id, code, decode)
 
 check_codelist_references(study)
 }
@@ -71,8 +71,6 @@ with \code{file}. Supplying neither returns an empty \code{mighty_codelists}.}
 
 \item{...}{Codelist-level fields to update (\code{label}, \code{description},
 \code{datatype}).}
-
-\item{codelist_id}{\code{character(1)} codelist id.}
 
 \item{.pos}{\code{integer(1)} new position of the value within its group.}
 
@@ -119,13 +117,13 @@ When part of a \code{\link[=mighty_study]{mighty_study()}}, every codelist must 
 by at least one column in the domain metadata.
 }
 \details{
-Functions to list, select, define, remove, and update codelists and their
+Functions to list, select, add, remove, and update codelists and their
 values in your \code{mighty_codelists()} object or directly on a
 \code{mighty_study()} object.
 
 Codelist level:
 \itemize{
-\item \code{define_codelist()} adds a new sponsor-defined codelist with \code{values}.
+\item \code{add_codelist()} adds a new sponsor-defined codelist with \code{values}.
 \item \code{remove_codelist()} removes codelist(s) and all their contents.
 \item \code{update_codelist()} updates \code{label}, \code{description} and \code{datatype}.
 \item \code{select_codelist()} returns a single codelist entry as a list.
@@ -133,7 +131,7 @@ Codelist level:
 
 Value level:
 \itemize{
-\item \code{define_codelist_values()} adds \code{values} to an existing codelist.
+\item \code{add_codelist_values()} adds \code{values} to an existing codelist.
 \item \code{extend_codelist_values()}, \code{restore_codelist_values()} and
 \code{subset_codelist_values()} add \code{extend}, \code{restore} and \code{subset} entries,
 creating the codelist if it does not exist.
@@ -175,7 +173,7 @@ cl <- mighty_codelists(
 print(cl)
 
 cl <- mighty_codelists() |>
-  define_codelist(
+  add_codelist(
     id = "REGION",
     label = "Region",
     description = "Geographical regions used in the study",
@@ -183,10 +181,10 @@ cl <- mighty_codelists() |>
     code = c("EUROPE", "NORTH AMERICA"),
     decode = c("Europe", "North America")
   ) |>
-  subset_codelist_values(codelist_id = "AGEU", code = c("MONTHS", "YEARS")) |>
-  restore_codelist_values(codelist_id = "AGEU", code = "DAYS") |>
+  subset_codelist_values(id = "AGEU", code = c("MONTHS", "YEARS")) |>
+  restore_codelist_values(id = "AGEU", code = "DAYS") |>
   extend_codelist_values(
-    codelist_id = "LOC",
+    id = "LOC",
     code = "MY CUSTOM LOCATION",
     decode = "My Custom Location"
   )
@@ -196,9 +194,9 @@ select_codelist(cl, id = "AGEU")
 
 cl <- cl |>
   update_codelist(id = "REGION", description = "Regions used in the trial") |>
-  update_codelist_value(codelist_id = "REGION", code = "EUROPE", decode = "EU") |>
-  move_codelist_value(codelist_id = "AGEU", code = "YEARS", .pos = 1) |>
-  remove_codelist_value(codelist_id = "AGEU", code = "MONTHS") |>
+  update_codelist_value(id = "REGION", code = "EUROPE", decode = "EU") |>
+  move_codelist_value(id = "AGEU", code = "YEARS", .pos = 1) |>
+  remove_codelist_value(id = "AGEU", code = "MONTHS") |>
   remove_codelist(id = "LOC")
 
 

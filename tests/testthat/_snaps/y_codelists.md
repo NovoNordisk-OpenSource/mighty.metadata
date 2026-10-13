@@ -1,15 +1,15 @@
-# define_codelist() errors on duplicate codelist id
+# add_codelist() errors on duplicate codelist id
 
     Code
-      define_codelist(cl, "NUM", "n", "n", "integer", code = 3)
+      add_codelist(cl, "NUM", "n", "n", "integer", code = 3)
     Condition
       Error in `cl_define()`:
       ! Codelist "NUM" already exists.
 
-# define_codelist() errors when decode and code lengths differ
+# add_codelist() errors when decode and code lengths differ
 
     Code
-      define_codelist(mighty_codelists(), "X", "n", "n", "text", code = c("A", "B"),
+      add_codelist(mighty_codelists(), "X", "n", "n", "text", code = c("A", "B"),
       decode = "a")
     Condition
       Error in `cl_build_values()`:
@@ -32,10 +32,10 @@
       ! Only label, description and datatype can be updated.
       x Invalid field: values
 
-# define_codelist_values() errors on unknown codelist
+# add_codelist_values() errors on unknown codelist
 
     Code
-      define_codelist_values(mighty_codelists(), "NOPE", code = "X")
+      add_codelist_values(mighty_codelists(), "NOPE", code = "X")
     Condition
       Error in `abort_unknown_codelist()`:
       ! Codelist "NOPE" is not defined in the codelists metadata.

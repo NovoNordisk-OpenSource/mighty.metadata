@@ -43,9 +43,9 @@ test_that("select_codelist() errors on unknown id", {
   )
 })
 
-test_that("define_codelist() adds a codelist with values", {
+test_that("add_codelist() adds a codelist with values", {
   cl <- mighty_codelists() |>
-    define_codelist(
+    add_codelist(
       id = "NEW",
       label = "New",
       description = "New codelist",
@@ -58,24 +58,24 @@ test_that("define_codelist() adds a codelist with values", {
   expect_equal(new$values[[2]]$decode, "b")
 })
 
-test_that("define_codelist() works without decodes", {
+test_that("add_codelist() works without decodes", {
   cl <- mighty_codelists() |>
-    define_codelist("NUM", "n", "n", "integer", code = c(1, 2))
+    add_codelist("NUM", "n", "n", "integer", code = c(1, 2))
   expect_null(select_codelist(cl, "NUM")$values[[1]]$decode)
 })
 
-test_that("define_codelist() errors on duplicate codelist id", {
+test_that("add_codelist() errors on duplicate codelist id", {
   cl <- mighty_codelists() |>
-    define_codelist("NUM", "n", "n", "integer", code = c(1, 2))
+    add_codelist("NUM", "n", "n", "integer", code = c(1, 2))
   expect_snapshot(
-    define_codelist(cl, "NUM", "n", "n", "integer", code = 3),
+    add_codelist(cl, "NUM", "n", "n", "integer", code = 3),
     error = TRUE
   )
 })
 
-test_that("define_codelist() errors when decode and code lengths differ", {
+test_that("add_codelist() errors when decode and code lengths differ", {
   expect_snapshot(
-    define_codelist(
+    add_codelist(
       mighty_codelists(),
       "X",
       "n",
@@ -88,9 +88,9 @@ test_that("define_codelist() errors when decode and code lengths differ", {
   )
 })
 
-test_that("define_codelist() requires at least one value", {
+test_that("add_codelist() requires at least one value", {
   expect_error(
-    define_codelist(
+    add_codelist(
       mighty_codelists(),
       "A",
       "a",
@@ -142,23 +142,23 @@ test_that("update_codelist() errors on unknown id", {
   )
 })
 
-test_that("define_codelist_values() appends to existing codelist", {
+test_that("add_codelist_values() appends to existing codelist", {
   cl <- new_cl(region(list(code = "EU", decode = "Europe"))) |>
-    define_codelist_values("REGION", code = "AF", decode = "Africa")
+    add_codelist_values("REGION", code = "AF", decode = "Africa")
   expect_equal(codes(select_codelist(cl, "REGION"), "values"), c("EU", "AF"))
 })
 
-test_that("define_codelist_values() errors on unknown codelist", {
+test_that("add_codelist_values() errors on unknown codelist", {
   expect_snapshot(
-    define_codelist_values(mighty_codelists(), "NOPE", code = "X"),
+    add_codelist_values(mighty_codelists(), "NOPE", code = "X"),
     error = TRUE
   )
 })
 
-test_that("define_codelist_values() errors on a subset codelist", {
+test_that("add_codelist_values() errors on a subset codelist", {
   cl <- new_cl(list(id = "AGEU", subset = list(list(code = "YEARS"))))
   expect_error(
-    define_codelist_values(cl, "AGEU", code = "DAYS"),
+    add_codelist_values(cl, "AGEU", code = "DAYS"),
     "cannot combine"
   )
 })
@@ -366,9 +366,9 @@ test_that("remove_codelist_value() on mighty_study drops empty codelist", {
 })
 
 
-test_that("define_codelist() and define_codelist_values() work on mighty_study", {
+test_that("add_codelist() and add_codelist_values() work on mighty_study", {
   study <- mighty_study(local_study_without_codelists()) |>
-    define_codelist(
+    add_codelist(
       id = "FANCY_CDISC_CODELIST",
       label = "Fancy",
       description = "Fancy codelist",
@@ -376,7 +376,7 @@ test_that("define_codelist() and define_codelist_values() work on mighty_study",
       code = "A",
       decode = "a"
     ) |>
-    define_codelist_values("FANCY_CDISC_CODELIST", code = "B", decode = "b")
+    add_codelist_values("FANCY_CDISC_CODELIST", code = "B", decode = "b")
   expect_s7_class(study, mighty_study)
   expect_equal(
     codes(select_codelist(study, "FANCY_CDISC_CODELIST"), "values"),
@@ -397,7 +397,7 @@ test_that("subset/restore/extend_codelist_values() work on mighty_study", {
 
 test_that("update_codelist() and update_codelist_value() work on mighty_study", {
   study <- mighty_study(local_study_without_codelists()) |>
-    define_codelist(
+    add_codelist(
       id = "FANCY_CDISC_CODELIST",
       label = "Fancy",
       description = "Fancy codelist",
@@ -443,7 +443,7 @@ test_that("select_codelist() on mighty_study errors on unknown id", {
 
 test_that("mighty_study methods allow adding codelists not yet referenced", {
   study <- mighty_study(local_study_without_codelists()) |>
-    define_codelist(
+    add_codelist(
       id = "UNREFERENCED",
       label = "x",
       description = "x",

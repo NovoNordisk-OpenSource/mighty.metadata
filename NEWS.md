@@ -4,8 +4,8 @@
   codelist metadata in `_codelists.yml`, supporting non-standard codelists
   (`values`) and value-level overrides of standard controlled terminology codelists (`subset`, `restore`,
   `extend`). New helpers: `list_codelists()`, `select_codelist()`,
-  `define_codelist()`, `remove_codelist()`, `update_codelist()`,
-  `define_codelist_values()`, `subset_codelist_values()`,
+  `add_codelist()`, `remove_codelist()`, `update_codelist()`,
+  `add_codelist_values()`, `subset_codelist_values()`,
   `restore_codelist_values()`, `extend_codelist_values()`,
   `remove_codelist_value()`, `move_codelist_value()` and
   `update_codelist_value()`.

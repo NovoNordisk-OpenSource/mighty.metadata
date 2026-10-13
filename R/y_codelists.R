@@ -1,16 +1,16 @@
 #' @details
-#' Functions to list, select, define, remove, and update codelists and their
+#' Functions to list, select, add, remove, and update codelists and their
 #' values in your `mighty_codelists()` object or directly on a
 #' `mighty_study()` object.
 #'
 #' Codelist level:
-#' - `define_codelist()` adds a new sponsor-defined codelist with `values`.
+#' - `add_codelist()` adds a new sponsor-defined codelist with `values`.
 #' - `remove_codelist()` removes codelist(s) and all their contents.
 #' - `update_codelist()` updates `label`, `description` and `datatype`.
 #' - `select_codelist()` returns a single codelist entry as a list.
 #'
 #' Value level:
-#' - `define_codelist_values()` adds `values` to an existing codelist.
+#' - `add_codelist_values()` adds `values` to an existing codelist.
 #' - `extend_codelist_values()`, `restore_codelist_values()` and
 #'   `subset_codelist_values()` add `extend`, `restore` and `subset` entries,
 #'   creating the codelist if it does not exist.
@@ -31,7 +31,6 @@
 #' @param x A `mighty_codelists()` or `mighty_study()` object.
 #' @param id `character(1)` codelist id. `remove_codelist()` accepts
 #'   `character()` to remove several codelists.
-#' @param codelist_id `character(1)` codelist id.
 #' @param label `character(1)` codelist label.
 #' @param description `character(1)` codelist description.
 #' @param datatype `character(1)` one of `"text"`, `"integer"`, `"float"`.
@@ -43,7 +42,7 @@
 #'   `datatype`).
 #' @examples
 #' cl <- mighty_codelists() |>
-#'   define_codelist(
+#'   add_codelist(
 #'     id = "REGION",
 #'     label = "Region",
 #'     description = "Geographical regions used in the study",
@@ -51,10 +50,10 @@
 #'     code = c("EUROPE", "NORTH AMERICA"),
 #'     decode = c("Europe", "North America")
 #'   ) |>
-#'   subset_codelist_values(codelist_id = "AGEU", code = c("MONTHS", "YEARS")) |>
-#'   restore_codelist_values(codelist_id = "AGEU", code = "DAYS") |>
+#'   subset_codelist_values(id = "AGEU", code = c("MONTHS", "YEARS")) |>
+#'   restore_codelist_values(id = "AGEU", code = "DAYS") |>
 #'   extend_codelist_values(
-#'     codelist_id = "LOC",
+#'     id = "LOC",
 #'     code = "MY CUSTOM LOCATION",
 #'     decode = "My Custom Location"
 #'   )
@@ -64,9 +63,9 @@
 #'
 #' cl <- cl |>
 #'   update_codelist(id = "REGION", description = "Regions used in the trial") |>
-#'   update_codelist_value(codelist_id = "REGION", code = "EUROPE", decode = "EU") |>
-#'   move_codelist_value(codelist_id = "AGEU", code = "YEARS", .pos = 1) |>
-#'   remove_codelist_value(codelist_id = "AGEU", code = "MONTHS") |>
+#'   update_codelist_value(id = "REGION", code = "EUROPE", decode = "EU") |>
+#'   move_codelist_value(id = "AGEU", code = "YEARS", .pos = 1) |>
+#'   remove_codelist_value(id = "AGEU", code = "MONTHS") |>
 #'   remove_codelist(id = "LOC")
 #'
 #' @name codelists
@@ -92,8 +91,8 @@ select_codelist <- S7::new_generic(
 
 #' @rdname codelists
 #' @export
-define_codelist <- S7::new_generic(
-  name = "define_codelist",
+add_codelist <- S7::new_generic(
+  name = "add_codelist",
   dispatch_args = "x",
   fun = function(x, id, label, description, datatype, code, decode = NULL) {
     S7::S7_dispatch()
@@ -118,10 +117,10 @@ update_codelist <- S7::new_generic(
 
 #' @rdname codelists
 #' @export
-define_codelist_values <- S7::new_generic(
-  name = "define_codelist_values",
+add_codelist_values <- S7::new_generic(
+  name = "add_codelist_values",
   dispatch_args = "x",
-  fun = function(x, codelist_id, code, decode = NULL) S7::S7_dispatch()
+  fun = function(x, id, code, decode = NULL) S7::S7_dispatch()
 )
 
 #' @rdname codelists
@@ -129,7 +128,7 @@ define_codelist_values <- S7::new_generic(
 extend_codelist_values <- S7::new_generic(
   name = "extend_codelist_values",
   dispatch_args = "x",
-  fun = function(x, codelist_id, code, decode = NULL) S7::S7_dispatch()
+  fun = function(x, id, code, decode = NULL) S7::S7_dispatch()
 )
 
 #' @rdname codelists
@@ -137,7 +136,7 @@ extend_codelist_values <- S7::new_generic(
 restore_codelist_values <- S7::new_generic(
   name = "restore_codelist_values",
   dispatch_args = "x",
-  fun = function(x, codelist_id, code) S7::S7_dispatch()
+  fun = function(x, id, code) S7::S7_dispatch()
 )
 
 #' @rdname codelists
@@ -145,7 +144,7 @@ restore_codelist_values <- S7::new_generic(
 subset_codelist_values <- S7::new_generic(
   name = "subset_codelist_values",
   dispatch_args = "x",
-  fun = function(x, codelist_id, code) S7::S7_dispatch()
+  fun = function(x, id, code) S7::S7_dispatch()
 )
 
 #' @rdname codelists
@@ -153,7 +152,7 @@ subset_codelist_values <- S7::new_generic(
 remove_codelist_value <- S7::new_generic(
   name = "remove_codelist_value",
   dispatch_args = "x",
-  fun = function(x, codelist_id, code) S7::S7_dispatch()
+  fun = function(x, id, code) S7::S7_dispatch()
 )
 
 #' @rdname codelists
@@ -161,7 +160,7 @@ remove_codelist_value <- S7::new_generic(
 move_codelist_value <- S7::new_generic(
   name = "move_codelist_value",
   dispatch_args = "x",
-  fun = function(x, codelist_id, code, .pos) S7::S7_dispatch()
+  fun = function(x, id, code, .pos) S7::S7_dispatch()
 )
 
 #' @rdname codelists
@@ -169,7 +168,7 @@ move_codelist_value <- S7::new_generic(
 update_codelist_value <- S7::new_generic(
   name = "update_codelist_value",
   dispatch_args = "x",
-  fun = function(x, codelist_id, code, decode) S7::S7_dispatch()
+  fun = function(x, id, code, decode) S7::S7_dispatch()
 )
 
 # mighty_codelists methods --------------------------------------------------
@@ -184,7 +183,7 @@ S7::method(select_codelist, mighty_codelists) <- function(x, id) {
   get_id(l, id)
 }
 
-S7::method(define_codelist, mighty_codelists) <- function(
+S7::method(add_codelist, mighty_codelists) <- function(
   x,
   id,
   label,
@@ -219,16 +218,16 @@ S7::method(update_codelist, mighty_codelists) <- function(x, id, ...) {
   x
 }
 
-S7::method(define_codelist_values, mighty_codelists) <- function(
+S7::method(add_codelist_values, mighty_codelists) <- function(
   x,
-  codelist_id,
+  id,
   code,
   decode = NULL
 ) {
-  abort_unknown_codelist(S7::S7_data(x), codelist_id)
+  abort_unknown_codelist(S7::S7_data(x), id)
   S7::S7_data(x) <- cl_add_values(
     S7::S7_data(x),
-    codelist_id,
+    id,
     "values",
     code,
     decode
@@ -239,13 +238,13 @@ S7::method(define_codelist_values, mighty_codelists) <- function(
 
 S7::method(extend_codelist_values, mighty_codelists) <- function(
   x,
-  codelist_id,
+  id,
   code,
   decode = NULL
 ) {
   S7::S7_data(x) <- cl_add_values(
     S7::S7_data(x),
-    codelist_id,
+    id,
     "extend",
     code,
     decode
@@ -256,31 +255,31 @@ S7::method(extend_codelist_values, mighty_codelists) <- function(
 
 S7::method(restore_codelist_values, mighty_codelists) <- function(
   x,
-  codelist_id,
+  id,
   code
 ) {
-  S7::S7_data(x) <- cl_add_values(S7::S7_data(x), codelist_id, "restore", code)
+  S7::S7_data(x) <- cl_add_values(S7::S7_data(x), id, "restore", code)
   S7::validate(x)
   x
 }
 
 S7::method(subset_codelist_values, mighty_codelists) <- function(
   x,
-  codelist_id,
+  id,
   code
 ) {
-  S7::S7_data(x) <- cl_add_values(S7::S7_data(x), codelist_id, "subset", code)
+  S7::S7_data(x) <- cl_add_values(S7::S7_data(x), id, "subset", code)
   S7::validate(x)
   x
 }
 
 S7::method(remove_codelist_value, mighty_codelists) <- function(
   x,
-  codelist_id,
+  id,
   code
 ) {
   S7::S7_data(x) <- as_list_or_empty(
-    cl_remove_values(S7::S7_data(x), codelist_id, code)
+    cl_remove_values(S7::S7_data(x), id, code)
   )
   S7::validate(x)
   x
@@ -288,22 +287,22 @@ S7::method(remove_codelist_value, mighty_codelists) <- function(
 
 S7::method(move_codelist_value, mighty_codelists) <- function(
   x,
-  codelist_id,
+  id,
   code,
   .pos
 ) {
-  S7::S7_data(x) <- cl_move_value(S7::S7_data(x), codelist_id, code, .pos)
+  S7::S7_data(x) <- cl_move_value(S7::S7_data(x), id, code, .pos)
   S7::validate(x)
   x
 }
 
 S7::method(update_codelist_value, mighty_codelists) <- function(
   x,
-  codelist_id,
+  id,
   code,
   decode
 ) {
-  S7::S7_data(x) <- cl_update_value(S7::S7_data(x), codelist_id, code, decode)
+  S7::S7_data(x) <- cl_update_value(S7::S7_data(x), id, code, decode)
   S7::validate(x)
   x
 }
@@ -324,7 +323,7 @@ S7::method(select_codelist, mighty_study) <- function(x, id) {
   select_codelist(x@codelists, id)
 }
 
-S7::method(define_codelist, mighty_study) <- function(
+S7::method(add_codelist, mighty_study) <- function(
   x,
   id,
   label,
@@ -335,7 +334,7 @@ S7::method(define_codelist, mighty_study) <- function(
 ) {
   modify_study_codelists(
     x,
-    define_codelist,
+    add_codelist,
     id = id,
     label = label,
     description = description,
@@ -353,16 +352,16 @@ S7::method(update_codelist, mighty_study) <- function(x, id, ...) {
   modify_study_codelists(x, update_codelist, id = id, ...)
 }
 
-S7::method(define_codelist_values, mighty_study) <- function(
+S7::method(add_codelist_values, mighty_study) <- function(
   x,
-  codelist_id,
+  id,
   code,
   decode = NULL
 ) {
   modify_study_codelists(
     x,
-    define_codelist_values,
-    codelist_id = codelist_id,
+    add_codelist_values,
+    id = id,
     code = code,
     decode = decode
   )
@@ -370,14 +369,14 @@ S7::method(define_codelist_values, mighty_study) <- function(
 
 S7::method(extend_codelist_values, mighty_study) <- function(
   x,
-  codelist_id,
+  id,
   code,
   decode = NULL
 ) {
   modify_study_codelists(
     x,
     extend_codelist_values,
-    codelist_id = codelist_id,
+    id = id,
     code = code,
     decode = decode
   )
@@ -385,53 +384,53 @@ S7::method(extend_codelist_values, mighty_study) <- function(
 
 S7::method(restore_codelist_values, mighty_study) <- function(
   x,
-  codelist_id,
+  id,
   code
 ) {
   modify_study_codelists(
     x,
     restore_codelist_values,
-    codelist_id = codelist_id,
+    id = id,
     code = code
   )
 }
 
 S7::method(subset_codelist_values, mighty_study) <- function(
   x,
-  codelist_id,
+  id,
   code
 ) {
   modify_study_codelists(
     x,
     subset_codelist_values,
-    codelist_id = codelist_id,
+    id = id,
     code = code
   )
 }
 
 S7::method(remove_codelist_value, mighty_study) <- function(
   x,
-  codelist_id,
+  id,
   code
 ) {
   modify_study_codelists(
     x,
     remove_codelist_value,
-    codelist_id = codelist_id,
+    id = id,
     code = code
   )
 }
 
 S7::method(move_codelist_value, mighty_study) <- function(
   x,
-  codelist_id,
+  id,
   code,
   .pos
 ) {
   modify_study_codelists(
     x,
     move_codelist_value,
-    codelist_id = codelist_id,
+    id = id,
     code = code,
     .pos = .pos
   )
@@ -439,14 +438,14 @@ S7::method(move_codelist_value, mighty_study) <- function(
 
 S7::method(update_codelist_value, mighty_study) <- function(
   x,
-  codelist_id,
+  id,
   code,
   decode
 ) {
   modify_study_codelists(
     x,
     update_codelist_value,
-    codelist_id = codelist_id,
+    id = id,
     code = code,
     decode = decode
   )
@@ -524,11 +523,11 @@ cl_update <- function(l, id, ...) {
 
 #' Append values to an operation group, creating the codelist if needed
 #' @noRd
-cl_add_values <- function(l, codelist_id, group, code, decode = NULL) {
+cl_add_values <- function(l, id, group, code, decode = NULL) {
   new_values <- cl_build_values(code, decode)
-  idx <- which_ids(l, codelist_id)
+  idx <- which_ids(l, id)
   if (!length(idx)) {
-    cl <- list(id = codelist_id)
+    cl <- list(id = id)
     cl[[group]] <- new_values
     return(insert_in_vector(l, cl))
   }
@@ -559,9 +558,9 @@ cl_find_value <- function(cl, code) {
 }
 
 #' @noRd
-cl_remove_values <- function(l, codelist_id, code) {
-  abort_unknown_codelist(l, codelist_id)
-  idx <- which_ids(l, codelist_id)
+cl_remove_values <- function(l, id, code) {
+  abort_unknown_codelist(l, id)
+  idx <- which_ids(l, id)
   cl <- l[[idx]]
   for (cd in code) {
     loc <- cl_find_value(cl, cd)
@@ -572,21 +571,21 @@ cl_remove_values <- function(l, codelist_id, code) {
   }
   if (!any(CODELIST_GROUPS %in% names(cl))) {
     cli::cli_inform(
-      "Codelist {.val {codelist_id}} has no values left and was removed."
+      "Codelist {.val {id}} has no values left and was removed."
     )
-    return(remove_ids(l, codelist_id))
+    return(remove_ids(l, id))
   }
   l[[idx]] <- cl
   l
 }
 
 #' @noRd
-cl_move_value <- function(l, codelist_id, code, .pos) {
-  abort_unknown_codelist(l, codelist_id)
+cl_move_value <- function(l, id, code, .pos) {
+  abort_unknown_codelist(l, id)
   if (length(code) != 1L) {
     cli::cli_abort("{.arg code} must be a single value.")
   }
-  idx <- which_ids(l, codelist_id)
+  idx <- which_ids(l, id)
   loc <- cl_find_value(l[[idx]], code)
   group <- l[[idx]][[loc$group]]
   check_position(.pos, max = length(group))
@@ -618,14 +617,14 @@ check_position <- function(
 }
 
 #' @noRd
-cl_update_value <- function(l, codelist_id, code, decode) {
-  abort_unknown_codelist(l, codelist_id)
+cl_update_value <- function(l, id, code, decode) {
+  abort_unknown_codelist(l, id)
   if (length(decode) != length(code)) {
     cli::cli_abort(
       "{.arg decode} must have the same length as {.arg code}."
     )
   }
-  idx <- which_ids(l, codelist_id)
+  idx <- which_ids(l, id)
   for (i in seq_along(code)) {
     loc <- cl_find_value(l[[idx]], code[[i]])
     if (!loc$group %in% CODELIST_DECODE_GROUPS) {
