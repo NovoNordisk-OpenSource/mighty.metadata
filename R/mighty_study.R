@@ -223,7 +223,6 @@ mighty_study <- S7::new_class(
   constructor = construct_mighty_study,
   validator = function(self) {
     check_document_references(self)
-    check_codelist_references(self)
     NULL
   }
 )

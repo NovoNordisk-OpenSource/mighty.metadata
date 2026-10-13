@@ -20,6 +20,14 @@ local_codelist_study <- function(env = parent.frame()) {
   tmpdir
 }
 
+# test_study without _codelists.yml, for tests that start from no codelists
+local_study_without_codelists <- function(env = parent.frame()) {
+  tmpdir <- withr::local_tempdir(.local_envir = env)
+  files <- list.files(test_path("test_study"), full.names = TRUE)
+  file.copy(files[basename(files) != "_codelists.yml"], tmpdir)
+  tmpdir
+}
+
 codes <- function(cl, group) group_codes(cl[[group]])
 
 test_that("select_codelist() returns the codelist entry", {
@@ -280,10 +288,15 @@ test_that("update_codelist_value() errors when decode and code lengths differ", 
 })
 
 test_that("mighty_study() has empty codelists without _codelists.yml", {
-  study <- mighty_study(test_path("test_study"))
+  study <- mighty_study(local_study_without_codelists())
   expect_s7_class(study@codelists, mighty_codelists)
   expect_length(study@codelists, 0)
   expect_identical(list_codelists(study), character(0))
+})
+
+test_that("mighty_study() reads _codelists.yml with unreferenced codelists", {
+  study <- mighty_study(test_path("test_study"))
+  expect_identical(list_codelists(study), c("REGION", "AGEU", "LOC"))
 })
 
 test_that("mighty_study() reads _codelists.yml", {
@@ -301,11 +314,31 @@ test_that("mighty_study print() shows codelists", {
   )
 })
 
-test_that("mighty_study() errors on unreferenced codelists", {
+test_that("mighty_study() allows codelists not referenced by any column", {
+  study <- mighty_study(local_codelist_study()) |>
+    subset_codelist_values("UNUSED", code = "A")
+  expect_setequal(
+    list_codelists(study),
+    c("FANCY_CDISC_CODELIST", "UNUSED")
+  )
+})
+
+test_that("check_codelist_references() returns study when all are referenced", {
   study <- mighty_study(local_codelist_study())
-  expect_snapshot(
-    subset_codelist_values(study, "UNUSED", code = "A"),
-    error = TRUE
+  expect_identical(check_codelist_references(study), study)
+  expect_invisible(check_codelist_references(study))
+})
+
+test_that("check_codelist_references() errors on unreferenced codelists", {
+  study <- mighty_study(local_codelist_study()) |>
+    subset_codelist_values("UNUSED", code = "A")
+  expect_snapshot(check_codelist_references(study), error = TRUE)
+})
+
+test_that("check_codelist_references() errors on non-study input", {
+  expect_error(
+    check_codelist_references(mighty_codelists()),
+    "must be a <mighty_study> object"
   )
 })
 
@@ -322,7 +355,7 @@ test_that("collect_codelist_refs() includes columns in parameters", {
 })
 
 test_that("remove_codelist_value() on mighty_study drops empty codelist", {
-  study <- mighty_study(test_path("test_study")) |>
+  study <- mighty_study(local_study_without_codelists()) |>
     extend_codelist_values("FANCY_CDISC_CODELIST", code = "X")
   expect_identical(list_codelists(study), "FANCY_CDISC_CODELIST")
 
@@ -332,11 +365,9 @@ test_that("remove_codelist_value() on mighty_study drops empty codelist", {
   expect_length(study@codelists, 0)
 })
 
-# mighty_study methods: FANCY_CDISC_CODELIST is the only id referenced in
-# test_study, so it is used for every operation that must pass validation.
 
 test_that("define_codelist() and define_codelist_values() work on mighty_study", {
-  study <- mighty_study(test_path("test_study")) |>
+  study <- mighty_study(local_study_without_codelists()) |>
     define_codelist(
       id = "FANCY_CDISC_CODELIST",
       label = "Fancy",
@@ -354,7 +385,7 @@ test_that("define_codelist() and define_codelist_values() work on mighty_study",
 })
 
 test_that("subset/restore/extend_codelist_values() work on mighty_study", {
-  study <- mighty_study(test_path("test_study")) |>
+  study <- mighty_study(local_study_without_codelists()) |>
     subset_codelist_values("FANCY_CDISC_CODELIST", code = "S") |>
     restore_codelist_values("FANCY_CDISC_CODELIST", code = "R") |>
     extend_codelist_values("FANCY_CDISC_CODELIST", code = "E", decode = "e")
@@ -365,7 +396,7 @@ test_that("subset/restore/extend_codelist_values() work on mighty_study", {
 })
 
 test_that("update_codelist() and update_codelist_value() work on mighty_study", {
-  study <- mighty_study(test_path("test_study")) |>
+  study <- mighty_study(local_study_without_codelists()) |>
     define_codelist(
       id = "FANCY_CDISC_CODELIST",
       label = "Fancy",
@@ -382,7 +413,7 @@ test_that("update_codelist() and update_codelist_value() work on mighty_study", 
 })
 
 test_that("move_codelist_value() works on mighty_study", {
-  study <- mighty_study(test_path("test_study")) |>
+  study <- mighty_study(local_study_without_codelists()) |>
     subset_codelist_values("FANCY_CDISC_CODELIST", code = c("A", "B")) |>
     move_codelist_value("FANCY_CDISC_CODELIST", code = "B", .pos = 1)
   expect_equal(
@@ -410,29 +441,25 @@ test_that("select_codelist() on mighty_study errors on unknown id", {
   )
 })
 
-test_that("mighty_study methods error when codelist is not referenced", {
-  study <- mighty_study(test_path("test_study"))
-  expect_error(
+test_that("mighty_study methods allow adding codelists not yet referenced", {
+  study <- mighty_study(local_study_without_codelists()) |>
     define_codelist(
-      study,
       id = "UNREFERENCED",
       label = "x",
       description = "x",
       datatype = "text",
       code = "A"
-    ),
-    "not referenced by any column"
+    ) |>
+    extend_codelist_values("UNREFERENCED_EXT", code = "A") |>
+    restore_codelist_values("UNREFERENCED_RES", code = "A")
+  expect_setequal(
+    list_codelists(study),
+    c("UNREFERENCED", "UNREFERENCED_EXT", "UNREFERENCED_RES")
   )
   expect_error(
-    extend_codelist_values(study, "UNREFERENCED", code = "A"),
+    check_codelist_references(study),
     "not referenced by any column"
   )
-  expect_error(
-    restore_codelist_values(study, "UNREFERENCED", code = "A"),
-    "not referenced by any column"
-  )
-  # The study is unchanged after a failed operation
-  expect_length(study@codelists, 0)
 })
 
 test_that("write_config() round-trips _codelists.yml", {
@@ -449,6 +476,6 @@ test_that("write_config() round-trips _codelists.yml", {
 
 test_that("write_config() writes no _codelists.yml when codelists is empty", {
   out <- withr::local_tempdir()
-  write_config(mighty_study(test_path("test_study")), path = out)
+  write_config(mighty_study(local_study_without_codelists()), path = out)
   expect_false(file.exists(file.path(out, "_codelists.yml")))
 })

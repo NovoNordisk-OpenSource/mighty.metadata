@@ -7,6 +7,7 @@
       @ mighty: <mighty_config>
       @ study: <study_config>
       @ documents: 3 entries
+      @ codelists: 3 entries
       $ ADAE: <mighty_domain>
       $ ADSL: <mighty_domain>
       $ ADVS: <mighty_domain>

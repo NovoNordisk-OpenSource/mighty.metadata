@@ -64,10 +64,10 @@
       Error in `cl_update_value()`:
       ! Decode can only be updated for values or extend entries; "YEARS" is in subset.
 
-# mighty_study() errors on unreferenced codelists
+# check_codelist_references() errors on unreferenced codelists
 
     Code
-      subset_codelist_values(study, "UNUSED", code = "A")
+      check_codelist_references(study)
     Condition
       Error in `check_codelist_references()`:
       ! Codelist "UNUSED" is not referenced by any column.

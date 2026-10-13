@@ -1,5 +1,5 @@
 test_that("mighty_codelists() reads _codelists.yml", {
-  cl <- mighty_codelists(file = test_path("test_codelists/_codelists.yml"))
+  cl <- mighty_codelists(file = test_path("test_study/_codelists.yml"))
   expect_s7_class(cl, mighty_codelists)
   expect_identical(
     list_codelists(cl),
@@ -199,7 +199,7 @@ test_that("validate_mighty_codelists() rejects mixed decodes in values", {
 })
 
 test_that("mighty_codelists print() summarizes codelists", {
-  cl <- mighty_codelists(file = test_path("test_codelists/_codelists.yml"))
+  cl <- mighty_codelists(file = test_path("test_study/_codelists.yml"))
   print(cl) |>
     expect_snapshot(
       transform = \(x) {

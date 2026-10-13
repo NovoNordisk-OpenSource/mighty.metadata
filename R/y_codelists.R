@@ -21,9 +21,12 @@
 #' - `update_codelist_value()` updates the decode of a `values` or `extend`
 #'   entry.
 #'
-#' When working on a `mighty_study()`, every codelist must be referenced by a
-#' column (`codelist` field), so add the column reference before defining the
-#' codelist.
+#' Study level:
+#' - `check_codelist_references()` checks that every codelist in a
+#'   `mighty_study()` is referenced by at least one column (`codelist` field),
+#'   including columns in parameters. It returns `study` invisibly or errors.
+#'   The check is not run automatically, so codelists can be added before
+#'   they are used by any column.
 #'
 #' @param x A `mighty_codelists()` or `mighty_study()` object.
 #' @param id `character(1)` codelist id. `remove_codelist()` accepts
@@ -661,9 +664,22 @@ collect_codelist_refs <- function(study) {
   unique(refs[!is.na(refs)])
 }
 
-#' Every codelist in `_codelists.yml` must be referenced by a column
-#' @noRd
+#' @param study A `mighty_study()` object.
+#' @examples
+#'
+#' # Check that all codelists in a study are referenced by a column
+#' study <- mighty_study(
+#'   path = system.file("examples", package = "mighty.metadata")
+#' ) |>
+#'   extend_codelist_values("UNUSED", code = "A")
+#'
+#' try(check_codelist_references(study))
+#' @rdname codelists
+#' @export
 check_codelist_references <- function(study) {
+  if (!S7::S7_inherits(study, mighty_study)) {
+    cli::cli_abort("{.arg study} must be a {.cls mighty_study} object.")
+  }
   unused <- setdiff(
     list_codelists(study@codelists),
     collect_codelist_refs(study)

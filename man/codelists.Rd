@@ -15,6 +15,7 @@
 \alias{remove_codelist_value}
 \alias{move_codelist_value}
 \alias{update_codelist_value}
+\alias{check_codelist_references}
 \title{Mighty Codelists}
 \usage{
 mighty_codelists(file, .data)
@@ -42,6 +43,8 @@ remove_codelist_value(x, codelist_id, code)
 move_codelist_value(x, codelist_id, code, .pos)
 
 update_codelist_value(x, codelist_id, code, decode)
+
+check_codelist_references(study)
 }
 \arguments{
 \item{file}{\code{character(1)} path to \verb{_codelists.yml}. Optional; mutually
@@ -72,6 +75,8 @@ with \code{file}. Supplying neither returns an empty \code{mighty_codelists}.}
 \item{codelist_id}{\code{character(1)} codelist id.}
 
 \item{.pos}{\code{integer(1)} new position of the value within its group.}
+
+\item{study}{A \code{mighty_study()} object.}
 }
 \value{
 \itemize{
@@ -140,9 +145,14 @@ values is removed.
 entry.
 }
 
-When working on a \code{mighty_study()}, every codelist must be referenced by a
-column (\code{codelist} field), so add the column reference before defining the
-codelist.
+Study level:
+\itemize{
+\item \code{check_codelist_references()} checks that every codelist in a
+\code{mighty_study()} is referenced by at least one column (\code{codelist} field),
+including columns in parameters. It returns \code{study} invisibly or errors.
+The check is not run automatically, so codelists can be added before
+they are used by any column.
+}
 }
 \examples{
 cl <- mighty_codelists(
@@ -191,4 +201,12 @@ cl <- cl |>
   remove_codelist_value(codelist_id = "AGEU", code = "MONTHS") |>
   remove_codelist(id = "LOC")
 
+
+# Check that all codelists in a study are referenced by a column
+study <- mighty_study(
+  path = system.file("examples", package = "mighty.metadata")
+) |>
+  extend_codelist_values("UNUSED", code = "A")
+
+try(check_codelist_references(study))
 }
