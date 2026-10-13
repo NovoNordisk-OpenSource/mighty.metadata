@@ -110,6 +110,18 @@ test_that("mighty_study() without _study.yml has NULL @study", {
   )
 })
 
+test_that("mighty_study() without _mighty.yml has NULL @mighty", {
+  tmp <- withr::local_tempdir()
+  file.copy(
+    from = test_path("test_study", c("_study.yml", "adsl.yml")),
+    to = tmp
+  )
+
+  study <- mighty_study(path = tmp) |> expect_no_condition()
+
+  expect_null(study@mighty)
+})
+
 test_that("validate_path() errors when @path set to non-existent directory", {
   study <- test_path("test_study") |>
     mighty_study()
