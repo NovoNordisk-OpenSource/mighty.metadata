@@ -1,7 +1,6 @@
 # mighty.metadata (development version)
 
-* Metadata constructors and `write_config()` now work with development S7.
-* `remove_documents()` now keeps an empty document object when removing the last entry.
+* Updates for compatibility with S7 > 0.2.2.
 
 * Added `create_md_table()`, `create_md_param()`, and `create_md_values()` to
   create metadata data sets for tables, BDS parameters, and value level
