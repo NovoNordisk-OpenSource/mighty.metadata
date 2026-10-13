@@ -48,6 +48,14 @@
       Error in `cl_find_value()`:
       ! Code "NOPE" does not exist in codelist "AGEU".
 
+# move_codelist_value() errors on unknown code
+
+    Code
+      move_codelist_value(cl, "AGEU", code = "NOPE", .pos = 1)
+    Condition
+      Error in `cl_find_value()`:
+      ! Code "NOPE" does not exist in codelist "AGEU".
+
 # move_codelist_value() rejects invalid .pos
 
     Code

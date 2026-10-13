@@ -163,13 +163,30 @@ test_that("add_codelist_values() errors on a subset codelist", {
   )
 })
 
-test_that("subset_codelist_values() and restore_codelist_values() create codelist if needed", {
+test_that("subset_codelist_values() creates codelist if needed", {
   cl <- mighty_codelists() |>
-    subset_codelist_values("AGEU", code = "YEARS") |>
+    subset_codelist_values("AGEU", code = "YEARS")
+  ageu <- select_codelist(cl, "AGEU")
+  expect_equal(names(ageu), c("id", "subset"))
+  expect_equal(codes(ageu, "subset"), "YEARS")
+})
+
+test_that("restore_codelist_values() creates codelist if needed", {
+  cl <- mighty_codelists() |>
     restore_codelist_values("AGEU", code = "MONTHS")
   ageu <- select_codelist(cl, "AGEU")
-  expect_equal(names(ageu), c("id", "subset", "restore"))
+  expect_equal(names(ageu), c("id", "restore"))
   expect_equal(codes(ageu, "restore"), "MONTHS")
+})
+
+test_that("subset and restore groups are ordered consistently", {
+  cl <- mighty_codelists() |>
+    restore_codelist_values("AGEU", code = "MONTHS") |>
+    subset_codelist_values("AGEU", code = "YEARS")
+  expect_equal(
+    names(select_codelist(cl, "AGEU")),
+    c("id", "subset", "restore")
+  )
 })
 
 test_that("extend_codelist_values() creates codelist if needed", {
@@ -211,6 +228,22 @@ test_that("move_codelist_value() moves within group", {
   )) |>
     move_codelist_value("AGEU", code = "DAYS", .pos = 1)
   expect_equal(codes(select_codelist(cl, "AGEU"), "subset"), c("DAYS", "YEARS"))
+})
+
+test_that("move_codelist_value() errors on unknown code", {
+  cl <- new_cl(list(id = "AGEU", subset = list(list(code = "YEARS"))))
+  expect_snapshot(
+    move_codelist_value(cl, "AGEU", code = "NOPE", .pos = 1),
+    error = TRUE
+  )
+})
+
+test_that("move_codelist_value() errors on unknown codelist", {
+  cl <- new_cl(list(id = "AGEU", subset = list(list(code = "YEARS"))))
+  expect_error(
+    move_codelist_value(cl, "NOPE", code = "YEARS", .pos = 1),
+    "is not defined in the codelists metadata"
+  )
 })
 
 test_that("move_codelist_value() rejects invalid .pos", {
