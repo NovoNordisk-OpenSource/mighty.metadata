@@ -1,5 +1,7 @@
 # mighty.metadata (development version)
 
+* `repos` is now a required field in `_mighty.yml` and must hold at least one
+  entry (#65). A `_mighty.yml` file is still optional.
 * Added `create_md_table()`, `create_md_param()`, and `create_md_values()` to
   create metadata data sets for tables, BDS parameters, and value level
   metadata, complementing `create_md_col()` (#11). `create_md()` returns all
