@@ -66,3 +66,12 @@ test_that("populate_sparse() - errors on non-standard predecessor method", {
   populate_sparse(study) |>
     expect_error("Non standard predecessor method")
 })
+
+test_that("populate_sparse() validates each domain once, not once per column", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  count_validations(populate_sparse(study)) |>
+    expect_equal(length(study))
+})

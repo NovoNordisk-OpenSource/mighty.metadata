@@ -75,3 +75,15 @@ test_that("populate_core() throws error with non-ADSL core variables", {
       "Only ADSL is allowed to have core columns. Found: `ADSL2.AGE`"
     )
 })
+
+test_that("populate_core() validates each domain once, not once per column", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  n_before <- length(list_columns(study$ADAE))
+
+  n <- count_validations(study <- populate_core(study))
+
+  expect_gt(length(list_columns(study$ADAE)) - n_before, 1L)
+  expect_equal(n, 1L) # only ADAE has `usecore`
+})

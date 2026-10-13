@@ -48,17 +48,19 @@ populate_sparse_study <- function(study) {
 
 #' @noRd
 populate_sparse_domain <- function(domain, study) {
-  Reduce(
-    f = \(init, x) {
-      update_predecessor(
-        x = init,
-        id = x,
-        study = study
-      )
-    },
-    x = list_predecessors(domain),
-    init = domain
-  )
+  S7::valid_eventually(domain, \(domain) {
+    Reduce(
+      f = \(init, x) {
+        update_predecessor(
+          x = init,
+          id = x,
+          study = study
+        )
+      },
+      x = list_predecessors(domain),
+      init = domain
+    )
+  })
 }
 
 #' Helper function to updated a single column list entry with its predecessor information.

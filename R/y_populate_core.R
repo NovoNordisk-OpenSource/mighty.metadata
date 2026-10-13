@@ -90,14 +90,16 @@ populate_core_domain <- function(domain, study) {
 
   predecessor <- names(core_vars)
 
-  for (i in seq_along(core_vars)) {
-    domain <- add_column(
-      x = domain,
-      id = core_vars[[i]],
-      method = predecessor[[i]],
-      origin = "Predecessor"
-    )
-  }
+  S7::valid_eventually(domain, \(domain) {
+    for (i in seq_along(core_vars)) {
+      domain <- add_column(
+        x = domain,
+        id = core_vars[[i]],
+        method = predecessor[[i]],
+        origin = "Predecessor"
+      )
+    }
 
-  domain
+    domain
+  })
 }

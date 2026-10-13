@@ -1,5 +1,8 @@
 # mighty.metadata (development version)
 
+* `populate_core()` and `populate_sparse()` are much faster: each domain is now
+  validated once after all columns have been added or updated, instead of once
+  per column (#10).
 * Added `create_md_table()`, `create_md_param()`, and `create_md_values()` to
   create metadata data sets for tables, BDS parameters, and value level
   metadata, complementing `create_md_col()` (#11). `create_md()` returns all
