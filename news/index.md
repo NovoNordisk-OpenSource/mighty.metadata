@@ -2,6 +2,10 @@
 
 ## mighty.metadata (development version)
 
+- `repos` is now a required field in `_mighty.yml` and must hold at
+  least one entry
+  ([\#65](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/65)).
+  A `_mighty.yml` file is still optional.
 - Added
   [`create_md_table()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_table.md),
   [`create_md_param()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_param.md),

@@ -45,8 +45,7 @@ A `mighty_config` S7 object extending
 
 - `repos`:
 
-  Optional character vector of component repository locations, or `NULL`
-  if not specified.
+  A character vector of component repository locations.
 
 ## Details
 
@@ -55,7 +54,7 @@ load. The file must contain an `external_data` array declaring the
 primary keys of any datasets external to the ADaM study (e.g. SDTM or
 reference datasets) that ADaM domain specifications may depend on.
 
-The optional `repos` field specifies where `mighty.component` should
+The required `repos` field specifies where `mighty.component` should
 look for shared components. Each entry is either a local path (e.g.
 `"."`) or a GitHub reference in `owner/repo/subdir@ref` format (e.g.
 `"NovoNordisk-OpenSource/mighty.standards/components@main"`).
@@ -104,7 +103,7 @@ str(x)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55f50eb0e898> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55e762e3d398> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 
 # Write back to a file
