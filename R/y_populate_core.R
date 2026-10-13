@@ -65,7 +65,7 @@ populate_core_domain <- function(domain, study) {
     toupper()
 
   if (!length(core_vars)) {
-        return(domain)
+    return(domain)
   }
 
   dup_core_vars <- which(duplicated(core_vars))

@@ -52,7 +52,7 @@ populate_sparse_domain <- function(domain, study) {
   if (!length(predecessors)) {
     return(domain)
   }
-    
+
   S7::valid_eventually(domain, \(domain) {
     Reduce(
       f = \(init, x) {
@@ -62,7 +62,7 @@ populate_sparse_domain <- function(domain, study) {
           study = study
         )
       },
-      x = predecessors
+      x = predecessors,
       init = domain
     )
   })
