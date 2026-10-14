@@ -48,6 +48,7 @@
 #' @param label `character(1)` codelist label.
 #' @param description `character(1)` codelist description.
 #' @param datatype `character(1)` one of `"text"`, `"integer"`, `"float"`.
+#'   Optional (`NULL`).
 #' @param code `character()` or `numeric()` coded value(s).
 #' @param decode `character()` decode(s), same length as `code`. Optional
 #'   (`NULL`) except in `update_codelist_value()`.
@@ -108,7 +109,15 @@ select_codelist <- S7::new_generic(
 add_codelist <- S7::new_generic(
   name = "add_codelist",
   dispatch_args = "x",
-  fun = function(x, id, label, description, datatype, code, decode = NULL) {
+  fun = function(
+    x,
+    id,
+    label,
+    description,
+    datatype = NULL,
+    code,
+    decode = NULL
+  ) {
     S7::S7_dispatch()
   }
 )
@@ -202,7 +211,7 @@ S7::method(add_codelist, mighty_codelists) <- function(
   id,
   label,
   description,
-  datatype,
+  datatype = NULL,
   code,
   decode = NULL
 ) {
@@ -334,7 +343,7 @@ S7::method(add_codelist, mighty_study) <- function(
   id,
   label,
   description,
-  datatype,
+  datatype = NULL,
   code,
   decode = NULL
 ) {
@@ -496,20 +505,17 @@ cl_define <- function(
   id,
   label,
   description,
-  datatype,
+  datatype = NULL,
   code,
   decode = NULL
 ) {
   if (id %in% list_ids(l)) {
     cli::cli_abort("Codelist {.val {id}} already exists.")
   }
-  cl <- list(
-    id = id,
-    label = label,
-    description = description,
-    datatype = datatype,
-    values = cl_build_values(code, decode)
-  )
+  cl <- list(id = id, label = label, description = description)
+  # Assigning NULL drops the field, keeping the optional datatype out of the YAML
+  cl$datatype <- datatype
+  cl$values <- cl_build_values(code, decode)
   insert_in_vector(l, cl)
 }
 

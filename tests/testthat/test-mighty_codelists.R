@@ -47,19 +47,30 @@ test_that("schema rejects an empty operation group", {
   )
 })
 
-test_that("schema requires label, description and datatype for values", {
+test_that("schema requires label and description for values", {
   base <- list(
     id = "A",
     label = "a",
     description = "a",
-    datatype = "text",
     values = list(list(code = "X"))
   )
-  for (field in c("label", "description", "datatype")) {
+  for (field in c("label", "description")) {
     cl <- base
     cl[[field]] <- NULL
     expect_error(new_cl(cl), paste0("required property '", field, "'"))
   }
+})
+
+test_that("schema does not require datatype for values", {
+  cl <- new_cl(
+    list(
+      id = "A",
+      label = "a",
+      description = "a",
+      values = list(list(code = "X"))
+    )
+  )
+  expect_null(select_codelist(cl, "A")$datatype)
 })
 
 test_that("schema restricts datatype to text, integer, float", {
