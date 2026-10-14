@@ -549,7 +549,7 @@ study folder, validated against
 <li>Codelist level:
 <ul>
 <li>
-<code>add_codelist(id, label, description, datatype, code, decode)</code>
+<code>define_codelist(id, label, description, datatype, code, decode)</code>
 — adds a new codelist; requires at least one value to be defined</li>
 <li>
 <code>remove_codelist(id)</code> — removes the codelist and all its
@@ -566,37 +566,38 @@ as a list</li>
 <li>Value level:
 <ul>
 <li>
-<code>add_codelist_values(id, code, decode)</code> - throws an error
-if the edited codelist doesn’t exist (because in such cases the label,
-description and datatype need to be defined)</li>
+<code>define_codelist_values(codelist_id, code, decode)</code> -
+throws an error if the edited codelist doesn’t exist (because in such
+cases the label, description and datatype need to be defined)</li>
 <li>
-<code>extend_codelist_values(id, code, decode)</code> - creates a
+<code>extend_codelist_values(codelist_id, code, decode)</code> -
+creates a codelist if it doesn’t exist</li>
+<li>
+<code>restore_codelist_values(codelist_id, code)</code> - creates a
 codelist if it doesn’t exist</li>
 <li>
-<code>restore_codelist_values(id, code)</code> - creates a codelist
-if it doesn’t exist</li>
+<code>subset_codelist_values(codelist_id, code)</code> - creates a
+codelist if it doesn’t exist</li>
 <li>
-<code>subset_codelist_values(id, code)</code> - creates a codelist
-if it doesn’t exist</li>
+<code>remove_codelist_value(codelist_id, code)</code> — removes a
+value; removes the operation group implicitly if it was the last
+codelist value</li>
 <li>
-<code>remove_codelist_value(id, code)</code> — removes a value;
-removes the operation group implicitly if it was the last codelist
-value</li>
-<li>
-<code>move_codelist_value(id, code, .pos)</code> — moves a value to
-a new position within its operation group; position affects the order of
-values in <code>values</code> entries in <code>define.xml</code>
+<code>move_codelist_value(codelist_id, code, .pos)</code> — moves a
+value to a new position within its operation group; position affects the
+order of values in <code>values</code> entries in
+<code>define.xml</code>
 </li>
 <li>
-<code>update_codelist_value(id, code, decode)</code> - updates the
-decode values - only supported for extended and defined values</li>
+<code>update_codelist_value(codelist_id, code, decode)</code> -
+updates the decode values - only supported for extended and defined
+values</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>All mutating methods rely on the validation triggered by
-<code>S7::S7_data&lt;-</code> and <code>@&lt;-</code>, so objects are
-validated once after each modification</li>
+<li>All mutating methods call <code><a href="https://rconsortium.github.io/S7/reference/validate.html" class="external-link">S7::validate()</a></code> after
+modification</li>
 <li>
 <code>mighty_study</code> auto-detects <code>_codelists.yml</code>
 on construction and populates the <code>codelists</code> property</li>
@@ -604,7 +605,7 @@ on construction and populates the <code>codelists</code> property</li>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Add a new codelist with initial values</span></span>
 <span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/codelists.html">add_codelist</a></span><span class="op">(</span></span>
+<span>  <span class="fu">define_codelist</span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"REGION"</span>,</span>
 <span>    label <span class="op">=</span> <span class="st">"Region"</span>,</span>
 <span>    description <span class="op">=</span> <span class="st">"Geographical regions used in the study"</span>,</span>
@@ -628,25 +629,25 @@ on construction and populates the <code>codelists</code> property</li>
 <span><span class="co"># Retain a specific set of values from a GCMD codelist</span></span>
 <span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/codelists.html">subset_codelist_values</a></span><span class="op">(</span></span>
-<span>    id <span class="op">=</span> <span class="st">"AGEU"</span>,</span>
+<span>    codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>,</span>
 <span>    code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MONTHS"</span>, <span class="st">"YEARS"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Remove a value from a codelist - it automatically detects from which group it should be removed</span></span>
 <span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/codelists.html">remove_codelist_value</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="st">"MONTHS"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/codelists.html">remove_codelist_value</a></span><span class="op">(</span>codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="st">"MONTHS"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Update a value's decode text</span></span>
 <span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/codelists.html">update_codelist_value</a></span><span class="op">(</span></span>
-<span>    id <span class="op">=</span> <span class="st">"AGEU"</span>,</span>
+<span>    codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>,</span>
 <span>    code <span class="op">=</span> <span class="st">"MONTHS"</span>,</span>
 <span>    decode <span class="op">=</span> <span class="st">"Month"</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Move a value to a new position within its operation group</span></span>
 <span><span class="va">codelists</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/codelists.html">move_codelist_value</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="st">"YEARS"</span>, .pos <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/codelists.html">move_codelist_value</a></span><span class="op">(</span>codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="st">"YEARS"</span>, .pos <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="testing-strategy">Testing Strategy<a class="anchor" aria-label="anchor" href="#testing-strategy"></a>
