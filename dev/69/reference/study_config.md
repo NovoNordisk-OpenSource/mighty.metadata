@@ -121,7 +121,7 @@ str(x)
 #>   .. ..$ version: chr "2023 JAN"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55a936117e08> 
+#>  .. @ context:Classes 'V8', 'environment' <environment: 0x55e8c84bdb40> 
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 
 # Write back to a file
