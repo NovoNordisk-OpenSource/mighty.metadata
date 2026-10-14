@@ -75,3 +75,22 @@ test_that("populate_sparse() validates each domain once, not once per column", {
   count_validations(populate_sparse(study)) |>
     expect_equal(length(study))
 })
+
+test_that("populate_sparse_domain() returns early without validating when there are no predecessors", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  domain <- study$ADSL
+  for (i in seq_along(domain$columns)) {
+    domain$columns[[i]][c("method", "origin")] <- NULL
+  }
+
+  expect_length(list_predecessors(domain), 0L)
+
+  count_validations(
+    result <- populate_sparse_domain(domain = domain, study = study)
+  ) |>
+    expect_equal(0L)
+
+  expect_identical(result, domain)
+})
