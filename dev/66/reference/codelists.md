@@ -47,7 +47,7 @@ list_codelists(x)
 
 select_codelist(x, id)
 
-add_codelist(x, id, label, description, datatype = NULL, code, decode = NULL)
+add_codelist(x, id, label, description, datatype, code, decode = NULL)
 
 remove_codelist(x, id)
 
@@ -105,8 +105,7 @@ check_codelist_references(study)
 
 - datatype:
 
-  `character(1)` one of `"text"`, `"integer"`, `"float"`. Optional
-  (`NULL`).
+  `character(1)` one of `"text"`, `"integer"`, `"float"`.
 
 - code:
 

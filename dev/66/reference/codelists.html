@@ -134,7 +134,7 @@ Validation includes:</p><ul><li><p>schema compliance with <code>inst/schema/code
 <span></span>
 <span><span class="fu">select_codelist</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">add_codelist</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">label</span>, <span class="va">description</span>, datatype <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">code</span>, decode <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu">add_codelist</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">label</span>, <span class="va">description</span>, <span class="va">datatype</span>, <span class="va">code</span>, decode <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">remove_codelist</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span><span class="op">)</span></span>
 <span></span>
@@ -189,8 +189,7 @@ with <code>file</code>. Supplying neither returns an empty <code>mighty_codelist
 
 
 <dt id="arg-datatype">datatype<a class="anchor" aria-label="anchor" href="#arg-datatype"></a></dt>
-<dd><p><code>character(1)</code> one of <code>"text"</code>, <code>"integer"</code>, <code>"float"</code>.
-Optional (<code>NULL</code>).</p></dd>
+<dd><p><code>character(1)</code> one of <code>"text"</code>, <code>"integer"</code>, <code>"float"</code>.</p></dd>
 
 
 <dt id="arg-code">code<a class="anchor" aria-label="anchor" href="#arg-code"></a></dt>
