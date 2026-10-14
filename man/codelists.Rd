@@ -24,7 +24,7 @@ list_codelists(x)
 
 select_codelist(x, id)
 
-add_codelist(x, id, label, description, datatype = NULL, code, decode = NULL)
+add_codelist(x, id, label, description, datatype, code, decode = NULL)
 
 remove_codelist(x, id)
 
@@ -62,8 +62,7 @@ with \code{file}. Supplying neither returns an empty \code{mighty_codelists}.}
 
 \item{description}{\code{character(1)} codelist description.}
 
-\item{datatype}{\code{character(1)} one of \code{"text"}, \code{"integer"}, \code{"float"}.
-Optional (\code{NULL}).}
+\item{datatype}{\code{character(1)} one of \code{"text"}, \code{"integer"}, \code{"float"}.}
 
 \item{code}{\code{character()} or \code{numeric()} coded value(s).}
 

@@ -46,9 +46,9 @@ an external source of controlled terminology (e.g. CDISC CT).
 | `restore` | External | `code` | Includes SDTM controlled terminology values in the ADaM codelist even when they are not used in the SDTM define.xml |
 | `extend` | External | `code`, optional `decode` | Adds sponsor-defined values to an extensible external codelist |
 
-A codelist with `values` must also have `label` and `description`. For the
-other groups these fields are optional, as they come from the external
-codelist. `datatype` is always optional.
+A codelist with `values` must also have `label`, `description` and `datatype`.
+For the other groups these fields are optional, as they come from the external
+codelist.
 
 `values` cannot be combined with `subset` or `restore` on the same codelist.
 `code` must be unique across all groups within a codelist.

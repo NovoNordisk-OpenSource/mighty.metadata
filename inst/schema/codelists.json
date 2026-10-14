@@ -86,7 +86,7 @@
         { "required": ["extend"] }
       ],
       "if": { "required": ["values"] },
-      "then": { "required": ["label", "description"] },
+      "then": { "required": ["label", "description", "datatype"] },
       "additionalProperties": false
     }
   }

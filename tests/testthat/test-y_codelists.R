@@ -64,12 +64,6 @@ test_that("add_codelist() works without decodes", {
   expect_null(select_codelist(cl, "NUM")$values[[1]]$decode)
 })
 
-test_that("add_codelist() works without datatype", {
-  cl <- mighty_codelists() |>
-    add_codelist("NUM", "n", "n", code = c(1, 2))
-  expect_false("datatype" %in% names(select_codelist(cl, "NUM")))
-})
-
 test_that("add_codelist() errors on duplicate codelist id", {
   cl <- mighty_codelists() |>
     add_codelist("NUM", "n", "n", "integer", code = c(1, 2))
