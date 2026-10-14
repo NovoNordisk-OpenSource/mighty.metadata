@@ -55,8 +55,9 @@ The function scans the directory for files matching \verb{*.yaml} or \verb{*.yml
 
 Use \code{\link[=write_config]{write_config()}} to serialize a \code{mighty_study()} object back to YAML
 files. Each domain is written as a separate file, plus \verb{_mighty.yml} and
-\verb{_study.yml} when \verb{@mighty} and \verb{@study} are not \code{NULL}. If \code{path} is
-\code{NULL}, files are written to \code{x@path}.
+\verb{_study.yml} when \verb{@mighty} and \verb{@study} are not \code{NULL}, and
+\verb{_documents.yml} and \verb{_codelists.yml} when \verb{@documents} and \verb{@codelists}
+are not empty. If \code{path} is \code{NULL}, files are written to \code{x@path}.
 }
 
 \examples{

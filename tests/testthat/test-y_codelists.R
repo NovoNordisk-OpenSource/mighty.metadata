@@ -329,13 +329,8 @@ test_that("mighty_study() has empty codelists without _codelists.yml", {
 
 test_that("mighty_study() reads _codelists.yml with unreferenced codelists", {
   study <- mighty_study(test_path("test_study"))
-  expect_identical(list_codelists(study), c("REGION", "AGEU", "LOC"))
-})
-
-test_that("mighty_study() reads _codelists.yml", {
-  study <- mighty_study(local_codelist_study())
   expect_s7_class(study@codelists, mighty_codelists)
-  expect_identical(list_codelists(study), "FANCY_CDISC_CODELIST")
+  expect_identical(list_codelists(study), c("REGION", "AGEU", "LOC"))
 })
 
 test_that("mighty_study print() shows codelists", {
@@ -344,15 +339,6 @@ test_that("mighty_study print() shows codelists", {
     cli::cli_fmt(print(study)),
     "@ codelists: 1 entries",
     all = FALSE
-  )
-})
-
-test_that("mighty_study() allows codelists not referenced by any column", {
-  study <- mighty_study(local_codelist_study()) |>
-    subset_codelist_values("UNUSED", code = "A")
-  expect_setequal(
-    list_codelists(study),
-    c("FANCY_CDISC_CODELIST", "UNUSED")
   )
 })
 
@@ -455,14 +441,14 @@ test_that("move_codelist_value() works on mighty_study", {
   )
 })
 
-test_that("remove_codelist() on mighty_study leaves empty codelists", {
+test_that("remove_codelist() on mighty_study removes the codelist", {
   study <- mighty_study(local_codelist_study()) |>
     remove_codelist("FANCY_CDISC_CODELIST")
   expect_length(study@codelists, 0)
   expect_identical(list_codelists(study), character(0))
 })
 
-test_that("select_codelist() on mighty_study errors on unknown id", {
+test_that("select_codelist() on mighty_study returns entry and errors on unknown id", {
   study <- mighty_study(local_codelist_study())
   expect_equal(
     select_codelist(study, "FANCY_CDISC_CODELIST")$subset[[1]]$code,

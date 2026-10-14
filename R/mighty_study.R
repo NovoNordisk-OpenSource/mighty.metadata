@@ -43,8 +43,9 @@
 #' @section Write Study Metadata:
 #' Use [write_config()] to serialize a `mighty_study()` object back to YAML
 #' files. Each domain is written as a separate file, plus `_mighty.yml` and
-#' `_study.yml` when `@mighty` and `@study` are not `NULL`. If `path` is
-#' `NULL`, files are written to `x@path`.
+#' `_study.yml` when `@mighty` and `@study` are not `NULL`, and
+#' `_documents.yml` and `_codelists.yml` when `@documents` and `@codelists`
+#' are not empty. If `path` is `NULL`, files are written to `x@path`.
 #'
 #' @seealso [mighty_domain], [mighty_config], [study_config],
 #'   [write_config()], [populate_sparse()], [populate_core()],

@@ -17,7 +17,7 @@
 #' terminology, while `subset`, `restore` and `extend` modify a standard
 #' codelist retrieved from an external source.
 #'
-#' The object is validated on creation and when `validate()` is called.
+#' The object is validated on creation and after every modification.
 #' Validation includes:
 #' - schema compliance with `inst/schema/codelists.json`,
 #' - uniqueness of codelist identifiers (`id`),
@@ -25,8 +25,9 @@
 #' - `values` being mutually exclusive with `subset` and `restore`,
 #' - consistent use of `decode` within an operation group (all or none).
 #'
-#' When part of a [mighty_study()], every codelist must also be referenced
-#' by at least one column in the domain metadata.
+#' Codelists do not have to be referenced by a column. Use
+#' `check_codelist_references()` to check that every codelist in a
+#' [mighty_study()] is used.
 #'
 #' @param file `character(1)` path to `_codelists.yml`. Optional; mutually
 #'   exclusive with `.data`.

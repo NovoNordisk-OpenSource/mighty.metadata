@@ -103,7 +103,7 @@ codelist even when they are not used in the SDTM define.xml,
 terminology, while \code{subset}, \code{restore} and \code{extend} modify a standard
 codelist retrieved from an external source.
 
-The object is validated on creation and when \code{validate()} is called.
+The object is validated on creation and after every modification.
 Validation includes:
 \itemize{
 \item schema compliance with \code{inst/schema/codelists.json},
@@ -113,8 +113,9 @@ Validation includes:
 \item consistent use of \code{decode} within an operation group (all or none).
 }
 
-When part of a \code{\link[=mighty_study]{mighty_study()}}, every codelist must also be referenced
-by at least one column in the domain metadata.
+Codelists do not have to be referenced by a column. Use
+\code{check_codelist_references()} to check that every codelist in a
+\code{\link[=mighty_study]{mighty_study()}} is used.
 }
 \details{
 Functions to list, select, add, remove, and update codelists and their
