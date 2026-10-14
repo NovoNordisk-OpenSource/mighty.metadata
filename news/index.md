@@ -2,6 +2,12 @@
 
 ## mighty.metadata (development version)
 
+- [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)
+  and
+  [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
+  are much faster: each domain is now validated once after all columns
+  have been added or updated, instead of once per column
+  ([\#10](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/10)).
 - `repos` is now a required field in `_mighty.yml` and must hold at
   least one entry
   ([\#65](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/65)).

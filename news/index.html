@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9016</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,8 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="mightymetadata-development-version">mighty.metadata (development version)<a class="anchor" aria-label="anchor" href="#mightymetadata-development-version"></a></h2>
 <ul><li>
+<code><a href="../reference/populate_core.html">populate_core()</a></code> and <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code> are much faster: each domain is now validated once after all columns have been added or updated, instead of once per column (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/10" class="external-link">#10</a>).</li>
+<li>
 <code>repos</code> is now a required field in <code>_mighty.yml</code> and must hold at least one entry (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/65" class="external-link">#65</a>). A <code>_mighty.yml</code> file is still optional.</li>
 <li>Added <code><a href="../reference/create_md_table.html">create_md_table()</a></code>, <code><a href="../reference/create_md_param.html">create_md_param()</a></code>, and <code><a href="../reference/create_md_values.html">create_md_values()</a></code> to create metadata data sets for tables, BDS parameters, and value level metadata, complementing <code><a href="../reference/create_md_col.html">create_md_col()</a></code> (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/11" class="external-link">#11</a>). <code><a href="../reference/create_md.html">create_md()</a></code> returns all four as a named list.</li>
 <li>
