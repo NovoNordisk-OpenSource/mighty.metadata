@@ -58,6 +58,7 @@ articles:
       - adam-schema
       - study-schema
       - mighty-schema
+      - codelists-schema
   - title: Architecture Decision Records
     navbar: Architecture Decision Records
     contents:
