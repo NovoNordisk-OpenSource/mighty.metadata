@@ -75,3 +75,45 @@ test_that("populate_core() throws error with non-ADSL core variables", {
       "Only ADSL is allowed to have core columns. Found: `ADSL2.AGE`"
     )
 })
+
+test_that("populate_core() validates each domain once, not once per column", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  n_before <- length(list_columns(study$ADAE))
+
+  n <- count_validations(study <- populate_core(study))
+
+  expect_gt(length(list_columns(study$ADAE)) - n_before, 1L)
+  expect_equal(n, 1L) # only ADAE has `usecore`
+})
+
+test_that("populate_core_domain() returns early without validating when `usecore` is not set", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  expect_false(isTRUE(study$ADSL$usecore))
+
+  count_validations(
+    result <- populate_core_domain(domain = study$ADSL, study = study)
+  ) |>
+    expect_equal(0L)
+
+  expect_identical(result, study$ADSL)
+})
+
+test_that("populate_core_domain() returns early without validating when there are no core variables", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  for (i in seq_along(study$ADSL$columns)) {
+    study$ADSL$columns[[i]][["is_core"]] <- NULL
+  }
+
+  count_validations(
+    result <- populate_core_domain(domain = study$ADAE, study = study)
+  ) |>
+    expect_equal(0L)
+
+  expect_identical(result, study$ADAE)
+})

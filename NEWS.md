@@ -1,5 +1,8 @@
 # mighty.metadata (development version)
 
+* `populate_core()` and `populate_sparse()` are much faster: each domain is now
+  validated once after all columns have been added or updated, instead of once
+  per column (#10).
 * `repos` is now a required field in `_mighty.yml` and must hold at least one
   entry (#65). A `_mighty.yml` file is still optional.
 * Added `create_md_table()`, `create_md_param()`, and `create_md_values()` to
