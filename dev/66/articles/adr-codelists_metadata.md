@@ -393,33 +393,32 @@ is found in the study folder.
   class
 - CRUD methods follow the pattern of `y_columns.R`:
   - Codelist level:
-    - `define_codelist(id, label, description, datatype, code, decode)`
-      — adds a new codelist; requires at least one value to be defined
+    - `add_codelist(id, label, description, datatype, code, decode)` —
+      adds a new codelist; requires at least one value to be defined
     - `remove_codelist(id)` — removes the codelist and all its contents
     - `update_codelist(id, ...)` — updates codelist-level fields
       (`label`, `description`, `datatype`)
     - `select_codelist(id)` — returns a single codelist entry as a list
   - Value level:
-    - `define_codelist_values(codelist_id, code, decode)` - throws an
-      error if the edited codelist doesn’t exist (because in such cases
-      the label, description and datatype need to be defined)
-    - `extend_codelist_values(codelist_id, code, decode)` - creates a
-      codelist if it doesn’t exist
-    - `restore_codelist_values(codelist_id, code)` - creates a codelist
-      if it doesn’t exist
-    - `subset_codelist_values(codelist_id, code)` - creates a codelist
-      if it doesn’t exist
-    - `remove_codelist_value(codelist_id, code)` — removes a value;
-      removes the operation group implicitly if it was the last codelist
-      value
-    - `move_codelist_value(codelist_id, code, .pos)` — moves a value to
-      a new position within its operation group; position affects the
-      order of values in `values` entries in `define.xml`
-    - `update_codelist_value(codelist_id, code, decode)` - updates the
-      decode values - only supported for extended and defined values
-- All mutating methods call
-  [`S7::validate()`](https://rconsortium.github.io/S7/reference/validate.html)
-  after modification
+    - `add_codelist_values(id, code, decode)` - throws an error if the
+      edited codelist doesn’t exist (because in such cases the label,
+      description and datatype need to be defined)
+    - `extend_codelist_values(id, code, decode)` - creates a codelist if
+      it doesn’t exist
+    - `restore_codelist_values(id, code)` - creates a codelist if it
+      doesn’t exist
+    - `subset_codelist_values(id, code)` - creates a codelist if it
+      doesn’t exist
+    - `remove_codelist_value(id, code)` — removes a value; removes the
+      operation group implicitly if it was the last codelist value
+    - `move_codelist_value(id, code, .pos)` — moves a value to a new
+      position within its operation group; position affects the order of
+      values in `values` entries in `define.xml`
+    - `update_codelist_value(id, code, decode)` - updates the decode
+      values - only supported for extended and defined values
+- All mutating methods rely on the validation triggered by
+  `S7::S7_data<-` and `@<-`, so objects are validated once after each
+  modification
 - `mighty_study` auto-detects `_codelists.yml` on construction and
   populates the `codelists` property
 
@@ -427,7 +426,7 @@ is found in the study folder.
 
 # Add a new codelist with initial values
 codelists |>
-  define_codelist(
+  add_codelist(
     id = "REGION",
     label = "Region",
     description = "Geographical regions used in the study",
@@ -451,25 +450,25 @@ codelists |>
 # Retain a specific set of values from a GCMD codelist
 codelists |>
   subset_codelist_values(
-    codelist_id = "AGEU",
+    id = "AGEU",
     code = c("MONTHS", "YEARS")
   )
 
 # Remove a value from a codelist - it automatically detects from which group it should be removed
 codelists |>
-  remove_codelist_value(codelist_id = "AGEU", code = "MONTHS")
+  remove_codelist_value(id = "AGEU", code = "MONTHS")
 
 # Update a value's decode text
 codelists |>
   update_codelist_value(
-    codelist_id = "AGEU",
+    id = "AGEU",
     code = "MONTHS",
     decode = "Month"
   )
 
 # Move a value to a new position within its operation group
 codelists |>
-  move_codelist_value(codelist_id = "AGEU", code = "YEARS", .pos = 2)
+  move_codelist_value(id = "AGEU", code = "YEARS", .pos = 2)
 ```
 
 ## Testing Strategy

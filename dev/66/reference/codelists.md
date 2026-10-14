@@ -48,25 +48,27 @@ list_codelists(x)
 
 select_codelist(x, id)
 
-define_codelist(x, id, label, description, datatype, code, decode = NULL)
+add_codelist(x, id, label, description, datatype, code, decode = NULL)
 
 remove_codelist(x, id)
 
 update_codelist(x, id, ...)
 
-define_codelist_values(x, codelist_id, code, decode = NULL)
+add_codelist_values(x, id, code, decode = NULL)
 
-extend_codelist_values(x, codelist_id, code, decode = NULL)
+extend_codelist_values(x, id, code, decode = NULL)
 
-restore_codelist_values(x, codelist_id, code)
+restore_codelist_values(x, id, code)
 
-subset_codelist_values(x, codelist_id, code)
+subset_codelist_values(x, id, code)
 
-remove_codelist_value(x, codelist_id, code)
+remove_codelist_value(x, id, code)
 
-move_codelist_value(x, codelist_id, code, .pos)
+move_codelist_value(x, id, code, .pos)
 
-update_codelist_value(x, codelist_id, code, decode)
+update_codelist_value(x, id, code, decode)
+
+check_codelist_references(study)
 ```
 
 ## Arguments
@@ -121,13 +123,15 @@ update_codelist_value(x, codelist_id, code, decode)
 
   Codelist-level fields to update (`label`, `description`, `datatype`).
 
-- codelist_id:
-
-  `character(1)` codelist id.
-
 - .pos:
 
   `integer(1)` new position of the value within its group.
+
+- study:
+
+  A
+  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  object.
 
 ## Value
 
@@ -143,14 +147,14 @@ update_codelist_value(x, codelist_id, code, decode)
 
 ## Details
 
-Functions to list, select, define, remove, and update codelists and
-their values in your `mighty_codelists()` object or directly on a
+Functions to list, select, add, remove, and update codelists and their
+values in your `mighty_codelists()` object or directly on a
 [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
 object.
 
 Codelist level:
 
-- `define_codelist()` adds a new sponsor-defined codelist with `values`.
+- `add_codelist()` adds a new sponsor-defined codelist with `values`.
 
 - `remove_codelist()` removes codelist(s) and all their contents.
 
@@ -160,11 +164,7 @@ Codelist level:
 
 Value level:
 
-- `define_codelist_values()` adds `values` to an existing codelist.
-
-- `extend_codelist_values()`, `restore_codelist_values()` and
-  `subset_codelist_values()` add `extend`, `restore` and `subset`
-  entries, creating the codelist if it does not exist.
+- `add_codelist_values()` adds `values` to an existing codelist.
 
 - `remove_codelist_value()` removes value(s) from whichever operation
   group they belong to. Empty groups are dropped, and a codelist left
@@ -175,10 +175,35 @@ Value level:
 - `update_codelist_value()` updates the decode of a `values` or `extend`
   entry.
 
-When working on a
-[`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md),
-every codelist must be referenced by a column (`codelist` field), so add
-the column reference before defining the codelist.
+Reuse of external codelists:
+
+Most codelists come from an external source of controlled terminology
+(e.g. CDISC CT), retrieved by downstream tooling such as
+`mighty.toolbox`. Instead of redefining these codelists, the functions
+below record how the study changes them. Support for reusing external
+codelists is still maturing. Each function creates the codelist entry if
+it does not exist.
+
+- `subset_codelist_values()` keeps only the given codes from the
+  external codelist (`subset`).
+
+- `restore_codelist_values()` includes SDTM controlled terminology codes
+  that would otherwise be excluded from the ADaM define.xml (`restore`).
+
+- `extend_codelist_values()` adds sponsor-defined codes to an extensible
+  external codelist (`extend`).
+
+`subset` and `restore` cannot be combined with `values` on the same
+codelist, as `values` defines a sponsor-defined codelist.
+
+Study level:
+
+- `check_codelist_references()` checks that every codelist in a
+  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  is referenced by at least one column (`codelist` field), including
+  columns in parameters. It returns `study` invisibly or errors. The
+  check is not run automatically, so codelists can be added before they
+  are used by any column.
 
 ## Examples
 
@@ -206,7 +231,7 @@ print(cl)
 #> IDs: `REGION` and `AGEU`
 
 cl <- mighty_codelists() |>
-  define_codelist(
+  add_codelist(
     id = "REGION",
     label = "Region",
     description = "Geographical regions used in the study",
@@ -214,10 +239,10 @@ cl <- mighty_codelists() |>
     code = c("EUROPE", "NORTH AMERICA"),
     decode = c("Europe", "North America")
   ) |>
-  subset_codelist_values(codelist_id = "AGEU", code = c("MONTHS", "YEARS")) |>
-  restore_codelist_values(codelist_id = "AGEU", code = "DAYS") |>
+  subset_codelist_values(id = "AGEU", code = c("MONTHS", "YEARS")) |>
+  restore_codelist_values(id = "AGEU", code = "DAYS") |>
   extend_codelist_values(
-    codelist_id = "LOC",
+    id = "LOC",
     code = "MY CUSTOM LOCATION",
     decode = "My Custom Location"
   )
@@ -250,8 +275,23 @@ select_codelist(cl, id = "AGEU")
 
 cl <- cl |>
   update_codelist(id = "REGION", description = "Regions used in the trial") |>
-  update_codelist_value(codelist_id = "REGION", code = "EUROPE", decode = "EU") |>
-  move_codelist_value(codelist_id = "AGEU", code = "YEARS", .pos = 1) |>
-  remove_codelist_value(codelist_id = "AGEU", code = "MONTHS") |>
+  update_codelist_value(id = "REGION", code = "EUROPE", decode = "EU") |>
+  move_codelist_value(id = "AGEU", code = "YEARS", .pos = 1) |>
+  remove_codelist_value(id = "AGEU", code = "MONTHS") |>
   remove_codelist(id = "LOC")
+
+
+# Check that all codelists in a study are referenced by a column
+study <- mighty_study(
+  path = system.file("examples", package = "mighty.metadata")
+) |>
+  extend_codelist_values("UNUSED", code = "A")
+#> → No `_documents.yml` file found
+#> → No `_codelists.yml` file found
+
+try(check_codelist_references(study))
+#> Error in check_codelist_references(study) : 
+#>   Codelist "UNUSED" is not referenced by any column.
+#> ℹ Reference the codelist in a column codelist field or remove it from
+#>   _codelists.yml.
 ```

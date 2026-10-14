@@ -57,7 +57,7 @@ by at least one column in the domain metadata."><meta property="og:image" conten
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9016</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9018</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,6 +74,7 @@ by at least one column in the domain metadata."><meta property="og:image" conten
     <li><a class="dropdown-item" href="../articles/adam-schema.html">ADaM specifications</a></li>
     <li><a class="dropdown-item" href="../articles/study-schema.html">Study specifications</a></li>
     <li><a class="dropdown-item" href="../articles/mighty-schema.html">Mighty specifications</a></li>
+    <li><a class="dropdown-item" href="../articles/codelists-schema.html">Codelists specifications</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Architecture Decision Records</h6></li>
     <li><a class="dropdown-item" href="../articles/adr.html">ADR: Package design and scope</a></li>
@@ -130,25 +131,27 @@ by at least one column in the domain metadata.</p>
 <span></span>
 <span><span class="fu">select_codelist</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">define_codelist</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">label</span>, <span class="va">description</span>, <span class="va">datatype</span>, <span class="va">code</span>, decode <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu">add_codelist</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">label</span>, <span class="va">description</span>, <span class="va">datatype</span>, <span class="va">code</span>, decode <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">remove_codelist</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">update_codelist</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">define_codelist_values</span><span class="op">(</span><span class="va">x</span>, <span class="va">codelist_id</span>, <span class="va">code</span>, decode <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu">add_codelist_values</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">code</span>, decode <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">extend_codelist_values</span><span class="op">(</span><span class="va">x</span>, <span class="va">codelist_id</span>, <span class="va">code</span>, decode <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu">extend_codelist_values</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">code</span>, decode <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">restore_codelist_values</span><span class="op">(</span><span class="va">x</span>, <span class="va">codelist_id</span>, <span class="va">code</span><span class="op">)</span></span>
+<span><span class="fu">restore_codelist_values</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">code</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">subset_codelist_values</span><span class="op">(</span><span class="va">x</span>, <span class="va">codelist_id</span>, <span class="va">code</span><span class="op">)</span></span>
+<span><span class="fu">subset_codelist_values</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">code</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">remove_codelist_value</span><span class="op">(</span><span class="va">x</span>, <span class="va">codelist_id</span>, <span class="va">code</span><span class="op">)</span></span>
+<span><span class="fu">remove_codelist_value</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">code</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">move_codelist_value</span><span class="op">(</span><span class="va">x</span>, <span class="va">codelist_id</span>, <span class="va">code</span>, <span class="va">.pos</span><span class="op">)</span></span>
+<span><span class="fu">move_codelist_value</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">code</span>, <span class="va">.pos</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">update_codelist_value</span><span class="op">(</span><span class="va">x</span>, <span class="va">codelist_id</span>, <span class="va">code</span>, <span class="va">decode</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">update_codelist_value</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">code</span>, <span class="va">decode</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">check_codelist_references</span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -200,12 +203,12 @@ with <code>file</code>. Supplying neither returns an empty <code>mighty_codelist
 <code>datatype</code>).</p></dd>
 
 
-<dt id="arg-codelist-id">codelist_id<a class="anchor" aria-label="anchor" href="#arg-codelist-id"></a></dt>
-<dd><p><code>character(1)</code> codelist id.</p></dd>
-
-
 <dt id="arg--pos">.pos<a class="anchor" aria-label="anchor" href="#arg--pos"></a></dt>
 <dd><p><code>integer(1)</code> new position of the value within its group.</p></dd>
+
+
+<dt id="arg-study">study<a class="anchor" aria-label="anchor" href="#arg-study"></a></dt>
+<dd><p>A <code><a href="mighty_study.html">mighty_study()</a></code> object.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -218,27 +221,39 @@ with <code>file</code>. Supplying neither returns an empty <code>mighty_codelist
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Functions to list, select, define, remove, and update codelists and their
+    <p>Functions to list, select, add, remove, and update codelists and their
 values in your <code>mighty_codelists()</code> object or directly on a
 <code><a href="mighty_study.html">mighty_study()</a></code> object.</p>
-<p>Codelist level:</p><ul><li><p><code>define_codelist()</code> adds a new sponsor-defined codelist with <code>values</code>.</p></li>
+<p>Codelist level:</p><ul><li><p><code>add_codelist()</code> adds a new sponsor-defined codelist with <code>values</code>.</p></li>
 <li><p><code>remove_codelist()</code> removes codelist(s) and all their contents.</p></li>
 <li><p><code>update_codelist()</code> updates <code>label</code>, <code>description</code> and <code>datatype</code>.</p></li>
 <li><p><code>select_codelist()</code> returns a single codelist entry as a list.</p></li>
-</ul><p>Value level:</p><ul><li><p><code>define_codelist_values()</code> adds <code>values</code> to an existing codelist.</p></li>
-<li><p><code>extend_codelist_values()</code>, <code>restore_codelist_values()</code> and
-<code>subset_codelist_values()</code> add <code>extend</code>, <code>restore</code> and <code>subset</code> entries,
-creating the codelist if it does not exist.</p></li>
+</ul><p>Value level:</p><ul><li><p><code>add_codelist_values()</code> adds <code>values</code> to an existing codelist.</p></li>
 <li><p><code>remove_codelist_value()</code> removes value(s) from whichever operation group
 they belong to. Empty groups are dropped, and a codelist left without any
 values is removed.</p></li>
 <li><p><code>move_codelist_value()</code> moves a value within its operation group.</p></li>
 <li><p><code>update_codelist_value()</code> updates the decode of a <code>values</code> or <code>extend</code>
 entry.</p></li>
-</ul><p>When working on a <code><a href="mighty_study.html">mighty_study()</a></code>, every codelist must be referenced by a
-column (<code>codelist</code> field), so add the column reference before defining the
-codelist.</p>
-    </div>
+</ul><p>Reuse of external codelists:</p>
+<p>Most codelists come from an external source of controlled terminology
+(e.g. CDISC CT), retrieved by downstream tooling such as <code>mighty.toolbox</code>.
+Instead of redefining these codelists, the functions below record how the
+study changes them. Support for reusing external codelists is still
+maturing. Each function creates the codelist entry if it does not exist.</p><ul><li><p><code>subset_codelist_values()</code> keeps only the given codes from the external
+codelist (<code>subset</code>).</p></li>
+<li><p><code>restore_codelist_values()</code> includes SDTM controlled terminology codes
+that would otherwise be excluded from the ADaM define.xml (<code>restore</code>).</p></li>
+<li><p><code>extend_codelist_values()</code> adds sponsor-defined codes to an extensible
+external codelist (<code>extend</code>).</p></li>
+</ul><p><code>subset</code> and <code>restore</code> cannot be combined with <code>values</code> on the same
+codelist, as <code>values</code> defines a sponsor-defined codelist.</p>
+<p>Study level:</p><ul><li><p><code>check_codelist_references()</code> checks that every codelist in a
+<code><a href="mighty_study.html">mighty_study()</a></code> is referenced by at least one column (<code>codelist</code> field),
+including columns in parameters. It returns <code>study</code> invisibly or errors.
+The check is not run automatically, so codelists can be added before
+they are used by any column.</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -265,7 +280,7 @@ codelist.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> IDs: `REGION` and `AGEU`</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">mighty_codelists</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">define_codelist</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu">add_codelist</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    id <span class="op">=</span> <span class="st">"REGION"</span>,</span></span>
 <span class="r-in"><span>    label <span class="op">=</span> <span class="st">"Region"</span>,</span></span>
 <span class="r-in"><span>    description <span class="op">=</span> <span class="st">"Geographical regions used in the study"</span>,</span></span>
@@ -273,10 +288,10 @@ codelist.</p>
 <span class="r-in"><span>    code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"EUROPE"</span>, <span class="st">"NORTH AMERICA"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    decode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Europe"</span>, <span class="st">"North America"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">subset_codelist_values</span><span class="op">(</span>codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MONTHS"</span>, <span class="st">"YEARS"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">restore_codelist_values</span><span class="op">(</span>codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="st">"DAYS"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">subset_codelist_values</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MONTHS"</span>, <span class="st">"YEARS"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">restore_codelist_values</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="st">"DAYS"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">extend_codelist_values</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    codelist_id <span class="op">=</span> <span class="st">"LOC"</span>,</span></span>
+<span class="r-in"><span>    id <span class="op">=</span> <span class="st">"LOC"</span>,</span></span>
 <span class="r-in"><span>    code <span class="op">=</span> <span class="st">"MY CUSTOM LOCATION"</span>,</span></span>
 <span class="r-in"><span>    decode <span class="op">=</span> <span class="st">"My Custom Location"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
@@ -309,11 +324,25 @@ codelist.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="va">cl</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">update_codelist</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"REGION"</span>, description <span class="op">=</span> <span class="st">"Regions used in the trial"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">update_codelist_value</span><span class="op">(</span>codelist_id <span class="op">=</span> <span class="st">"REGION"</span>, code <span class="op">=</span> <span class="st">"EUROPE"</span>, decode <span class="op">=</span> <span class="st">"EU"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">move_codelist_value</span><span class="op">(</span>codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="st">"YEARS"</span>, .pos <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">remove_codelist_value</span><span class="op">(</span>codelist_id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="st">"MONTHS"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">update_codelist_value</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"REGION"</span>, code <span class="op">=</span> <span class="st">"EUROPE"</span>, decode <span class="op">=</span> <span class="st">"EU"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">move_codelist_value</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="st">"YEARS"</span>, .pos <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">remove_codelist_value</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"AGEU"</span>, code <span class="op">=</span> <span class="st">"MONTHS"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">remove_codelist</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"LOC"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Check that all codelists in a study are referenced by a column</span></span></span>
+<span class="r-in"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="mighty_study.html">mighty_study</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">extend_codelist_values</span><span class="op">(</span><span class="st">"UNUSED"</span>, code <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → No `_documents.yml` file found</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → No `_codelists.yml` file found</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">check_codelist_references</span><span class="op">(</span><span class="va">study</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in check_codelist_references(study) : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Codelist <span style="color: #0000BB;">"UNUSED"</span> is not referenced by any column.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Reference the codelist in a column <span style="color: #00BB00;">codelist</span> field or remove it from</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">_codelists.yml</span>.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
