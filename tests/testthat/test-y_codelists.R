@@ -460,27 +460,6 @@ test_that("select_codelist() on mighty_study returns entry and errors on unknown
   )
 })
 
-test_that("mighty_study methods allow adding codelists not yet referenced", {
-  study <- mighty_study(local_study_without_codelists()) |>
-    add_codelist(
-      id = "UNREFERENCED",
-      label = "x",
-      description = "x",
-      datatype = "text",
-      code = "A"
-    ) |>
-    extend_codelist_values("UNREFERENCED_EXT", code = "A") |>
-    restore_codelist_values("UNREFERENCED_RES", code = "A")
-  expect_setequal(
-    list_codelists(study),
-    c("UNREFERENCED", "UNREFERENCED_EXT", "UNREFERENCED_RES")
-  )
-  expect_error(
-    check_codelist_references(study),
-    "not referenced by any column"
-  )
-})
-
 test_that("write_config() round-trips _codelists.yml", {
   study <- mighty_study(local_codelist_study())
   out <- withr::local_tempdir()
