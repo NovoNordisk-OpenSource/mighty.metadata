@@ -20,9 +20,8 @@ A codelist can contain the following operation groups:
 terminology, while `subset`, `restore` and `extend` modify a standard
 codelist retrieved from an external source.
 
-The object is validated on creation and when
-[`validate()`](https://rconsortium.github.io/S7/reference/validate.html)
-is called. Validation includes:
+The object is validated on creation and after every modification.
+Validation includes:
 
 - schema compliance with `inst/schema/codelists.json`,
 
@@ -34,10 +33,10 @@ is called. Validation includes:
 
 - consistent use of `decode` within an operation group (all or none).
 
-When part of a
-[`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md),
-every codelist must also be referenced by at least one column in the
-domain metadata.
+Codelists do not have to be referenced by a column. Use
+`check_codelist_references()` to check that every codelist in a
+[`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+is used.
 
 ## Usage
 

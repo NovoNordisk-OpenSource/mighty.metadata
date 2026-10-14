@@ -135,8 +135,9 @@ exists.</p></dd>
 
 <p>Use <code><a href="write_config.html">write_config()</a></code> to serialize a <code>mighty_study()</code> object back to YAML
 files. Each domain is written as a separate file, plus <code>_mighty.yml</code> and
-<code>_study.yml</code> when <code>@mighty</code> and <code>@study</code> are not <code>NULL</code>. If <code>path</code> is
-<code>NULL</code>, files are written to <code>x@path</code>.</p>
+<code>_study.yml</code> when <code>@mighty</code> and <code>@study</code> are not <code>NULL</code>, and
+<code>_documents.yml</code> and <code>_codelists.yml</code> when <code>@documents</code> and <code>@codelists</code>
+are not empty. If <code>path</code> is <code>NULL</code>, files are written to <code>x@path</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

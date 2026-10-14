@@ -97,8 +97,9 @@ Use
 [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 to serialize a `mighty_study()` object back to YAML files. Each domain
 is written as a separate file, plus `_mighty.yml` and `_study.yml` when
-`@mighty` and `@study` are not `NULL`. If `path` is `NULL`, files are
-written to `x@path`.
+`@mighty` and `@study` are not `NULL`, and `_documents.yml` and
+`_codelists.yml` when `@documents` and `@codelists` are not empty. If
+`path` is `NULL`, files are written to `x@path`.
 
 ## See also
 

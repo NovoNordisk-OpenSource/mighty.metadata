@@ -14,7 +14,7 @@ extend: values added to an extensible codelist.
 values is meant for codelists that are not part of standard controlled
 terminology, while subset, restore and extend modify a standard
 codelist retrieved from an external source.
-The object is validated on creation and when validate() is called.
+The object is validated on creation and after every modification.
 Validation includes:
 schema compliance with inst/schema/codelists.json,
 uniqueness of codelist identifiers (id),
@@ -23,8 +23,9 @@ values being mutually exclusive with subset and restore,
 consistent use of decode within an operation group (all or none).
 
 
-When part of a mighty_study(), every codelist must also be referenced
-by at least one column in the domain metadata."><meta property="og:description" content="mighty_codelists() creates an S7 object for storing codelist metadata.
+Codelists do not have to be referenced by a column. Use
+check_codelist_references() to check that every codelist in a
+mighty_study() is used."><meta property="og:description" content="mighty_codelists() creates an S7 object for storing codelist metadata.
 The class represents the contents of _codelists.yml as a list of codelist
 entries. Each codelist is referenced from column metadata via its id
 (the codelist field of a column).
@@ -39,7 +40,7 @@ extend: values added to an extensible codelist.
 values is meant for codelists that are not part of standard controlled
 terminology, while subset, restore and extend modify a standard
 codelist retrieved from an external source.
-The object is validated on creation and when validate() is called.
+The object is validated on creation and after every modification.
 Validation includes:
 schema compliance with inst/schema/codelists.json,
 uniqueness of codelist identifiers (id),
@@ -48,8 +49,9 @@ values being mutually exclusive with subset and restore,
 consistent use of decode within an operation group (all or none).
 
 
-When part of a mighty_study(), every codelist must also be referenced
-by at least one column in the domain metadata."><meta property="og:image" content="https://novonordisk-opensource.github.io/mighty.metadata/logo.png"></head><body>
+Codelists do not have to be referenced by a column. Use
+check_codelist_references() to check that every codelist in a
+mighty_study() is used."><meta property="og:image" content="https://novonordisk-opensource.github.io/mighty.metadata/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -113,14 +115,15 @@ codelist even when they are not used in the SDTM define.xml,</p></li>
 </ul><p><code>values</code> is meant for codelists that are not part of standard controlled
 terminology, while <code>subset</code>, <code>restore</code> and <code>extend</code> modify a standard
 codelist retrieved from an external source.</p>
-<p>The object is validated on creation and when <code><a href="https://rconsortium.github.io/S7/reference/validate.html" class="external-link">validate()</a></code> is called.
+<p>The object is validated on creation and after every modification.
 Validation includes:</p><ul><li><p>schema compliance with <code>inst/schema/codelists.json</code>,</p></li>
 <li><p>uniqueness of codelist identifiers (<code>id</code>),</p></li>
 <li><p>uniqueness of <code>code</code> within a codelist across all operation groups,</p></li>
 <li><p><code>values</code> being mutually exclusive with <code>subset</code> and <code>restore</code>,</p></li>
 <li><p>consistent use of <code>decode</code> within an operation group (all or none).</p></li>
-</ul><p>When part of a <code><a href="mighty_study.html">mighty_study()</a></code>, every codelist must also be referenced
-by at least one column in the domain metadata.</p>
+</ul><p>Codelists do not have to be referenced by a column. Use
+<code>check_codelist_references()</code> to check that every codelist in a
+<code><a href="mighty_study.html">mighty_study()</a></code> is used.</p>
     </div>
 
     <div class="section level2">

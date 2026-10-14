@@ -22,11 +22,13 @@
   and
   [`update_codelist_value()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md).
 - [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
-  gains a nullable `@codelists` property, populated from
-  `_codelists.yml` and written back by
+  gains a `@codelists` property, populated from `_codelists.yml` (empty
+  `mighty_codelists` if the file is missing) and written back by
   [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md).
-  Every codelist must be referenced by at least one column `codelist`
-  field.
+  New
+  [`check_codelist_references()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  checks that every codelist is referenced by at least one column
+  `codelist` field.
 - [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)
   and
   [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
