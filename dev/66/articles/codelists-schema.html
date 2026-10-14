@@ -207,13 +207,13 @@ define.xml</translatedtext></decode>
 <div class="section level3">
 <h3 id="codelist">codelist<a class="anchor" aria-label="anchor" href="#codelist"></a>
 </h3>
-<table class="table">
+<table style="width:100%;" class="table">
 <colgroup>
 <col width="3%">
-<col width="3%">
-<col width="59%">
+<col width="4%">
+<col width="62%">
 <col width="6%">
-<col width="17%">
+<col width="13%">
 <col width="9%">
 </colgroup>
 <thead><tr class="header">
@@ -231,7 +231,7 @@ define.xml</translatedtext></decode>
 list(“subset”))<br>list(required = list(“restore”))<br>list(required =
 list(“extend”))</td>
 <td align="left">list(“values”)</td>
-<td align="left">list(“label”, “description”, “datatype”)</td>
+<td align="left">list(“label”, “description”)</td>
 <td align="left">No</td>
 </tr></tbody>
 </table>
@@ -391,10 +391,10 @@ even when they are not used in the SDTM define.xml</td>
 </tr>
 </tbody>
 </table>
-<p>A codelist with <code>values</code> must also have
-<code>label</code>, <code>description</code> and <code>datatype</code>.
-For the other groups these fields are optional, as they come from the
-external codelist.</p>
+<p>A codelist with <code>values</code> must also have <code>label</code>
+and <code>description</code>. For the other groups these fields are
+optional, as they come from the external codelist. <code>datatype</code>
+is always optional.</p>
 <p><code>values</code> cannot be combined with <code>subset</code> or
 <code>restore</code> on the same codelist. <code>code</code> must be
 unique across all groups within a codelist.</p>
