@@ -12,7 +12,11 @@
 * `mighty_study()` gains a nullable `@codelists` property, populated from
   `_codelists.yml` and written back by `write_config()`. Every codelist must be
   referenced by at least one column `codelist` field.
-
+* `populate_core()` and `populate_sparse()` are much faster: each domain is now
+  validated once after all columns have been added or updated, instead of once
+  per column (#10).
+* `repos` is now a required field in `_mighty.yml` and must hold at least one
+  entry (#65). A `_mighty.yml` file is still optional.
 * Added `create_md_table()`, `create_md_param()`, and `create_md_values()` to
   create metadata data sets for tables, BDS parameters, and value level
   metadata, complementing `create_md_col()` (#11). `create_md()` returns all
