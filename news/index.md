@@ -2,6 +2,33 @@
 
 ## mighty.metadata (development version)
 
+- added
+  [`mighty_codelists()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  class and `codelists.json` schema for study-level codelist metadata in
+  `_codelists.yml`, supporting non-standard codelists (`values`) and
+  value-level overrides of standard controlled terminology codelists
+  (`subset`, `restore`, `extend`). New helpers:
+  [`list_codelists()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md),
+  [`select_codelist()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md),
+  [`add_codelist()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md),
+  [`remove_codelist()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md),
+  [`update_codelist()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md),
+  [`add_codelist_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md),
+  [`subset_codelist_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md),
+  [`restore_codelist_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md),
+  [`extend_codelist_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md),
+  [`remove_codelist_value()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md),
+  [`move_codelist_value()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  and
+  [`update_codelist_value()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md).
+- [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  gains a `@codelists` property, populated from `_codelists.yml` (empty
+  `mighty_codelists` if the file is missing) and written back by
+  [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md).
+  New
+  [`check_codelist_references()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  checks that every codelist is referenced by at least one column
+  `codelist` field.
 - [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)
   and
   [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)

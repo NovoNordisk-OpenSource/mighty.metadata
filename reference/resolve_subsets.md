@@ -39,6 +39,7 @@ study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
 #> → No `_documents.yml` file found
+#> → No `_codelists.yml` file found
 
 # Add a row action restricted to a subset of source rows
 study$ADAE <- add_row(

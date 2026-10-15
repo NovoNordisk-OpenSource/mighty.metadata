@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9017</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9018</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,6 +24,7 @@
     <li><a class="dropdown-item" href="../articles/adam-schema.html">ADaM specifications</a></li>
     <li><a class="dropdown-item" href="../articles/study-schema.html">Study specifications</a></li>
     <li><a class="dropdown-item" href="../articles/mighty-schema.html">Mighty specifications</a></li>
+    <li><a class="dropdown-item" href="../articles/codelists-schema.html">Codelists specifications</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Architecture Decision Records</h6></li>
     <li><a class="dropdown-item" href="../articles/adr.html">ADR: Package design and scope</a></li>
@@ -201,9 +202,9 @@
         </dt>
         <dd>Create Metadata Value Table</dd>
       </dl></div><div class="section level2">
-      <h2 id="documents-metadata">Documents metadata<a class="anchor" aria-label="anchor" href="#documents-metadata"></a></h2>
+      <h2 id="metadata-for-define-xml">Metadata for define.xml<a class="anchor" aria-label="anchor" href="#metadata-for-define-xml"></a></h2>
 
-      <div class="section-desc"><p>Manage study-level document catalog and references.</p></div>
+      <div class="section-desc"><p>Manage study-level documents and codelists referenced from domain metadata and used when generating define.xml.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -216,6 +217,13 @@
 
         </dt>
         <dd>Mighty Documents</dd>
+
+        <dt>
+
+          <code><a href="codelists.html">mighty_codelists()</a></code> <code><a href="codelists.html">list_codelists()</a></code> <code><a href="codelists.html">select_codelist()</a></code> <code><a href="codelists.html">add_codelist()</a></code> <code><a href="codelists.html">remove_codelist()</a></code> <code><a href="codelists.html">update_codelist()</a></code> <code><a href="codelists.html">add_codelist_values()</a></code> <code><a href="codelists.html">extend_codelist_values()</a></code> <code><a href="codelists.html">restore_codelist_values()</a></code> <code><a href="codelists.html">subset_codelist_values()</a></code> <code><a href="codelists.html">remove_codelist_value()</a></code> <code><a href="codelists.html">move_codelist_value()</a></code> <code><a href="codelists.html">update_codelist_value()</a></code> <code><a href="codelists.html">check_codelist_references()</a></code>
+
+        </dt>
+        <dd>Mighty Codelists</dd>
       </dl></div><div class="section level2">
       <h2 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a></h2>
 

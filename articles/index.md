@@ -8,6 +8,8 @@
   specifications](https://novonordisk-opensource.github.io/mighty.metadata/articles/study-schema.md):
 - [Mighty
   specifications](https://novonordisk-opensource.github.io/mighty.metadata/articles/mighty-schema.md):
+- [Codelists
+  specifications](https://novonordisk-opensource.github.io/mighty.metadata/articles/codelists-schema.md):
 
 ### Architecture Decision Records
 

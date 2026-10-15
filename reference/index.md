@@ -66,9 +66,10 @@ Flatten a study or a single data set into tabular metadata.
 - [`create_md_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/create_md_values.md)
   : Create Metadata Value Table
 
-## Documents metadata
+## Metadata for define.xml
 
-Manage study-level document catalog and references.
+Manage study-level documents and codelists referenced from domain
+metadata and used when generating define.xml.
 
 - [`mighty_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   [`list_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
@@ -77,6 +78,21 @@ Manage study-level document catalog and references.
   [`add_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   [`update_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   : Mighty Documents
+- [`mighty_codelists()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`list_codelists()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`select_codelist()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`add_codelist()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`remove_codelist()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`update_codelist()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`add_codelist_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`extend_codelist_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`restore_codelist_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`subset_codelist_values()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`remove_codelist_value()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`move_codelist_value()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`update_codelist_value()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  [`check_codelist_references()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  : Mighty Codelists
 
 ## Utilities
 

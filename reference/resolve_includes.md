@@ -45,6 +45,7 @@ study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
 #> → No `_documents.yml` file found
+#> → No `_codelists.yml` file found
 
 # Add a conditional column
 study$ADVS <- update_column(

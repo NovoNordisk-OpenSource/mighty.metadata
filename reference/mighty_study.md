@@ -1,13 +1,14 @@
 # Mighty Study
 
 Creates a `mighty_study` object by loading all YAML metadata files from
-a directory. Each YAML file (except `_mighty.yml`,`_study.yml` and
-`_documents.yml`) is parsed as a
+a directory. Each YAML file (except `_mighty.yml`, `_study.yml`,
+`_documents.yml` and `_codelists.yml`) is parsed as a
 [mighty_domain](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
-object. The optional `_study.yml` file provides study-level properties
-and the optional `_mighty.yml` file provides mighty framework
-configuration, and optional `_documents.yml` provides study-level
-documents metadata.
+object. The optional `_study.yml` file provides study-level properties,
+the optional `_mighty.yml` file provides mighty framework configuration,
+the optional `_documents.yml` provides study-level documents metadata,
+and the optional `_codelists.yml` provides study-level codelists
+metadata.
 
 ## Usage
 
@@ -57,6 +58,13 @@ A `mighty_study` S7 object extending `list`:
   Study-level document metadata from `_documents.yml`, or an empty
   `mighty_documents` if no documents file exists.
 
+- `@codelists`:
+
+  A
+  [mighty_codelists](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+  object loaded from `_codelists.yml`, or an empty `mighty_codelists` if
+  no codelists file exists.
+
 - `@path`:
 
   The source directory path as `character(1)`.
@@ -73,13 +81,15 @@ The function scans the directory for files matching `*.yaml` or `*.yml`:
 
 - File named `_documents.yml` is treated as study documents metadata
 
+- File named `_codelists.yml` is treated as study codelists metadata
+
 - All other YAML files must follow ADaM naming conventions (starting
   with `ad` or `md`) and are loaded as
   [mighty_domain](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_domain.md)
   objects
 
-- Only one `_mighty.yml`, one `_study.yml` and one `_documents.yml` file
-  is allowed per directory
+- Only one `_mighty.yml`, one `_study.yml`, one `_documents.yml` and one
+  `_codelists.yml` file is allowed per directory
 
 ## Write Study Metadata
 
@@ -87,8 +97,9 @@ Use
 [`write_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/write_config.md)
 to serialize a `mighty_study()` object back to YAML files. Each domain
 is written as a separate file, plus `_mighty.yml` and `_study.yml` when
-`@mighty` and `@study` are not `NULL`. If `path` is `NULL`, files are
-written to `x@path`.
+`@mighty` and `@study` are not `NULL`, and `_documents.yml` and
+`_codelists.yml` when `@documents` and `@codelists` are not empty. If
+`path` is `NULL`, files are written to `x@path`.
 
 ## See also
 
@@ -111,6 +122,7 @@ study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
 #> → No `_documents.yml` file found
+#> → No `_codelists.yml` file found
 
 # List tables with metadata
 names(study)
@@ -147,6 +159,7 @@ study <- mighty_study(
   populate = TRUE
 )
 #> → No `_documents.yml` file found
+#> → No `_codelists.yml` file found
 
 # Write study back to YAML
 tmp <- tempdir()
