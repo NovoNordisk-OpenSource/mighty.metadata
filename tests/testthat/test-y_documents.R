@@ -309,3 +309,17 @@ test_that("find_invalid_method_refs() flags METHOD refs with non-Derived origin"
   expect_length(invalid, 1)
   expect_identical(invalid[[1]]$level, "x")
 })
+
+test_that("remove_documents() preserves an empty documents object", {
+  docs <- mighty_documents() |>
+    add_document(
+      id = "only",
+      title = "Only document",
+      doctype = "suppdoc",
+      href = "only.pdf"
+    )
+  docs <- remove_documents(docs, id = "only")
+  expect_s7_class(docs, mighty_documents)
+  expect_identical(S7::S7_data(docs), list())
+  expect_identical(list_documents(docs), character())
+})

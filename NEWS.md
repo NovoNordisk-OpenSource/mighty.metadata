@@ -1,5 +1,6 @@
 # mighty.metadata (development version)
 
+* Updates for compatibility with S7 > 0.2.2.
 * added `mighty_codelists()` class and `codelists.json` schema for study-level
   codelist metadata in `_codelists.yml`, supporting non-standard codelists
   (`values`) and value-level overrides of standard controlled terminology codelists (`subset`, `restore`,
