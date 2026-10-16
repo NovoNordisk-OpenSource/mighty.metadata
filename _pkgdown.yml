@@ -35,11 +35,13 @@ reference:
       - create_md_col
       - create_md_param
       - create_md_values
-  - title: Documents metadata
+  - title: Metadata for define.xml
     description: |
-      Manage study-level document catalog and references.
+      Manage study-level documents and codelists referenced from domain
+      metadata and used when generating define.xml.
     contents:
       - documents
+      - codelists
   - title: Utilities
     contents:
       - write_config
@@ -53,6 +55,7 @@ articles:
       - adam-schema
       - study-schema
       - mighty-schema
+      - codelists-schema
   - title: Architecture Decision Records
     navbar: Architecture Decision Records
     contents:

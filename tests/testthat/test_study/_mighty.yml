@@ -3,3 +3,5 @@ external_data:
     keys:
       - STUDYID
       - USUBJID
+repos:
+  - "."

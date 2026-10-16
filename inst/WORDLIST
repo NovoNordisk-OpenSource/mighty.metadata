@@ -31,7 +31,6 @@ Graczyk
 Hedegaard
 Katarzyna
 Knoph
-Katarzyna
 MEDDRA
 MYVAR
 Moelgaard
@@ -83,6 +82,7 @@ entr
 formalstandardname
 formalstandardversion
 envir
+integerish
 jsonvalidate
 jsonvalidator
 knitr

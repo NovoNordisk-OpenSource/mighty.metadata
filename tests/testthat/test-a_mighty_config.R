@@ -58,12 +58,25 @@ test_that("mighty_config works with single repos entry", {
   expect_true(length(x$repos) > 0)
 })
 
-test_that("mighty_config works without repos field", {
-  x <- mighty_config(
-    .data = list(external_data = list(list(id = "DM", keys = "USUBJID")))
-  ) |>
-    expect_no_condition()
-  expect_null(x$repos)
+test_that("mighty_config errors without repos field", {
+  expect_error(
+    mighty_config(
+      .data = list(external_data = list(list(id = "DM", keys = "USUBJID")))
+    ),
+    regexp = "repos"
+  )
+})
+
+test_that("mighty_config errors on empty repos", {
+  expect_error(
+    mighty_config(
+      .data = list(
+        external_data = list(list(id = "DM", keys = "USUBJID")),
+        repos = list()
+      )
+    ),
+    regexp = "repos"
+  )
 })
 
 test_that("mighty_config errors on invalid repo entry", {
@@ -115,7 +128,8 @@ test_that("mighty_config errors on duplicate external_data ids", {
         external_data = list(
           list(id = "DM", keys = "USUBJID"),
           list(id = "DM", keys = "STUDYID")
-        )
+        ),
+        repos = "."
       )
     ),
     regexp = "Duplicate"
@@ -130,7 +144,10 @@ test_that("mighty_config requires exactly one input source", {
         "_mighty.yml",
         package = "mighty.metadata"
       ),
-      .data = list(external_data = list(list(id = "DM", keys = "USUBJID")))
+      .data = list(
+        external_data = list(list(id = "DM", keys = "USUBJID")),
+        repos = "."
+      )
     ),
     regexp = "Exactly one"
   )
@@ -139,7 +156,10 @@ test_that("mighty_config requires exactly one input source", {
 
 test_that("mighty_config in-memory object requires a path to write", {
   x <- mighty_config(
-    .data = list(external_data = list(list(id = "DM", keys = "USUBJID")))
+    .data = list(
+      external_data = list(list(id = "DM", keys = "USUBJID")),
+      repos = "."
+    )
   )
   expect_error(write_config(x), regexp = "path")
 
@@ -153,7 +173,10 @@ test_that("mighty_config in-memory object requires a path to write", {
 test_that("mighty_config write_config uses @file when path is NULL", {
   tmp <- withr::local_tempdir()
   file <- file.path(tmp, "_mighty.yml")
-  writeLines(c("external_data:", "  - id: DM", "    keys: USUBJID"), file)
+  writeLines(
+    c("external_data:", "  - id: DM", "    keys: USUBJID", "repos: '.'"),
+    file
+  )
 
   x <- mighty_config(file)
   x$external_data[[1]]$id <- "VS"

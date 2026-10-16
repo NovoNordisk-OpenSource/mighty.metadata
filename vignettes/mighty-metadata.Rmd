@@ -246,7 +246,8 @@ str(study@mighty)
 ```
 
 The `_study.yml` file provides the `study_id`. The `_mighty.yml` file provides
-`external_data` definitions (source domains and their keys).
+`external_data` definitions (source domains and their keys) and the `repos`
+where components are found.
 
 ### Populating Core Variables
 

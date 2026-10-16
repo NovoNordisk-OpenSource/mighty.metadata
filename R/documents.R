@@ -46,12 +46,8 @@ NULL
 
 #' @noRd
 construct_mighty_documents <- function(file, .data) {
-  schema <- system.file("schema", "documents.json", package = "mighty.metadata")
-  if (rlang::is_missing(file) && rlang::is_missing(.data)) {
-    .data <- list()
-  }
   S7::new_object(
-    S7schema::S7schema(file = file, schema = schema, .data = .data)
+    construct_s7schema(file, .data, schema_name = "documents.json")
   )
 }
 

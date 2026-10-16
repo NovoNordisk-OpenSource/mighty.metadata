@@ -96,6 +96,8 @@ construct_study_config <- function(file, .data) {
     file <- NULL
   }
 
+  S7schema::validate_list(.data, schema)
+
   parent <- S7schema::S7schema(.data = .data, schema = schema)
   parent@file <- file
   S7::new_object(parent)

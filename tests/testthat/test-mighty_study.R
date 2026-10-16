@@ -41,7 +41,7 @@ test_that("mighty_study()", {
     expect_equal(c("ADAE", "ADSL", "ADVS"))
 
   S7::prop_names(study) |>
-    expect_equal(c("mighty", "study", "documents", "path"))
+    expect_equal(c("mighty", "study", "documents", "codelists", "path"))
 
   expect_true(S7::S7_inherits(study@mighty, mighty_config))
   expect_equal(
@@ -108,6 +108,18 @@ test_that("mighty_study() without _study.yml has NULL @study", {
       gsub(pattern = "mighty\\.metadata::", replacement = "", x = x)
     }
   )
+})
+
+test_that("mighty_study() without _mighty.yml has NULL @mighty", {
+  tmp <- withr::local_tempdir()
+  file.copy(
+    from = test_path("test_study", c("_study.yml", "adsl.yml")),
+    to = tmp
+  )
+
+  study <- mighty_study(path = tmp) |> expect_no_condition()
+
+  expect_null(study@mighty)
 })
 
 test_that("validate_path() errors when @path set to non-existent directory", {

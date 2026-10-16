@@ -1,7 +1,24 @@
 # mighty.metadata (development version)
 
 * Updates for compatibility with S7 > 0.2.2.
-
+* added `mighty_codelists()` class and `codelists.json` schema for study-level
+  codelist metadata in `_codelists.yml`, supporting non-standard codelists
+  (`values`) and value-level overrides of standard controlled terminology codelists (`subset`, `restore`,
+  `extend`). New helpers: `list_codelists()`, `select_codelist()`,
+  `add_codelist()`, `remove_codelist()`, `update_codelist()`,
+  `add_codelist_values()`, `subset_codelist_values()`,
+  `restore_codelist_values()`, `extend_codelist_values()`,
+  `remove_codelist_value()`, `move_codelist_value()` and
+  `update_codelist_value()`.
+* `mighty_study()` gains a `@codelists` property, populated from
+  `_codelists.yml` (empty `mighty_codelists` if the file is missing) and
+  written back by `write_config()`. New `check_codelist_references()` checks
+  that every codelist is referenced by at least one column `codelist` field.
+* `populate_core()` and `populate_sparse()` are much faster: each domain is now
+  validated once after all columns have been added or updated, instead of once
+  per column (#10).
+* `repos` is now a required field in `_mighty.yml` and must hold at least one
+  entry (#65). A `_mighty.yml` file is still optional.
 * Added `create_md_table()`, `create_md_param()`, and `create_md_values()` to
   create metadata data sets for tables, BDS parameters, and value level
   metadata, complementing `create_md_col()` (#11). `create_md()` returns all
