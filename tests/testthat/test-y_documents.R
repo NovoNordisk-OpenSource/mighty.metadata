@@ -112,10 +112,11 @@ test_that("remove_documents() works on mighty_study", {
   expect_false("EXTRA001" %in% list_documents(study))
 })
 
-test_that("remove_documents() errors on mighty_study when removing referenced document", {
+test_that("removing a referenced document is caught by check_document_references()", {
   study <- mighty_study(test_path("test_study"))
+  study <- expect_no_error(remove_documents(study, id = "COMMENT001"))
 
-  expect_snapshot(remove_documents(study, id = "COMMENT001"), error = TRUE)
+  expect_snapshot(check_document_references(study), error = TRUE)
 })
 
 test_that("mighty_documents print() summarizes document ids and entry count", {
@@ -154,7 +155,8 @@ test_that("mighty_study() reads _documents.yml", {
   )
 })
 
-test_that("check_document_references() returns study unchanged when no doc refs in domains and no docs in _documents.yml", { # nolint: line_length_linter
+test_that("check_document_references() returns study unchanged when no doc refs in domains and no docs in _documents.yml", {
+  # nolint: line_length_linter
   tmpdir <- withr::local_tempdir()
   file.copy(test_path("test_study/adsl.yml"), tmpdir) # adsl.yml has no document references
   study <- mighty_study(tmpdir)
@@ -164,7 +166,8 @@ test_that("check_document_references() returns study unchanged when no doc refs 
     expect_equal(study)
 })
 
-test_that("check_document_references() returns study unchanged when no doc refs in domains but docs exist in _documents.yml", { # nolint: line_length_linter
+test_that("check_document_references() returns study unchanged when no doc refs in domains but docs exist in _documents.yml", {
+  # nolint: line_length_linter
   tmpdir <- withr::local_tempdir()
   file.copy(test_path("test_study/adsl.yml"), tmpdir) # adsl.yml has no document references
   file.copy(test_path("test_study/_documents.yml"), tmpdir)
@@ -178,31 +181,44 @@ test_that("check_document_references() returns study unchanged when no doc refs 
 test_that("check_document_references() errors when domains reference document ids but no docs in _documents.yml", {
   study <- mighty_study(test_path("test_study"))
 
-  expect_snapshot(
-    study@documents <- mighty_documents(.data = list()),
-    error = TRUE
-  )
+  study@documents <- mighty_documents(.data = list())
+
+  expect_snapshot(check_document_references(study), error = TRUE)
 })
 
 test_that("check_document_references() errors when domains reference document ids not defined in _documents.yml", {
   study <- mighty_study(test_path("test_study"))
   study$ADVS$documents <- list(list(id = "UNKNOWN"), list(id = "NEXT"))
 
-  expect_snapshot(validate(study), error = TRUE)
+  expect_snapshot(check_document_references(study), error = TRUE)
 })
 
 test_that("check_document_references() errors for METHOD on non-Derived", {
   study <- mighty_study(test_path("test_study"))
   study$ADVS$columns[[1]]$documents <- list(list(id = "METHOD001"))
 
-  expect_snapshot(validate(study), error = TRUE)
+  expect_snapshot(check_document_references(study), error = TRUE)
 })
 
 test_that("check_document_references() warns for COMMENT with missing text", {
   study <- mighty_study(test_path("test_study"))
   study$ADAE$columns[[9]]$comment <- ""
 
-  expect_snapshot(validate(study))
+  expect_snapshot(check_document_references(study))
+})
+
+test_that("check_document_references() errors on non-study input", {
+  expect_error(
+    check_document_references(mighty_documents()),
+    "must be a <mighty_study> object"
+  )
+})
+
+test_that("mighty_study() no longer validates document references", {
+  study <- mighty_study(test_path("test_study"))
+  study$ADVS$documents <- list(list(id = "UNKNOWN"))
+
+  expect_no_error(validate(study))
 })
 
 test_that("as_list_or_empty() returns empty list for empty inputs", {

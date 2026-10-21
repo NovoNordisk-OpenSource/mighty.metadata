@@ -14,6 +14,10 @@
 #' - `list_documents()`: `character()` vector with document ids.
 #' - `select_document()`: selected document entry as a list.
 #' - `add_document()`, `update_document()`, `remove_documents()`: modified object (`invisible(x)`).
+#' - `check_document_references()`: the input `study` (`invisible(study)`).
+#'   Errors if a domain, column, or parameter references an unknown document id
+#'   or a METHOD document on a non-Derived column, and warns if a COMMENT
+#'   reference has missing comment text.
 #'
 #' @examples
 #' # Load study config
@@ -428,12 +432,24 @@ warn_on_missing_comment_refs <- function(refs, ref_types) {
   ))
 }
 
-#' @noRd
+#' @param study A `mighty_study()` object.
+#' @examples
+#'
+#' # Check that all document references in a study are valid
+#' study <- mighty_study(
+#'   path = system.file("examples", package = "mighty.metadata")
+#' )
+#' check_document_references(study)
+#' @rdname documents
+#' @export
 check_document_references <- function(study) {
+  if (!S7::S7_inherits(study, mighty_study)) {
+    cli::cli_abort("{.arg study} must be a {.cls mighty_study} object.")
+  }
   refs <- unlist(lapply(study, collect_document_refs), recursive = FALSE)
 
   if (!length(refs)) {
-    return(study)
+    return(invisible(study))
   }
 
   docs <- S7::S7_data(study@documents)
@@ -451,5 +467,5 @@ check_document_references <- function(study) {
 
   warn_on_missing_comment_refs(refs, ref_types)
 
-  study
+  invisible(study)
 }
