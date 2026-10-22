@@ -8,6 +8,7 @@
 \alias{remove_documents}
 \alias{add_document}
 \alias{update_document}
+\alias{check_document_references}
 \title{Mighty Documents}
 \usage{
 mighty_documents(file, .data)
@@ -28,6 +29,8 @@ add_document(
 )
 
 update_document(x, id, ...)
+
+check_document_references(study)
 }
 \arguments{
 \item{file}{\code{character(1)} path to \verb{_documents.yml}. Optional; mutually
@@ -49,6 +52,8 @@ with \code{file}. Supplying neither returns an empty \code{mighty_documents}.}
 \item{.pos}{\code{integer(1)} insertion position for a new document.}
 
 \item{...}{Additional document properties to update.}
+
+\item{study}{A \code{mighty_study()} object.}
 }
 \value{
 An object of class \code{mighty_documents}.
@@ -57,6 +62,10 @@ An object of class \code{mighty_documents}.
 \item \code{list_documents()}: \code{character()} vector with document ids.
 \item \code{select_document()}: selected document entry as a list.
 \item \code{add_document()}, \code{update_document()}, \code{remove_documents()}: modified object (\code{invisible(x)}).
+\item \code{check_document_references()}: the input \code{study} (\code{invisible(study)}).
+Errors if a domain, column, or parameter references an unknown document id
+or a METHOD document on a non-Derived column, and warns if a COMMENT
+reference has missing comment text.
 }
 }
 \description{
@@ -139,4 +148,10 @@ docs <- docs |>
 
 list_documents(docs)
 
+
+# Check that all document references in a study are valid
+study <- mighty_study(
+  path = system.file("examples", package = "mighty.metadata")
+)
+check_document_references(study)
 }
