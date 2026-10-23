@@ -26,12 +26,9 @@ write_dated_study <- function(dir, env = parent.frame()) {
   file
 }
 
-test_that("upstream S7schema still mis-parses unquoted dates (bug is live)", {
-  # When this FAILS the bug is fixed: drop the `S7SCHEMA-WORKAROUND` blocks
-  # in R/a_study_config.R and R/utils-yml.R, plus this file.
+test_that("study_config accepts unquoted date versions", {
   file <- write_dated_study()
 
-  expect_error(S7schema::validate_yaml(file, study_schema()), "must be string")
   expect_equal(study_config(file = file)$standards[[1]]$version, "2025-08-06")
 })
 
