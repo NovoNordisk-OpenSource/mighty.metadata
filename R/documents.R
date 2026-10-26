@@ -47,7 +47,7 @@ NULL
 #' @noRd
 construct_mighty_documents <- function(file, .data) {
   S7::new_object(
-    .parent = construct_s7schema(file, .data, schema_name = "documents.json")
+    construct_s7schema(file, .data, schema_name = "documents.json")
   )
 }
 

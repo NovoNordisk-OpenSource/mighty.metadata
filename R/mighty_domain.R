@@ -61,7 +61,7 @@ NULL
 #' @noRd
 construct_mighty_domain <- function(file, .data) {
   S7::new_object(
-    .parent = S7schema::S7schema(
+    S7schema::S7schema(
       file = file,
       schema = system.file("schema", "adam.json", package = "mighty.metadata"),
       .data = .data

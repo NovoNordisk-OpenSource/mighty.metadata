@@ -74,7 +74,7 @@ CODELIST_DECODE_GROUPS <- c("values", "extend")
 #' @noRd
 construct_mighty_codelists <- function(file, .data) {
   S7::new_object(
-    .parent = construct_s7schema(file, .data, schema_name = "codelists.json")
+    construct_s7schema(file, .data, schema_name = "codelists.json")
   )
 }
 
