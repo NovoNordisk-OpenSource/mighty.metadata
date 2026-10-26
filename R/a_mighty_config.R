@@ -71,7 +71,7 @@ NULL
 #' @noRd
 construct_mighty_config <- function(file, .data) {
   S7::new_object(
-    .parent = S7schema::S7schema(
+    S7schema::S7schema(
       file = file,
       schema = system.file(
         "schema",

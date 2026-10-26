@@ -207,3 +207,11 @@ test_that("mighty_codelists print() summarizes codelists", {
       }
     )
 })
+
+test_that("mighty_codelists preserves its schema parent", {
+  data <- list(list(id = "AGEU", subset = list(list(code = "YEARS"))))
+  x <- mighty_codelists(.data = data)
+  expect_identical(S7::S7_data(x), data)
+  expect_s7_class(x, S7schema::S7schema)
+  expect_identical(mighty_codelists() |> S7::S7_data(), list())
+})
