@@ -317,7 +317,14 @@ str(study@study)
 #>   .. ..$ version: chr "2023 JAN"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x563a959a88a0> 
+#>  .. @ context:List of 6
+#>  .. .. $ context :<pointer: 0x56321b2bbe30> 
+#>  .. .. $ validate:function (code_string)  
+#>  .. .. $ source  :function (file = NULL, code = NULL)  
+#>  .. .. $ call    :function (function_name, ...)  
+#>  .. .. $ get     :function (var_name)  
+#>  .. .. $ assign  :function (var_name, value)  
+#>  .. .. - attr(*, "class")= chr "JSContext"
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_study.yml"
 str(study@mighty)
 #> <mighty.metadata::mighty_config> List of 2
@@ -334,7 +341,14 @@ str(study@mighty)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x563a95ca10e8> 
+#>  .. @ context:List of 6
+#>  .. .. $ context :<pointer: 0x563217703a20> 
+#>  .. .. $ validate:function (code_string)  
+#>  .. .. $ source  :function (file = NULL, code = NULL)  
+#>  .. .. $ call    :function (function_name, ...)  
+#>  .. .. $ get     :function (var_name)  
+#>  .. .. $ assign  :function (var_name, value)  
+#>  .. .. - attr(*, "class")= chr "JSContext"
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 ```
 

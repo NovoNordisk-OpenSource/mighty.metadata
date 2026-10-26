@@ -103,7 +103,14 @@ str(x)
 #>  $ repos        : chr [1:2] "NovoNordisk-OpenSource/mighty.standards/components@main" "."
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/mighty.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x556c107b6218> 
+#>  .. @ context:List of 6
+#>  .. .. $ context :<pointer: 0x557c7f0c9a60> 
+#>  .. .. $ validate:function (code_string)  
+#>  .. .. $ source  :function (file = NULL, code = NULL)  
+#>  .. .. $ call    :function (function_name, ...)  
+#>  .. .. $ get     :function (var_name)  
+#>  .. .. $ assign  :function (var_name, value)  
+#>  .. .. - attr(*, "class")= chr "JSContext"
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/_mighty.yml"
 
 # Write back to a file

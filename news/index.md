@@ -2,6 +2,7 @@
 
 ## mighty.metadata (development version)
 
+- Updates for compatibility with S7 \> 0.2.2.
 - added
   [`mighty_codelists()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
   class and `codelists.json` schema for study-level codelist metadata in

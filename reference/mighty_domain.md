@@ -163,7 +163,14 @@ str(x)
 #>   .. .. .. ..$ method: chr "Numeric representation of AVALC"
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/adam.json"
 #>  @ validator: <S7schema::validator>
-#>  .. @ context:Classes 'V8', 'environment' <environment: 0x556c0ee60a30> 
+#>  .. @ context:List of 6
+#>  .. .. $ context :<pointer: 0x557c84136c90> 
+#>  .. .. $ validate:function (code_string)  
+#>  .. .. $ source  :function (file = NULL, code = NULL)  
+#>  .. .. $ call    :function (function_name, ...)  
+#>  .. .. $ get     :function (var_name)  
+#>  .. .. $ assign  :function (var_name, value)  
+#>  .. .. - attr(*, "class")= chr "JSContext"
 #>  @ file     : chr "/home/runner/work/_temp/Library/mighty.metadata/examples/advs.yml"
 
 # Or build one in memory
