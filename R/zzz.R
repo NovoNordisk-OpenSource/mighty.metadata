@@ -1,8 +1,9 @@
+# nocov start
 .onLoad <- function(...) {
   if ("S7_on_load" %in% getNamespaceExports("S7")) {
-    getExportedValue("S7", "S7_on_load")() # nocov
+    getExportedValue("S7", "S7_on_load")()
   } else {
-    S7::methods_register() # nocov
+    S7::methods_register()
   }
 }
 
@@ -15,3 +16,4 @@
 if ("S7_on_build" %in% getNamespaceExports("S7")) {
   getExportedValue("S7", "S7_on_build")()
 }
+# nocov end
