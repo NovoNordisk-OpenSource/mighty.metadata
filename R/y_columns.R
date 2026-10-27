@@ -160,21 +160,21 @@ col_list <- function(x) {
 
 #' @noRd
 col_remove <- function(x, id) {
-  S7::S7_data(x)[["columns"]] <- remove_ids(x[["columns"]], id)
-  x
+  x[["columns"]] <- remove_ids(x[["columns"]], id)
+  validate(x)
 }
 
 #' @noRd
 col_add <- function(x, id, ..., .pos) {
   column <- c(id = id, rlang::list2(...))
-  S7::S7_data(x)[["columns"]] <- insert_in_vector(x[["columns"]], column, pos = .pos)
-  x
+  x[["columns"]] <- insert_in_vector(x[["columns"]], column, pos = .pos)
+  validate(x)
 }
 
 #' @noRd
 col_move <- function(x, id, .pos) {
-  S7::S7_data(x)[["columns"]] <- move_id(x[["columns"]], id, .pos)
-  x
+  x[["columns"]] <- move_id(x[["columns"]], id, .pos)
+  validate(x)
 }
 
 #' @noRd
@@ -184,6 +184,6 @@ col_select <- function(x, id) {
 
 #' @noRd
 col_update <- function(x, id, ...) {
-  S7::S7_data(x)[["columns"]] <- update_ids(x[["columns"]], id, ...)
-  x
+  x[["columns"]] <- update_ids(x[["columns"]], id, ...)
+  validate(x)
 }

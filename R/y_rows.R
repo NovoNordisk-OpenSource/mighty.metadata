@@ -147,27 +147,27 @@ row_list <- function(x) {
 
 #' @noRd
 row_remove <- function(x, id) {
-  S7::S7_data(x)[["rows"]] <- remove_ids(x[["rows"]], id)
-  x
+  x[["rows"]] <- remove_ids(x[["rows"]], id)
+  validate(x)
 }
 
 #' @noRd
 row_add <- function(x, id, ..., .pos) {
   row <- c(id = id, rlang::list2(...))
-  S7::S7_data(x)[["rows"]] <- insert_in_vector(x[["rows"]], row, pos = .pos)
-  x
+  x[["rows"]] <- insert_in_vector(x[["rows"]], row, pos = .pos)
+  validate(x)
 }
 
 #' @noRd
 row_move <- function(x, id, .pos) {
-  S7::S7_data(x)[["rows"]] <- move_id(x[["rows"]], id, .pos)
-  x
+  x[["rows"]] <- move_id(x[["rows"]], id, .pos)
+  validate(x)
 }
 
 #' @noRd
 row_update <- function(x, id, ...) {
-  S7::S7_data(x)[["rows"]] <- update_ids(x[["rows"]], id, ...)
-  x
+  x[["rows"]] <- update_ids(x[["rows"]], id, ...)
+  validate(x)
 }
 
 #' @noRd
