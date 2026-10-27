@@ -104,8 +104,6 @@ in <code>subset</code>. A <code>component</code> with a <code>with.domain</code>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  subset <span class="op">=</span> <span class="st">"STUDYID == 'STUDY1'"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in validate_S7schema(self):</span> <span style="color: #00BB00;">(root)</span> must NOT have additional properties</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> additionalProperty: NA</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># `subset` is folded into `component.with.domain` as a `.mighty_subset()` marker call</span></span></span>
 <span class="r-in"><span><span class="va">study</span> <span class="op">|&gt;</span></span></span>
@@ -113,7 +111,13 @@ in <code>subset</code>. A <code>component</code> with a <code>with.domain</code>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Extract.html" class="external-link">getElement</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="rows.html">select_row</a></span><span class="op">(</span><span class="st">"TRTEMFL_STUDY1"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in get_id(x[["rows"]], id):</span> Id `TRTEMFL_STUDY1` does not exist</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Resolving row subsets requires <span style="color: #0000BB;">mighty.component</span> (&gt;= 0.1.0.9003)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ id       : chr "TRTEMFL_STUDY1"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ component:List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ id  : chr "STUDY1_COMPONENT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ with:List of 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ domain: chr ".mighty_subset(ADAE, \"STUDYID == 'STUDY1'\")"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -51,8 +51,6 @@ study$ADAE <- add_row(
   ),
   subset = "STUDYID == 'STUDY1'"
 )
-#> Error in validate_S7schema(self): (root) must NOT have additional properties
-#> ✖ additionalProperty: NA
 
 # `subset` is folded into `component.with.domain` as a `.mighty_subset()` marker call
 study |>
@@ -60,5 +58,11 @@ study |>
   getElement("ADAE") |>
   select_row("TRTEMFL_STUDY1") |>
   str()
-#> Error in get_id(x[["rows"]], id): Id `TRTEMFL_STUDY1` does not exist
+#> ! Resolving row subsets requires mighty.component (>= 0.1.0.9003)
+#> List of 2
+#>  $ id       : chr "TRTEMFL_STUDY1"
+#>  $ component:List of 2
+#>   ..$ id  : chr "STUDY1_COMPONENT"
+#>   ..$ with:List of 1
+#>   .. ..$ domain: chr ".mighty_subset(ADAE, \"STUDYID == 'STUDY1'\")"
 ```
