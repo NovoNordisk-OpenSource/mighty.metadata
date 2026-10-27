@@ -1,7 +1,7 @@
-# remove_documents() errors on mighty_study when removing referenced document
+# removing a referenced document is caught by check_document_references()
 
     Code
-      remove_documents(study, id = "COMMENT001")
+      check_document_references(study)
     Condition
       Error in `abort_on_unknown_document_refs()`:
       ! Unknown document references detected.
@@ -21,7 +21,7 @@
 # check_document_references() errors when domains reference document ids but no docs in _documents.yml
 
     Code
-      study@documents <- mighty_documents(.data = list())
+      check_document_references(study)
     Condition
       Error in `abort_on_unknown_document_refs()`:
       ! Unknown document references detected.
@@ -35,7 +35,7 @@
 # check_document_references() errors when domains reference document ids not defined in _documents.yml
 
     Code
-      validate(study)
+      check_document_references(study)
     Condition
       Error in `abort_on_unknown_document_refs()`:
       ! Unknown document references detected.
@@ -47,7 +47,7 @@
 # check_document_references() errors for METHOD on non-Derived
 
     Code
-      validate(study)
+      check_document_references(study)
     Condition
       Error in `abort_on_invalid_method_refs()`:
       ! Invalid METHOD document references detected.
@@ -56,7 +56,7 @@
 # check_document_references() warns for COMMENT with missing text
 
     Code
-      validate(study)
+      check_document_references(study)
     Condition
       Warning:
       Missing comment text for COMMENT document references.
