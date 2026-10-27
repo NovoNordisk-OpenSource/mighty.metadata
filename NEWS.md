@@ -1,5 +1,8 @@
 # mighty.metadata (development version)
 
+* `check_document_references()` is now exported and no longer runs as part of
+  the `mighty_study()` validator. Call it explicitly to verify document
+  references (#72).
 * Updates for compatibility with S7 > 0.2.2.
 * CRUD helpers for columns, rows, parameters and documents no longer validate
   the object twice per operation.
