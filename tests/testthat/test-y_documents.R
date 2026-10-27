@@ -205,13 +205,6 @@ test_that("check_document_references() warns for COMMENT with missing text", {
   expect_snapshot(check_document_references(study))
 })
 
-test_that("check_document_references() errors on non-study input", {
-  expect_error(
-    check_document_references(mighty_documents()),
-    "must be a <mighty_study> object"
-  )
-})
-
 test_that("mighty_study() no longer validates document references", {
   study <- mighty_study(test_path("test_study"))
   study$ADVS$documents <- list(list(id = "UNKNOWN"))

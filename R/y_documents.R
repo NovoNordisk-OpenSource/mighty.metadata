@@ -308,7 +308,6 @@ is_missing_comment <- function(x) {
 }
 
 
-
 #' @noRd
 build_doc_types <- function(documents) {
   doc_ids <- list_ids(documents)
@@ -442,10 +441,13 @@ warn_on_missing_comment_refs <- function(refs, ref_types) {
 #' check_document_references(study)
 #' @rdname documents
 #' @export
-check_document_references <- function(study) {
-  if (!S7::S7_inherits(study, mighty_study)) {
-    cli::cli_abort("{.arg study} must be a {.cls mighty_study} object.")
-  }
+check_document_references <- S7::new_generic(
+  name = "check_document_references",
+  dispatch_args = "study"
+)
+
+#' @noRd
+S7::method(check_document_references, mighty_study) <- function(study) {
   refs <- unlist(lapply(study, collect_document_refs), recursive = FALSE)
 
   if (!length(refs)) {
