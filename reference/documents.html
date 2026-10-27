@@ -106,7 +106,9 @@ your <code>mighty_documents()</code> object (or through <code>mighty_study@docum
 <span>  .pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu">list_documents</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1L</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">update_document</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">update_document</span><span class="op">(</span><span class="va">x</span>, <span class="va">id</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">check_document_references</span><span class="op">(</span><span class="va">study</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -150,6 +152,10 @@ with <code>file</code>. Supplying neither returns an empty <code>mighty_document
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional document properties to update.</p></dd>
 
+
+<dt id="arg-study">study<a class="anchor" aria-label="anchor" href="#arg-study"></a></dt>
+<dd><p>A <code><a href="mighty_study.html">mighty_study()</a></code> object.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -157,6 +163,10 @@ with <code>file</code>. Supplying neither returns an empty <code>mighty_document
 <ul><li><p><code>list_documents()</code>: <code><a href="https://rdrr.io/r/base/character.html" class="external-link">character()</a></code> vector with document ids.</p></li>
 <li><p><code>select_document()</code>: selected document entry as a list.</p></li>
 <li><p><code>add_document()</code>, <code>update_document()</code>, <code>remove_documents()</code>: modified object (<code>invisible(x)</code>).</p></li>
+<li><p><code>check_document_references()</code>: the input <code>study</code> (<code>invisible(study)</code>).
+Errors if a domain, column, or parameter references an unknown document id
+or a METHOD document on a non-Derived column, and warns if a COMMENT
+reference has missing comment text.</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -243,6 +253,14 @@ with <code>file</code>. Supplying neither returns an empty <code>mighty_document
 <span class="r-in"><span><span class="fu">list_documents</span><span class="op">(</span><span class="va">docs</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "CSR"</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Check that all document references in a study are valid</span></span></span>
+<span class="r-in"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="mighty_study.html">mighty_study</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → No `_documents.yml` file found</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → No `_codelists.yml` file found</span>
+<span class="r-in"><span><span class="fu">check_document_references</span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

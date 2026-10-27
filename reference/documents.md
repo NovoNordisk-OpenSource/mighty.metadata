@@ -44,6 +44,8 @@ add_document(
 )
 
 update_document(x, id, ...)
+
+check_document_references(study, ...)
 ```
 
 ## Arguments
@@ -90,6 +92,12 @@ update_document(x, id, ...)
 
   Additional document properties to update.
 
+- study:
+
+  A
+  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  object.
+
 ## Value
 
 An object of class `mighty_documents`.
@@ -102,6 +110,11 @@ An object of class `mighty_documents`.
 
 - `add_document()`, `update_document()`, `remove_documents()`: modified
   object (`invisible(x)`).
+
+- `check_document_references()`: the input `study` (`invisible(study)`).
+  Errors if a domain, column, or parameter references an unknown
+  document id or a METHOD document on a non-Derived column, and warns if
+  a COMMENT reference has missing comment text.
 
 ## Examples
 
@@ -187,4 +200,13 @@ docs <- docs |>
 
 list_documents(docs)
 #> [1] "CSR"
+
+
+# Check that all document references in a study are valid
+study <- mighty_study(
+  path = system.file("examples", package = "mighty.metadata")
+)
+#> → No `_documents.yml` file found
+#> → No `_codelists.yml` file found
+check_document_references(study)
 ```

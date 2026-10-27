@@ -245,6 +245,7 @@ metadata and used when generating define.xml.
   [`remove_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   [`add_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   [`update_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  [`check_document_references()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   : Mighty Documents
 - [`mighty_codelists()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
   [`list_codelists()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)

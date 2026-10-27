@@ -2,6 +2,11 @@
 
 ## mighty.metadata (development version)
 
+- [`check_document_references()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  is now exported and no longer runs as part of the
+  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  validator. Call it explicitly to verify document references
+  ([\#72](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/72)).
 - Updates for compatibility with S7 \> 0.2.2.
 - added
   [`mighty_codelists()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
