@@ -1,5 +1,7 @@
 # mighty.metadata (development version)
 
+* Requires S7schema >= 0.2.1. `study_config()` uses `S7schema::S7schema()`
+  again instead of a local workaround for unquoted dates (#57, #70).
 * `check_document_references()` is now exported and no longer runs as part of
   the `mighty_study()` validator. Call it explicitly to verify document
   references (#72).
