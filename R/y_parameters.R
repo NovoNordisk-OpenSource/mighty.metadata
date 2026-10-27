@@ -159,8 +159,8 @@ param_list <- function(x) {
 
 #' @noRd
 param_remove <- function(x, id) {
-  x[["parameters"]] <- remove_ids(x[["parameters"]], id)
-  validate(x)
+  S7::S7_data(x)[["parameters"]] <- remove_ids(x[["parameters"]], id)
+  x
 }
 
 #' @noRd
@@ -171,24 +171,24 @@ param_add <- function(x, id, label, columns, ..., .pos) {
     columns = list(columns),
     rlang::list2(...)
   )
-  x[["parameters"]] <- insert_in_vector(
+  S7::S7_data(x)[["parameters"]] <- insert_in_vector(
     x[["parameters"]],
     parameter,
     pos = .pos
   )
-  validate(x)
+  x
 }
 
 #' @noRd
 param_move <- function(x, id, .pos) {
-  x[["parameters"]] <- move_id(x[["parameters"]], id, .pos)
-  validate(x)
+  S7::S7_data(x)[["parameters"]] <- move_id(x[["parameters"]], id, .pos)
+  x
 }
 
 #' @noRd
 param_update <- function(x, id, ...) {
-  x[["parameters"]] <- update_ids(x[["parameters"]], id, ...)
-  validate(x)
+  S7::S7_data(x)[["parameters"]] <- update_ids(x[["parameters"]], id, ...)
+  x
 }
 
 #' @noRd

@@ -1,6 +1,8 @@
 # mighty.metadata (development version)
 
 * Updates for compatibility with S7 > 0.2.2.
+* CRUD helpers for columns, rows, parameters and documents no longer validate
+  the object twice per operation.
 * added `mighty_codelists()` class and `codelists.json` schema for study-level
   codelist metadata in `_codelists.yml`, supporting non-standard codelists
   (`values`) and value-level overrides of standard controlled terminology codelists (`subset`, `restore`,
