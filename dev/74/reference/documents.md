@@ -45,7 +45,7 @@ add_document(
 
 update_document(x, id, ...)
 
-check_document_references(study)
+check_document_references(study, ...)
 ```
 
 ## Arguments
