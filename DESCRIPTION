@@ -33,14 +33,14 @@ Imports:
     S7schema (>= 0.2.1),
     stats,
     tibble,
-    yaml,
     zephyr
 Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
     tidyr,
-    withr
+    withr,
+    yaml
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
