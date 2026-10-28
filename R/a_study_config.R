@@ -73,35 +73,9 @@ NULL
 construct_study_config <- function(file, .data) {
   schema <- system.file("schema", "study.json", package = "mighty.metadata")
 
-  # S7SCHEMA-WORKAROUND (start) -- remove once S7schema parses yaml in R.
-  # Mirrors `S7schema::S7schema()`, except that it validates the R-parsed list
-  # instead of the file: `validate_yaml()` parses in JavaScript, where js-yaml
-  # resolves `version: 2025-08-06` to a timestamp and the string check fails.
-  # Revert to:
-  #   S7::new_object(S7schema::S7schema(
-  #     file = file, schema = schema, .data = .data
-  #   ))
-  rlang::check_exclusive(file, .data)
-
-  if (!rlang::is_missing(file)) {
-    valid <- check_file(file, ext = c("yml", "yaml"))
-    if (!isTRUE(valid)) {
-      cli::cli_abort(c(
-        "Illegal file reference {.file {file}}",
-        rlang::set_names(valid, "i")
-      ))
-    }
-    .data <- yaml::read_yaml(file)
-  } else {
-    file <- NULL
-  }
-
-  S7schema::validate_list(.data, schema)
-
-  parent <- S7schema::S7schema(.data = .data, schema = schema)
-  parent@file <- file
-  S7::new_object(parent)
-  # S7SCHEMA-WORKAROUND (end)
+  S7::new_object(S7schema::S7schema(
+    file = file, schema = schema, .data = .data
+  ))
 }
 
 #' @rdname study_config

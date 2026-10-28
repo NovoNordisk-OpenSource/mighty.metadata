@@ -76,3 +76,19 @@ test_that("match_yml() errors on multiple files", {
     "Only one `_study` file allowed"
   )
 })
+
+test_that("find_yml() accepts unquoted date versions", {
+  schema <- system.file("schema", "study.json", package = "mighty.metadata")
+  tmp <- withr::local_tempdir()
+  file <- file.path(tmp, "_study.yml")
+  writeLines(
+    c("study_id: s", "standards:", "  - id: sdtm", "    version: 2025-08-06"),
+    file
+  )
+
+  # On Windows `tempdir()` yields backslashes that `file.path()` keeps, while
+  # `list.files()` returns forward slashes.
+  find_yml(path = tmp, name = "_study", schema = schema) |>
+    normalizePath(winslash = "/") |>
+    expect_equal(normalizePath(file, winslash = "/"))
+})
