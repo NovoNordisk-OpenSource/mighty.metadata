@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9019</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9020</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="mightymetadata-development-version">mighty.metadata (development version)<a class="anchor" aria-label="anchor" href="#mightymetadata-development-version"></a></h2>
-<ul><li>
+<ul><li>Requires S7schema &gt;= 0.2.1. <code><a href="../reference/study_config.html">study_config()</a></code> uses <code><a href="https://novonordisk-opensource.github.io/S7schema/reference/S7schema.html" class="external-link">S7schema::S7schema()</a></code> again instead of a local workaround for unquoted dates (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/57" class="external-link">#57</a>, <a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/70" class="external-link">#70</a>).</li>
+<li>
 <code><a href="../reference/documents.html">check_document_references()</a></code> is now exported and no longer runs as part of the <code><a href="../reference/mighty_study.html">mighty_study()</a></code> validator. Call it explicitly to verify document references (<a href="https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/72" class="external-link">#72</a>).</li>
 <li>Updates for compatibility with S7 &gt; 0.2.2.</li>
 <li>added <code><a href="../reference/codelists.html">mighty_codelists()</a></code> class and <code>codelists.json</code> schema for study-level codelist metadata in <code>_codelists.yml</code>, supporting non-standard codelists (<code>values</code>) and value-level overrides of standard controlled terminology codelists (<code>subset</code>, <code>restore</code>, <code>extend</code>). New helpers: <code><a href="../reference/codelists.html">list_codelists()</a></code>, <code><a href="../reference/codelists.html">select_codelist()</a></code>, <code><a href="../reference/codelists.html">add_codelist()</a></code>, <code><a href="../reference/codelists.html">remove_codelist()</a></code>, <code><a href="../reference/codelists.html">update_codelist()</a></code>, <code><a href="../reference/codelists.html">add_codelist_values()</a></code>, <code><a href="../reference/codelists.html">subset_codelist_values()</a></code>, <code><a href="../reference/codelists.html">restore_codelist_values()</a></code>, <code><a href="../reference/codelists.html">extend_codelist_values()</a></code>, <code><a href="../reference/codelists.html">remove_codelist_value()</a></code>, <code><a href="../reference/codelists.html">move_codelist_value()</a></code> and <code><a href="../reference/codelists.html">update_codelist_value()</a></code>.</li>
