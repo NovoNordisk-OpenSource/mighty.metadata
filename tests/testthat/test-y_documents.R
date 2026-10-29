@@ -86,6 +86,22 @@ test_that("update_document() works on mighty_study", {
   expect_equal(select_document(study, "SUPPDOC001")$title, "Updated")
 })
 
+test_that("add_document() on mighty_study validates the result", {
+  study <- mighty_study(test_path("test_study"))
+  expect_error(
+    add_document(study, id = "DOC001", title = "t", doctype = 1, href = "x"),
+    "doctype must be string"
+  )
+})
+
+test_that("update_document() on mighty_study validates the result", {
+  study <- mighty_study(test_path("test_study"))
+  expect_error(
+    update_document(study, id = "SUPPDOC001", doctype = 1),
+    "doctype must be string"
+  )
+})
+
 test_that("remove_documents() works on mighty_documents", {
   docs <- mighty_documents(
     file = test_path("test_study/_documents.yml")

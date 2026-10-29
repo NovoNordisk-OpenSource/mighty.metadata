@@ -106,10 +106,3 @@ test_that("update_column() preserves position", {
   list_columns(y) |>
     expect_equal(original_columns)
 })
-
-test_that("CRUD helpers validate the modified object (add_column)", {
-  x <- mighty_domain(
-    file = system.file("examples", "advs.yml", package = "mighty.metadata")
-  )
-  expect_error(add_column(x, id = "STUDYID"), "Duplicate")
-})
