@@ -15,8 +15,14 @@
   validator. Call it explicitly to verify document references
   ([\#72](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/72)).
 - Updates for compatibility with S7 \> 0.2.2.
-- CRUD helpers for columns, rows, parameters and documents no longer
-  validate the object twice per operation.
+- [`add_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md),
+  [`update_document()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  and
+  [`remove_documents()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
+  no longer validate a
+  [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+  object twice per operation
+  ([\#71](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/71)).
 - added
   [`mighty_codelists()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
   class and `codelists.json` schema for study-level codelist metadata in
