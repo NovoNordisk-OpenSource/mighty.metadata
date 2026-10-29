@@ -6,8 +6,8 @@
   the `mighty_study()` validator. Call it explicitly to verify document
   references (#72).
 * Updates for compatibility with S7 > 0.2.2.
-* CRUD helpers for columns, rows, parameters and documents no longer validate
-  the object twice per operation.
+* `add_document()`, `update_document()` and `remove_documents()` no longer
+  validate a `mighty_study()` object twice per operation (#71).
 * added `mighty_codelists()` class and `codelists.json` schema for study-level
   codelist metadata in `_codelists.yml`, supporting non-standard codelists
   (`values`) and value-level overrides of standard controlled terminology codelists (`subset`, `restore`,
