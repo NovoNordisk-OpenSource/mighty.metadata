@@ -1,4 +1,4 @@
-# mighty.metadata (development version)
+# mighty.metadata 0.2.0
 
 * Requires S7schema >= 0.2.1. `study_config()` uses `S7schema::S7schema()`
   again instead of a local workaround for unquoted dates (#57, #70).
