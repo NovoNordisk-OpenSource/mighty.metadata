@@ -1,6 +1,6 @@
 Package: mighty.metadata
 Title: Manage 'CDISC' 'ADaM' Dataset Specifications in 'YAML' Format
-Version: 0.1.0.9019
+Version: 0.1.0.9020
 Authors@R: c(
     person("Aksel", "Thomsen", , "oath@novonordisk.com", role = c("aut", "cre")),
     person("Ari", "Siggaard Knoph", , "aikp@novonordisk.com", role = "aut"),
@@ -30,20 +30,20 @@ Imports:
     purrr,
     rlang,
     S7,
-    S7schema (>= 0.1.2),
+    S7schema (>= 0.2.1),
     stats,
     tibble,
-    yaml,
     zephyr
 Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
     tidyr,
-    withr
+    withr,
+    yaml
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1
