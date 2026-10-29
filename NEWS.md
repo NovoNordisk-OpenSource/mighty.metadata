@@ -1,66 +1,31 @@
-# mighty.metadata (development version)
+# mighty.metadata 0.2.0
 
-* Requires S7schema >= 0.2.1. `study_config()` uses `S7schema::S7schema()`
-  again instead of a local workaround for unquoted dates (#57, #70).
-* `check_document_references()` is now exported and no longer runs as part of
-  the `mighty_study()` validator. Call it explicitly to verify document
-  references (#72).
-* Updates for compatibility with S7 > 0.2.2.
-* `add_document()`, `update_document()` and `remove_documents()` no longer
-  validate a `mighty_study()` object twice per operation (#71).
-* added `mighty_codelists()` class and `codelists.json` schema for study-level
-  codelist metadata in `_codelists.yml`, supporting non-standard codelists
-  (`values`) and value-level overrides of standard controlled terminology codelists (`subset`, `restore`,
-  `extend`). New helpers: `list_codelists()`, `select_codelist()`,
-  `add_codelist()`, `remove_codelist()`, `update_codelist()`,
-  `add_codelist_values()`, `subset_codelist_values()`,
-  `restore_codelist_values()`, `extend_codelist_values()`,
-  `remove_codelist_value()`, `move_codelist_value()` and
-  `update_codelist_value()`.
-* `mighty_study()` gains a `@codelists` property, populated from
-  `_codelists.yml` (empty `mighty_codelists` if the file is missing) and
-  written back by `write_config()`. New `check_codelist_references()` checks
-  that every codelist is referenced by at least one column `codelist` field.
-* `populate_core()` and `populate_sparse()` are much faster: each domain is now
-  validated once after all columns have been added or updated, instead of once
-  per column (#10).
-* `repos` is now a required field in `_mighty.yml` and must hold at least one
-  entry (#65). A `_mighty.yml` file is still optional.
-* Added `create_md_table()`, `create_md_param()`, and `create_md_values()` to
-  create metadata data sets for tables, BDS parameters, and value level
-  metadata, complementing `create_md_col()` (#11). `create_md()` returns all
-  four as a named list.
-* `resolve_includes()` now recurses into `include` fields on columns within parameters (#52).
-* Added `filter_domains()` to filter a `mighty_study` to domains matching a given prefix (default `"AD"`) (#46).
-* `mighty_study()` now accepts `MD*` dataset files alongside `AD*` in the specifications directory (#46).
-* added optional study-level `standards` and `terminology` fields to
-  `_study.yml` and `study.json` (#48). Each entry requires an `id` and a
-  `version`. Missing fields and empty lists are both valid and mean no entries.
-  Only the structure is validated; domain-semantic checks are left to consuming
-  packages.
-* `version` in `standards` and `terminology` must now be a string. Unquoted
-  numeric versions (e.g. `27.0`) fail validation instead of silently becoming
-  `27`; quote them in `_study.yml`.
-* added `mighty_documents()` class with schema validation and document manipulation helpers:
-  `list_documents()`, `select_document()`, `add_document()`, `update_document()`, `remove_documents()` (#27)
-* added study-level documents support via `_documents.yml` and new `study@documents` property (#27)
-* `mighty_domain()`, `mighty_config()`, and `study_config()` now accept a
-  `.data` argument to build an object from an in-memory `list` instead of a
-  yaml file (#51). `file` and `.data` are mutually exclusive. Objects built
-  from `.data` have `@file` set to `NULL` and need an explicit `path` in
-  `write_config()`.
-* Added `mighty_config()` class for the `_mighty.yml` configuration file (#25).
-  The `@mighty` property of `mighty_study()` now holds a `mighty_config()`
-  object instead of a plain list, and is `NULL` when no `_mighty.yml` exists.
-* Added `study_config()` class for the `_study.yml` configuration file (#26).
-  The `@study` property of `mighty_study()` now holds a `study_config()`
-  object instead of a plain list, and is `NULL` when no `_study.yml` exists.
-* Added validation for column dependencies in `mighty_domain()` (#12).
-* Added validation for naming pattern in `mighty_study()` (#2).
-* Added `resolve_subsets()` generic to resolve the `rows.row.subset`
-  property, rewriting `component.with.domain` to a
-  `.mighty_subset(domain, "subset")` marker call matching the marker syntax
-  `mighty.component::mighty_component$render()` (>= 0.1.0.9003) expects.
+* Added `mighty_codelists()` class for study-level codelist metadata in
+  `_codelists.yml`, available as `mighty_study()@codelists` (#49).
+* Added `mighty_documents()` class for study-level document metadata in
+  `_documents.yml`, available as `mighty_study()@documents`. Call
+  `check_document_references()` to verify references (#27, #72).
+* Added `mighty_config()` class for `_mighty.yml`. `mighty_study()@mighty` is
+  now a `mighty_config()` object, or `NULL` if the file is missing (#25).
+* `_mighty.yml` requires a non-empty `repos` field (#24, #65).
+* Added `study_config()` class for `_study.yml`. `mighty_study()@study` is now
+  a `study_config()` object, or `NULL` if the file is missing (#26).
+* Added optional `standards` and `terminology` fields to `_study.yml`. Each
+  entry needs an `id` and a string `version` (#48, #62).
+* `mighty_domain()`, `mighty_config()` and `study_config()` gain a `.data`
+  argument to build objects from an in-memory list (#51).
+* Added `create_md_table()`, `create_md_param()` and `create_md_values()`.
+  `create_md()` returns all metadata data sets as a named list (#11).
+* Added `rows.row.subset` property and `resolve_subsets()` (#36, #44).
+* Added `filter_domains()` to filter a `mighty_study` by domain prefix (#46).
+* `mighty_study()` errors on wrongly named files in the specifications
+  directory, and accepts both `AD*` and `MD*` files (#2, #46).
+* Column `depends` may only reference `rows.*` or `parameters.*` (#12).
+* `populate_core()` and `populate_sparse()` are faster (#10).
+* `resolve_includes()` now resolves `include` on columns within parameters
+  (#52).
+* Requires S7schema >= 0.2.1. `yaml` moved to Suggests (#57, #70).
+* Compatibility with the upcoming S7 release (#73).
 
 # mighty.metadata 0.1.0
 
