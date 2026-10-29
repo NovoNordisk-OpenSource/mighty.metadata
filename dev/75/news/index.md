@@ -2,6 +2,13 @@
 
 ## mighty.metadata (development version)
 
+- Requires S7schema \>= 0.2.1.
+  [`study_config()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/study_config.md)
+  uses
+  [`S7schema::S7schema()`](https://novonordisk-opensource.github.io/S7schema/reference/S7schema.html)
+  again instead of a local workaround for unquoted dates
+  ([\#57](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/57),
+  [\#70](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/70)).
 - [`check_document_references()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/documents.md)
   is now exported and no longer runs as part of the
   [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
