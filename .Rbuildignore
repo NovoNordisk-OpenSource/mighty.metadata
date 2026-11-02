@@ -10,7 +10,6 @@
 ^LICENSE\.md$
 ^mighty\.metadata\.Rproj$
 ^pkgdown$
-^tools$
 ^vignettes/articles$
 ^README\.Rmd$
 ^doc$
