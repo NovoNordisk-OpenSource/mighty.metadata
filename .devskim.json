@@ -1,5 +1,3 @@
 {
-  "Globs": [
-    "**/inst/schema/*.json"
-  ]
+  "Globs": ["**/inst/schema/*.json"]
 }
