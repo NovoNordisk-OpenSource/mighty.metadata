@@ -1,3 +1,5 @@
+# mighty.metadata (development version)
+
 # mighty.metadata 0.2.0
 
 * Added `mighty_codelists()` class for study-level codelist metadata in
