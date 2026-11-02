@@ -1,6 +1,10 @@
 # Changelog
 
+## mighty.metadata (development version)
+
 ## mighty.metadata 0.2.0
+
+CRAN release: 2026-10-29
 
 - Added
   [`mighty_codelists()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
