@@ -62,14 +62,7 @@
       "$ref": "#/definitions/parameters"
     }
   },
-  "required": [
-    "id",
-    "label",
-    "class",
-    "structure",
-    "keys",
-    "columns"
-  ],
+  "required": ["id", "label", "class", "structure", "keys", "columns"],
   "additionalProperties": false,
   "definitions": {
     "keys": {
@@ -154,9 +147,7 @@
           "$ref": "#/definitions/documents"
         }
       },
-      "required": [
-        "id"
-      ],
+      "required": ["id"],
       "additionalProperties": false
     },
     "rows": {
@@ -197,9 +188,7 @@
           "$ref": "#/definitions/mighty/filter"
         }
       },
-      "required": [
-        "id"
-      ],
+      "required": ["id"],
       "additionalProperties": false
     },
     "parameters": {
@@ -240,9 +229,7 @@
           "$ref": "#/definitions/mighty/depends"
         }
       },
-      "required": [
-        "id"
-      ],
+      "required": ["id"],
       "additionalProperties": false
     },
     "standard": {
@@ -280,10 +267,7 @@
             "pattern": "\\."
           }
         },
-        "required": [
-          "type",
-          "length"
-        ]
+        "required": ["type", "length"]
       }
     },
     "cdisc": {
@@ -329,11 +313,7 @@
       "core": {
         "description": "Indicator of whether a variable is required (Req), conditionally required (Cond), or permissible (Perm) in the dataset",
         "type": "string",
-        "enum": [
-          "Cond",
-          "Perm",
-          "Req"
-        ]
+        "enum": ["Cond", "Perm", "Req"]
       }
     },
     "mighty": {
@@ -351,9 +331,7 @@
             "$ref": "#/definitions/mighty/global_input_list"
           }
         },
-        "required": [
-          "base"
-        ]
+        "required": ["base"]
       },
       "base_input_list": {
         "description": "mighty - list of base input datasets",
@@ -380,11 +358,7 @@
             "$ref": "#/definitions/mighty/filter"
           }
         },
-        "required": [
-          "domain",
-          "depends",
-          "filter"
-        ],
+        "required": ["domain", "depends", "filter"],
         "additionalProperties": false
       },
       "global_input_list": {
@@ -408,10 +382,7 @@
             "$ref": "#/definitions/mighty/depends"
           }
         },
-        "required": [
-          "filter",
-          "depends"
-        ],
+        "required": ["filter", "depends"],
         "additionalProperties": false
       },
       "depends_string": {
@@ -464,9 +435,7 @@
             "type": "object"
           }
         },
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "additionalProperties": false
       }
     },
@@ -491,9 +460,7 @@
           ]
         }
       },
-      "required": [
-        "id"
-      ],
+      "required": ["id"],
       "additionalProperties": false
     },
     "documents": {

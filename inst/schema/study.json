@@ -24,9 +24,7 @@
       "items": { "$ref": "#/definitions/versioned_entry" }
     }
   },
-  "required": [
-    "study_id"
-  ],
+  "required": ["study_id"],
   "additionalProperties": true,
   "definitions": {
     "versioned_entry": {
