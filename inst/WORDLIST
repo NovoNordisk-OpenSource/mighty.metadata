@@ -121,6 +121,7 @@ multiarch
 myvar
 nocov
 nullable
+openxlsx
 pdfpagereftype
 pipeable
 plz

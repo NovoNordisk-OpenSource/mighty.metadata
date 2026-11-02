@@ -22,7 +22,7 @@ jobs:
       contents: read
     uses: NovoNordisk-OpenSource/r.workflows/.github/workflows/check_nn_versions.yaml@6d0dc4114cbbd1f2ca5a696da6bce9ac6261d78d # v0.1.1
     with:
-      min_lock_date: '2024-08-06'
+      min_lock_date: "2024-08-06"
   pkgdown:
     name: Pkgdown site
     permissions:
