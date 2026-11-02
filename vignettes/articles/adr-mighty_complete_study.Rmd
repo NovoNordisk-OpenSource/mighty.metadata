@@ -1,0 +1,37 @@
+---
+title: "ADR: mighty_complete_study"
+date: "2026-11-02"
+author:
+  - "Aksel Thomsen"
+---
+
+## Status
+
+|             |                   |
+|-------------|-------------------|
+| Package     | mighty.metadata   |
+| Status      | Draft             |
+| Version     | 0.1.0             |
+| Description |                   |
+
+## Success criteria
+
+## Context
+
+## Decisions
+
+## Consequences
+
+### Changes to current content
+
+## Alternatives Considered
+
+## Implementation Details
+
+## Testing Strategy
+
+## Risks
+
+## Compliance Considerations
+
+## References
