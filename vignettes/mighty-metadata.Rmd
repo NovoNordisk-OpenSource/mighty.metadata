@@ -223,9 +223,18 @@ The written file can be loaded back with `mighty_domain()`.
 
 ### Loading a Study
 
-Load all domain specifications from a directory with `mighty_study()`. The
-directory can contain `_study.yml` (study-level properties) and `_mighty.yml`
-(mighty framework configuration).
+Load all domain specifications from a directory with `mighty_study()`. Besides
+the domain files, the directory can contain four optional study-level files:
+
+| File              | Property     | Content                                   |
+|-------------------|--------------|-------------------------------------------|
+| `_study.yml`      | `@study`     | Study-level properties (`study_config()`) |
+| `_mighty.yml`     | `@mighty`    | mighty framework configuration (`mighty_config()`) |
+| `_documents.yml`  | `@documents` | Study documents (`mighty_documents()`)    |
+| `_codelists.yml`  | `@codelists` | Study codelists (`mighty_codelists()`)    |
+
+All other YAML files are loaded as domains and their file names must start with
+`ad` or `md` (case-insensitive); any other name is an error.
 
 ```{r}
 study_path <- system.file("examples", package = "mighty.metadata")
@@ -233,21 +242,30 @@ study <- mighty_study(study_path)
 study
 ```
 
-Access individual domains with `$`. Study-level properties from `_study.yml`
-are stored in `@study` as a `study_config()` object and mighty framework
-configuration from `_mighty.yml` is stored in `@mighty` as a `mighty_config()`
-object. Both are `NULL` when the corresponding file is absent. The `@` operator
-accesses properties of S7 objects:
+The bundled examples do not include `_documents.yml` or `_codelists.yml`,
+hence the messages above. In that case `@documents` and `@codelists` are empty,
+while `@study` and `@mighty` are `NULL` when their file is absent.
+
+Access individual domains with `$` and study-level properties with `@`:
 
 ```{r}
 names(study)
-str(study@study)
-str(study@mighty)
+study@study$study_id
+study@mighty$repos
 ```
 
 The `_study.yml` file provides the `study_id`. The `_mighty.yml` file provides
 `external_data` definitions (source domains and their keys) and the `repos`
 where components are found.
+
+`filter_domains()` keeps only domains whose names start with given prefixes,
+e.g. to drop `MD*` domains:
+
+```{r}
+study |>
+  filter_domains(prefix = "AD") |>
+  names()
+```
 
 ### Populating Core Variables
 
