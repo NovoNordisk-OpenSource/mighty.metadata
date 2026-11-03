@@ -90,9 +90,9 @@ There is no circular dependency, since {mighty.component} does not depend on {mi
 
 ### 1. Only add a new helper function to resolve components and inherit component metadata
 
-Not chosen, because all downstream integrations would then have to call this function.
-For this change alone, the amount of work is roughly the same, but with possible future
-changes this approach is not sustainable. Therefore, we use a new class and method dispatch instead.
+Not chosen, because a separate class guarantees that downstream code receives a fully resolved object,
+and lets {mighty} and {mighty.toolbox} dispatch on it.
+With only a helper, every integration must call it, and nothing ensures that it was called.
 
 ### 2. Handle supplementary data as part of the base domain specification
 
@@ -306,7 +306,13 @@ With this change, all components must have correct `@method` and `@origin` tags,
 
 1. Keep all tests for exported functions in downstream packages the same, ensuring a consistent user experience.
 1. Only remove internal tests when the functionality is made redundant by this new class.
-1. Continuously run integration tests against both {mighty} and {mighty.toolbox}.
+1. Run integration tests against {mighty} in the {mighty.metadata} CI. Run integration tests against {mighty.toolbox} in the {mighty.toolbox} CI, since it is an internal repository.
+1. Add unit tests in {mighty.metadata} for:
+   1. Parsing of the two- and three-part predecessor notation, including the filter key rules.
+   1. Field precedence (user > predecessor > component).
+   1. Each helper and `mighty_complete_study()` give the same result when run again on their own output.
+   1. Read-only properties of `mighty_complete_study()`.
+   1. `resolve_components()` returns the study unchanged when `@mighty` is `NULL`.
 
 ## Risks
 
