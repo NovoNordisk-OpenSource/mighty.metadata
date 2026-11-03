@@ -121,7 +121,7 @@ continuously remain compatible with {mighty} and {mighty.toolbox}.
 
 Proposed implementation order:
 
-1. Update `populate_sparse()` to support component predecessor mapping.
+1. Update `populate_sparse()` to support component predecessor mapping. Extend the predecessor regex in `populate_sparse()` and `is_predecessor()` to accept the three-part `DOMAIN.VALUE.COLUMN` notation.
 1. First version of `resolve_components()`.
 1. Add any new special `mighty_*` components to {mighty.standards}.
 1. First version of `mighty_complete_study()`, only implementing component metadata re-use. Note that this means {mighty} will temporarily fetch the components a second time.
@@ -133,10 +133,23 @@ Proposed implementation order:
 The component metadata is added in the following steps:
 
 1. After `populate_sparse()`, all predecessor columns have `component.id` and (if needed) `component.with` entries.
-1. A new `resolve_components()` function ensures component tags are populated back to the `column` entries in the `mighty_study()` object:
+1. A new `resolve_components()` function populates component tags back to the `column` entries in the `mighty_study()` object, only when missing:
    1. `@origin` --> `column.origin`
    1. `@method` --> `column.method`
 1. The rendered component object itself is stored for later re-use in {mighty}. Specifics are left to the `mighty_complete_study()` implementation.
+
+`resolve_components()` uses the `repos` field of `_mighty.yml` (`@mighty`) to find standard and local components.
+If `@mighty` is `NULL`, it returns the study unchanged. This supports documentation-only use.
+
+Fields are only filled when missing. Precedence is user > predecessor > component:
+
+1. `origin`: user, else `"Predecessor"`, else component `@origin`.
+1. `method`: user, else component `@method`.
+1. `component`: user, else the shorthand mapping.
+
+Every helper, and the full pipeline, must give the same result when run again on its own output.
+This is needed because the `generate_*(<mighty_study>)` wrappers always call `mighty_complete_study()`,
+and a resolved `mighty_study()` cannot be distinguished from a raw one.
 
 ### `mighty_complete_study()`
 
@@ -204,7 +217,7 @@ To ensure a good user experience, we want to support shorthand notation for simp
 Assuming our current domain is `ADSL` and the base domain is `DM`, the different predecessor types can be mapped as follows:
 
 1. Keep column from the base domain:
-   `id: MYVAR` --> `method: DM.MYVAR` --> `component.id: mighty_init_domain`
+   `id: MYVAR` --> `component.id: mighty_init_domain` with `component.with.domain: [DM]`
 1. Rename column from the base domain:
    `method: DM.DMSEQ` --> `component.id: mighty_col_rename`
 1. Copy existing column into new column:
@@ -212,15 +225,75 @@ Assuming our current domain is `ADSL` and the base domain is `DM`, the different
 1. Join predecessor from other domain:
    `method: ADXX.VAR2` --> `component.id: mighty_col_echo`
 1. Join predecessor from supplementary SDTM data:
-   `method: SUPPDM.EFFICACY.QVAL` --> `method: SUPPDM.QVAL where SUPPDM.QNAM = "EFFICACY"` --> `component.id: mighty_merge_supp`
+   `method: SUPPDM.EFFICACY.QVAL` --> `component.id: mighty_merge_supp`
 1. Join predecessor from ADaM BDS data set:
-   `method: ADVS.BMIGRP.AVALC` --> `method: ADVS.AVALC where ADVS.PARAMCD = "BMIGRP"` --> `component.id: mighty_merge_param`
+   `method: ADVS.BMIGRP.AVALC` --> `component.id: mighty_merge_param`
+1. Join predecessor from SDTM findings data:
+   `method: VS.SYSBP.VSSTRESN` --> `component.id: mighty_merge_param`
 
-In case 1, it might be more efficient to leave the component mapping inside {mighty}, but then
-we just need to ensure `origin` is set correctly.
+In case 1, a column with no `method` and no `component` is taken from the base domain(s).
+Several base domains are row-bound, and all must have the column.
+`origin` is set to `"Predecessor"` if missing.
+
+`populate_sparse()` parses the `method` shorthand into a structured `component.with` with `domain`, `column`, and optional `filter`.
+`method` keeps the user's shorthand unchanged, so the predecessor source is available for define.xml.
+Example for a column in `ADAE` (case 4):
+
+```yaml
+# input
+- id: AGE
+  method: ADSL.AGE
+
+# after populate_sparse()
+- id: AGE
+  method: ADSL.AGE
+  origin: Predecessor
+  component:
+    id: mighty_col_echo
+    with:
+      domain: ADSL
+      column: AGE
+```
+
+The three-part notation `DOMAIN.VALUE.COLUMN` filters the predecessor domain on `VALUE`.
+The filter key is derived from the domain prefix:
+
+1. `SUPP--`: `QNAM`
+1. Domain in the study (ADaM BDS): `PARAMCD`
+1. Any other domain (SDTM findings): `<DOMAIN>TESTCD`
+
+```
+SUPPDM.EFFICACY.QVAL  -> filter QNAM     = EFFICACY
+ADVS.BMIGRP.AVALC     -> filter PARAMCD  = BMIGRP
+VS.SYSBP.VSSTRESN     -> filter VSTESTCD = SYSBP
+```
+
+The filter is stored in `component.with`, e.g. for SUPP--:
+
+```yaml
+component:
+  id: mighty_merge_supp
+  with:
+    domain: SUPPDM
+    column: QVAL
+    filter:
+      QNAM: EFFICACY
+```
+
+Metadata inheritance for three-part references:
+
+1. ADaM BDS (`ADVS.BMIGRP.AVALC`): inherit from the `AVALC` column of parameter `BMIGRP` first, then from the `AVALC` column of `ADVS`.
+1. SUPP-- and SDTM: the source is not in the study, so users must specify label and type.
+
+{mighty.metadata} only passes domain, column and filter in `component.with`.
+Components choose their own join keys (e.g. `USUBJID`, or `IDVAR`/`IDVARVAL` for SUPP--).
 
 The first four components are already implemented in {mighty}, and the standard components exist in {mighty.standards}.
-The last two have to be written. Potentially, they can be combined into one.
+`mighty_merge_supp` and `mighty_merge_param` have to be written. Potentially, they can be combined into one.
+This is decided during implementation.
+
+Open question: whether the case 1 mapping stays inside {mighty} for performance.
+If so, this is an exception to success criterion 2.
 
 With this change, all components must have correct `@method` and `@origin` tags, which is not the case for the existing components.
 
