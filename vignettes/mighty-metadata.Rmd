@@ -197,6 +197,28 @@ advs <- mighty_domain(path)
 advs
 ```
 
+A domain can also be created from a list in memory with `.data`, e.g. when
+specifications are generated programmatically:
+
+```{r}
+mighty_domain(
+  .data = list(
+    id = "ADXX",
+    label = "Example Dataset",
+    class = "ADAM OTHER",
+    structure = "One record per subject",
+    keys = "USUBJID",
+    columns = list(list(id = "USUBJID", label = "Unique Subject Identifier"))
+  )
+)
+```
+
+A `mighty_domain` is a list, so any field can be read with `$` or `[[`:
+
+```{r}
+advs$keys
+```
+
 Use `list_*()` functions to see what the specification contains:
 
 ```{r}
@@ -228,10 +250,16 @@ advs <- mighty_domain(path) |>
     .pos = 5
   ) |>
   update_column(id = "AVAL", label = "Analysis Value (Numeric)") |>
+  move_column(id = "PARAM", .pos = 3) |>
   remove_columns(id = "AVALC")
 
 list_columns(advs)
 ```
+
+Any column field from the table above can be passed to `add_column()` and
+`update_column()` as a named argument. `.pos` sets the position; by default
+new items are appended at the end. `update_column()` only changes the given
+fields and keeps the column's position.
 
 #### Schema Validation
 
@@ -247,6 +275,12 @@ adding a column with a duplicate ID fails:
 
 ```{r, error = TRUE}
 advs |> add_column(id = "AVAL", label = "Duplicate")
+```
+
+Values outside the controlled terminology are rejected as well:
+
+```{r, error = TRUE}
+advs |> update_column(id = "AVAL", origin = "Calculated")
 ```
 
 ### Modifying Parameters
@@ -290,6 +324,23 @@ Rows follow the same pattern. Inspect a row with `select_row()`:
 ```{r}
 select_row(advs, id = "BASELINE") |>
   str()
+```
+
+Add a row action that uses a mighty component, update it and change its
+position:
+
+```{r}
+advs <- advs |>
+  add_row(
+    id = "LOCF",
+    method = "Last observation carried forward",
+    component = list(id = "locf", with = list(domain = "ADVS")),
+    depends = "rows.BASELINE"
+  ) |>
+  update_row(id = "LOCF", method = "LOCF imputation for missing visits") |>
+  move_row(id = "LOCF", .pos = 1)
+
+list_rows(advs)
 ```
 
 ### Saving Changes
@@ -456,7 +507,20 @@ Omit `path` to write back to the original directory (`study@path`).
 
 Pooled specifications can serve multiple studies by using conditional `include`
 fields. Conditions are wrapped in `{braces}` and evaluated as R expressions
-(via `glue::glue_data()`) against the study's `@study` values.
+(via `glue::glue_data()`) against the study's `@study` values. `include` can
+also be a plain `true` or `false`:
+
+```yaml
+columns:
+  - id: STUDYID
+    label: Study Identifier
+    include: "{study_id == 'example_study'}"
+  - id: SITEID
+    label: Study Site Identifier
+    include: false
+```
+
+The same condition set in R:
 
 ```{r}
 study <- mighty_study(study_path)
@@ -483,7 +547,10 @@ resolved <- resolve_includes(study, info = list(study_id = "other"))
 list_columns(resolved$ADVS)
 ```
 
-`include` can be applied to columns, rows, parameters, and individual columns within a parameter.
+`include` can be applied to whole domains, columns, rows, parameters, and
+individual columns within a parameter. A domain whose condition is `FALSE` is
+removed from the study. `info` can hold any values used in the conditions,
+not only `study_id`.
 
 ### Row Subsets
 
@@ -686,6 +753,18 @@ i.e. the value level metadata:
 
 ```{r}
 create_md_values(study)
+```
+
+The tables reflect the study as it is, so populate and resolve it first.
+A typical end-to-end workflow:
+
+```{r}
+md_col <- mighty_study(study_path, populate = TRUE) |>
+  resolve_includes() |>
+  resolve_subsets() |>
+  create_md_col()
+
+md_col
 ```
 
 ## Next Steps
