@@ -24,6 +24,29 @@ multi-domain study, propagating metadata across domains, applying conditional
 includes and row subsets, managing documents and codelists, and producing flat
 output for downstream tooling.
 
+mighty.metadata manages *specifications* (metadata) only; it does not read or
+create ADaM datasets.
+
+All examples use the specifications bundled with the package in
+`system.file("examples", package = "mighty.metadata")`, so every code chunk can
+be run as-is. One chunk also uses the withr package, which can be installed
+with `install.packages("withr")`.
+
+To start your own study, copy the bundled examples to a new directory and edit
+the YAML files there:
+
+```{r, eval = FALSE}
+dir.create("specs")
+file.copy(
+  list.files(
+    system.file("examples", package = "mighty.metadata"),
+    full.names = TRUE
+  ),
+  "specs"
+)
+study <- mighty_study("specs")
+```
+
 ## The YAML Specification Format
 
 Each ADaM domain is defined in a YAML file. The simplest case is a
@@ -576,7 +599,8 @@ Write all domain files back to disk with `write_config()`. `_study.yml` and
 not empty:
 
 ```{r}
-out <- withr::local_tempdir()
+out <- tempfile()
+dir.create(out)
 write_config(study, path = out)
 list.files(out)
 ```
