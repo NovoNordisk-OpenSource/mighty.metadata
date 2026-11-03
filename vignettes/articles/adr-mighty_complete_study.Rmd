@@ -39,7 +39,8 @@ and also adds functionality to inherit metadata from the referenced components.
 
 ## Decisions
 
-Create a new `mighty_complete_study()` class based on `mighty_study()`.
+Create a new `mighty_complete_study()` class that holds the resolved `mighty_study()` object as a property.
+It does not inherit from `mighty_study()`.
 It populates and resolves all information, ensuring that all metadata and components are directly available for downstream use.
 
 The new flow in the packages becomes:
@@ -63,8 +64,11 @@ generate_define_xml(<mighty_study>)
     └─> generate_define_xml(<mighty_complete_study>)
 ```
 
-The new helper functions for components will still be exported.
+The new `resolve_components()` helper is exported alongside the existing helpers.
 All helper functions consistently return a `mighty_study()` object.
+
+The `populate` argument of `mighty_study()` is soft-deprecated in favour of `mighty_complete_study()`.
+It only runs `populate_core()` and `populate_sparse()`, and skips includes and subsets.
 
 ## Consequences
 
@@ -136,7 +140,8 @@ The component metadata is added in the following steps:
 
 ### `mighty_complete_study()`
 
-This is a new S7 class built on top of `mighty_study()`, but with all specifications explicit.
+This is a new S7 class with parent `S7_object`, with all specifications explicit.
+It holds the study as a property rather than inheriting from `mighty_study()`.
 Unlike `mighty_study()`, the specifications must now be read-only.
 
 This cannot be ensured in the underlying `<list>` parent of `mighty_study()`.
@@ -146,23 +151,52 @@ Proposed structure with all properties as read-only:
 ```
 <mighty_complete_study>
 @ properties :
-  $ study      : <mighty_study>  # The resolved and populated study specification
+  $ spec       : <mighty_study>  # The resolved and populated study specification
   $ components : <list>          # Named list with all components used in the study
-  $ nodes      : <list>          # Nested list with e.g. rendered components for use in {mighty}
+  $ nodes      : <list>          # Nested list of nodes, see below
 ```
 
-Where `@study` is built with:
+Read-only is enforced with set-once setters.
+Each setter only allows the assignment at construction, and errors afterwards:
 
 ```r
-study |>
-  resolve_includes() |>
+spec = S7::new_property(
+  class = S7::new_union(NULL, mighty_study),
+  default = NULL,
+  setter = function(self, value) {
+    if (!is.null(self@spec)) {
+      cli::cli_abort("{.field @spec} is read-only")
+    }
+    self@spec <- value
+    self
+  }
+)
+```
+
+Rendered components are R6 objects and are not protected from in-place modification.
+The guarantee is that `@spec`, `@components` and `@nodes` are consistent with each other at construction.
+
+`mighty_complete_study(x, ...)` passes `...` on to the helpers (e.g. `info` to `resolve_includes()`).
+`@spec` is built with:
+
+```r
+x |>
+  resolve_includes(...) |>
   resolve_subsets() |>
   populate_core() |>
   populate_sparse() |>
   resolve_components()
 ```
 
-Note: The structure of `@nodes` should be made to fit into the internals of `mighty::generate_adam_code()`.
+`@nodes` has a package-neutral structure owned by {mighty.metadata}; downstream packages adapt to it.
+Each node has `type` (column, row, or parameter), `id`, and `component` (the rendered component object):
+
+```
+@nodes$ADSL$AGE
+  $ type      : "column"
+  $ id        : "AGE"
+  $ component : <mighty_component_rendered>
+```
 
 ### Predecessor mapping and components
 
