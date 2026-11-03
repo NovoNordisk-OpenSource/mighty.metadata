@@ -436,6 +436,68 @@ study |>
   str()
 ```
 
+## Documents
+
+Study-level documents (e.g. the SAP) are stored in `_documents.yml` and
+available as `@documents`. Each document has an `id`, `title`, `href` and a
+`doctype` of `"suppdoc"`, `"comment"` or `"method"`:
+
+```yaml
+- id: SAP
+  title: Statistical Analysis Plan
+  doctype: suppdoc
+  href: ./docs/sap.pdf
+
+- id: DERIV_METHODS
+  title: Derivation Methods
+  doctype: method
+  href: ./docs/methods.pdf
+```
+
+Domains and columns (including columns within parameters) reference documents
+by `id` in their `documents` field, optionally with a `page`:
+
+```yaml
+columns:
+  - id: SAFFL
+    label: Safety Population Flag
+    origin: Derived
+    documents:
+      - id: DERIV_METHODS
+        page: 12
+```
+
+The `list_documents()`, `select_document()`, `add_document()`,
+`update_document()` and `remove_documents()` verbs work on both a study and a
+`mighty_documents()` object:
+
+```{r}
+study <- study |>
+  add_document(
+    id = "SAP",
+    title = "Statistical Analysis Plan",
+    doctype = "suppdoc",
+    href = "./docs/sap.pdf"
+  )
+
+list_documents(study)
+```
+
+References can also be added in R:
+
+```{r}
+study$ADSL <- study$ADSL |>
+  update_column(id = "SAFFL", documents = list(list(id = "SAP", page = 12)))
+```
+
+`check_document_references()` verifies that every referenced document exists,
+that `"method"` documents are only used where `origin` is `"Derived"`, and warns
+when a `"comment"` document is referenced without a `comment`:
+
+```{r}
+check_document_references(study)
+```
+
 ## Creating Flat Metadata Tables
 
 A set of `create_md_*()` functions flattens the study specifications into
