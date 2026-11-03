@@ -67,7 +67,7 @@ generate_define_xml(<mighty_study>)
 The new `resolve_components()` helper is exported alongside the existing helpers.
 All helper functions consistently return a `mighty_study()` object.
 
-The `populate` argument of `mighty_study()` is soft-deprecated in favour of `mighty_complete_study()`.
+The `populate` argument of `mighty_study()` is soft-deprecated in favor of `mighty_complete_study()`.
 It only runs `populate_core()` and `populate_sparse()`, and skips includes and subsets.
 
 ## Consequences
