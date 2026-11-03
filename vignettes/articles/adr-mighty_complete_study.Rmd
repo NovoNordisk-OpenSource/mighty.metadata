@@ -134,7 +134,7 @@ The component metadata is added in the following steps:
 `resolve_components()` uses the `repos` field of `_mighty.yml` (`@mighty`) to find standard and local components.
 If `@mighty` is `NULL`, it returns the study unchanged. This supports documentation-only use.
 
-Metadata inheritance also runs for columns where the user set `component`, so the parser accepts both the shorthand and the expanded form.
+`populate_sparse()` keeps a user-set `component` but still runs metadata inheritance for it, so the parser accepts both the shorthand and the expanded form.
 
 `origin` and `component` are only filled when missing.
 Precedence per field:
@@ -221,11 +221,11 @@ With several base domains (e.g. LB and XL), `method` is `LB.MYVAR, XL.MYVAR` and
 
 Filtered references other than SUPP-- (cases 6 and 7) get `origin: Derived`, since they are not valid define.xml predecessors.
 
-Cases 1–4 inherit label and type from the source column only if the source domain is in the study.
+Cases 1–4 inherit label and type from the source column only if the source domain is in the study; case 6 inherits from the parameter column.
 Cases 5 and 7 inherit nothing, since SUPP-- and SDTM sources are not in the study.
 Where no metadata is inherited, users must specify label and type.
 
-`populate_sparse()` rewrites `method` to the expanded form used in define.xml, and writes `component.id` and, if needed, `component.with` (`domain`, `column`, optional `filter`) for code generation.
+`populate_sparse()` sets or rewrites `method` to the expanded form used in define.xml, and writes `component.id` and, if needed, `component.with` (`domain`, `column`, optional `filter`) for code generation.
 Example for a column in `ADAE` (case 4):
 
 ```yaml
@@ -269,7 +269,7 @@ component:
 Components choose their own join keys (e.g. `USUBJID`, or `IDVAR`/`IDVARVAL` for SUPP--).
 
 The first four components are already implemented in {mighty}, and the standard components exist in {mighty.standards}.
-`mighty_merge_supp` and `mighty_merge_param` are new; whether they become one component is decided during implementation.
+`mighty_merge_supp` and `mighty_merge_param` are new and have to be written; whether they become one component is decided during implementation.
 
 ## Testing Strategy
 
