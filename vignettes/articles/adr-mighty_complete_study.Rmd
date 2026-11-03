@@ -80,12 +80,6 @@ Any new special `mighty_*` components have to be added to {mighty.standards}.
 There is no circular dependency, since {mighty.component} does not depend on {mighty.metadata}.
 {mighty.standards} is not a package dependency. It is a GitHub repository of components, found through the `repos` field in `_mighty.yml`.
 
-### Changes to current content
-
-1. Update `populate_sparse()` to write the parsed predecessor reference to `component.id` and `component.with`. `method` is rewritten to the expanded form.
-1. The `mighty_study()` object then has direct references to the special `mighty_*` components.
-1. The `populate` argument of `mighty_study()` is soft-deprecated.
-
 ## Alternatives Considered
 
 ### 1. Only add a new helper function to resolve components and inherit component metadata
@@ -137,7 +131,6 @@ Proposed implementation order:
 
 The component metadata is added in the following steps:
 
-1. After `populate_sparse()`, all predecessor columns have `component.id` and (if needed) `component.with` entries.
 1. A new `resolve_components()` function populates component tags back to the `column` entries in the `mighty_study()` object:
    1. `@origin` --> `column.origin`
    1. `@method` --> `column.method`
@@ -146,16 +139,13 @@ The component metadata is added in the following steps:
 `resolve_components()` uses the `repos` field of `_mighty.yml` (`@mighty`) to find standard and local components.
 If `@mighty` is `NULL`, it returns the study unchanged. This supports documentation-only use.
 
-`populate_sparse()` skips component population for columns that already have a `component`.
-Metadata inheritance still runs for those columns, so the parser accepts both the shorthand and the expanded form.
+Metadata inheritance also runs for columns where the user set `component`, so the parser accepts both the shorthand and the expanded form.
 
 Fields are only filled when missing. Precedence is user > predecessor > component:
 
 1. `origin`: user, else the origin set by the predecessor mapping (`"Predecessor"` or `"Derived"`), else component `@origin`.
 1. `method`: user, else the expanded predecessor reference, else component `@method`.
 1. `component`: user, else the shorthand mapping.
-
-The shorthand is a predecessor reference and is always expanded.
 
 Every helper, and the full pipeline, must give the same result when run again on its own output.
 This is needed because the `generate_*(<mighty_study>)` wrappers always call `mighty_complete_study()`,
@@ -164,7 +154,6 @@ and a resolved `mighty_study()` cannot be distinguished from a raw one.
 ### `mighty_complete_study()`
 
 This is a new S7 class with parent `S7_object`, with all specifications explicit.
-It holds the study as a property rather than inheriting from `mighty_study()`.
 Unlike `mighty_study()`, the specifications must now be read-only.
 
 This cannot be ensured in the underlying `<list>` parent of `mighty_study()`.
@@ -273,12 +262,6 @@ The filter key is derived from the domain prefix:
 1. `SUPP--`: `QNAM`
 1. Domain in the study (ADaM BDS): `PARAMCD`
 1. Any other domain (SDTM findings): `<DOMAIN>TESTCD`
-
-```
-SUPPDM.EFFICACY.QVAL  -> filter QNAM     = EFFICACY
-ADVS.BMIGRP.AVALC     -> filter PARAMCD  = BMIGRP
-VS.SYSBP.VSSTRESN     -> filter VSTESTCD = SYSBP
-```
 
 SUPP-- references get `origin: Predecessor`. ADaM BDS and SDTM findings references get `origin: Derived`,
 since filtered references other than SUPP-- are not valid define.xml predecessors.
