@@ -498,6 +498,82 @@ when a `"comment"` document is referenced without a `comment`:
 check_document_references(study)
 ```
 
+## Codelists
+
+Codelists are stored in `_codelists.yml` and available as `@codelists`. Columns
+refer to a codelist by its `id` in their `codelist` field. A codelist is either
+sponsor-defined (`values`) or records changes to an external codelist, such as
+CDISC CT, through `subset`, `restore` and `extend`:
+
+```yaml
+# Sponsor-defined codelist
+- id: SEX
+  label: Sex
+  description: Sex of the subject
+  datatype: text
+  values:
+    - code: F
+      decode: Female
+    - code: M
+      decode: Male
+
+# Keep only some values of an external codelist and restore one more
+- id: AGEU
+  subset:
+    - code: YEARS
+  restore:
+    - code: MONTHS
+
+# Add a sponsor-defined value to an extensible external codelist
+- id: LOC
+  extend:
+    - code: MY CUSTOM LOCATION
+      decode: My Custom Location
+```
+
+A column refers to a codelist by its `id`:
+
+```yaml
+columns:
+  - id: SEX
+    label: Sex
+    codelist: SEX
+```
+
+Codelists can also be added in R:
+
+```{r}
+study <- study |>
+  add_codelist(
+    id = "SEX",
+    label = "Sex",
+    description = "Sex of the subject",
+    datatype = "text",
+    code = c("F", "M"),
+    decode = c("Female", "Male")
+  ) |>
+  subset_codelist_values(id = "AGEU", code = "YEARS")
+
+list_codelists(study)
+```
+
+Codelists can be added before any column uses them. Use
+`check_codelist_references()` to check that every codelist is referenced:
+
+```{r, error = TRUE}
+check_codelist_references(study)
+```
+
+```{r}
+study$ADSL <- study$ADSL |>
+  update_column(id = "SEX", codelist = "SEX") |>
+  update_column(id = "AGEU", codelist = "AGEU")
+
+check_codelist_references(study)
+```
+
+See `vignette("codelists-schema")` for all operation groups and verbs.
+
 ## Creating Flat Metadata Tables
 
 A set of `create_md_*()` functions flattens the study specifications into
