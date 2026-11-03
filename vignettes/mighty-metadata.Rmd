@@ -355,8 +355,10 @@ study <- mighty_study(study_path, populate = TRUE)
 
 ### Saving a Study
 
-Write all domain files, `_study.yml`, and `_mighty.yml` back to disk
-with `write_config()`:
+Write all domain files back to disk with `write_config()`. `_study.yml` and
+`_mighty.yml` are written when `@study` and `@mighty` are set, and
+`_documents.yml` and `_codelists.yml` when `@documents` and `@codelists` are
+not empty:
 
 ```{r}
 out <- withr::local_tempdir()
