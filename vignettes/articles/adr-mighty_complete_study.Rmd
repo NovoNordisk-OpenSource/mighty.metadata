@@ -69,9 +69,11 @@ Downstream use in {mighty} and {mighty.toolbox} has to be updated after this fea
 
 Any new special `mighty_*` components have to be added to {mighty.standards}.
 
+All components must have correct `@method` and `@origin` tags; existing components do not.
+
 {mighty.metadata} adds {mighty.component} to `Imports`.
 There is no circular dependency, since {mighty.component} does not depend on {mighty.metadata}.
-{mighty.standards} is not a package dependency. It is a GitHub repository of components, found through the `repos` field in `_mighty.yml`.
+{mighty.standards} is not a package dependency but a GitHub repository of components, found through the `repos` field in `_mighty.yml`.
 
 ## Alternatives Considered
 
@@ -134,10 +136,11 @@ If `@mighty` is `NULL`, it returns the study unchanged. This supports documentat
 
 Metadata inheritance also runs for columns where the user set `component`, so the parser accepts both the shorthand and the expanded form.
 
-Fields are only filled when missing. Precedence is user > predecessor > component:
+`origin` and `component` are only filled when missing.
+Precedence per field:
 
 1. `origin`: user, else the origin set by the predecessor mapping (`"Predecessor"` or `"Derived"`), else component `@origin`.
-1. `method`: user, else the expanded predecessor reference, else component `@method`.
+1. `method`: the expanded form if the user's `method` is a predecessor reference, else the user's `method`, else the base-domain reference for case 1, else component `@method`.
 1. `component`: user, else the shorthand mapping.
 
 Every helper, and the full pipeline, must give the same result when run again on its own output.
@@ -189,7 +192,7 @@ x |>
 ```
 
 `@nodes` has a package-neutral structure owned by {mighty.metadata}; downstream packages adapt to it.
-Each node has `type` (column, row, or parameter), `id`, and `component` (the rendered component object):
+Each node has `type` (column, row, or parameter, matching the `columns`, `rows` and `parameters` entries of the domain), `id`, and `component` (the rendered component object):
 
 ```
 @nodes$ADSL$AGE
@@ -268,11 +271,6 @@ Components choose their own join keys (e.g. `USUBJID`, or `IDVAR`/`IDVARVAL` for
 The first four components are already implemented in {mighty}, and the standard components exist in {mighty.standards}.
 `mighty_merge_supp` and `mighty_merge_param` are new; whether they become one component is decided during implementation.
 
-Open question: whether the case 1 mapping stays inside {mighty} for performance.
-If so, this is an exception to success criterion 2.
-
-With this change, all components must have correct `@method` and `@origin` tags, which is not the case for the existing components.
-
 ## Testing Strategy
 
 1. Keep all tests for exported functions in downstream packages the same, ensuring a consistent user experience.
@@ -281,7 +279,7 @@ With this change, all components must have correct `@method` and `@origin` tags,
 1. Add unit tests in {mighty.metadata} for:
    1. Parsing of the two- and three-part predecessor notation, including the filter key rules.
    1. The expanded form parses to the same `component.with` as the shorthand.
-   1. Field precedence (user > predecessor > component).
+   1. Field precedence for `origin`, `method` and `component`.
    1. Each helper and `mighty_complete_study()` give the same result when run again on their own output.
    1. Read-only properties of `mighty_complete_study()`.
    1. `resolve_components()` returns the study unchanged when `@mighty` is `NULL`.
@@ -290,6 +288,9 @@ With this change, all components must have correct `@method` and `@origin` tags,
 
 Internally, {mighty} handles a lot of the logic that is now pushed forward into the component helpers.
 Depending on how large the required changes are, we may have to plan them separately from this document.
+
+Open question: whether the case 1 mapping stays inside {mighty} for performance.
+If so, this is an exception to success criterion 2.
 
 ## Compliance Considerations
 
