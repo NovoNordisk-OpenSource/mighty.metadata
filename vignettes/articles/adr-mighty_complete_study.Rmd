@@ -76,10 +76,15 @@ Downstream use in {mighty} and {mighty.toolbox} has to be updated after this fea
 
 Any new special `mighty_*` components have to be added to {mighty.standards}.
 
+{mighty.metadata} adds {mighty.component} to `Imports`.
+There is no circular dependency, since {mighty.component} does not depend on {mighty.metadata}.
+{mighty.standards} is not a package dependency. It is a GitHub repository of components, found through the `repos` field in `_mighty.yml`.
+
 ### Changes to current content
 
-1. Update `populate_core()` and `populate_sparse()` to also add the component information.
+1. Update `populate_sparse()` to write the parsed predecessor reference to `component.id` and `component.with`. `method` is kept unchanged.
 1. The `mighty_study()` object then has direct references to the special `mighty_*` components.
+1. The `populate` argument of `mighty_study()` is soft-deprecated.
 
 ## Alternatives Considered
 
@@ -133,10 +138,10 @@ Proposed implementation order:
 The component metadata is added in the following steps:
 
 1. After `populate_sparse()`, all predecessor columns have `component.id` and (if needed) `component.with` entries.
-1. A new `resolve_components()` function populates component tags back to the `column` entries in the `mighty_study()` object, only when missing:
+1. A new `resolve_components()` function populates component tags back to the `column` entries in the `mighty_study()` object:
    1. `@origin` --> `column.origin`
    1. `@method` --> `column.method`
-1. The rendered component object itself is stored for later re-use in {mighty}. Specifics are left to the `mighty_complete_study()` implementation.
+1. The rendered component objects are stored in `@nodes` of `mighty_complete_study()` (see below).
 
 `resolve_components()` uses the `repos` field of `_mighty.yml` (`@mighty`) to find standard and local components.
 If `@mighty` is `NULL`, it returns the study unchanged. This supports documentation-only use.
