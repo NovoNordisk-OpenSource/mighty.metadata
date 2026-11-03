@@ -119,8 +119,9 @@ Proposed implementation order:
 1. First version of `resolve_components()`.
 1. Add any new special `mighty_*` components to {mighty.standards}.
 1. First version of `mighty_complete_study()`, only implementing component metadata re-use. Note that this means {mighty} will temporarily fetch the components a second time.
-1. Implement the new method dispatch in {mighty} and {mighty.toolbox} to ensure compatibility. Steps 1–5 give the first complete implementation; step 6 is optimization.
+1. Implement the new method dispatch in {mighty} and {mighty.toolbox} to ensure compatibility. Steps 1–5 give the first complete implementation; steps 6 and 7 are optimization.
 1. Remove now-redundant logic around predecessors in {mighty}.
+1. In several steps refactor {mighty} to use the new `@nodes` property effectively.
 
 ### Component metadata retrieval
 
