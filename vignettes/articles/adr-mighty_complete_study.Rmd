@@ -202,25 +202,25 @@ Each node has `type` (column, row, or parameter), `id`, and `component` (the ren
 
 Shorthand predecessor mapping, with current domain `ADSL` and base domain `DM`:
 
-1. Keep column from the base domain:
-   `id: MYVAR` --> `method: DM.MYVAR` --> `component.id: mighty_init_domain`
-1. Rename column from the base domain:
-   `method: DM.DMSEQ` --> `component.id: mighty_col_rename`
-1. Copy existing column into new column:
-   `method: ADSL.MYVAR` --> `component.id: mighty_col_mutate`
-1. Join predecessor from other domain:
-   `method: ADXX.VAR2` --> `component.id: mighty_col_echo`
-1. Join predecessor from supplementary SDTM data:
-   `method: SUPPDM.EFFICACY.QVAL` --> `method: SUPPDM.QVAL where QNAM="EFFICACY"` --> `component.id: mighty_merge_supp`
-1. Join predecessor from ADaM BDS data set:
-   `method: ADVS.BMIGRP.AVALC` --> `method: ADVS.AVALC where PARAMCD="BMIGRP"` --> `component.id: mighty_merge_param`
-1. Join predecessor from SDTM findings data:
-   `method: VS.SYSBP.VSSTRESN` --> `method: VS.VSSTRESN where VSTESTCD="SYSBP"` --> `component.id: mighty_merge_param`
+| # | Case                                          | Input `method`         | `method` after `populate_sparse()`   | Component            | Origin      | Inherits from                 |
+|---|-----------------------------------------------|------------------------|--------------------------------------|----------------------|-------------|-------------------------------|
+| 1 | Keep column from the base domain              | none (`id: MYVAR`)     | `DM.MYVAR`                           | `mighty_init_domain` | Predecessor | Source column, if in study    |
+| 2 | Rename column from the base domain            | `DM.DMSEQ`             | unchanged                            | `mighty_col_rename`  | Predecessor | Source column, if in study    |
+| 3 | Copy existing column into new column          | `ADSL.MYVAR`           | unchanged                            | `mighty_col_mutate`  | Predecessor | Source column, if in study    |
+| 4 | Join predecessor from other domain            | `ADXX.VAR2`            | unchanged                            | `mighty_col_echo`    | Predecessor | Source column, if in study    |
+| 5 | Join predecessor from supplementary SDTM data | `SUPPDM.EFFICACY.QVAL` | `SUPPDM.QVAL where QNAM="EFFICACY"`  | `mighty_merge_supp`  | Predecessor | None                          |
+| 6 | Join predecessor from ADaM BDS data set       | `ADVS.BMIGRP.AVALC`    | `ADVS.AVALC where PARAMCD="BMIGRP"`  | `mighty_merge_param` | Derived     | `AVALC` of parameter `BMIGRP` |
+| 7 | Join predecessor from SDTM findings data      | `VS.SYSBP.VSSTRESN`    | `VS.VSSTRESN where VSTESTCD="SYSBP"` | `mighty_merge_param` | Derived     | None                          |
 
 In case 1, a column with no `method` and no `component` is taken from the base domain(s).
 Several base domains are row-bound, and all must have the column.
-With one base domain, `method` is set to `DM.MYVAR` and `origin` to `"Predecessor"`.
-With several base domains (e.g. LB and XL), `method` is set to `LB.MYVAR, XL.MYVAR` and `origin` to `"Derived"`.
+With several base domains (e.g. LB and XL), `method` is `LB.MYVAR, XL.MYVAR` and `origin` is `Derived`.
+
+Filtered references other than SUPP-- (cases 6 and 7) get `origin: Derived`, since they are not valid define.xml predecessors.
+
+Cases 1–4 inherit label and type from the source column only if the source domain is in the study.
+Cases 5 and 7 inherit nothing, since SUPP-- and SDTM sources are not in the study.
+Where no metadata is inherited, users must specify label and type.
 
 `populate_sparse()` rewrites `method` to the expanded form used in define.xml, and writes `component.id` and, if needed, `component.with` (`domain`, `column`, optional `filter`) for code generation.
 Example for a column in `ADAE` (case 4):
@@ -248,9 +248,6 @@ The filter key is derived from the domain prefix:
 1. Domain in the study (ADaM BDS): `PARAMCD`
 1. Any other domain (SDTM findings): `<DOMAIN>TESTCD`
 
-SUPP-- references get `origin: Predecessor`. ADaM BDS and SDTM findings references get `origin: Derived`,
-since filtered references other than SUPP-- are not valid define.xml predecessors.
-
 The filter is stored in `component.with`, e.g. for SUPP--:
 
 ```yaml
@@ -264,11 +261,6 @@ component:
     filter:
       QNAM: EFFICACY
 ```
-
-Metadata inheritance for three-part references:
-
-1. ADaM BDS (`ADVS.BMIGRP.AVALC`): inherit from the `AVALC` column of parameter `BMIGRP`.
-1. SUPP-- and SDTM: the source is not in the study, so users must specify label and type.
 
 {mighty.metadata} only passes domain, column and filter in `component.with`.
 Components choose their own join keys (e.g. `USUBJID`, or `IDVAR`/`IDVARVAL` for SUPP--).
