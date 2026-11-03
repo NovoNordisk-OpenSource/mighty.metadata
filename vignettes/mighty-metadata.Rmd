@@ -473,8 +473,24 @@ propagation are:
   propagated columns. This is a top-level YAML property on the consumer domain,
   so it is set via list assignment rather than `update_column()`.
 
-`populate_core()` reads these flags and adds the marked ADSL columns to each
-consumer domain as predecessor columns.
+`populate_core()` reads these flags and appends the marked ADSL columns to the
+end of each consumer domain as predecessor columns (`method: ADSL.<COLUMN>`,
+`origin: Predecessor`). It errors if a consumer domain already has a column
+with the same name, and only ADSL may mark columns with `is_core`.
+
+In YAML this looks like:
+
+```yaml
+# adsl.yml
+columns:
+  - id: SEX
+    label: Sex
+    is_core: true
+
+# adae.yml
+id: ADAE
+usecore: true
+```
 
 The bundled examples do not include these fields, so we add them here to
 demonstrate the workflow:
@@ -498,7 +514,16 @@ SEX and RACE now appear in ADAE as predecessor columns sourced from ADSL.
 
 Columns that reference another domain (e.g., `method: ADSL.SAFFL`) can inherit
 metadata from the referenced column. `populate_sparse()` performs this lookup
-across the study, filling in only missing properties.
+across the study for every predecessor column (`method: DOMAIN.COLUMN` or
+`origin: Predecessor`):
+
+- `origin` is set to `Predecessor`.
+- Properties missing in the column (e.g. `label`, `format`, `codelist`) are
+  copied from the referenced column; existing properties are not overwritten.
+  `id`, `method`, `origin`, `is_core`, `component` and `depends` are never
+  copied.
+- If the referenced domain is not in the study (e.g. SDTM `DM`), only `origin`
+  is set. If the domain exists but the column does not, it is an error.
 
 ```{r}
 # Before: SAFFL in ADVS references ADSL.SAFFL
@@ -509,7 +534,7 @@ select_column(study$ADVS, id = "SAFFL") |>
 ```{r}
 study <- study |> populate_sparse()
 
-# After: origin inherited from ADSL
+# After: origin set to Predecessor
 select_column(study$ADVS, id = "SAFFL") |>
   str()
 ```
