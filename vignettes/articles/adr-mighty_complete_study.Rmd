@@ -15,7 +15,7 @@ author:
 
 ## Success criteria
 
-1. Users can easily specify simple predecessors. Both column predecessors such as `ADXX.MYVAR` (currently supported) and predecessors from supplementary domains and BDS parameters should be supported.
+1. Users can specify predecessors with shorthand: columns (`ADXX.MYVAR`, already supported), SUPP-- qualifiers, BDS parameters and SDTM findings.
 1. Metadata is used consistently for code generation and documentation, in {mighty} and {mighty.toolbox} respectively, without any further processing inside the two packages.
 1. Information from components is re-used as much as possible, so users do not have to create redundant specifications.
 
@@ -25,23 +25,16 @@ Currently, the main export of {mighty.metadata} is the `mighty_study()` class th
 It is sparsely defined so that users do not have to specify redundant information, which makes the current class
 suitable for CRUD updates, but not suitable for downstream use.
 
-It has the following helper functions to alleviate this:
-
-1. `resolve_includes()`
-1. `resolve_subsets()`
-1. `populate_core()`
-1. `populate_sparse()`
-
-They have to be called appropriately in all integrations.
+It has the helpers `resolve_includes()`, `resolve_subsets()`, `populate_core()` and `populate_sparse()`, which every integration must call correctly.
 
 To make this easier, this ADR proposes a new class that handles this consistently,
 and also adds functionality to inherit metadata from the referenced components.
 
 ## Decisions
 
-Create a new `mighty_complete_study()` class that holds the resolved `mighty_study()` object as a property.
-It does not inherit from `mighty_study()`.
-It populates and resolves all information, ensuring that all metadata and components are directly available for downstream use.
+`mighty_complete_study()` is a new S7 class (parent `S7_object`) that stores the resolved `mighty_study()` as a read-only property.
+It does not inherit from `mighty_study()`, because read-only cannot be enforced on the `<list>` parent of `mighty_study()`.
+It populates and resolves all information, so all metadata and components are directly available for downstream use.
 
 The new flow in the packages becomes:
 
@@ -124,7 +117,7 @@ Proposed implementation order:
 1. First version of `resolve_components()`.
 1. Add any new special `mighty_*` components to {mighty.standards}.
 1. First version of `mighty_complete_study()`, only implementing component metadata re-use. Note that this means {mighty} will temporarily fetch the components a second time.
-1. Implement the new method dispatch in {mighty} and {mighty.toolbox} to ensure compatibility. Combined with the above changes, this marks the initial complete implementation. The changes below are for optimization and further streamlining.
+1. Implement the new method dispatch in {mighty} and {mighty.toolbox} to ensure compatibility. Steps 1–5 give the first complete implementation; step 6 is optimization.
 1. Remove now-redundant logic around predecessors in {mighty}.
 
 ### Component metadata retrieval
@@ -153,12 +146,7 @@ and a resolved `mighty_study()` cannot be distinguished from a raw one.
 
 ### `mighty_complete_study()`
 
-This is a new S7 class with parent `S7_object`, with all specifications explicit.
-Unlike `mighty_study()`, the specifications must now be read-only.
-
-This cannot be ensured in the underlying `<list>` parent of `mighty_study()`.
-Instead, the complete study specifications must be stored as a property in the object.
-Proposed structure with all properties as read-only:
+Proposed structure, all properties read-only:
 
 ```
 <mighty_complete_study>
@@ -212,8 +200,7 @@ Each node has `type` (column, row, or parameter), `id`, and `component` (the ren
 
 ### Predecessor mapping and components
 
-To ensure a good user experience, we want to support shorthand notation for simple predecessor mapping.
-Assuming our current domain is `ADSL` and the base domain is `DM`, the different predecessor types can be mapped as follows:
+Shorthand predecessor mapping, with current domain `ADSL` and base domain `DM`:
 
 1. Keep column from the base domain:
    `id: MYVAR` --> `method: DM.MYVAR` --> `component.id: mighty_init_domain`
@@ -235,9 +222,7 @@ Several base domains are row-bound, and all must have the column.
 With one base domain, `method` is set to `DM.MYVAR` and `origin` to `"Predecessor"`.
 With several base domains (e.g. LB and XL), `method` is set to `LB.MYVAR, XL.MYVAR` and `origin` to `"Derived"`.
 
-`populate_sparse()` parses the `method` shorthand into a structured `component.with` with `domain`, `column`, and optional `filter`.
-`populate_sparse()` rewrites the `method` shorthand to the expanded form used in define.xml.
-`component.with` holds the structured reference for code generation.
+`populate_sparse()` rewrites `method` to the expanded form used in define.xml, and writes `component.id` and, if needed, `component.with` (`domain`, `column`, optional `filter`) for code generation.
 Example for a column in `ADAE` (case 4):
 
 ```yaml
@@ -289,8 +274,7 @@ Metadata inheritance for three-part references:
 Components choose their own join keys (e.g. `USUBJID`, or `IDVAR`/`IDVARVAL` for SUPP--).
 
 The first four components are already implemented in {mighty}, and the standard components exist in {mighty.standards}.
-`mighty_merge_supp` and `mighty_merge_param` have to be written. Potentially, they can be combined into one.
-This is decided during implementation.
+`mighty_merge_supp` and `mighty_merge_param` are new; whether they become one component is decided during implementation.
 
 Open question: whether the case 1 mapping stays inside {mighty} for performance.
 If so, this is an exception to success criterion 2.
@@ -301,7 +285,7 @@ With this change, all components must have correct `@method` and `@origin` tags,
 
 1. Keep all tests for exported functions in downstream packages the same, ensuring a consistent user experience.
 1. Only remove internal tests when the functionality is made redundant by this new class.
-1. Run integration tests against {mighty} in the {mighty.metadata} CI. Run integration tests against {mighty.toolbox} in the {mighty.toolbox} CI, since it is an internal repository.
+1. Integration tests: {mighty} in the {mighty.metadata} CI; {mighty.toolbox} in its own CI, since it is an internal repository.
 1. Add unit tests in {mighty.metadata} for:
    1. Parsing of the two- and three-part predecessor notation, including the filter key rules.
    1. The expanded form parses to the same `component.with` as the shorthand.
