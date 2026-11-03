@@ -389,9 +389,64 @@ study@study$study_id
 study@mighty$repos
 ```
 
-The `_study.yml` file provides the `study_id`. The `_mighty.yml` file provides
-`external_data` definitions (source domains and their keys) and the `repos`
-where components are found.
+The `_study.yml` file provides the `study_id`, and optionally the `standards`
+and `terminology` (controlled terminologies and dictionaries) applied in the
+study. Each entry requires an `id` and a `version`:
+
+```yaml
+study_id: example_study
+
+standards:
+  - id: ADaM-IG
+    version: '1.1'
+
+terminology:
+  - id: ADAM
+    version: '2025-08-06'
+  - id: MedDRA
+    version: '22.1'
+  - id: WHODrug
+    version: 2023 JAN
+```
+
+`version` must be a string, so quote values that look like numbers or dates
+(`'1.1'`, not `1.1`). Only the structure is validated; whether a version
+exists is left to consuming packages. See `vignette("study-schema")`.
+
+```{r}
+study@study$standards |>
+  purrr::map_chr("id")
+```
+
+The `_mighty.yml` file configures the mighty framework. Both fields are
+required: `external_data` lists the source (e.g. SDTM) domains with their
+keys, and `repos` lists the repositories where mighty components are found,
+as local paths or `owner/repo/subdir@ref` strings:
+
+```yaml
+external_data:
+  - id: DM
+    keys: [STUDYID, USUBJID]
+  - id: VS
+    keys: [STUDYID, USUBJID]
+
+repos:
+  - "NovoNordisk-OpenSource/mighty.standards/components@main"
+  - "."
+```
+
+See `vignette("mighty-schema")` for details.
+
+Loading messages, such as the ones printed for missing study-level files, can
+be silenced with the `mighty.metadata.verbosity_level` option (see
+`?"mighty.metadata-options"`):
+
+```{r}
+withr::with_options(
+  list(mighty.metadata.verbosity_level = "quiet"),
+  mighty_study(study_path)
+)
+```
 
 `filter_domains()` keeps only domains whose names start with given prefixes,
 e.g. to drop `MD*` domains:
