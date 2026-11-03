@@ -1,5 +1,5 @@
 ---
-title: "ADR: mighty_complete_study"
+title: "ADR: mighty_complete_study() class"
 date: "2026-11-02"
 author:
   - "Aksel Thomsen"
@@ -7,31 +7,212 @@ author:
 
 ## Status
 
-|             |                   |
-|-------------|-------------------|
-| Package     | mighty.metadata   |
-| Status      | Draft             |
-| Version     | 0.1.0             |
-| Description |                   |
+|             |                                                    |
+|-------------|----------------------------------------------------|
+| Package     | mighty.metadata                                    |
+| Version     | 0.1.0                                              |
+| Description | New complete metadata class to ease downstream use |
 
 ## Success criteria
 
+1. Users can easily specify simple predecessors. Both column predecessors such as `ADXX.MYVAR` (currently supported) and predecessors from supplementary domains and BDS parameters should be supported.
+1. Metadata is used consistently for code generation and documentation, in {mighty} and {mighty.toolbox} respectively, without any further processing inside the two packages.
+1. Information from components is re-used as much as possible, so users do not have to create redundant specifications.
+
 ## Context
+
+Currently, the main export of {mighty.metadata} is the `mighty_study()` class that defines all ADaM metadata for a study.
+It is sparsely defined so that users do not have to specify redundant information, which makes the current class
+suitable for CRUD updates, but not suitable for downstream use.
+
+It has the following helper functions to alleviate this:
+
+1. `resolve_includes()`
+1. `resolve_subsets()`
+1. `populate_core()`
+1. `populate_sparse()`
+
+They have to be called appropriately in all integrations.
+
+To make this easier, this ADR proposes a new class that handles this consistently,
+and also adds functionality to inherit metadata from the referenced components.
 
 ## Decisions
 
+Create a new `mighty_complete_study()` class based on `mighty_study()`.
+It populates and resolves all information, ensuring that all metadata and components are directly available for downstream use.
+
+The new flow in the packages becomes:
+
+```
+mighty_study()
+└─> mighty_complete_study()
+    ├─> mighty::generate_adam_code()
+    └─> mighty.toolbox::generate_define_xml()
+```
+
+Add new downstream methods for both generics, and keep existing `mighty_study()` methods as wrappers:
+
+```
+generate_adam_code(<mighty_study>)
+└─> mighty_complete_study()
+    └─> generate_adam_code(<mighty_complete_study>)
+
+generate_define_xml(<mighty_study>)
+└─> mighty_complete_study()
+    └─> generate_define_xml(<mighty_complete_study>)
+```
+
+The new helper functions for components will still be exported.
+All helper functions consistently return a `mighty_study()` object.
+
 ## Consequences
+
+Downstream use in {mighty} and {mighty.toolbox} has to be updated after this feature is released.
+
+Any new special `mighty_*` components have to be added to {mighty.standards}.
 
 ### Changes to current content
 
+1. Update `populate_core()` and `populate_sparse()` to also add the component information.
+1. The `mighty_study()` object then has direct references to the special `mighty_*` components.
+
 ## Alternatives Considered
+
+### 1. Only add a new helper function to resolve components and inherit component metadata
+
+Not chosen, because all downstream integrations would then have to call this function.
+For this change alone, the amount of work is roughly the same, but with possible future
+changes this approach is not sustainable. Therefore, we use a new class and method dispatch instead.
+
+### 2. Handle supplementary data as part of the base domain specification
+
+Proposed as Option A in [mighty#95](https://github.com/NovoNordisk-OpenSource/mighty/issues/95).
+The base domain gets a flag, and columns refer to `SUPP` only.
+The SUPP-- data set is derived from the base domain (e.g. `AE` --> `SUPPAE`):
+
+```yaml
+population:
+  base:
+    - domain: AE
+      include_supp: TRUE
+
+columns:
+  - id: AETECH1
+    method: SUPP.AETECH1
+```
+
+This keeps the two-part `DOMAIN.COLUMN` notation, and with multiple base domains
+(e.g. LB and XL) one column entry can get values from both SUPPLB and SUPPXL.
+
+Not chosen, because it requires changes to `population`, makes `SUPP` a reserved domain name,
+and only supports SUPP-- data sets of the base domain. Instead, we use the explicit
+`SUPPDM.EFFICACY.QVAL` notation, which maps directly to a predecessor with a where clause
+and needs no flag on the base domain.
 
 ## Implementation Details
 
+In general, this change should be implemented in many smaller increments to ensure we
+continuously remain compatible with {mighty} and {mighty.toolbox}.
+
+Proposed implementation order:
+
+1. Update `populate_sparse()` to support component predecessor mapping.
+1. First version of `resolve_components()`.
+1. Add any new special `mighty_*` components to {mighty.standards}.
+1. First version of `mighty_complete_study()`, only implementing component metadata re-use. Note that this means {mighty} will temporarily fetch the components a second time.
+1. Implement the new method dispatch in {mighty} and {mighty.toolbox} to ensure compatibility. Combined with the above changes, this marks the initial complete implementation. The changes below are for optimization and further streamlining.
+1. Remove now-redundant logic around predecessors in {mighty}.
+
+### Component metadata retrieval
+
+The component metadata is added in the following steps:
+
+1. After `populate_sparse()`, all predecessor columns have `component.id` and (if needed) `component.with` entries.
+1. A new `resolve_components()` function ensures component tags are populated back to the `column` entries in the `mighty_study()` object:
+   1. `@origin` --> `column.origin`
+   1. `@method` --> `column.method`
+1. The rendered component object itself is stored for later re-use in {mighty}. Specifics are left to the `mighty_complete_study()` implementation.
+
+### `mighty_complete_study()`
+
+This is a new S7 class built on top of `mighty_study()`, but with all specifications explicit.
+Unlike `mighty_study()`, the specifications must now be read-only.
+
+This cannot be ensured in the underlying `<list>` parent of `mighty_study()`.
+Instead, the complete study specifications must be stored as a property in the object.
+Proposed structure with all properties as read-only:
+
+```
+<mighty_complete_study>
+@ properties :
+  $ study      : <mighty_study>  # The resolved and populated study specification
+  $ components : <list>          # Named list with all components used in the study
+  $ nodes      : <list>          # Nested list with e.g. rendered components for use in {mighty}
+```
+
+Where `@study` is built with:
+
+```r
+study |>
+  resolve_includes() |>
+  resolve_subsets() |>
+  populate_core() |>
+  populate_sparse() |>
+  resolve_components()
+```
+
+Note: The structure of `@nodes` should be made to fit into the internals of `mighty::generate_adam_code()`.
+
+### Predecessor mapping and components
+
+To ensure a good user experience, we want to support shorthand notation for simple predecessor mapping.
+Assuming our current domain is `ADSL` and the base domain is `DM`, the different predecessor types can be mapped as follows:
+
+1. Keep column from the base domain:
+   `id: MYVAR` --> `method: DM.MYVAR` --> `component.id: mighty_init_domain`
+1. Rename column from the base domain:
+   `method: DM.DMSEQ` --> `component.id: mighty_col_rename`
+1. Copy existing column into new column:
+   `method: ADSL.MYVAR` --> `component.id: mighty_col_mutate`
+1. Join predecessor from other domain:
+   `method: ADXX.VAR2` --> `component.id: mighty_col_echo`
+1. Join predecessor from supplementary SDTM data:
+   `method: SUPPDM.EFFICACY.QVAL` --> `method: SUPPDM.QVAL where SUPPDM.QNAM = "EFFICACY"` --> `component.id: mighty_merge_supp`
+1. Join predecessor from ADaM BDS data set:
+   `method: ADVS.BMIGRP.AVALC` --> `method: ADVS.AVALC where ADVS.PARAMCD = "BMIGRP"` --> `component.id: mighty_merge_param`
+
+In case 1, it might be more efficient to leave the component mapping inside {mighty}, but then
+we just need to ensure `origin` is set correctly.
+
+The first four components are already implemented in {mighty}, and the standard components exist in {mighty.standards}.
+The last two have to be written. Potentially, they can be combined into one.
+
+With this change, all components must have correct `@method` and `@origin` tags, which is not the case for the existing components.
+
 ## Testing Strategy
+
+1. Keep all tests for exported functions in downstream packages the same, ensuring a consistent user experience.
+1. Only remove internal tests when the functionality is made redundant by this new class.
+1. Continuously run integration tests against both {mighty} and {mighty.toolbox}.
 
 ## Risks
 
+Internally, {mighty} handles a lot of the logic that is now pushed forward into the component helpers.
+Depending on how large the required changes are, we may have to plan them separately from this document.
+
 ## Compliance Considerations
 
+None.
+
 ## References
+
+* [ADR: Package design and scope](adr.html)
+* [ADR: mighty.toolbox integration](adr-mighty_toolbox_integration.html)
+* [ADR: Specifying pooled specifications](adr-pooling.html)
+* [mighty.metadata milestone: 0.3.0 integration with mighty.component](https://github.com/NovoNordisk-OpenSource/mighty.metadata/milestone/4)
+* [mighty.metadata#23: Integrate component metadata](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/23)
+* [mighty.component milestone: 0.1.1 integration with mighty.metadata](https://github.com/NovoNordisk-OpenSource/mighty.component/milestone/8)
+* [mighty.standards milestone: initial release with internal components](https://github.com/NovoNordisk-OpenSource/mighty.standards/milestone/5)
+* [mighty.standards#72: supp: add supplemental qualifiers](https://github.com/NovoNordisk-OpenSource/mighty.standards/issues/72)
+* [mighty#95: Reference SUPP-- qualifiers directly from the domain specification](https://github.com/NovoNordisk-OpenSource/mighty/issues/95)

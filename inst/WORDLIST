@@ -11,6 +11,7 @@ AEENDTC
 AENDT
 AESEQ
 AESTDTC
+AETECH
 AETERM
 AGEU
 ASTDT
@@ -33,6 +34,7 @@ CodeListItem
 Codelist
 Codelists
 Cond
+DMSEQ
 EQ
 EnumeratedItem
 ExternalCodeList
@@ -62,6 +64,8 @@ Origindescription
 PARAMCD
 PHARMACOKINETIC
 Pais
+QNAM
+QVAL
 RANDFL
 README
 Req
@@ -72,7 +76,11 @@ SDTM
 SITEID
 STUDYID
 SUBJID
+SUPPAE
+SUPPDM
 SUPPDOC
+SUPPLB
+SUPPXL
 Siggaard
 Sweave
 Szymanski
