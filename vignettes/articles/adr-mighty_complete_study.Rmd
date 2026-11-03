@@ -82,7 +82,7 @@ There is no circular dependency, since {mighty.component} does not depend on {mi
 
 ### Changes to current content
 
-1. Update `populate_sparse()` to write the parsed predecessor reference to `component.id` and `component.with`. `method` is kept unchanged.
+1. Update `populate_sparse()` to write the parsed predecessor reference to `component.id` and `component.with`. `method` is rewritten to the expanded form.
 1. The `mighty_study()` object then has direct references to the special `mighty_*` components.
 1. The `populate` argument of `mighty_study()` is soft-deprecated.
 
@@ -126,7 +126,7 @@ continuously remain compatible with {mighty} and {mighty.toolbox}.
 
 Proposed implementation order:
 
-1. Update `populate_sparse()` to support component predecessor mapping. Extend the predecessor regex in `populate_sparse()` and `is_predecessor()` to accept the three-part `DOMAIN.VALUE.COLUMN` notation.
+1. Update `populate_sparse()` to support component predecessor mapping. Extend the predecessor regex in `populate_sparse()` and `is_predecessor()` to accept the three-part shorthand and the expanded `where` form.
 1. First version of `resolve_components()`.
 1. Add any new special `mighty_*` components to {mighty.standards}.
 1. First version of `mighty_complete_study()`, only implementing component metadata re-use. Note that this means {mighty} will temporarily fetch the components a second time.
@@ -146,11 +146,16 @@ The component metadata is added in the following steps:
 `resolve_components()` uses the `repos` field of `_mighty.yml` (`@mighty`) to find standard and local components.
 If `@mighty` is `NULL`, it returns the study unchanged. This supports documentation-only use.
 
+`populate_sparse()` skips component population for columns that already have a `component`.
+Metadata inheritance still runs for those columns, so the parser accepts both the shorthand and the expanded form.
+
 Fields are only filled when missing. Precedence is user > predecessor > component:
 
-1. `origin`: user, else `"Predecessor"`, else component `@origin`.
-1. `method`: user, else component `@method`.
+1. `origin`: user, else the origin set by the predecessor mapping (`"Predecessor"` or `"Derived"`), else component `@origin`.
+1. `method`: user, else the expanded predecessor reference, else component `@method`.
 1. `component`: user, else the shorthand mapping.
+
+The shorthand is a predecessor reference and is always expanded.
 
 Every helper, and the full pipeline, must give the same result when run again on its own output.
 This is needed because the `generate_*(<mighty_study>)` wrappers always call `mighty_complete_study()`,
@@ -222,7 +227,7 @@ To ensure a good user experience, we want to support shorthand notation for simp
 Assuming our current domain is `ADSL` and the base domain is `DM`, the different predecessor types can be mapped as follows:
 
 1. Keep column from the base domain:
-   `id: MYVAR` --> `component.id: mighty_init_domain` with `component.with.domain: [DM]`
+   `id: MYVAR` --> `method: DM.MYVAR` --> `component.id: mighty_init_domain`
 1. Rename column from the base domain:
    `method: DM.DMSEQ` --> `component.id: mighty_col_rename`
 1. Copy existing column into new column:
@@ -230,18 +235,20 @@ Assuming our current domain is `ADSL` and the base domain is `DM`, the different
 1. Join predecessor from other domain:
    `method: ADXX.VAR2` --> `component.id: mighty_col_echo`
 1. Join predecessor from supplementary SDTM data:
-   `method: SUPPDM.EFFICACY.QVAL` --> `component.id: mighty_merge_supp`
+   `method: SUPPDM.EFFICACY.QVAL` --> `method: SUPPDM.QVAL where QNAM="EFFICACY"` --> `component.id: mighty_merge_supp`
 1. Join predecessor from ADaM BDS data set:
-   `method: ADVS.BMIGRP.AVALC` --> `component.id: mighty_merge_param`
+   `method: ADVS.BMIGRP.AVALC` --> `method: ADVS.AVALC where PARAMCD="BMIGRP"` --> `component.id: mighty_merge_param`
 1. Join predecessor from SDTM findings data:
-   `method: VS.SYSBP.VSSTRESN` --> `component.id: mighty_merge_param`
+   `method: VS.SYSBP.VSSTRESN` --> `method: VS.VSSTRESN where VSTESTCD="SYSBP"` --> `component.id: mighty_merge_param`
 
 In case 1, a column with no `method` and no `component` is taken from the base domain(s).
 Several base domains are row-bound, and all must have the column.
-`origin` is set to `"Predecessor"` if missing.
+With one base domain, `method` is set to `DM.MYVAR` and `origin` to `"Predecessor"`.
+With several base domains (e.g. LB and XL), `method` is set to `LB.MYVAR, XL.MYVAR` and `origin` to `"Derived"`.
 
 `populate_sparse()` parses the `method` shorthand into a structured `component.with` with `domain`, `column`, and optional `filter`.
-`method` keeps the user's shorthand unchanged, so the predecessor source is available for define.xml.
+`populate_sparse()` rewrites the `method` shorthand to the expanded form used in define.xml.
+`component.with` holds the structured reference for code generation.
 Example for a column in `ADAE` (case 4):
 
 ```yaml
@@ -273,9 +280,14 @@ ADVS.BMIGRP.AVALC     -> filter PARAMCD  = BMIGRP
 VS.SYSBP.VSSTRESN     -> filter VSTESTCD = SYSBP
 ```
 
+SUPP-- references get `origin: Predecessor`. ADaM BDS and SDTM findings references get `origin: Derived`,
+since filtered references other than SUPP-- are not valid define.xml predecessors.
+
 The filter is stored in `component.with`, e.g. for SUPP--:
 
 ```yaml
+method: 'SUPPDM.QVAL where QNAM="EFFICACY"'
+origin: Predecessor
 component:
   id: mighty_merge_supp
   with:
@@ -309,6 +321,7 @@ With this change, all components must have correct `@method` and `@origin` tags,
 1. Run integration tests against {mighty} in the {mighty.metadata} CI. Run integration tests against {mighty.toolbox} in the {mighty.toolbox} CI, since it is an internal repository.
 1. Add unit tests in {mighty.metadata} for:
    1. Parsing of the two- and three-part predecessor notation, including the filter key rules.
+   1. The expanded form parses to the same `component.with` as the shorthand.
    1. Field precedence (user > predecessor > component).
    1. Each helper and `mighty_complete_study()` give the same result when run again on their own output.
    1. Read-only properties of `mighty_complete_study()`.
