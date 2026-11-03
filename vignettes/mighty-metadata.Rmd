@@ -400,9 +400,9 @@ study <- mighty_study(study_path)
 study
 ```
 
-The bundled examples do not include `_documents.yml` or `_codelists.yml`,
-hence the messages above. In that case `@documents` and `@codelists` are empty,
-while `@study` and `@mighty` are `NULL` when their file is absent.
+The bundled examples include all four study-level files. When a file is
+absent, `mighty_study()` prints a message; `@documents` and `@codelists` are
+then empty, while `@study` and `@mighty` are `NULL`.
 
 Access individual domains with `$` and study-level properties with `@`:
 
@@ -695,7 +695,8 @@ study |>
 
 Study-level documents (e.g. the SAP) are stored in `_documents.yml` and
 available as `@documents`. Each document has an `id`, `title`, `href` and a
-`doctype` of `"suppdoc"`, `"comment"` or `"method"`:
+`doctype` of `"suppdoc"`, `"comment"` or `"method"`. The bundled
+`_documents.yml` contains:
 
 ```yaml
 - id: SAP
@@ -707,6 +708,10 @@ available as `@documents`. Each document has an `id`, `title`, `href` and a
   title: Derivation Methods
   doctype: method
   href: ./docs/methods.pdf
+```
+
+```{r}
+list_documents(study)
 ```
 
 Domains and columns (including columns within parameters) reference documents
@@ -729,10 +734,10 @@ The `list_documents()`, `select_document()`, `add_document()`,
 ```{r}
 study <- study |>
   add_document(
-    id = "SAP",
-    title = "Statistical Analysis Plan",
+    id = "PROTOCOL",
+    title = "Study Protocol",
     doctype = "suppdoc",
-    href = "./docs/sap.pdf"
+    href = "./docs/protocol.pdf"
   )
 
 list_documents(study)
@@ -755,10 +760,10 @@ check_document_references(study)
 
 ## Codelists
 
-Codelists are stored in `_codelists.yml` and available as `@codelists`. Columns
-refer to a codelist by its `id` in their `codelist` field. A codelist is either
-sponsor-defined (`values`) or records changes to an external codelist, such as
-CDISC CT, through `subset`, `restore` and `extend`:
+Codelists are stored in `_codelists.yml` and available as `@codelists`. A
+codelist is either sponsor-defined (`values`) or records changes to an external
+codelist, such as CDISC CT, through `subset`, `restore` and `extend`. The
+bundled `_codelists.yml` contains one of each of the first two kinds:
 
 ```yaml
 # Sponsor-defined codelist
@@ -778,15 +783,16 @@ CDISC CT, through `subset`, `restore` and `extend`:
     - code: YEARS
   restore:
     - code: MONTHS
-
-# Add a sponsor-defined value to an extensible external codelist
-- id: LOC
-  extend:
-    - code: MY CUSTOM LOCATION
-      decode: My Custom Location
 ```
 
-A column refers to a codelist by its `id`:
+```{r}
+list_codelists(study)
+select_codelist(study, id = "SEX") |>
+  str()
+```
+
+Columns refer to a codelist by its `id` in their `codelist` field, as `SEX`
+and `AGEU` do in the bundled `adsl.yml`:
 
 ```yaml
 columns:
@@ -795,19 +801,16 @@ columns:
     codelist: SEX
 ```
 
-Codelists can also be added in R:
+Codelists can also be added in R. Here we add a sponsor-defined value to the
+extensible external `LOC` codelist:
 
 ```{r}
 study <- study |>
-  add_codelist(
-    id = "SEX",
-    label = "Sex",
-    description = "Sex of the subject",
-    datatype = "text",
-    code = c("F", "M"),
-    decode = c("Female", "Male")
-  ) |>
-  subset_codelist_values(id = "AGEU", code = "YEARS")
+  extend_codelist_values(
+    id = "LOC",
+    code = "MY CUSTOM LOCATION",
+    decode = "My Custom Location"
+  )
 
 list_codelists(study)
 ```
@@ -820,9 +823,12 @@ check_codelist_references(study)
 ```
 
 ```{r}
-study$ADSL <- study$ADSL |>
-  update_column(id = "SEX", codelist = "SEX") |>
-  update_column(id = "AGEU", codelist = "AGEU")
+study$ADVS <- study$ADVS |>
+  add_column(
+    id = "VSLOC",
+    label = "Location of Vital Signs Measurement",
+    codelist = "LOC"
+  )
 
 check_codelist_references(study)
 ```
