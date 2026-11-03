@@ -21,7 +21,8 @@ library(mighty.metadata)
 This vignette walks you through the key workflows for defining and working with
 ADaM specifications: loading and editing a single domain, assembling a
 multi-domain study, propagating metadata across domains, applying conditional
-includes, and producing flat output for downstream tooling.
+includes and row subsets, managing documents and codelists, and producing flat
+output for downstream tooling.
 
 ## The YAML Specification Format
 
@@ -609,13 +610,14 @@ create_md_values(study)
 This vignette covered the core workflows: `mighty_domain()` for single datasets,
 `mighty_study()` for collections, `populate_core()` and `populate_sparse()` for
 metadata propagation, `write_config()` for saving changes, `resolve_includes()`
-for conditional specifications, and the `create_md_*()` functions for flat
-output.
+and `resolve_subsets()` for conditional specifications, documents and
+codelists, and the `create_md_*()` functions for flat output.
 
 To learn more:
 
 - `vignette("adam-schema")` documents the domain YAML schema reference
 - `vignette("study-schema")` documents the study YAML schema reference
 - `vignette("mighty-schema")` documents the mighty YAML schema reference
+- `vignette("codelists-schema")` documents the codelists YAML schema reference
 - The [package reference](https://novonordisk-opensource.github.io/mighty.metadata/reference/index.html)
   lists all available functions
