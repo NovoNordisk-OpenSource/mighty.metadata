@@ -20,6 +20,7 @@ Aksel
 Bakalo
 BMIDER
 BMIGRP
+BRTHDTC
 CDISC
 CRAN
 Codelist
@@ -31,6 +32,7 @@ Graczyk
 Hedegaard
 Katarzyna
 Knoph
+LOCF
 MEDDRA
 MYVAR
 Moelgaard
@@ -43,6 +45,7 @@ PARAMCD
 PHARMACOKINETIC
 Pais
 RANDFL
+RFICDTC
 Roxygen
 Roxygenize
 Rscript
@@ -62,6 +65,7 @@ TRTP
 Thomsen
 USUBJID
 VISITNUM
+VSLOC
 VSSTRESN
 VSTEST
 VSTESTCD
@@ -86,6 +90,7 @@ integerish
 jsonvalidate
 jsonvalidator
 knitr
+locf
 mapequal
 mdcol
 mdparam
