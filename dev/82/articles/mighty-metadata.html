@@ -1075,7 +1075,9 @@ when a <code>"comment"</code> document is referenced without a
 (<code>values</code>) or records changes to an external codelist, such
 as CDISC CT, through <code>subset</code>, <code>restore</code> and
 <code>extend</code>. The bundled <code>_codelists.yml</code> contains
-one of each of the first two kinds:</p>
+one sponsor-defined codelist (<code>SEX</code>) and one that modifies an
+external codelist (<code>AGEU</code>, via <code>subset</code> and
+<code>restore</code>):</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># Sponsor-defined codelist</span></span>
 <span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SEX</span></span>
 <span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="at">  </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Sex</span></span>
@@ -1148,7 +1150,8 @@ referenced:</p>
 <span></span>
 <span><span class="fu"><a href="../reference/codelists.html">check_codelist_references</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span></code></pre></div>
 <p>See <code><a href="../articles/codelists-schema.html">vignette("codelists-schema")</a></code> for all operation
-groups and verbs.</p>
+groups and validation rules, and <code><a href="../reference/codelists.html">?list_codelists</a></code> for all
+codelist verbs.</p>
 </div>
 <div class="section level2">
 <h2 id="creating-flat-metadata-tables">Creating Flat Metadata Tables<a class="anchor" aria-label="anchor" href="#creating-flat-metadata-tables"></a>

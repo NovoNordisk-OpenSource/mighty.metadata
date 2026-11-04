@@ -921,8 +921,9 @@ check_document_references(study)
 Codelists are stored in `_codelists.yml` and available as `@codelists`.
 A codelist is either sponsor-defined (`values`) or records changes to an
 external codelist, such as CDISC CT, through `subset`, `restore` and
-`extend`. The bundled `_codelists.yml` contains one of each of the first
-two kinds:
+`extend`. The bundled `_codelists.yml` contains one sponsor-defined
+codelist (`SEX`) and one that modifies an external codelist (`AGEU`, via
+`subset` and `restore`):
 
 ``` yaml
 # Sponsor-defined codelist
@@ -1017,7 +1018,9 @@ check_codelist_references(study)
 
 See
 [`vignette("codelists-schema")`](https://novonordisk-opensource.github.io/mighty.metadata/articles/codelists-schema.md)
-for all operation groups and verbs.
+for all operation groups and validation rules, and
+[`?list_codelists`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
+for all codelist verbs.
 
 ## Creating Flat Metadata Tables
 
