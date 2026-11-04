@@ -8,7 +8,7 @@
 write_config(x, path = NULL)
 
 ## S7 method for class <mighty.metadata::mighty_study>
-write_config(x, path = NULL)
+\special{write_config(x, path = NULL)}
 }
 \arguments{
 \item{x}{A \link{mighty_config}, \link{study_config}, or \link{mighty_study} object.}

@@ -4,7 +4,7 @@
 \alias{mighty.metadata-options-params}
 \title{Internal parameters for reuse in functions}
 \arguments{
-\item{verbosity_level}{Verbosity level for functions in mighty.metadata. See \link[zephyr:verbosity_level]{zephyr::verbosity_level} for details.. Default: \code{NA_character_}.}
+\item{verbosity_level}{Verbosity level for functions in mighty.metadata. See \link[zephyr:verbosity_level]{zephyr::verbosity_level} for details. Default: \code{NA_character_}.}
 }
 \description{
 Internal parameters for reuse in functions

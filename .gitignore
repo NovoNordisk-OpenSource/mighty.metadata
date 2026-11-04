@@ -8,3 +8,6 @@ megalinter-reports/
 .mega-linter-r-only.yml
 /doc/
 /Meta/
+
+# CRAN submission
+CRAN-SUBMISSION

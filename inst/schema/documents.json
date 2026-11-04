@@ -24,23 +24,14 @@
         "doctype": {
           "description": "Type of document referenced in define.xml",
           "type": "string",
-          "enum": [
-            "suppdoc",
-            "comment",
-            "method"
-          ]
+          "enum": ["suppdoc", "comment", "method"]
         },
         "href": {
           "description": "Relative or absolute path to the document",
           "type": "string"
         }
       },
-      "required": [
-        "id",
-        "title",
-        "doctype",
-        "href"
-      ],
+      "required": ["id", "title", "doctype", "href"],
       "additionalProperties": false
     }
   }

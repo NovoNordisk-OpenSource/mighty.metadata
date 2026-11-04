@@ -258,7 +258,9 @@ test_that("study_config errors when standards is not an array of objects", {
 
 test_that("study_config errors when terminology is not an array of objects", {
   expect_error(
-    study_config(.data = list(study_id = "a", terminology = list("MedDRA"))),
+    study_config(
+      .data = list(study_id = "a", terminology = list("MedDRA", "WHODrug"))
+    ),
     regexp = "must be object"
   )
 })

@@ -124,7 +124,7 @@ S7::method(remove_documents, mighty_documents) <- function(x, id) {
 #' @noRd
 S7::method(remove_documents, mighty_study) <- function(x, id) {
   x@documents <- remove_documents(x@documents, id)
-  validate(x)
+  x
 }
 
 #' @rdname documents
@@ -175,7 +175,7 @@ S7::method(add_document, mighty_study) <- function(
     href = href,
     .pos = .pos
   )
-  validate(x)
+  x
 }
 
 #' @rdname documents
@@ -197,7 +197,7 @@ S7::method(update_document, mighty_documents) <- function(x, id, ...) {
 #' @noRd
 S7::method(update_document, mighty_study) <- function(x, id, ...) {
   x@documents <- update_document(x@documents, id, ...)
-  validate(x)
+  x
 }
 
 
