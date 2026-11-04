@@ -137,269 +137,26 @@ subject-level dataset like ADSL, which has no parameters or rows:</p>
 <span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="at">    </span><span class="fu">method</span><span class="kw">:</span><span class="at"> DM.USUBJID</span></span>
 <span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="at">    </span><span class="fu">core</span><span class="kw">:</span><span class="at"> Req</span></span>
 <span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">  # ... more columns ...</span></span></code></pre></div>
-<p>A domain file is made up of three parts, described in turn below:
-domain-level fields (<code>id</code>, <code>label</code>,
-<code>class</code>, <code>structure</code>, <code>keys</code>), the
-optional <code>population</code> block, and the <code>columns</code>
-list.</p>
-<div class="section level3">
-<h3 id="domain-level-fields">Domain-level fields<a class="anchor" aria-label="anchor" href="#domain-level-fields"></a>
-</h3>
-<table class="table">
-<colgroup>
-<col width="37%">
-<col width="27%">
-<col width="35%">
-</colgroup>
-<thead><tr class="header">
-<th>Field</th>
-<th>Required</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>id</code></td>
-<td>yes</td>
-<td>Dataset name, uppercase (e.g. <code>ADSL</code>)</td>
-</tr>
-<tr class="even">
-<td><code>label</code></td>
-<td>yes</td>
-<td>Dataset label</td>
-</tr>
-<tr class="odd">
-<td><code>class</code></td>
-<td>yes</td>
-<td>
-<code>SUBJECT LEVEL ANALYSIS DATASET</code>,
-<code>BASIC DATA STRUCTURE</code>,
-<code>OCCURRENCE DATA STRUCTURE</code> or <code>ADAM OTHER</code>
-</td>
-</tr>
-<tr class="even">
-<td><code>structure</code></td>
-<td>yes</td>
-<td>Description of one record</td>
-</tr>
-<tr class="odd">
-<td><code>keys</code></td>
-<td>yes</td>
-<td>One key or a list of unique keys</td>
-</tr>
-<tr class="even">
-<td><code>columns</code></td>
-<td>yes</td>
-<td>List of columns</td>
-</tr>
-<tr class="odd">
-<td><code>subclass</code></td>
-<td>no</td>
-<td>E.g. <code>TIME-TO-EVENT</code>, <code>ADVERSE EVENT</code>
-</td>
-</tr>
-<tr class="even">
-<td><code>population</code></td>
-<td>no</td>
-<td>Source domains and filters used by the mighty code generator</td>
-</tr>
-<tr class="odd">
-<td><code>parameters</code></td>
-<td>no</td>
-<td>BDS parameters</td>
-</tr>
-<tr class="even">
-<td><code>rows</code></td>
-<td>no</td>
-<td>Row-level actions</td>
-</tr>
-<tr class="odd">
-<td><code>usecore</code></td>
-<td>no</td>
-<td>Receive ADSL core variables (see <code><a href="../reference/populate_core.html">populate_core()</a></code>)</td>
-</tr>
-<tr class="even">
-<td><code>include</code></td>
-<td>no</td>
-<td>Conditional inclusion (see <a href="#conditional-metadata">Conditional Metadata</a>)</td>
-</tr>
-<tr class="odd">
-<td>
-<code>comment</code>, <code>documents</code>
-</td>
-<td>no</td>
-<td>Free-text comment and document references</td>
-</tr>
-</tbody>
-</table>
-<p>All <code>id</code>s (domains, columns, parameters, rows) must be
-uppercase and match <code>^[A-Z][A-Z0-9_]*$</code>. Unknown fields are
-not allowed in domains, columns, parameters, rows or
-<code>population</code> entries.</p>
-</div>
-<div class="section level3">
-<h3 id="population">Population<a class="anchor" aria-label="anchor" href="#population"></a>
-</h3>
-<p>The optional <code>population</code> block declares which source
-domains supply raw data and how the starting population is restricted.
-If present, it must contain <code>base</code>; <code>global</code> is
-optional:</p>
-<table class="table">
-<colgroup>
-<col width="17%">
-<col width="58%">
-<col width="23%">
-</colgroup>
-<thead><tr class="header">
-<th>Field</th>
-<th>Required fields per entry</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>base</code></td>
-<td>
-<code>domain</code>, <code>depends</code>, <code>filter</code>
-</td>
-<td>Source domains, each with its own filter</td>
-</tr>
-<tr class="even">
-<td><code>global</code></td>
-<td>
-<code>filter</code>, <code>depends</code>
-</td>
-<td>Filters applied after combining the base datasets</td>
-</tr>
-</tbody>
-</table>
-<p>In the ADSL example above, records are taken from <code>DM</code>
-(where <code>USUBJID</code> is not empty) and then restricted to
-randomized subjects (<code>RANDFL == "Y"</code>). The mighty code
-generator reads this block to build the initial population step;
-mighty.metadata stores it but does not execute it.</p>
-</div>
-<div class="section level3">
-<h3 id="column-fields">Column fields<a class="anchor" aria-label="anchor" href="#column-fields"></a>
-</h3>
-<p>Only <code>id</code> is required. The most common fields are:</p>
-<table class="table">
-<colgroup>
-<col width="50%">
-<col width="50%">
-</colgroup>
-<thead><tr class="header">
-<th>Field</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>label</code></td>
-<td>Column label</td>
-</tr>
-<tr class="even">
-<td><code>method</code></td>
-<td>How the column is derived. <code>DOMAIN.COLUMN</code>
-(e.g. <code>DM.STUDYID</code>) marks a predecessor</td>
-</tr>
-<tr class="odd">
-<td><code>origin</code></td>
-<td>
-<code>Assigned</code>, <code>Collected</code>, <code>Derived</code>,
-<code>Not Available</code>, <code>Other</code>, <code>Predecessor</code>
-or <code>Protocol</code>
-</td>
-</tr>
-<tr class="even">
-<td><code>core</code></td>
-<td>ADaM conformance: <code>Req</code>, <code>Cond</code> or
-<code>Perm</code>
-</td>
-</tr>
-<tr class="odd">
-<td><code>codelist</code></td>
-<td>Id of a codelist in <code>_codelists.yml</code>
-</td>
-</tr>
-<tr class="even">
-<td><code>format</code></td>
-<td>
-<code>type</code> and <code>length</code> (both required) and
-optional SAS <code>display</code> format</td>
-</tr>
-<tr class="odd">
-<td><code>is_core</code></td>
-<td>In ADSL: propagate the column to other domains</td>
-</tr>
-<tr class="even">
-<td><code>depends</code></td>
-<td>Dependencies: <code>COLUMN</code>, <code>DOMAIN.COLUMN</code>,
-<code>rows.ID</code> or <code>parameters.ID</code>
-</td>
-</tr>
-<tr class="odd">
-<td><code>component</code></td>
-<td>mighty component (<code>id</code> and optional <code>with</code>
-arguments) used for the derivation</td>
-</tr>
-<tr class="even">
-<td>
-<code>include</code>, <code>comment</code>,
-<code>documents</code>
-</td>
-<td>Conditional inclusion, comment and document references</td>
-</tr>
-</tbody>
-</table>
-<p>A predecessor column (<code>method: DM.STUDYID</code>) can inherit
-its metadata from the referenced column via
-<code><a href="../reference/populate_sparse.html">populate_sparse()</a></code>, provided the referenced domain is part
-of the study.</p>
-<p>For example, a fully specified derived column:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AGE</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="at">  </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Age</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="at">  </span><span class="fu">origin</span><span class="kw">:</span><span class="at"> Derived</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="at">  </span><span class="fu">core</span><span class="kw">:</span><span class="at"> Req</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="at">  </span><span class="fu">method</span><span class="kw">:</span><span class="at"> Age at informed consent</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="at">  </span><span class="fu">format</span><span class="kw">:</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="at">    </span><span class="fu">type</span><span class="kw">:</span><span class="at"> integer</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="at">    </span><span class="fu">length</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="at">  </span><span class="fu">depends</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">DM.BRTHDTC</span><span class="kw">,</span><span class="at"> DM.RFICDTC</span><span class="kw">]</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="bds-domains">BDS domains<a class="anchor" aria-label="anchor" href="#bds-domains"></a>
-</h3>
-<p>A domain can also have <code>parameters</code> and <code>rows</code>;
-they are typically used in BDS domains like ADVS. A parameter overrides
-column metadata in <code>columns</code> for its records
-(e.g. <code>AVAL</code> for <code>BMI</code>); a row describes an action
-that adds or modifies records (e.g. baseline, LOCF):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> ADVS</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">label</span><span class="kw">:</span><span class="at"> Vital Signs Analysis Dataset</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">class</span><span class="kw">:</span><span class="at"> BASIC DATA STRUCTURE</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">structure</span><span class="kw">:</span><span class="at"> One record per vital sign parameter, per visit, per subject</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">keys</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">USUBJID</span><span class="kw">,</span><span class="at"> PARAMCD</span><span class="kw">,</span><span class="at"> AVISITN</span><span class="kw">]</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">  # ... columns ...</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="fu">parameters</span><span class="kw">:</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> BMI</span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Body Mass Index (kg/m^2)</span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AVAL</span></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="at">        </span><span class="fu">method</span><span class="kw">:</span><span class="at"> Derived from height and weight</span></span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a></span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="fu">rows</span><span class="kw">:</span></span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> BASELINE</span></span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="at">    </span><span class="fu">method</span><span class="kw">:</span><span class="at"> Add baseline visit as a new row</span></span></code></pre></div>
-<p>Parameters require only <code>id</code> and may also have
-<code>label</code>, <code>columns</code>, <code>component</code>,
-<code>depends</code> and <code>include</code>. Rows require only
-<code>id</code> and may also have <code>method</code>,
-<code>component</code>, <code>depends</code>, <code>subset</code> and
-<code>include</code>.</p>
-<p>See <code><a href="../articles/adam-schema.html">vignette("adam-schema")</a></code> for the full schema
-reference.</p>
-</div>
+<p>Every domain needs <code>id</code>, <code>label</code>,
+<code>class</code>, <code>structure</code>, <code>keys</code> and
+<code>columns</code>; for columns only <code>id</code> is required. The
+optional <code>population</code> block declares the source domains and
+filters used by the mighty code generator.</p>
+<p>BDS domains like ADVS can also have <code>parameters</code>, which
+override column metadata for their records, and <code>rows</code>, which
+describe actions that add or modify records (e.g. baseline):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">parameters</span><span class="kw">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> BMI</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Body Mass Index (kg/m^2)</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AVAL</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="at">        </span><span class="fu">method</span><span class="kw">:</span><span class="at"> Derived from height and weight</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">rows</span><span class="kw">:</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> BASELINE</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="at">    </span><span class="fu">method</span><span class="kw">:</span><span class="at"> Add baseline visit as a new row</span></span></code></pre></div>
+<p>See <code><a href="../articles/adam-schema.html">vignette("adam-schema")</a></code> for all fields and allowed
+values.</p>
 </div>
 <div class="section level2">
 <h2 id="working-with-a-single-domain">Working with a Single Domain<a class="anchor" aria-label="anchor" href="#working-with-a-single-domain"></a>
@@ -466,7 +223,7 @@ remove multiple items at once.</p>
 <p>Load a domain specification from a YAML file with
 <code><a href="../reference/mighty_domain.html">mighty_domain()</a></code>. The file is validated against the ADaM
 JSON schema on load.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, <span class="st">"advs.yml"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span></span>
 <span><span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_domain.html">mighty_domain</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span>
 <span><span class="va">advs</span></span>
@@ -477,7 +234,7 @@ JSON schema on load.</p>
 <p>A domain can also be created from a list in memory with
 <code>.data</code>, e.g. when specifications are generated
 programmatically:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mighty_domain.html">mighty_domain</a></span><span class="op">(</span></span>
 <span>  .data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"ADXX"</span>,</span>
@@ -494,12 +251,12 @@ programmatically:</p>
 <span><span class="co">#&gt; Keys: USUBJID</span></span></code></pre></div>
 <p>A <code>mighty_domain</code> is a list, so any field can be read with
 <code>$</code> or <code>[[</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">advs</span><span class="op">$</span><span class="va">keys</span></span>
 <span><span class="co">#&gt; [1] "USUBJID" "PARAMCD" "AVISITN"</span></span></code></pre></div>
 <p>Use <code>list_*()</code> functions to see what the specification
 contains:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/columns.html">list_columns</a></span><span class="op">(</span><span class="va">advs</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "STUDYID"  "USUBJID"  "SAFFL"    "TRTP"     "VISITNUM" "AVISITN" </span></span>
 <span><span class="co">#&gt;  [7] "AVISIT"   "PARAMCD"  "PARAM"    "AVAL"     "AVALC"</span></span>
@@ -508,7 +265,7 @@ contains:</p>
 <span><span class="fu"><a href="../reference/rows.html">list_rows</a></span><span class="op">(</span><span class="va">advs</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "BASELINE"</span></span></code></pre></div>
 <p>Drill into a specific column with <code><a href="../reference/columns.html">select_column()</a></code>:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/columns.html">select_column</a></span><span class="op">(</span><span class="va">advs</span>, id <span class="op">=</span> <span class="st">"AVAL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 4</span></span>
@@ -524,7 +281,7 @@ contains:</p>
 schema. All column functions return the modified domain, so they compose
 naturally into a pipe chain. Here we add an actual treatment column
 sourced from ADSL, update a label, and drop an unused column:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">advs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_domain.html">mighty_domain</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/columns.html">add_column</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"TRTA"</span>,</span>
@@ -539,27 +296,27 @@ sourced from ADSL, update a label, and drop an unused column:</p>
 <span><span class="fu"><a href="../reference/columns.html">list_columns</a></span><span class="op">(</span><span class="va">advs</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "STUDYID"  "USUBJID"  "PARAM"    "SAFFL"    "TRTP"     "TRTA"    </span></span>
 <span><span class="co">#&gt;  [7] "VISITNUM" "AVISITN"  "AVISIT"   "PARAMCD"  "AVAL"</span></span></code></pre></div>
-<p>Any column field from the table above can be passed to
-<code><a href="../reference/columns.html">add_column()</a></code> and <code><a href="../reference/columns.html">update_column()</a></code> as a named
-argument. <code>.pos</code> sets the position; by default new items are
-appended at the end. <code><a href="../reference/columns.html">update_column()</a></code> only changes the given
-fields and keeps the column’s position.</p>
+<p>Any column field (see <code><a href="../articles/adam-schema.html">vignette("adam-schema")</a></code>) can be
+passed to <code><a href="../reference/columns.html">add_column()</a></code> and <code><a href="../reference/columns.html">update_column()</a></code> as
+a named argument. <code>.pos</code> sets the position; by default new
+items are appended at the end. <code><a href="../reference/columns.html">update_column()</a></code> only changes
+the given fields and keeps the column’s position.</p>
 <div class="section level4">
 <h4 id="schema-validation">Schema Validation<a class="anchor" aria-label="anchor" href="#schema-validation"></a>
 </h4>
 <p>Validation runs on every modification and on initial load. You can
 also call <code><a href="https://rconsortium.github.io/S7/reference/validate.html" class="external-link">validate()</a></code> explicitly at any time:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rconsortium.github.io/S7/reference/validate.html" class="external-link">validate</a></span><span class="op">(</span><span class="va">advs</span><span class="op">)</span></span></code></pre></div>
 <p>If a modification violates the schema, you get an immediate error.
 For example, adding a column with a duplicate ID fails:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">advs</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/columns.html">add_column</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"AVAL"</span>, label <span class="op">=</span> <span class="st">"Duplicate"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_unique_ids()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Duplicate `id` entries found:</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> columns.id: AVAL</span></span></code></pre></div>
 <p>Values outside the controlled terminology are rejected as well:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">advs</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/columns.html">update_column</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"AVAL"</span>, origin <span class="op">=</span> <span class="st">"Calculated"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `validate_S7schema()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> <span style="color: #00BB00;">/columns/11/origin</span> must be equal to one of the allowed values</span></span>
@@ -575,7 +332,7 @@ For example, adding a column with a duplicate ID fails:</p>
 <code>columns</code> argument in <code><a href="../reference/parameters.html">add_parameter()</a></code>, which
 accepts a nested list of column overrides specific to that
 parameter:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/parameters.html">select_parameter</a></span><span class="op">(</span><span class="va">advs</span>, id <span class="op">=</span> <span class="st">"BMI"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 3</span></span>
@@ -585,7 +342,7 @@ parameter:</p>
 <span><span class="co">#&gt;   ..$ :List of 2</span></span>
 <span><span class="co">#&gt;   .. ..$ id    : chr "AVAL"</span></span>
 <span><span class="co">#&gt;   .. ..$ method: chr "Derived from height and weight"</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">advs</span> <span class="op">&lt;-</span> <span class="va">advs</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/parameters.html">add_parameter</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"WSTCIR"</span>,</span>
@@ -598,7 +355,7 @@ parameter:</p>
 <span><span class="fu"><a href="../reference/parameters.html">list_parameters</a></span><span class="op">(</span><span class="va">advs</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "BMI"    "BMIGRP" "WSTCIR"</span></span></code></pre></div>
 <p>Update and remove work as expected:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">advs</span> <span class="op">&lt;-</span> <span class="va">advs</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/parameters.html">update_parameter</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"WSTCIR"</span>, label <span class="op">=</span> <span class="st">"Waist Circumference"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/parameters.html">remove_parameters</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"BMIGRP"</span><span class="op">)</span></span>
@@ -611,7 +368,7 @@ parameter:</p>
 </h3>
 <p>Rows follow the same pattern. Inspect a row with
 <code><a href="../reference/rows.html">select_row()</a></code>:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rows.html">select_row</a></span><span class="op">(</span><span class="va">advs</span>, id <span class="op">=</span> <span class="st">"BASELINE"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 2</span></span>
@@ -619,7 +376,7 @@ parameter:</p>
 <span><span class="co">#&gt;  $ method: chr "Add baseline visit as a new row"</span></span></code></pre></div>
 <p>Add a row action that uses a mighty component, update it and change
 its position:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">advs</span> <span class="op">&lt;-</span> <span class="va">advs</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/rows.html">add_row</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"LOCF"</span>,</span>
@@ -638,7 +395,7 @@ its position:</p>
 </h3>
 <p>Write the modified domain back to YAML with
 <code><a href="../reference/write_config.html">write_config()</a></code>:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".yml"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/write_config.html">write_config</a></span><span class="op">(</span><span class="va">advs</span>, path <span class="op">=</span> <span class="va">out</span><span class="op">)</span></span></code></pre></div>
 <p>The written file can be loaded back with
@@ -691,7 +448,7 @@ contain four optional study-level files:</p>
 <p>All other YAML files are loaded as domains and their file names must
 start with <code>ad</code> or <code>md</code> (case-insensitive); any
 other name is an error.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span></span>
 <span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span><span class="op">)</span></span>
 <span><span class="va">study</span></span>
@@ -710,7 +467,7 @@ while <code>@study</code> and <code>@mighty</code> are
 <code>NULL</code>.</p>
 <p>Access individual domains with <code>$</code> and study-level
 properties with <code>@</code>:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "ADAE" "ADSL" "ADVS"</span></span>
 <span><span class="va">study</span><span class="op">@</span><span class="va">study</span><span class="op">$</span><span class="va">study_id</span></span>
@@ -718,51 +475,18 @@ properties with <code>@</code>:</p>
 <span><span class="va">study</span><span class="op">@</span><span class="va">mighty</span><span class="op">$</span><span class="va">repos</span></span>
 <span><span class="co">#&gt; [1] "NovoNordisk-OpenSource/mighty.standards/components@main"</span></span>
 <span><span class="co">#&gt; [2] "."</span></span></code></pre></div>
-<p>The <code>_study.yml</code> file provides the <code>study_id</code>,
-and optionally the <code>standards</code> and <code>terminology</code>
-(controlled terminologies and dictionaries) applied in the study. Each
-entry requires an <code>id</code> and a <code>version</code>:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">study_id</span><span class="kw">:</span><span class="at"> example_study</span></span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">standards</span><span class="kw">:</span></span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> ADaM-IG</span></span>
-<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="at">    </span><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="st">'1.1'</span></span>
-<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a><span class="fu">terminology</span><span class="kw">:</span></span>
-<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> ADAM</span></span>
-<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="at">    </span><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="st">'2025-08-06'</span></span>
-<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> MedDRA</span></span>
-<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a><span class="at">    </span><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="st">'22.1'</span></span>
-<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> WHODrug</span></span>
-<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a><span class="at">    </span><span class="fu">version</span><span class="kw">:</span><span class="at"> 2023 JAN</span></span></code></pre></div>
-<p><code>version</code> must be a string, so quote values that look like
-numbers or dates (<code>'1.1'</code>, not <code>1.1</code>). Only the
-structure is validated; whether a version exists is left to consuming
-packages. See <code><a href="../articles/study-schema.html">vignette("study-schema")</a></code>.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">study</span><span class="op">@</span><span class="va">study</span><span class="op">$</span><span class="va">standards</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_chr</a></span><span class="op">(</span><span class="st">"id"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "ADaM-IG"</span></span></code></pre></div>
-<p>The <code>_mighty.yml</code> file configures the mighty framework.
-Both fields are required: <code>external_data</code> lists the source
-(e.g. SDTM) domains with their keys, and <code>repos</code> lists the
-repositories where mighty components are found, as local paths or
-<code>owner/repo/subdir@ref</code> strings:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">external_data</span><span class="kw">:</span></span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> DM</span></span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="at">    </span><span class="fu">keys</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">STUDYID</span><span class="kw">,</span><span class="at"> USUBJID</span><span class="kw">]</span></span>
-<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> VS</span></span>
-<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="at">    </span><span class="fu">keys</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">STUDYID</span><span class="kw">,</span><span class="at"> USUBJID</span><span class="kw">]</span></span>
-<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a></span>
-<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a><span class="fu">repos</span><span class="kw">:</span></span>
-<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">"NovoNordisk-OpenSource/mighty.standards/components@main"</span></span>
-<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="st">"."</span></span></code></pre></div>
-<p>See <code><a href="../articles/mighty-schema.html">vignette("mighty-schema")</a></code> for details.</p>
+<p><code>_study.yml</code> holds the <code>study_id</code> and
+optionally the <code>standards</code> and <code>terminology</code> used
+in the study. <code>_mighty.yml</code> lists the source domains
+(<code>external_data</code>) and the repositories (<code>repos</code>)
+where mighty components are found. See
+<code><a href="../articles/study-schema.html">vignette("study-schema")</a></code> and
+<code><a href="../articles/mighty-schema.html">vignette("mighty-schema")</a></code> for their structure.</p>
 <p>Loading messages, such as the ones printed for missing study-level
 files, can be silenced with the
 <code>mighty.metadata.verbosity_level</code> option (see
 <code><a href="../reference/mighty.metadata-options.html">?"mighty.metadata-options"</a></code>):</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">withr</span><span class="fu">::</span><span class="fu"><a href="https://withr.r-lib.org/reference/with_options.html" class="external-link">with_options</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mighty.metadata.verbosity_level <span class="op">=</span> <span class="st">"quiet"</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span><span class="op">)</span></span>
@@ -777,7 +501,7 @@ files, can be silenced with the
 <span><span class="co">#&gt; $ ADVS: <span style="color: #0000BB;">&lt;mighty.metadata::mighty_domain&gt;</span></span></span></code></pre></div>
 <p><code><a href="../reference/filter_domains.html">filter_domains()</a></code> keeps only domains whose names start
 with given prefixes, e.g. to drop <code>MD*</code> domains:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/filter_domains.html">filter_domains</a></span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"AD"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -809,18 +533,18 @@ ADSL columns to the end of each consumer domain as predecessor columns
 already has a column with the same name, and only ADSL may mark columns
 with <code>is_core</code>.</p>
 <p>In YAML this looks like:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># adsl.yml</span></span>
-<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
-<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SEX</span></span>
-<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Sex</span></span>
-<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a><span class="at">    </span><span class="fu">is_core</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a><span class="co"># adae.yml</span></span>
-<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> ADAE</span></span>
-<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a><span class="fu">usecore</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># adsl.yml</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SEX</span></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Sex</span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="at">    </span><span class="fu">is_core</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="co"># adae.yml</span></span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> ADAE</span></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a><span class="fu">usecore</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div>
 <p>The bundled examples do not include these fields, so we add them here
 to demonstrate the workflow:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span><span class="op">$</span><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">study</span><span class="op">$</span><span class="va">ADSL</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/columns.html">update_column</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"SEX"</span>, is_core <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/columns.html">update_column</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"RACE"</span>, is_core <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -858,7 +582,7 @@ are never copied.</li>
 <code>DM</code>), only <code>origin</code> is set. If the domain exists
 but the column does not, it is an error.</li>
 </ul>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Before: SAFFL in ADVS references ADSL.SAFFL</span></span>
 <span><span class="fu"><a href="../reference/columns.html">select_column</a></span><span class="op">(</span><span class="va">study</span><span class="op">$</span><span class="va">ADVS</span>, id <span class="op">=</span> <span class="st">"SAFFL"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -867,7 +591,7 @@ but the column does not, it is an error.</li>
 <span><span class="co">#&gt;  $ label : chr "Safety Population Flag"</span></span>
 <span><span class="co">#&gt;  $ method: chr "ADSL.SAFFL"</span></span>
 <span><span class="co">#&gt;  $ core  : chr "Req"</span></span></code></pre></div>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="va">study</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/populate_sparse.html">populate_sparse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># After: origin set to Predecessor</span></span>
@@ -884,7 +608,7 @@ but the column does not, it is an error.</li>
 <h3 id="the-complete-study-pipeline">The Complete Study Pipeline<a class="anchor" aria-label="anchor" href="#the-complete-study-pipeline"></a>
 </h3>
 <p>Here is the full pipeline in one block:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Mark ADSL core variables</span></span>
@@ -904,7 +628,7 @@ but the column does not, it is an error.</li>
 call. Passing <code>populate = TRUE</code> is equivalent to calling
 <code><a href="../reference/populate_core.html">populate_core()</a></code> then <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code> after
 loading:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span>, populate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -915,7 +639,7 @@ loading:</p>
 <code>@study</code> and <code>@mighty</code> are set, and
 <code>_documents.yml</code> and <code>_codelists.yml</code> when
 <code>@documents</code> and <code>@codelists</code> are not empty:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/write_config.html">write_config</a></span><span class="op">(</span><span class="va">study</span>, path <span class="op">=</span> <span class="va">out</span><span class="op">)</span></span>
@@ -935,15 +659,15 @@ loading:</p>
 <code><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue_data()</a></code>) against the study’s <code>@study</code>
 values. <code>include</code> can also be a plain <code>true</code> or
 <code>false</code>:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
-<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> STUDYID</span></span>
-<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Study Identifier</span></span>
-<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a><span class="at">    </span><span class="fu">include</span><span class="kw">:</span><span class="at"> </span><span class="st">"{study_id == 'example_study'}"</span></span>
-<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SITEID</span></span>
-<span id="cb34-6"><a href="#cb34-6" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Study Site Identifier</span></span>
-<span id="cb34-7"><a href="#cb34-7" tabindex="-1"></a><span class="at">    </span><span class="fu">include</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> STUDYID</span></span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Study Identifier</span></span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="at">    </span><span class="fu">include</span><span class="kw">:</span><span class="at"> </span><span class="st">"{study_id == 'example_study'}"</span></span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SITEID</span></span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Study Site Identifier</span></span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a><span class="at">    </span><span class="fu">include</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code></pre></div>
 <p>The same condition set in R:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">study</span><span class="op">$</span><span class="va">ADVS</span> <span class="op">&lt;-</span> <span class="va">study</span><span class="op">$</span><span class="va">ADVS</span> <span class="op">|&gt;</span></span>
@@ -953,13 +677,13 @@ values. <code>include</code> can also be a plain <code>true</code> or
 <span>  <span class="op">)</span></span></code></pre></div>
 <p>When <code>study_id</code> in <code>@study</code> matches, the
 condition is <code>TRUE</code> and the column is kept:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resolved</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/resolve_includes.html">resolve_includes</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/columns.html">list_columns</a></span><span class="op">(</span><span class="va">resolved</span><span class="op">$</span><span class="va">ADVS</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "STUDYID"  "USUBJID"  "SAFFL"    "TRTP"     "VISITNUM" "AVISITN" </span></span>
 <span><span class="co">#&gt;  [7] "AVISIT"   "PARAMCD"  "PARAM"    "AVAL"     "AVALC"</span></span></code></pre></div>
 <p>Override with a different value and the column is removed:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resolved</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/resolve_includes.html">resolve_includes</a></span><span class="op">(</span><span class="va">study</span>, info <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>study_id <span class="op">=</span> <span class="st">"other"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/columns.html">list_columns</a></span><span class="op">(</span><span class="va">resolved</span><span class="op">$</span><span class="va">ADVS</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "USUBJID"  "SAFFL"    "TRTP"     "VISITNUM" "AVISITN"  "AVISIT"  </span></span>
@@ -973,40 +697,11 @@ condition is <code>FALSE</code> is removed from the study.
 <h3 id="row-subsets">Row Subsets<a class="anchor" aria-label="anchor" href="#row-subsets"></a>
 </h3>
 <p>A row action can be restricted to a subset of the source rows with
-the <code>subset</code> field. The row must have a
-<code>component</code> with a <code>with.domain</code> entry.
-<code><a href="../reference/resolve_subsets.html">resolve_subsets()</a></code> folds the subset into
-<code>component.with.domain</code> as a <code>.mighty_subset()</code>
-marker call, which <code>mighty.component</code> (&gt;= 0.1.0.9003)
-expands when rendering code:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="fu">rows</span><span class="kw">:</span></span>
-<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> TRTEMFL_STUDY1</span></span>
-<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="at">    </span><span class="fu">subset</span><span class="kw">:</span><span class="at"> STUDYID == 'STUDY1'</span></span>
-<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a><span class="at">    </span><span class="fu">component</span><span class="kw">:</span></span>
-<span id="cb38-5"><a href="#cb38-5" tabindex="-1"></a><span class="at">      </span><span class="fu">id</span><span class="kw">:</span><span class="at"> STUDY1_COMPONENT</span></span>
-<span id="cb38-6"><a href="#cb38-6" tabindex="-1"></a><span class="at">      </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb38-7"><a href="#cb38-7" tabindex="-1"></a><span class="at">        </span><span class="fu">domain</span><span class="kw">:</span><span class="at"> ADAE</span></span></code></pre></div>
-<p>The same row added in R:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">study</span><span class="op">$</span><span class="va">ADAE</span> <span class="op">&lt;-</span> <span class="va">study</span><span class="op">$</span><span class="va">ADAE</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/rows.html">add_row</a></span><span class="op">(</span></span>
-<span>    id <span class="op">=</span> <span class="st">"TRTEMFL_STUDY1"</span>,</span>
-<span>    component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"STUDY1_COMPONENT"</span>, with <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>domain <span class="op">=</span> <span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    subset <span class="op">=</span> <span class="st">"STUDYID == 'STUDY1'"</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="va">study</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/resolve_subsets.html">resolve_subsets</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/Extract.html" class="external-link">getElement</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/rows.html">select_row</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"TRTEMFL_STUDY1"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Resolving row subsets requires <span style="color: #0000BB;">mighty.component</span> (&gt;= 0.1.0.9003)</span></span>
-<span><span class="co">#&gt; List of 2</span></span>
-<span><span class="co">#&gt;  $ id       : chr "TRTEMFL_STUDY1"</span></span>
-<span><span class="co">#&gt;  $ component:List of 2</span></span>
-<span><span class="co">#&gt;   ..$ id  : chr "STUDY1_COMPONENT"</span></span>
-<span><span class="co">#&gt;   ..$ with:List of 1</span></span>
-<span><span class="co">#&gt;   .. ..$ domain: chr ".mighty_subset(ADAE, \"STUDYID == 'STUDY1'\")"</span></span></code></pre></div>
+the <code>subset</code> field
+(e.g. <code>subset: STUDYID == 'STUDY1'</code>).
+<code><a href="../reference/resolve_subsets.html">resolve_subsets()</a></code> folds the subset into the row’s mighty
+component so that the generated code only uses those rows. See
+<code><a href="../reference/resolve_subsets.html">?resolve_subsets</a></code> for details and requirements.</p>
 </div>
 </div>
 <div class="section level2">
@@ -1018,33 +713,33 @@ Each document has an <code>id</code>, <code>title</code>,
 <code>href</code> and a <code>doctype</code> of <code>"suppdoc"</code>,
 <code>"comment"</code> or <code>"method"</code>. The bundled
 <code>_documents.yml</code> contains:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SAP</span></span>
-<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="at"> Statistical Analysis Plan</span></span>
-<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a><span class="at">  </span><span class="fu">doctype</span><span class="kw">:</span><span class="at"> suppdoc</span></span>
-<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a><span class="at">  </span><span class="fu">href</span><span class="kw">:</span><span class="at"> ./docs/sap.pdf</span></span>
-<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a></span>
-<span id="cb40-6"><a href="#cb40-6" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> DERIV_METHODS</span></span>
-<span id="cb40-7"><a href="#cb40-7" tabindex="-1"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="at"> Derivation Methods</span></span>
-<span id="cb40-8"><a href="#cb40-8" tabindex="-1"></a><span class="at">  </span><span class="fu">doctype</span><span class="kw">:</span><span class="at"> method</span></span>
-<span id="cb40-9"><a href="#cb40-9" tabindex="-1"></a><span class="at">  </span><span class="fu">href</span><span class="kw">:</span><span class="at"> ./docs/methods.pdf</span></span></code></pre></div>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SAP</span></span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="at"> Statistical Analysis Plan</span></span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a><span class="at">  </span><span class="fu">doctype</span><span class="kw">:</span><span class="at"> suppdoc</span></span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a><span class="at">  </span><span class="fu">href</span><span class="kw">:</span><span class="at"> ./docs/sap.pdf</span></span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> DERIV_METHODS</span></span>
+<span id="cb34-7"><a href="#cb34-7" tabindex="-1"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="at"> Derivation Methods</span></span>
+<span id="cb34-8"><a href="#cb34-8" tabindex="-1"></a><span class="at">  </span><span class="fu">doctype</span><span class="kw">:</span><span class="at"> method</span></span>
+<span id="cb34-9"><a href="#cb34-9" tabindex="-1"></a><span class="at">  </span><span class="fu">href</span><span class="kw">:</span><span class="at"> ./docs/methods.pdf</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/documents.html">list_documents</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "SAP"           "DERIV_METHODS"</span></span></code></pre></div>
 <p>Domains and columns (including columns within parameters) reference
 documents by <code>id</code> in their <code>documents</code> field,
 optionally with a <code>page</code>:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
-<span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SAFFL</span></span>
-<span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Safety Population Flag</span></span>
-<span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a><span class="at">    </span><span class="fu">origin</span><span class="kw">:</span><span class="at"> Derived</span></span>
-<span id="cb42-5"><a href="#cb42-5" tabindex="-1"></a><span class="at">    </span><span class="fu">documents</span><span class="kw">:</span></span>
-<span id="cb42-6"><a href="#cb42-6" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> DERIV_METHODS</span></span>
-<span id="cb42-7"><a href="#cb42-7" tabindex="-1"></a><span class="at">        </span><span class="fu">page</span><span class="kw">:</span><span class="at"> </span><span class="dv">12</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SAFFL</span></span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Safety Population Flag</span></span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a><span class="at">    </span><span class="fu">origin</span><span class="kw">:</span><span class="at"> Derived</span></span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a><span class="at">    </span><span class="fu">documents</span><span class="kw">:</span></span>
+<span id="cb36-6"><a href="#cb36-6" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> DERIV_METHODS</span></span>
+<span id="cb36-7"><a href="#cb36-7" tabindex="-1"></a><span class="at">        </span><span class="fu">page</span><span class="kw">:</span><span class="at"> </span><span class="dv">12</span></span></code></pre></div>
 <p>The <code><a href="../reference/documents.html">list_documents()</a></code>, <code><a href="../reference/documents.html">select_document()</a></code>,
 <code><a href="../reference/documents.html">add_document()</a></code>, <code><a href="../reference/documents.html">update_document()</a></code> and
 <code><a href="../reference/documents.html">remove_documents()</a></code> verbs work on both a study and a
 <code><a href="../reference/documents.html">mighty_documents()</a></code> object:</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="va">study</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/documents.html">add_document</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"PROTOCOL"</span>,</span>
@@ -1056,7 +751,7 @@ optionally with a <code>page</code>:</p>
 <span><span class="fu"><a href="../reference/documents.html">list_documents</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "SAP"           "DERIV_METHODS" "PROTOCOL"</span></span></code></pre></div>
 <p>References can also be added in R:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span><span class="op">$</span><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">study</span><span class="op">$</span><span class="va">ADSL</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/columns.html">update_column</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"SAFFL"</span>, documents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"SAP"</span>, page <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/documents.html">check_document_references()</a></code> verifies that every
@@ -1064,7 +759,7 @@ referenced document exists, that <code>"method"</code> documents are
 only used where <code>origin</code> is <code>"Derived"</code>, and warns
 when a <code>"comment"</code> document is referenced without a
 <code>comment</code>:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/documents.html">check_document_references</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -1078,24 +773,24 @@ as CDISC CT, through <code>subset</code>, <code>restore</code> and
 one sponsor-defined codelist (<code>SEX</code>) and one that modifies an
 external codelist (<code>AGEU</code>, via <code>subset</code> and
 <code>restore</code>):</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># Sponsor-defined codelist</span></span>
-<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SEX</span></span>
-<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="at">  </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Sex</span></span>
-<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a><span class="at">  </span><span class="fu">description</span><span class="kw">:</span><span class="at"> Sex of the subject</span></span>
-<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a><span class="at">  </span><span class="fu">datatype</span><span class="kw">:</span><span class="at"> text</span></span>
-<span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a><span class="at">  </span><span class="fu">values</span><span class="kw">:</span></span>
-<span id="cb46-7"><a href="#cb46-7" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> F</span></span>
-<span id="cb46-8"><a href="#cb46-8" tabindex="-1"></a><span class="at">      </span><span class="fu">decode</span><span class="kw">:</span><span class="at"> Female</span></span>
-<span id="cb46-9"><a href="#cb46-9" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> M</span></span>
-<span id="cb46-10"><a href="#cb46-10" tabindex="-1"></a><span class="at">      </span><span class="fu">decode</span><span class="kw">:</span><span class="at"> Male</span></span>
-<span id="cb46-11"><a href="#cb46-11" tabindex="-1"></a></span>
-<span id="cb46-12"><a href="#cb46-12" tabindex="-1"></a><span class="co"># Keep only some values of an external codelist and restore one more</span></span>
-<span id="cb46-13"><a href="#cb46-13" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AGEU</span></span>
-<span id="cb46-14"><a href="#cb46-14" tabindex="-1"></a><span class="at">  </span><span class="fu">subset</span><span class="kw">:</span></span>
-<span id="cb46-15"><a href="#cb46-15" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> YEARS</span></span>
-<span id="cb46-16"><a href="#cb46-16" tabindex="-1"></a><span class="at">  </span><span class="fu">restore</span><span class="kw">:</span></span>
-<span id="cb46-17"><a href="#cb46-17" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MONTHS</span></span></code></pre></div>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co"># Sponsor-defined codelist</span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SEX</span></span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a><span class="at">  </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Sex</span></span>
+<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a><span class="at">  </span><span class="fu">description</span><span class="kw">:</span><span class="at"> Sex of the subject</span></span>
+<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a><span class="at">  </span><span class="fu">datatype</span><span class="kw">:</span><span class="at"> text</span></span>
+<span id="cb40-6"><a href="#cb40-6" tabindex="-1"></a><span class="at">  </span><span class="fu">values</span><span class="kw">:</span></span>
+<span id="cb40-7"><a href="#cb40-7" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> F</span></span>
+<span id="cb40-8"><a href="#cb40-8" tabindex="-1"></a><span class="at">      </span><span class="fu">decode</span><span class="kw">:</span><span class="at"> Female</span></span>
+<span id="cb40-9"><a href="#cb40-9" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> M</span></span>
+<span id="cb40-10"><a href="#cb40-10" tabindex="-1"></a><span class="at">      </span><span class="fu">decode</span><span class="kw">:</span><span class="at"> Male</span></span>
+<span id="cb40-11"><a href="#cb40-11" tabindex="-1"></a></span>
+<span id="cb40-12"><a href="#cb40-12" tabindex="-1"></a><span class="co"># Keep only some values of an external codelist and restore one more</span></span>
+<span id="cb40-13"><a href="#cb40-13" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AGEU</span></span>
+<span id="cb40-14"><a href="#cb40-14" tabindex="-1"></a><span class="at">  </span><span class="fu">subset</span><span class="kw">:</span></span>
+<span id="cb40-15"><a href="#cb40-15" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> YEARS</span></span>
+<span id="cb40-16"><a href="#cb40-16" tabindex="-1"></a><span class="at">  </span><span class="fu">restore</span><span class="kw">:</span></span>
+<span id="cb40-17"><a href="#cb40-17" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MONTHS</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/codelists.html">list_codelists</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "SEX"  "AGEU"</span></span>
 <span><span class="fu"><a href="../reference/codelists.html">select_codelist</a></span><span class="op">(</span><span class="va">study</span>, id <span class="op">=</span> <span class="st">"SEX"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -1115,13 +810,13 @@ external codelist (<code>AGEU</code>, via <code>subset</code> and
 <p>Columns refer to a codelist by its <code>id</code> in their
 <code>codelist</code> field, as <code>SEX</code> and <code>AGEU</code>
 do in the bundled <code>adsl.yml</code>:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
-<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SEX</span></span>
-<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Sex</span></span>
-<span id="cb48-4"><a href="#cb48-4" tabindex="-1"></a><span class="at">    </span><span class="fu">codelist</span><span class="kw">:</span><span class="at"> SEX</span></span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
+<span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> SEX</span></span>
+<span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Sex</span></span>
+<span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a><span class="at">    </span><span class="fu">codelist</span><span class="kw">:</span><span class="at"> SEX</span></span></code></pre></div>
 <p>Codelists can also be added in R. Here we add a sponsor-defined value
 to the extensible external <code>LOC</code> codelist:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="va">study</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/codelists.html">extend_codelist_values</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"LOC"</span>,</span>
@@ -1134,13 +829,13 @@ to the extensible external <code>LOC</code> codelist:</p>
 <p>Codelists can be added before any column uses them. Use
 <code><a href="../reference/codelists.html">check_codelist_references()</a></code> to check that every codelist is
 referenced:</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/codelists.html">check_codelist_references</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_codelist_references()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Codelist <span style="color: #0000BB;">"LOC"</span> is not referenced by any column.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Reference the codelist in a column <span style="color: #00BB00;">codelist</span> field or remove it from</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">_codelists.yml</span>.</span></span></code></pre></div>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">study</span><span class="op">$</span><span class="va">ADVS</span> <span class="op">&lt;-</span> <span class="va">study</span><span class="op">$</span><span class="va">ADVS</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/columns.html">add_column</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"VSLOC"</span>,</span>
@@ -1160,7 +855,7 @@ codelist verbs.</p>
 specifications into tibbles. This is the format consumed by downstream
 mighty tools.</p>
 <p><code><a href="../reference/create_md_table.html">create_md_table()</a></code> gives one row per dataset:</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create_md_table.html">create_md_table</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 8</span></span></span>
 <span><span class="co">#&gt;   order id    label                       class subclass structure keys  comment</span></span>
@@ -1169,7 +864,7 @@ mighty tools.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     2 ADSL  Subject-Level Analysis Dat… SUBJ… <span style="color: #BB0000;">NA</span>       One reco… <span style="color: #949494;">&lt;chr&gt;</span> <span style="color: #BB0000;">NA</span>     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     3 ADVS  Vital Signs Analysis Datas… BASI… <span style="color: #BB0000;">NA</span>       One reco… <span style="color: #949494;">&lt;chr&gt;</span> <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
 <p><code><a href="../reference/create_md_col.html">create_md_col()</a></code> gives one row per column:</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create_md_col.html">create_md_col</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 33 × 15</span></span></span>
 <span><span class="co">#&gt;    table_id table_label      order id    label origin key   is_core core  method</span></span>
@@ -1188,7 +883,7 @@ mighty tools.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: codelist &lt;chr&gt;, format_type &lt;chr&gt;, format_length &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   format_display &lt;chr&gt;, comment &lt;chr&gt;</span></span></span></code></pre></div>
 <p><code><a href="../reference/create_md_param.html">create_md_param()</a></code> gives one row per BDS parameter:</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create_md_param.html">create_md_param</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 5</span></span></span>
 <span><span class="co">#&gt;   table_id table_label                  order id     label                   </span></span>
@@ -1197,7 +892,7 @@ mighty tools.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ADVS     Vital Signs Analysis Dataset     2 BMIGRP Body Mass Index Group</span></span></code></pre></div>
 <p><code><a href="../reference/create_md_values.html">create_md_values()</a></code> gives one row per column defined
 inside a parameter, i.e. the value level metadata:</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create_md_values.html">create_md_values</a></span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 15</span></span></span>
 <span><span class="co">#&gt;   table_id table_label param_order param_id param_label order id    label origin</span></span>
@@ -1209,7 +904,7 @@ inside a parameter, i.e. the value level metadata:</p>
 <span><span class="co">#&gt; <span style="color: #949494;">#   format_length &lt;int&gt;, format_display &lt;chr&gt;, comment &lt;chr&gt;</span></span></span></code></pre></div>
 <p>The tables reflect the study as it is, so populate and resolve it
 first. A typical end-to-end workflow:</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">md_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mighty_study.html">mighty_study</a></span><span class="op">(</span><span class="va">study_path</span>, populate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/resolve_includes.html">resolve_includes</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/resolve_subsets.html">resolve_subsets</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>

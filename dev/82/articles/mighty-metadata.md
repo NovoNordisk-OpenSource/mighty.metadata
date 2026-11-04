@@ -63,102 +63,16 @@ columns:
   # ... more columns ...
 ```
 
-A domain file is made up of three parts, described in turn below:
-domain-level fields (`id`, `label`, `class`, `structure`, `keys`), the
-optional `population` block, and the `columns` list.
+Every domain needs `id`, `label`, `class`, `structure`, `keys` and
+`columns`; for columns only `id` is required. The optional `population`
+block declares the source domains and filters used by the mighty code
+generator.
 
-### Domain-level fields
-
-| Field | Required | Description |
-|----|----|----|
-| `id` | yes | Dataset name, uppercase (e.g. `ADSL`) |
-| `label` | yes | Dataset label |
-| `class` | yes | `SUBJECT LEVEL ANALYSIS DATASET`, `BASIC DATA STRUCTURE`, `OCCURRENCE DATA STRUCTURE` or `ADAM OTHER` |
-| `structure` | yes | Description of one record |
-| `keys` | yes | One key or a list of unique keys |
-| `columns` | yes | List of columns |
-| `subclass` | no | E.g. `TIME-TO-EVENT`, `ADVERSE EVENT` |
-| `population` | no | Source domains and filters used by the mighty code generator |
-| `parameters` | no | BDS parameters |
-| `rows` | no | Row-level actions |
-| `usecore` | no | Receive ADSL core variables (see [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)) |
-| `include` | no | Conditional inclusion (see [Conditional Metadata](#conditional-metadata)) |
-| `comment`, `documents` | no | Free-text comment and document references |
-
-All `id`s (domains, columns, parameters, rows) must be uppercase and
-match `^[A-Z][A-Z0-9_]*$`. Unknown fields are not allowed in domains,
-columns, parameters, rows or `population` entries.
-
-### Population
-
-The optional `population` block declares which source domains supply raw
-data and how the starting population is restricted. If present, it must
-contain `base`; `global` is optional:
-
-| Field | Required fields per entry | Description |
-|----|----|----|
-| `base` | `domain`, `depends`, `filter` | Source domains, each with its own filter |
-| `global` | `filter`, `depends` | Filters applied after combining the base datasets |
-
-In the ADSL example above, records are taken from `DM` (where `USUBJID`
-is not empty) and then restricted to randomized subjects
-(`RANDFL == "Y"`). The mighty code generator reads this block to build
-the initial population step; mighty.metadata stores it but does not
-execute it.
-
-### Column fields
-
-Only `id` is required. The most common fields are:
-
-| Field | Description |
-|----|----|
-| `label` | Column label |
-| `method` | How the column is derived. `DOMAIN.COLUMN` (e.g. `DM.STUDYID`) marks a predecessor |
-| `origin` | `Assigned`, `Collected`, `Derived`, `Not Available`, `Other`, `Predecessor` or `Protocol` |
-| `core` | ADaM conformance: `Req`, `Cond` or `Perm` |
-| `codelist` | Id of a codelist in `_codelists.yml` |
-| `format` | `type` and `length` (both required) and optional SAS `display` format |
-| `is_core` | In ADSL: propagate the column to other domains |
-| `depends` | Dependencies: `COLUMN`, `DOMAIN.COLUMN`, `rows.ID` or `parameters.ID` |
-| `component` | mighty component (`id` and optional `with` arguments) used for the derivation |
-| `include`, `comment`, `documents` | Conditional inclusion, comment and document references |
-
-A predecessor column (`method: DM.STUDYID`) can inherit its metadata
-from the referenced column via
-[`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md),
-provided the referenced domain is part of the study.
-
-For example, a fully specified derived column:
+BDS domains like ADVS can also have `parameters`, which override column
+metadata for their records, and `rows`, which describe actions that add
+or modify records (e.g. baseline):
 
 ``` yaml
-- id: AGE
-  label: Age
-  origin: Derived
-  core: Req
-  method: Age at informed consent
-  format:
-    type: integer
-    length: 3
-  depends: [DM.BRTHDTC, DM.RFICDTC]
-```
-
-### BDS domains
-
-A domain can also have `parameters` and `rows`; they are typically used
-in BDS domains like ADVS. A parameter overrides column metadata in
-`columns` for its records (e.g. `AVAL` for `BMI`); a row describes an
-action that adds or modifies records (e.g. baseline, LOCF):
-
-``` yaml
-id: ADVS
-label: Vital Signs Analysis Dataset
-class: BASIC DATA STRUCTURE
-structure: One record per vital sign parameter, per visit, per subject
-keys: [USUBJID, PARAMCD, AVISITN]
-
-columns:
-  # ... columns ...
-
 parameters:
   - id: BMI
     label: Body Mass Index (kg/m^2)
@@ -171,13 +85,9 @@ rows:
     method: Add baseline visit as a new row
 ```
 
-Parameters require only `id` and may also have `label`, `columns`,
-`component`, `depends` and `include`. Rows require only `id` and may
-also have `method`, `component`, `depends`, `subset` and `include`.
-
 See
 [`vignette("adam-schema")`](https://novonordisk-opensource.github.io/mighty.metadata/articles/adam-schema.md)
-for the full schema reference.
+for all fields and allowed values.
 
 ## Working with a Single Domain
 
@@ -294,7 +204,9 @@ list_columns(advs)
 #>  [7] "VISITNUM" "AVISITN"  "AVISIT"   "PARAMCD"  "AVAL"
 ```
 
-Any column field from the table above can be passed to
+Any column field (see
+[`vignette("adam-schema")`](https://novonordisk-opensource.github.io/mighty.metadata/articles/adam-schema.md))
+can be passed to
 [`add_column()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md)
 and
 [`update_column()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/columns.md)
@@ -486,59 +398,14 @@ study@mighty$repos
 #> [2] "."
 ```
 
-The `_study.yml` file provides the `study_id`, and optionally the
-`standards` and `terminology` (controlled terminologies and
-dictionaries) applied in the study. Each entry requires an `id` and a
-`version`:
-
-``` yaml
-study_id: example_study
-
-standards:
-  - id: ADaM-IG
-    version: '1.1'
-
-terminology:
-  - id: ADAM
-    version: '2025-08-06'
-  - id: MedDRA
-    version: '22.1'
-  - id: WHODrug
-    version: 2023 JAN
-```
-
-`version` must be a string, so quote values that look like numbers or
-dates (`'1.1'`, not `1.1`). Only the structure is validated; whether a
-version exists is left to consuming packages. See
-[`vignette("study-schema")`](https://novonordisk-opensource.github.io/mighty.metadata/articles/study-schema.md).
-
-``` r
-
-study@study$standards |>
-  purrr::map_chr("id")
-#> [1] "ADaM-IG"
-```
-
-The `_mighty.yml` file configures the mighty framework. Both fields are
-required: `external_data` lists the source (e.g. SDTM) domains with
-their keys, and `repos` lists the repositories where mighty components
-are found, as local paths or `owner/repo/subdir@ref` strings:
-
-``` yaml
-external_data:
-  - id: DM
-    keys: [STUDYID, USUBJID]
-  - id: VS
-    keys: [STUDYID, USUBJID]
-
-repos:
-  - "NovoNordisk-OpenSource/mighty.standards/components@main"
-  - "."
-```
-
-See
+`_study.yml` holds the `study_id` and optionally the `standards` and
+`terminology` used in the study. `_mighty.yml` lists the source domains
+(`external_data`) and the repositories (`repos`) where mighty components
+are found. See
+[`vignette("study-schema")`](https://novonordisk-opensource.github.io/mighty.metadata/articles/study-schema.md)
+and
 [`vignette("mighty-schema")`](https://novonordisk-opensource.github.io/mighty.metadata/articles/mighty-schema.md)
-for details.
+for their structure.
 
 Loading messages, such as the ones printed for missing study-level
 files, can be silenced with the `mighty.metadata.verbosity_level` option
@@ -793,47 +660,12 @@ the conditions, not only `study_id`.
 ### Row Subsets
 
 A row action can be restricted to a subset of the source rows with the
-`subset` field. The row must have a `component` with a `with.domain`
-entry.
+`subset` field (e.g. `subset: STUDYID == 'STUDY1'`).
 [`resolve_subsets()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_subsets.md)
-folds the subset into `component.with.domain` as a `.mighty_subset()`
-marker call, which `mighty.component` (\>= 0.1.0.9003) expands when
-rendering code:
-
-``` yaml
-rows:
-  - id: TRTEMFL_STUDY1
-    subset: STUDYID == 'STUDY1'
-    component:
-      id: STUDY1_COMPONENT
-      with:
-        domain: ADAE
-```
-
-The same row added in R:
-
-``` r
-
-study$ADAE <- study$ADAE |>
-  add_row(
-    id = "TRTEMFL_STUDY1",
-    component = list(id = "STUDY1_COMPONENT", with = list(domain = "ADAE")),
-    subset = "STUDYID == 'STUDY1'"
-  )
-
-study |>
-  resolve_subsets() |>
-  getElement("ADAE") |>
-  select_row(id = "TRTEMFL_STUDY1") |>
-  str()
-#> ! Resolving row subsets requires mighty.component (>= 0.1.0.9003)
-#> List of 2
-#>  $ id       : chr "TRTEMFL_STUDY1"
-#>  $ component:List of 2
-#>   ..$ id  : chr "STUDY1_COMPONENT"
-#>   ..$ with:List of 1
-#>   .. ..$ domain: chr ".mighty_subset(ADAE, \"STUDYID == 'STUDY1'\")"
-```
+folds the subset into the row’s mighty component so that the generated
+code only uses those rows. See
+[`?resolve_subsets`](https://novonordisk-opensource.github.io/mighty.metadata/reference/resolve_subsets.md)
+for details and requirements.
 
 ## Documents
 
