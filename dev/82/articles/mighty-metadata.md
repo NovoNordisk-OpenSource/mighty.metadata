@@ -33,7 +33,7 @@ study <- mighty_study("specs")
 ## The YAML Specification Format
 
 Each ADaM domain is defined in a YAML file. The simplest case is a
-subject-level dataset like ADSL, which has no parameters or rows:
+subject-level dataset like ADSL, which only has columns:
 
 ``` yaml
 id: ADSL
@@ -45,11 +45,8 @@ keys: USUBJID
 population:
   base:
     - domain: DM
-      depends: USUBJID
+      depends: [USUBJID]
       filter: USUBJID != ""
-  global:
-    - filter: RANDFL == "Y"
-      depends: RANDFL
 
 columns:
   - id: STUDYID
@@ -63,16 +60,28 @@ columns:
   # ... more columns ...
 ```
 
-Every domain needs `id`, `label`, `class`, `structure`, `keys` and
-`columns`; for columns only `id` is required. The optional `population`
-block declares the source domains and filters used by the mighty code
-generator.
+Top-level keys define the domain identity (`id`, `label`, `class`,
+`structure`, `keys`). The `population` block declares which source
+domains supply raw data and what row-level filters apply. The mighty
+code generator reads this to build the initial population step;
+mighty.metadata stores it but does not execute it.
 
-BDS domains like ADVS can also have `parameters`, which override column
-metadata for their records, and `rows`, which describe actions that add
-or modify records (e.g. baseline):
+Each column has an `id`, `label`, and `core` conformance level: `Req`
+(Required), `Cond` (Conditionally Required), or `Perm` (Permissible).
+The `method` field describes how the column is derived. A
+`DOMAIN.COLUMN` pattern (e.g., `DM.STUDYID`) means the column is a
+predecessor — its metadata can be inherited from the referenced source
+via
+[`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md).
+
+BDS (Basic Data Structure) domains like ADVS add `parameters` and
+`rows`:
 
 ``` yaml
+id: ADVS
+label: Vital Signs Analysis Dataset
+keys: [USUBJID, PARAMCD, AVISITN]
+
 parameters:
   - id: BMI
     label: Body Mass Index (kg/m^2)
@@ -87,7 +96,7 @@ rows:
 
 See
 [`vignette("adam-schema")`](https://novonordisk-opensource.github.io/mighty.metadata/articles/adam-schema.md)
-for all fields and allowed values.
+for the full schema reference.
 
 ## Working with a Single Domain
 

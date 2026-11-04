@@ -111,7 +111,7 @@ and edit the YAML files there:</p>
 <h2 id="the-yaml-specification-format">The YAML Specification Format<a class="anchor" aria-label="anchor" href="#the-yaml-specification-format"></a>
 </h2>
 <p>Each ADaM domain is defined in a YAML file. The simplest case is a
-subject-level dataset like ADSL, which has no parameters or rows:</p>
+subject-level dataset like ADSL, which only has columns:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> ADSL</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">label</span><span class="kw">:</span><span class="at"> Subject-Level Analysis Dataset</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">class</span><span class="kw">:</span><span class="at"> SUBJECT LEVEL ANALYSIS DATASET</span></span>
@@ -121,42 +121,51 @@ subject-level dataset like ADSL, which has no parameters or rows:</p>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">population</span><span class="kw">:</span></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="at">  </span><span class="fu">base</span><span class="kw">:</span></span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">domain</span><span class="kw">:</span><span class="at"> DM</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="at">      </span><span class="fu">depends</span><span class="kw">:</span><span class="at"> USUBJID</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="at">      </span><span class="fu">depends</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">USUBJID</span><span class="kw">]</span></span>
 <span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="at">      </span><span class="fu">filter</span><span class="kw">:</span><span class="at"> USUBJID != ""</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="at">  </span><span class="fu">global</span><span class="kw">:</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">filter</span><span class="kw">:</span><span class="at"> RANDFL == "Y"</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="at">      </span><span class="fu">depends</span><span class="kw">:</span><span class="at"> RANDFL</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> STUDYID</span></span>
-<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Study Identifier</span></span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="at">    </span><span class="fu">method</span><span class="kw">:</span><span class="at"> DM.STUDYID</span></span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="at">    </span><span class="fu">core</span><span class="kw">:</span><span class="at"> Req</span></span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> USUBJID</span></span>
-<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Unique Subject Identifier</span></span>
-<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="at">    </span><span class="fu">method</span><span class="kw">:</span><span class="at"> DM.USUBJID</span></span>
-<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="at">    </span><span class="fu">core</span><span class="kw">:</span><span class="at"> Req</span></span>
-<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">  # ... more columns ...</span></span></code></pre></div>
-<p>Every domain needs <code>id</code>, <code>label</code>,
-<code>class</code>, <code>structure</code>, <code>keys</code> and
-<code>columns</code>; for columns only <code>id</code> is required. The
-optional <code>population</code> block declares the source domains and
-filters used by the mighty code generator.</p>
-<p>BDS domains like ADVS can also have <code>parameters</code>, which
-override column metadata for their records, and <code>rows</code>, which
-describe actions that add or modify records (e.g. baseline):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">parameters</span><span class="kw">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> BMI</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Body Mass Index (kg/m^2)</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AVAL</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="at">        </span><span class="fu">method</span><span class="kw">:</span><span class="at"> Derived from height and weight</span></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">rows</span><span class="kw">:</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> BASELINE</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="at">    </span><span class="fu">method</span><span class="kw">:</span><span class="at"> Add baseline visit as a new row</span></span></code></pre></div>
-<p>See <code><a href="../articles/adam-schema.html">vignette("adam-schema")</a></code> for all fields and allowed
-values.</p>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="fu">columns</span><span class="kw">:</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> STUDYID</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Study Identifier</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="at">    </span><span class="fu">method</span><span class="kw">:</span><span class="at"> DM.STUDYID</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="at">    </span><span class="fu">core</span><span class="kw">:</span><span class="at"> Req</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> USUBJID</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Unique Subject Identifier</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="at">    </span><span class="fu">method</span><span class="kw">:</span><span class="at"> DM.USUBJID</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="at">    </span><span class="fu">core</span><span class="kw">:</span><span class="at"> Req</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">  # ... more columns ...</span></span></code></pre></div>
+<p>Top-level keys define the domain identity (<code>id</code>,
+<code>label</code>, <code>class</code>, <code>structure</code>,
+<code>keys</code>). The <code>population</code> block declares which
+source domains supply raw data and what row-level filters apply. The
+mighty code generator reads this to build the initial population step;
+mighty.metadata stores it but does not execute it.</p>
+<p>Each column has an <code>id</code>, <code>label</code>, and
+<code>core</code> conformance level: <code>Req</code> (Required),
+<code>Cond</code> (Conditionally Required), or <code>Perm</code>
+(Permissible). The <code>method</code> field describes how the column is
+derived. A <code>DOMAIN.COLUMN</code> pattern (e.g.,
+<code>DM.STUDYID</code>) means the column is a predecessor — its
+metadata can be inherited from the referenced source via
+<code><a href="../reference/populate_sparse.html">populate_sparse()</a></code>.</p>
+<p>BDS (Basic Data Structure) domains like ADVS add
+<code>parameters</code> and <code>rows</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> ADVS</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">label</span><span class="kw">:</span><span class="at"> Vital Signs Analysis Dataset</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">keys</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">USUBJID</span><span class="kw">,</span><span class="at"> PARAMCD</span><span class="kw">,</span><span class="at"> AVISITN</span><span class="kw">]</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">parameters</span><span class="kw">:</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> BMI</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="at">    </span><span class="fu">label</span><span class="kw">:</span><span class="at"> Body Mass Index (kg/m^2)</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> AVAL</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="at">        </span><span class="fu">method</span><span class="kw">:</span><span class="at"> Derived from height and weight</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="fu">rows</span><span class="kw">:</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> BASELINE</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="at">    </span><span class="fu">method</span><span class="kw">:</span><span class="at"> Add baseline visit as a new row</span></span></code></pre></div>
+<p>See <code><a href="../articles/adam-schema.html">vignette("adam-schema")</a></code> for the full schema
+reference.</p>
 </div>
 <div class="section level2">
 <h2 id="working-with-a-single-domain">Working with a Single Domain<a class="anchor" aria-label="anchor" href="#working-with-a-single-domain"></a>
