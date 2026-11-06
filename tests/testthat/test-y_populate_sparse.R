@@ -38,7 +38,7 @@ test_that("populate_sparse() - errors when predecessor does not exist", {
     )
 })
 
-test_that("populate_sparse() - debug info for predecessors not in study (e.g. SDTM)", {
+test_that("populate_sparse() - debug info for predecessors not in study", {
   withr::local_options(
     .new = list(mighty.metadata.verbosity_level = "debug")
   )
@@ -70,11 +70,11 @@ test_that("populate_sparse() validates each domain once, not once per column", {
     mighty_study() |>
     populate_core()
 
-  count_validations(populate_sparse(study)) |>
+  count_validations(populate_sparse(study))$n |>
     expect_equal(length(study))
 })
 
-test_that("populate_sparse_domain() returns early without validating when there are no predecessors", {
+test_that("populate_sparse_domain() skips validation if no predecessors", {
   study <- test_path("test_study") |>
     mighty_study()
 
@@ -85,10 +85,10 @@ test_that("populate_sparse_domain() returns early without validating when there 
 
   expect_length(list_predecessors(domain), 0L)
 
-  count_validations(
-    result <- populate_sparse_domain(domain = domain, study = study)
-  ) |>
-    expect_equal(0L)
+  res <- count_validations(
+    populate_sparse_domain(domain = domain, study = study)
+  )
 
-  expect_identical(result, domain)
+  expect_equal(res$n, 0L)
+  expect_identical(res$value, domain)
 })
