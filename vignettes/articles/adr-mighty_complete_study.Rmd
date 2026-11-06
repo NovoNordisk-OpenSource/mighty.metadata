@@ -293,12 +293,38 @@ Depending on how large the required changes are, we may have to plan them separa
 
 Open question: whether the case 1 mapping stays inside {mighty} for performance.
 If so, this is an exception to success criterion 2.
+
 ### Repeated method and origin tags for multi column components
 
 The `@origin` and `@method` tags can only be supplied once, and not per output column for a component.
 Right now that means they will be repeated for each column. For `@origin` this could be a problem, since two columns created by the same component could be `Derived` and `Assigned` respectively.
 
 This requires a later update in {mighty.component} to support definitions like:
+
+```r
+#' @title Double a column
+#' @description
+#' Creates a new column as two times an existing column.
+#'
+#' @param domain `character` Name of the domain
+#' @param output `character` Name of the new column
+#' @param input `character` Name of the existing column
+#' @type column
+#' @origin {{{output}}} Derived
+#' @origin Y Assigned
+#' @method {{{output}}} Two times the input column
+#' @method Y Hardcoded to "Hello"
+#' @depends {{{domain}}} {{{input}}}
+#' @outputs {{{output}}} Y # Possibly outdated
+#' @code
+{{{domain}}} <- {{{domain}}} |>
+  dplyr::mutate(
+    {{{output}}} = 2 * {{{input}}},
+   Y = "Hello"
+  )
+```
+
+This implementation is pushed to the next iteration of the suggested implementation.
 
 ## Compliance Considerations
 
