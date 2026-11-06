@@ -172,8 +172,11 @@ only runs <code><a href="../reference/populate_core.html">populate_core()</a></c
 </h2>
 <p>Downstream use in {mighty} and {mighty.toolbox} has to be updated
 after this feature is released.</p>
-<p>Any new special <code>mighty_*</code> components have to be added to
-{mighty.standards}.</p>
+<p>The components that <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code> maps shorthand
+predecessors to (see Predecessor mapping) must exist in
+{mighty.standards}, as {mighty.metadata} now refers to them by id. This
+includes the new <code>mighty_merge_supp</code> and
+<code>mighty_merge_param</code>.</p>
 <p>All components must have correct <code>@method</code> and
 <code>@origin</code> tags; existing components do not.</p>
 <p>{mighty.metadata} adds {mighty.component} to <code>Imports</code>.
@@ -216,9 +219,9 @@ from both SUPPLB and SUPPXL.</p>
 <p>Not chosen, because it requires changes to <code>population</code>,
 makes <code>SUPP</code> a reserved domain name, and only supports SUPP–
 data sets of the base domain. Instead, we use the explicit
-<code>SUPPDM.EFFICACY.QVAL</code> notation, which maps directly to a
-predecessor with a where clause and needs no flag on the base
-domain.</p>
+<code>SUPPDM.EFFICACY.QVAL</code> notation, which maps directly to the
+predecessor <code>SUPPDM.QVAL where QNAM="EFFICACY"</code> (see <a href="#predecessor-mapping-and-components">Predecessor mapping and
+components</a>) and needs no flag on the base domain.</p>
 </div>
 </div>
 <div class="section level2">
@@ -229,6 +232,9 @@ increments to ensure we continuously remain compatible with {mighty} and
 {mighty.toolbox}.</p>
 <p>Proposed implementation order:</p>
 <ol style="list-style-type: decimal">
+<li>Make <code><a href="../reference/populate_core.html">populate_core()</a></code> and <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code>
+idempotent, and add the double-run tests from the Testing Strategy for
+all existing helpers.</li>
 <li>Update <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code> to support component
 predecessor mapping. Extend the predecessor regex in
 <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code> and <code>is_predecessor()</code> to
@@ -241,8 +247,8 @@ form.</li>
 implementing component metadata re-use. Note that this means {mighty}
 will temporarily fetch the components a second time.</li>
 <li>Implement the new method dispatch in {mighty} and {mighty.toolbox}
-to ensure compatibility. Steps 1–5 give the first complete
-implementation; steps 6 and 7 are optimization.</li>
+to ensure compatibility. Steps 1–6 give the first complete
+implementation; steps 7 and 8 are optimization.</li>
 <li>Remove now-redundant logic around predecessors in {mighty}.</li>
 <li>In several steps refactor {mighty} to use the new
 <code>@nodes</code> property effectively.</li>
@@ -542,7 +548,16 @@ result when run again on their own output.</li>
 forward into the component helpers. Depending on how large the required
 changes are, we may have to plan them separately from this document.</p>
 <p>Open question: whether the case 1 mapping stays inside {mighty} for
-performance. If so, this is an exception to success criterion 2.</p>
+performance. If so, this is an exception to success criterion 2. ###
+Repeated method and origin tags for multi column components</p>
+<p>The <code>@origin</code> and <code>@method</code> tags can only be
+supplied once, and not per output column for a component. Right now that
+means they will be repeated for each column. For <code>@origin</code>
+this could be a problem, since two columns created by the same component
+could be <code>Derived</code> and <code>Assigned</code>
+respectively.</p>
+<p>This requires a later update in {mighty.component} to support
+definitions like:</p>
 </div>
 <div class="section level2">
 <h2 id="compliance-considerations">Compliance Considerations<a class="anchor" aria-label="anchor" href="#compliance-considerations"></a>

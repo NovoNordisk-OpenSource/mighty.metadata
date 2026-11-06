@@ -89,8 +89,11 @@ and skips includes and subsets.
 Downstream use in {mighty} and {mighty.toolbox} has to be updated after
 this feature is released.
 
-Any new special `mighty_*` components have to be added to
-{mighty.standards}.
+The components that
+[`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
+maps shorthand predecessors to (see Predecessor mapping) must exist in
+{mighty.standards}, as {mighty.metadata} now refers to them by id. This
+includes the new `mighty_merge_supp` and `mighty_merge_param`.
 
 All components must have correct `@method` and `@origin` tags; existing
 components do not.
@@ -135,8 +138,10 @@ SUPPLB and SUPPXL.
 Not chosen, because it requires changes to `population`, makes `SUPP` a
 reserved domain name, and only supports SUPP– data sets of the base
 domain. Instead, we use the explicit `SUPPDM.EFFICACY.QVAL` notation,
-which maps directly to a predecessor with a where clause and needs no
-flag on the base domain.
+which maps directly to the predecessor
+`SUPPDM.QVAL where QNAM="EFFICACY"` (see [Predecessor mapping and
+components](#predecessor-mapping-and-components)) and needs no flag on
+the base domain.
 
 ## Implementation Details
 
@@ -146,23 +151,29 @@ to ensure we continuously remain compatible with {mighty} and
 
 Proposed implementation order:
 
-1.  Update
+1.  Make
+    [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)
+    and
+    [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
+    idempotent, and add the double-run tests from the Testing Strategy
+    for all existing helpers.
+2.  Update
     [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
     to support component predecessor mapping. Extend the predecessor
     regex in
     [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
     and `is_predecessor()` to accept the three-part shorthand and the
     expanded `where` form.
-2.  First version of `resolve_components()`.
-3.  Add any new special `mighty_*` components to {mighty.standards}.
-4.  First version of `mighty_complete_study()`, only implementing
+3.  First version of `resolve_components()`.
+4.  Add any new special `mighty_*` components to {mighty.standards}.
+5.  First version of `mighty_complete_study()`, only implementing
     component metadata re-use. Note that this means {mighty} will
     temporarily fetch the components a second time.
-5.  Implement the new method dispatch in {mighty} and {mighty.toolbox}
-    to ensure compatibility. Steps 1–5 give the first complete
-    implementation; steps 6 and 7 are optimization.
-6.  Remove now-redundant logic around predecessors in {mighty}.
-7.  In several steps refactor {mighty} to use the new `@nodes` property
+6.  Implement the new method dispatch in {mighty} and {mighty.toolbox}
+    to ensure compatibility. Steps 1–6 give the first complete
+    implementation; steps 7 and 8 are optimization.
+7.  Remove now-redundant logic around predecessors in {mighty}.
+8.  In several steps refactor {mighty} to use the new `@nodes` property
     effectively.
 
 ### Component metadata retrieval
@@ -369,7 +380,17 @@ forward into the component helpers. Depending on how large the required
 changes are, we may have to plan them separately from this document.
 
 Open question: whether the case 1 mapping stays inside {mighty} for
-performance. If so, this is an exception to success criterion 2.
+performance. If so, this is an exception to success criterion 2. \###
+Repeated method and origin tags for multi column components
+
+The `@origin` and `@method` tags can only be supplied once, and not per
+output column for a component. Right now that means they will be
+repeated for each column. For `@origin` this could be a problem, since
+two columns created by the same component could be `Derived` and
+`Assigned` respectively.
+
+This requires a later update in {mighty.component} to support
+definitions like:
 
 ## Compliance Considerations
 
