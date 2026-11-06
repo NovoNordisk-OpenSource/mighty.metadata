@@ -1,0 +1,9 @@
+- id: SAP
+  title: Statistical Analysis Plan
+  doctype: suppdoc
+  href: ./docs/sap.pdf
+
+- id: DERIV_METHODS
+  title: Derivation Methods
+  doctype: method
+  href: ./docs/methods.pdf

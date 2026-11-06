@@ -1,0 +1,17 @@
+# Sponsor-defined codelist
+- id: SEX
+  label: Sex
+  description: Sex of the subject
+  datatype: text
+  values:
+    - code: F
+      decode: Female
+    - code: M
+      decode: Male
+
+# Keep only some values of an external codelist and restore one more
+- id: AGEU
+  subset:
+    - code: YEARS
+  restore:
+    - code: MONTHS
