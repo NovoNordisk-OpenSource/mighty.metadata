@@ -18,7 +18,9 @@ column metadata populated.
 \description{
 Populates column metadata from predecessor references. Columns with a
 \code{method} in the format \code{domain.column} (e.g., \code{ADSL.USUBJID}) inherit
-metadata from the referenced predecessor.
+metadata from the referenced predecessor. Predecessors that are themselves
+predecessors are resolved along the chain in one run, the nearest
+predecessor wins per field, and circular references give an error.
 }
 \examples{
 study <- mighty_study(

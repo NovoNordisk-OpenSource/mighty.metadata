@@ -3,7 +3,9 @@
 #' @description
 #' Populates column metadata from predecessor references. Columns with a
 #' `method` in the format `domain.column` (e.g., `ADSL.USUBJID`) inherit
-#' metadata from the referenced predecessor.
+#' metadata from the referenced predecessor. Predecessors that are themselves
+#' predecessors are resolved along the chain in one run, the nearest
+#' predecessor wins per field, and circular references give an error.
 #'
 #' @param x A [mighty_study] or [mighty_domain] object.
 #' @param ... Additional arguments passed to methods.
@@ -79,38 +81,12 @@ update_predecessor <- function(
 ) {
   column <- select_column(x = x, id = id)
 
-  predecessor_pattern <- "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$"
-  if (!isTRUE(grepl(pattern = predecessor_pattern, x = column$method))) {
-    cli::cli_abort(
-      "{id}: Non standard predecessor method {.code {column$method}}.
-      Must be in the {.code {{domain}}.{{column}}} format."
-    )
-  }
-
-  pred_table <- gsub(pattern = "\\..*$", replacement = "", x = column$method)
-  pred_column <- gsub(pattern = "^.*\\.", replacement = "", x = column$method)
-
-  if (!pred_table %in% names(study)) {
-    zephyr::msg_debug(
-      "{column$id}: Predecessor domain {.code {pred_table}} not found in study"
-    )
-    return(
-      update_column(
-        x = x,
-        id = id,
-        origin = "Predecessor"
-      )
-    )
-  }
-
-  if (!pred_column %in% list_columns(x = study[[pred_table]])) {
-    cli::cli_abort(
-      "{column$id}: Predecessor {.code {column$method}} not found in study"
-    )
-  }
-
-  pred <- study[[pred_table]] |>
-    select_column(id = pred_column)
+  pred <- resolve_predecessor(
+    column = column,
+    study = study,
+    path = paste(x$id, id, sep = "."),
+    discard = discard
+  )
 
   updated_values <- names(pred) |>
     setdiff(y = discard) |>
@@ -125,4 +101,56 @@ update_predecessor <- function(
       pred[updated_values]
     )
   )
+}
+
+#' Helper function to resolve the metadata of a predecessor, following
+#' predecessors of the predecessor. The nearest predecessor wins per field.
+#' `path` holds the visited `domain.column` references to detect cycles.
+#' @noRd
+resolve_predecessor <- function(column, study, path, discard) {
+  predecessor_pattern <- "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$"
+  if (!isTRUE(grepl(pattern = predecessor_pattern, x = column$method))) {
+    cli::cli_abort(
+      "{column$id}: Non standard predecessor method {.code {column$method}}.
+      Must be in the {.code {{domain}}.{{column}}} format."
+    )
+  }
+
+  if (column$method %in% path) {
+    cycle <- c(path[match(column$method, path):length(path)], column$method)
+    cycle <- paste0("`", cycle, "`", collapse = " -> ")
+    cli::cli_abort("Circular predecessor reference: {cycle}")
+  }
+
+  pred_table <- gsub(pattern = "\\..*$", replacement = "", x = column$method)
+  pred_column <- gsub(pattern = "^.*\\.", replacement = "", x = column$method)
+
+  if (!pred_table %in% names(study)) {
+    zephyr::msg_debug(
+      "{column$id}: Predecessor domain {.code {pred_table}} not found in study"
+    )
+    return(list())
+  }
+
+  if (!pred_column %in% list_columns(x = study[[pred_table]])) {
+    cli::cli_abort(
+      "{column$id}: Predecessor {.code {column$method}} not found in study"
+    )
+  }
+
+  pred <- study[[pred_table]] |>
+    select_column(id = pred_column)
+
+  if (!is_predecessor(pred)) {
+    return(pred)
+  }
+
+  ancestor <- resolve_predecessor(
+    column = pred,
+    study = study,
+    path = c(path, column$method),
+    discard = discard
+  )
+
+  c(pred, ancestor[setdiff(names(ancestor), c(discard, names(pred)))])
 }
