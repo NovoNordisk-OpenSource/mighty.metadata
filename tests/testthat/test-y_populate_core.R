@@ -125,10 +125,10 @@ test_that("populate_core() validates each domain once, not once per column", {
 
   n_before <- length(list_columns(study$ADAE))
 
-  n <- count_validations(study <- populate_core(study))
+  res <- count_validations(populate_core(study))
 
-  expect_gt(length(list_columns(study$ADAE)) - n_before, 1L)
-  expect_equal(n, 1L) # only ADAE has `usecore`
+  expect_gt(length(list_columns(res$value$ADAE)) - n_before, 1L)
+  expect_equal(res$n, 1L) # only ADAE has `usecore`
 })
 
 test_that("populate_core_domain() returns early without validating when `usecore` is not set", {
@@ -137,12 +137,12 @@ test_that("populate_core_domain() returns early without validating when `usecore
 
   expect_false(isTRUE(study$ADSL$usecore))
 
-  count_validations(
-    result <- populate_core_domain(domain = study$ADSL, study = study)
-  ) |>
-    expect_equal(0L)
+  res <- count_validations(
+    populate_core_domain(domain = study$ADSL, study = study)
+  )
 
-  expect_identical(result, study$ADSL)
+  expect_equal(res$n, 0L)
+  expect_identical(res$value, study$ADSL)
 })
 
 test_that("populate_core_domain() returns early without validating when there are no core variables", {
@@ -153,12 +153,12 @@ test_that("populate_core_domain() returns early without validating when there ar
     study$ADSL$columns[[i]][["is_core"]] <- NULL
   }
 
-  count_validations(
-    result <- populate_core_domain(domain = study$ADAE, study = study)
-  ) |>
-    expect_equal(0L)
+  res <- count_validations(
+    populate_core_domain(domain = study$ADAE, study = study)
+  )
 
-  expect_identical(result, study$ADAE)
+  expect_equal(res$n, 0L)
+  expect_identical(res$value, study$ADAE)
 })
 
 test_that("populate_core_domain() skips validation when already populated", {
@@ -166,10 +166,10 @@ test_that("populate_core_domain() skips validation when already populated", {
     mighty_study() |>
     populate_core()
 
-  count_validations(
-    result <- populate_core_domain(domain = study$ADAE, study = study)
-  ) |>
-    expect_equal(0L)
+  res <- count_validations(
+    populate_core_domain(domain = study$ADAE, study = study)
+  )
 
-  expect_identical(result, study$ADAE)
+  expect_equal(res$n, 0L)
+  expect_identical(res$value, study$ADAE)
 })
