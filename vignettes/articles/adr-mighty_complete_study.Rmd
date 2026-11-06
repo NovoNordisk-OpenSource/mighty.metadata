@@ -220,15 +220,15 @@ Each node has `type` (column, row, or parameter, matching the `columns`, `rows` 
 
 Shorthand predecessor mapping, with current domain `ADSL` and base domain `DM`:
 
-| # | Case                                          | Input `method`         | `method` after `populate_sparse()`   | Component            | Origin      | Inherits from                 |
-|---|-----------------------------------------------|------------------------|--------------------------------------|----------------------|-------------|-------------------------------|
-| 1 | Keep column from the base domain              | none (`id: MYVAR`)     | `DM.MYVAR`                           | `mighty_init_domain` | Predecessor | Source column, if in study    |
-| 2 | Rename column from the base domain            | `DM.DMSEQ`             | unchanged                            | `mighty_col_rename`  | Predecessor | Source column, if in study    |
-| 3 | Copy existing column into new column          | `ADSL.MYVAR`           | unchanged                            | `mighty_col_mutate`  | Predecessor | Source column, if in study    |
-| 4 | Join predecessor from other domain            | `ADXX.VAR2`            | unchanged                            | `mighty_col_echo`    | Predecessor | Source column, if in study    |
-| 5 | Join predecessor from supplementary SDTM data | `SUPPDM.EFFICACY.QVAL` | `SUPPDM.QVAL where QNAM="EFFICACY"`  | `mighty_merge_supp`  | Predecessor | None                          |
-| 6 | Join predecessor from ADaM BDS data set       | `ADVS.BMIGRP.AVALC`    | `ADVS.AVALC where PARAMCD="BMIGRP"`  | `mighty_merge_param` | Derived     | `AVALC` of parameter `BMIGRP` |
-| 7 | Join predecessor from SDTM findings data      | `VS.SYSBP.VSSTRESN`    | `VS.VSSTRESN where VSTESTCD="SYSBP"` | `mighty_merge_param` | Derived     | None                          |
+| # | Case                                          | Input `id` | Input `method`         | Output `method`                      | Component            | Origin      | Inherits from                 |
+|---|-----------------------------------------------|------------|------------------------|--------------------------------------|----------------------|-------------|-------------------------------|
+| 1 | Keep column from the base domain              | `MYVAR`    | none                   | `DM.MYVAR`                           | `mighty_init_domain` | Predecessor | Source column, if in study    |
+| 2 | Rename column from the base domain            | `SRCSEQ`   | `DM.DMSEQ`             | unchanged                            | `mighty_col_rename`  | Predecessor | Source column, if in study    |
+| 3 | Copy existing column into new column          | `NEWVAR`   | `ADSL.MYVAR`           | unchanged                            | `mighty_col_mutate`  | Predecessor | Source column, if in study    |
+| 4 | Join predecessor from other domain            | `VAR2`     | `ADXX.VAR2`            | unchanged                            | `mighty_col_echo`    | Predecessor | Source column, if in study    |
+| 5 | Join predecessor from supplementary SDTM data | `EFFICACY` | `SUPPDM.EFFICACY.QVAL` | `SUPPDM.QVAL where QNAM="EFFICACY"`  | `mighty_merge_supp`  | Predecessor | None                          |
+| 6 | Join predecessor from ADaM BDS data set       | `BMIGRP`   | `ADVS.BMIGRP.AVALC`    | `ADVS.AVALC where PARAMCD="BMIGRP"`  | `mighty_merge_param` | Derived     | `AVALC` of parameter `BMIGRP` |
+| 7 | Join predecessor from SDTM findings data      | `SYSBP`    | `VS.SYSBP.VSSTRESN`    | `VS.VSSTRESN where VSTESTCD="SYSBP"` | `mighty_merge_param` | Derived     | None                          |
 
 In case 1, a column with no `method` and no `component` is taken from the base domain(s).
 Several base domains are row-bound, and all must have the column.
