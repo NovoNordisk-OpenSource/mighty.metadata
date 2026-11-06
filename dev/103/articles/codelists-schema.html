@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,253 +92,75 @@ refer to a codelist by its <code>id</code> in their
 <code>codelist</code> field. The file structure is defined by a <a href="https://json-schema.org" class="external-link">JSON-schema</a> accessible with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"schema"</span>, <span class="st">"codelists.json"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span></span></code></pre></div>
-<p>Below you can find a detailed description of the structure.</p>
 <div class="section level2">
-<h2 id="mighty-metadata-codelists-specification">Mighty Metadata Codelists Specification<a class="anchor" aria-label="anchor" href="#mighty-metadata-codelists-specification"></a>
+<h2 id="structure">Structure<a class="anchor" aria-label="anchor" href="#structure"></a>
 </h2>
-<p>Schema for study-level codelist definitions and value-level overrides
-referenced from ADaM domain metadata</p>
-<table class="table">
-<thead><tr class="header">
-<th align="left">Type</th>
-<th align="left">Items</th>
-<th align="left">Unique Items</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td align="left">array</td>
-<td align="left"><a href="#codelist">codelist</a></td>
-<td align="left">Yes</td>
-</tr></tbody>
-</table>
-</div>
-<div class="section level2">
-<h2 id="definitions">Definitions<a class="anchor" aria-label="anchor" href="#definitions"></a>
-</h2>
-<div class="section level3">
-<h3 id="code">code<a class="anchor" aria-label="anchor" href="#code"></a>
-</h3>
-<p>Coded value</p>
-<div class="section level4">
-<h4 id="anyof">anyOf<a class="anchor" aria-label="anchor" href="#anyof"></a>
-</h4>
-</div>
-</div>
-<div class="section level3">
-<h3 id="decoded_value">decoded_value<a class="anchor" aria-label="anchor" href="#decoded_value"></a>
-</h3>
-<table class="table">
-<thead><tr class="header">
-<th align="left">Type</th>
-<th align="left">Required</th>
-<th align="left">Additional Properties</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td align="left">object</td>
-<td align="left">code</td>
-<td align="left">No</td>
-</tr></tbody>
-</table>
-<div class="section level4">
-<h4 id="properties">Properties<a class="anchor" aria-label="anchor" href="#properties"></a>
-</h4>
+<p>The file is a list of codelists. Each codelist has the following
+fields:</p>
 <table class="table">
 <colgroup>
-<col width="8%">
-<col width="73%">
-<col width="8%">
-<col width="10%">
+<col width="41%">
+<col width="22%">
+<col width="36%">
 </colgroup>
 <thead><tr class="header">
-<th align="left">Name</th>
-<th align="left">Description</th>
-<th align="left">Type</th>
-<th align="left">Required</th>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">code</td>
-<td align="left"></td>
-<td align="left"><a href="#code">code</a></td>
-<td align="left">Yes</td>
+<td><code>id</code></td>
+<td>string</td>
+<td>Unique id used to reference the codelist from column metadata
+(required)</td>
 </tr>
 <tr class="even">
-<td align="left">decode</td>
-<td align="left">Decode text rendered as <decode><translatedtext> in
-define.xml</translatedtext></decode>
+<td><code>label</code></td>
+<td>string</td>
+<td>Codelist label</td>
+</tr>
+<tr class="odd">
+<td><code>description</code></td>
+<td>string</td>
+<td>Codelist description</td>
+</tr>
+<tr class="even">
+<td><code>datatype</code></td>
+<td>string</td>
+<td>Data type of the coded values: <code>text</code>,
+<code>integer</code> or <code>float</code>
 </td>
-<td align="left">string</td>
-<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td><code>values</code></td>
+<td>list</td>
+<td>Values of a sponsor-defined codelist</td>
+</tr>
+<tr class="even">
+<td><code>subset</code></td>
+<td>list</td>
+<td>Values to keep from an external codelist</td>
+</tr>
+<tr class="odd">
+<td><code>restore</code></td>
+<td>list</td>
+<td>SDTM CT values to include even when not used in the SDTM
+define.xml</td>
+</tr>
+<tr class="even">
+<td><code>extend</code></td>
+<td>list</td>
+<td>Values extending an extensible external codelist</td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="section level3">
-<h3 id="coded_value">coded_value<a class="anchor" aria-label="anchor" href="#coded_value"></a>
-</h3>
-<table class="table">
-<thead><tr class="header">
-<th align="left">Type</th>
-<th align="left">Required</th>
-<th align="left">Additional Properties</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td align="left">object</td>
-<td align="left">code</td>
-<td align="left">No</td>
-</tr></tbody>
-</table>
-<div class="section level4">
-<h4 id="properties-1">Properties<a class="anchor" aria-label="anchor" href="#properties-1"></a>
-</h4>
-<table class="table">
-<thead><tr class="header">
-<th align="left">Name</th>
-<th align="left">Required</th>
-<th align="left">Type</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td align="left">code</td>
-<td align="left">Yes</td>
-<td align="left"><a href="#code">code</a></td>
-</tr></tbody>
-</table>
-</div>
-</div>
-<div class="section level3">
-<h3 id="codelist">codelist<a class="anchor" aria-label="anchor" href="#codelist"></a>
-</h3>
-<table class="table">
-<colgroup>
-<col width="3%">
-<col width="3%">
-<col width="59%">
-<col width="6%">
-<col width="17%">
-<col width="9%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">Type</th>
-<th align="left">Required</th>
-<th align="left">Any Of</th>
-<th align="left">If</th>
-<th align="left">Then</th>
-<th align="left">Additional Properties</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td align="left">object</td>
-<td align="left">id</td>
-<td align="left">list(required = list(“values”))<br>list(required =
-list(“subset”))<br>list(required = list(“restore”))<br>list(required =
-list(“extend”))</td>
-<td align="left">list(“values”)</td>
-<td align="left">list(“label”, “description”, “datatype”)</td>
-<td align="left">No</td>
-</tr></tbody>
-</table>
-<div class="section level4">
-<h4 id="properties-2">Properties<a class="anchor" aria-label="anchor" href="#properties-2"></a>
-</h4>
-<table class="table">
-<colgroup>
-<col width="6%">
-<col width="58%">
-<col width="3%">
-<col width="12%">
-<col width="5%">
-<col width="7%">
-<col width="4%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">Name</th>
-<th align="left">Description</th>
-<th align="left">Type</th>
-<th align="left">Enum</th>
-<th align="right">Min Items</th>
-<th align="left">Items</th>
-<th align="left">Required</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">id</td>
-<td align="left">Unique id used to reference the codelist from column
-metadata</td>
-<td align="left">string</td>
-<td align="left">NULL</td>
-<td align="right"></td>
-<td align="left">NULL</td>
-<td align="left">Yes</td>
-</tr>
-<tr class="even">
-<td align="left">label</td>
-<td align="left">Codelist label</td>
-<td align="left">string</td>
-<td align="left">NULL</td>
-<td align="right"></td>
-<td align="left">NULL</td>
-<td align="left">No</td>
-</tr>
-<tr class="odd">
-<td align="left">description</td>
-<td align="left">Codelist description</td>
-<td align="left">string</td>
-<td align="left">NULL</td>
-<td align="right"></td>
-<td align="left">NULL</td>
-<td align="left">No</td>
-</tr>
-<tr class="even">
-<td align="left">datatype</td>
-<td align="left">Data type of the coded values</td>
-<td align="left">string</td>
-<td align="left">text , integer, float</td>
-<td align="right"></td>
-<td align="left">NULL</td>
-<td align="left">No</td>
-</tr>
-<tr class="odd">
-<td align="left">values</td>
-<td align="left">Values of a sponsor-defined (non-standard)
-codelist</td>
-<td align="left">array</td>
-<td align="left">NULL</td>
-<td align="right">1</td>
-<td align="left"><a href="#decoded_value">decoded_value</a></td>
-<td align="left">No</td>
-</tr>
-<tr class="even">
-<td align="left">subset</td>
-<td align="left">Values to keep from a standard controlled terminology
-codelist</td>
-<td align="left">array</td>
-<td align="left">NULL</td>
-<td align="right">1</td>
-<td align="left"><a href="#coded_value">coded_value</a></td>
-<td align="left">No</td>
-</tr>
-<tr class="odd">
-<td align="left">restore</td>
-<td align="left">SDTM controlled terminology values to include in the
-ADaM codelist even when not used in the SDTM define.xml</td>
-<td align="left">array</td>
-<td align="left">NULL</td>
-<td align="right">1</td>
-<td align="left"><a href="#coded_value">coded_value</a></td>
-<td align="left">No</td>
-</tr>
-<tr class="even">
-<td align="left">extend</td>
-<td align="left">Values extending an extensible codelist</td>
-<td align="left">array</td>
-<td align="left">NULL</td>
-<td align="right">1</td>
-<td align="left"><a href="#decoded_value">decoded_value</a></td>
-<td align="left">No</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p>Entries in <code>values</code> and <code>extend</code> have a
+<code>code</code> and an optional <code>decode</code> (intended for
+<code>TranslatedText</code> in define.xml); entries in
+<code>subset</code> and <code>restore</code> have only a
+<code>code</code>. Each group must have at least one entry, and within a
+group either all or none of the entries have a <code>decode</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="operation-groups">Operation groups<a class="anchor" aria-label="anchor" href="#operation-groups"></a>
@@ -397,8 +219,10 @@ even when they are not used in the SDTM define.xml</td>
 For the other groups these fields are optional, as they come from the
 external codelist.</p>
 <p><code>values</code> cannot be combined with <code>subset</code> or
-<code>restore</code> on the same codelist. <code>code</code> must be
-unique across all groups within a codelist.</p>
+<code>restore</code> on the same codelist. Codelist <code>id</code>s
+must be unique, and <code>code</code> must be unique across all groups
+within a codelist (compared as text, so <code>1</code> and
+<code>"1"</code> are duplicates).</p>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -435,7 +259,10 @@ unique across all groups within a codelist.</p>
 <p>Codelists do not have to be referenced by a column, e.g. when they
 are added before the columns that use them. Use
 <code><a href="../reference/codelists.html">check_codelist_references()</a></code> to check that every codelist in
-a study is referenced.</p>
+a study is referenced by at least one column (including columns within
+parameters). It does not check the opposite direction: a column
+referring to a codelist that is not defined in
+<code>_codelists.yml</code> is not reported.</p>
 <p><code>code</code> can be a string or a number. Since yaml infers
 types, unquoted values that look like numbers
 (e.g. <code>code: 1</code>) are read as numbers.</p>

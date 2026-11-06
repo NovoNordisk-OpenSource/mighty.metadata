@@ -31,7 +31,7 @@ your mighty_documents() object (or through mighty_study@documents)."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -193,53 +193,49 @@ reference has missing comment text.</p></li>
 <span class="r-in"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="mighty_study.html">mighty_study</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → No `_documents.yml` file found</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → No `_codelists.yml` file found</span>
 <span class="r-in"><span><span class="va">study</span><span class="op">@</span><span class="va">documents</span> <span class="op">&lt;-</span> <span class="va">docs</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Load study config</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="mighty_study.html">mighty_study</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → No `_documents.yml` file found</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → No `_codelists.yml` file found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Add a document</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="va">s</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">add_document</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    id <span class="op">=</span> <span class="st">"SAP"</span>,</span></span>
-<span class="r-in"><span>    title <span class="op">=</span> <span class="st">"Statistical Analysis Plan"</span>,</span></span>
+<span class="r-in"><span>    id <span class="op">=</span> <span class="st">"PROTOCOL"</span>,</span></span>
+<span class="r-in"><span>    title <span class="op">=</span> <span class="st">"Study Protocol"</span>,</span></span>
 <span class="r-in"><span>    doctype <span class="op">=</span> <span class="st">"suppdoc"</span>,</span></span>
-<span class="r-in"><span>    href <span class="op">=</span> <span class="st">"./docs/sap.pdf"</span></span></span>
+<span class="r-in"><span>    href <span class="op">=</span> <span class="st">"./docs/protocol.pdf"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># List and select documents</span></span></span>
 <span class="r-in"><span><span class="fu">list_documents</span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "SAP"</span>
-<span class="r-in"><span><span class="fu">select_document</span><span class="op">(</span><span class="va">s</span>, id <span class="op">=</span> <span class="st">"SAP"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "SAP"           "DERIV_METHODS" "PROTOCOL"     </span>
+<span class="r-in"><span><span class="fu">select_document</span><span class="op">(</span><span class="va">s</span>, id <span class="op">=</span> <span class="st">"PROTOCOL"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "SAP"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "PROTOCOL"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $title</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Statistical Analysis Plan"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Study Protocol"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $doctype</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "suppdoc"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $href</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "./docs/sap.pdf"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "./docs/protocol.pdf"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Update existing document</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="va">s</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">update_document</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    id <span class="op">=</span> <span class="st">"SAP"</span>,</span></span>
-<span class="r-in"><span>    title <span class="op">=</span> <span class="st">"Statistical Analysis Plan v2"</span></span></span>
+<span class="r-in"><span>    id <span class="op">=</span> <span class="st">"PROTOCOL"</span>,</span></span>
+<span class="r-in"><span>    title <span class="op">=</span> <span class="st">"Study Protocol v2"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Remove one or more documents</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="va">s</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">remove_documents</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"SAP"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">remove_documents</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"PROTOCOL"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Work directly on mighty_documents</span></span></span>
 <span class="r-in"><span><span class="va">docs</span> <span class="op">&lt;-</span> <span class="fu">mighty_documents</span><span class="op">(</span><span class="op">)</span></span></span>
@@ -259,8 +255,6 @@ reference has missing comment text.</p></li>
 <span class="r-in"><span><span class="va">study</span> <span class="op">&lt;-</span> <span class="fu"><a href="mighty_study.html">mighty_study</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, package <span class="op">=</span> <span class="st">"mighty.metadata"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → No `_documents.yml` file found</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → No `_codelists.yml` file found</span>
 <span class="r-in"><span><span class="fu">check_document_references</span><span class="op">(</span><span class="va">study</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
