@@ -1,4 +1,4 @@
-# removing a referenced document is caught by check_document_references()
+# check_document_references() catches removed referenced document
 
     Code
       check_document_references(study)
@@ -18,7 +18,7 @@
       Documents: 3 entries
       IDs: `SUPPDOC001`, `COMMENT001`, and `METHOD001`
 
-# check_document_references() errors when domains reference document ids but no docs in _documents.yml
+# check_document_references() errors on refs with empty documents
 
     Code
       check_document_references(study)
@@ -32,7 +32,7 @@
       Add this id to '_documents.yml' or update the reference id in metadata.
       i No documents are currently defined in _documents.yml.
 
-# check_document_references() errors when domains reference document ids not defined in _documents.yml
+# check_document_references() errors on undefined document refs
 
     Code
       check_document_references(study)
