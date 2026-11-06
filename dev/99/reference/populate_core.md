@@ -3,9 +3,6 @@
 Adds core variables from supplier datasets as predecessor columns to
 datasets that use them (marked with `usecore = TRUE`).
 
-Core variables already added as predecessors are skipped, so running it
-again returns the same result.
-
 Note: Currently only accepts core variables from ADSL.
 
 ## Usage
