@@ -65,3 +65,4 @@ articles:
       - articles/adr-mapping_sheet
       - articles/adr-pooling
       - articles/adr-codelists_metadata
+      - articles/adr-mighty_complete_study

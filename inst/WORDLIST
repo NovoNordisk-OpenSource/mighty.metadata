@@ -11,6 +11,7 @@ AEENDTC
 AENDT
 AESEQ
 AESTDTC
+AETECH
 AETERM
 AGEU
 ASTDT
@@ -33,6 +34,7 @@ CodeListItem
 Codelist
 Codelists
 Cond
+DMSEQ
 EQ
 EnumeratedItem
 ExternalCodeList
@@ -40,6 +42,8 @@ GCMD
 Giulia
 Graczyk
 Hedegaard
+IDVAR
+IDVARVAL
 IG
 Katarzyna
 Knoph
@@ -48,6 +52,7 @@ MEDDRA
 MYVAR
 MedDRA
 NCI
+NEWVAR
 NN
 NOCOLS
 NOLABEL
@@ -62,6 +67,8 @@ Origindescription
 PARAMCD
 PHARMACOKINETIC
 Pais
+QNAM
+QVAL
 RANDFL
 README
 Req
@@ -70,12 +77,19 @@ Ryszard
 SAFFL
 SDTM
 SITEID
+SRCSEQ
 STUDYID
 SUBJID
+SUPPAE
+SUPPDM
 SUPPDOC
+SUPPLB
+SUPPXL
+SYSBP
 Siggaard
 Sweave
 Szymanski
+TESTCD
 TRTA
 TRTEMFL
 TRTP
@@ -89,6 +103,7 @@ VSTESTCD
 WORDLIST
 WSTCIR
 Whereclauses
+XVAR
 accomodate
 advs
 cdisc
