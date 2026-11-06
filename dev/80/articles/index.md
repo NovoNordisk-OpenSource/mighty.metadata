@@ -25,3 +25,5 @@
   specifications](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-pooling.md):
 - [ADR: codelists metadata
   structure](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-codelists_metadata.md):
+- [ADR: mighty_complete_study()
+  class](https://novonordisk-opensource.github.io/mighty.metadata/articles/adr-mighty_complete_study.md):
