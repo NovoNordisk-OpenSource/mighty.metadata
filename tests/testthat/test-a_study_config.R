@@ -105,7 +105,7 @@ test_that("study_config accepts standards and terminology", {
   expect_equal(x$terminology[[2]]$version, "2023 JAN")
 })
 
-test_that("write_config() preserves quoted version strings with trailing zeros", {
+test_that("write_config() keeps quoted version strings with trailing zeros", {
   tmp <- withr::local_tempdir()
   file <- file.path(tmp, "_study.yml")
 
@@ -135,7 +135,7 @@ test_that("study_config accepts missing or empty standards and terminology", {
   expect_length(x$terminology, 0)
 })
 
-test_that("study_config errors on standards or terminology missing id/version", {
+test_that("study_config errors on standards/terminology missing id/version", {
   expect_error(
     study_config(
       .data = list(study_id = "a", standards = list(list(version = "1.1")))

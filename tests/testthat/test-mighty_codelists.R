@@ -140,7 +140,7 @@ test_that("validate_mighty_codelists() detects duplicate codes across groups", {
   )
 })
 
-test_that("validate_mighty_codelists() detects duplicate codes within a group", {
+test_that("validate_mighty_codelists() detects duplicate codes in a group", {
   expect_error(
     new_cl(list(id = "A", subset = list(list(code = "X"), list(code = "X")))),
     "Duplicate code values in codelist"
