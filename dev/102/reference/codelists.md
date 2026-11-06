@@ -285,8 +285,6 @@ study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 ) |>
   extend_codelist_values("UNUSED", code = "A")
-#> → No `_documents.yml` file found
-#> → No `_codelists.yml` file found
 
 try(check_codelist_references(study))
 #> Error in check_codelist_references(study) : 

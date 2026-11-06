@@ -140,53 +140,49 @@ print(docs)
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
-#> → No `_documents.yml` file found
-#> → No `_codelists.yml` file found
 study@documents <- docs
 
 # Load study config
 s <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
-#> → No `_documents.yml` file found
-#> → No `_codelists.yml` file found
 
 # Add a document
 s <- s |>
   add_document(
-    id = "SAP",
-    title = "Statistical Analysis Plan",
+    id = "PROTOCOL",
+    title = "Study Protocol",
     doctype = "suppdoc",
-    href = "./docs/sap.pdf"
+    href = "./docs/protocol.pdf"
   )
 
 # List and select documents
 list_documents(s)
-#> [1] "SAP"
-select_document(s, id = "SAP")
+#> [1] "SAP"           "DERIV_METHODS" "PROTOCOL"     
+select_document(s, id = "PROTOCOL")
 #> $id
-#> [1] "SAP"
+#> [1] "PROTOCOL"
 #> 
 #> $title
-#> [1] "Statistical Analysis Plan"
+#> [1] "Study Protocol"
 #> 
 #> $doctype
 #> [1] "suppdoc"
 #> 
 #> $href
-#> [1] "./docs/sap.pdf"
+#> [1] "./docs/protocol.pdf"
 #> 
 
 # Update existing document
 s <- s |>
   update_document(
-    id = "SAP",
-    title = "Statistical Analysis Plan v2"
+    id = "PROTOCOL",
+    title = "Study Protocol v2"
   )
 
 # Remove one or more documents
 s <- s |>
-  remove_documents(id = "SAP")
+  remove_documents(id = "PROTOCOL")
 
 # Work directly on mighty_documents
 docs <- mighty_documents()
@@ -206,7 +202,5 @@ list_documents(docs)
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
-#> → No `_documents.yml` file found
-#> → No `_codelists.yml` file found
 check_document_references(study)
 ```
