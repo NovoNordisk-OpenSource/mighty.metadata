@@ -157,6 +157,11 @@ and a resolved `mighty_study()` cannot be distinguished from a raw one.
 `origin: Predecessor` and `method: ADSL.<VAR>`, and errors for any other
 column with the same name.
 
+`populate_sparse()` resolves predecessor chains (e.g. `ADVS.AGE -> ADAE.AGE -> ADSL.AGE`)
+in one run; the nearest ancestor wins per field.
+Circular predecessor references (e.g. `ADAE.XVAR -> ADVS.XVAR -> ADAE.XVAR`)
+give an error.
+
 ### `mighty_complete_study()`
 
 Proposed structure, all properties read-only:
@@ -291,6 +296,8 @@ The first four components are already implemented in {mighty}, and the standard 
    1. The expanded form parses to the same `component.with` as the shorthand.
    1. Field precedence for `origin`, `method` and `component`.
    1. Each helper and `mighty_complete_study()` give the same result when run again on their own output.
+   1. Predecessor chains resolve in one run.
+   1. Circular predecessor references give an error.
    1. Read-only properties of `mighty_complete_study()`.
    1. `resolve_components()` returns the study unchanged when `@mighty` is `NULL`.
 
