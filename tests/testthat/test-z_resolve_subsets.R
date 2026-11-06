@@ -21,6 +21,8 @@ test_that("resolve_subsets() - subsetting works", {
       subset = "STUDYID == 'STUDY1'"
     )
 
+  expect_idempotent(study, resolve_subsets)
+
   study <- study |>
     resolve_subsets() |>
     expect_no_condition()
@@ -125,21 +127,4 @@ test_that("resolve_subsets() - error handling", {
     expect_error(
       regexp = "STUDY1_COMPONENT.*with\\.domain.*specified"
     )
-})
-
-test_that("resolve_subsets() is idempotent", {
-  study <- test_path("test_study") |>
-    mighty_study()
-
-  study$ADAE <- study$ADAE |>
-    add_row(
-      id = "TRTEMFL_STUDY1",
-      component = list(
-        id = "STUDY1_COMPONENT",
-        with = list(domain = "ADAE")
-      ),
-      subset = "STUDYID == 'STUDY1'"
-    )
-
-  expect_idempotent(study, resolve_subsets)
 })
