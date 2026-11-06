@@ -16,6 +16,7 @@ author:
 ## Success criteria
 
 1. Users can specify predecessors with shorthand: columns (`ADXX.MYVAR`, already supported), SUPP-- qualifiers, BDS parameters and SDTM findings.
+   Users never have to refer to the internal `mighty_*` components directly.
 1. Metadata is used consistently for code generation and documentation, in {mighty} and {mighty.toolbox} respectively, without any further processing inside the two packages.
 1. Information from components is re-used as much as possible, so users do not have to create redundant specifications.
 
