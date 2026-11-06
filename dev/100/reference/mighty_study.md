@@ -121,8 +121,6 @@ is written as a separate file, plus `_mighty.yml` and `_study.yml` when
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
-#> → No `_documents.yml` file found
-#> → No `_codelists.yml` file found
 
 # List tables with metadata
 names(study)
@@ -150,16 +148,14 @@ study@mighty
 # Access study-level documents metadata
 study@documents
 #> <mighty.metadata::mighty_documents>
-#> Documents: 0 entries
-#> IDs:
+#> Documents: 2 entries
+#> IDs: `SAP` and `DERIV_METHODS`
 
 # Load and populate in one step
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata"),
   populate = TRUE
 )
-#> → No `_documents.yml` file found
-#> → No `_codelists.yml` file found
 
 # Write study back to YAML
 tmp <- tempdir()

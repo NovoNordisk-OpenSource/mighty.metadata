@@ -14,66 +14,25 @@ accessible with:
 system.file("schema", "codelists.json", package = "mighty.metadata")
 ```
 
-Below you can find a detailed description of the structure.
+## Structure
 
-## Mighty Metadata Codelists Specification
+The file is a list of codelists. Each codelist has the following fields:
 
-Schema for study-level codelist definitions and value-level overrides
-referenced from ADaM domain metadata
+| Field | Type | Description |
+|----|----|----|
+| `id` | string | Unique id used to reference the codelist from column metadata (required) |
+| `label` | string | Codelist label |
+| `description` | string | Codelist description |
+| `datatype` | string | Data type of the coded values: `text`, `integer` or `float` |
+| `values` | list | Values of a sponsor-defined codelist |
+| `subset` | list | Values to keep from an external codelist |
+| `restore` | list | SDTM CT values to include even when not used in the SDTM define.xml |
+| `extend` | list | Values extending an extensible external codelist |
 
-| Type  | Items                 | Unique Items |
-|:------|:----------------------|:-------------|
-| array | [codelist](#codelist) | Yes          |
-
-## Definitions
-
-### code
-
-Coded value
-
-#### anyOf
-
-### decoded_value
-
-| Type   | Required | Additional Properties |
-|:-------|:---------|:----------------------|
-| object | code     | No                    |
-
-#### Properties
-
-| Name   | Description                           | Type          | Required |
-|:-------|:--------------------------------------|:--------------|:---------|
-| code   |                                       | [code](#code) | Yes      |
-| decode | Decode text rendered as in define.xml | string        | No       |
-
-### coded_value
-
-| Type   | Required | Additional Properties |
-|:-------|:---------|:----------------------|
-| object | code     | No                    |
-
-#### Properties
-
-| Name | Required | Type          |
-|:-----|:---------|:--------------|
-| code | Yes      | [code](#code) |
-
-### codelist
-
-[TABLE]
-
-#### Properties
-
-| Name | Description | Type | Enum | Min Items | Items | Required |
-|:---|:---|:---|:---|---:|:---|:---|
-| id | Unique id used to reference the codelist from column metadata | string | NULL |  | NULL | Yes |
-| label | Codelist label | string | NULL |  | NULL | No |
-| description | Codelist description | string | NULL |  | NULL | No |
-| datatype | Data type of the coded values | string | text , integer, float |  | NULL | No |
-| values | Values of a sponsor-defined (non-standard) codelist | array | NULL | 1 | [decoded_value](#decoded_value) | No |
-| subset | Values to keep from a standard controlled terminology codelist | array | NULL | 1 | [coded_value](#coded_value) | No |
-| restore | SDTM controlled terminology values to include in the ADaM codelist even when not used in the SDTM define.xml | array | NULL | 1 | [coded_value](#coded_value) | No |
-| extend | Values extending an extensible codelist | array | NULL | 1 | [decoded_value](#decoded_value) | No |
+Entries in `values` and `extend` have a `code` and an optional `decode`
+(intended for `TranslatedText` in define.xml); entries in `subset` and
+`restore` have only a `code`. Each group must have at least one entry,
+and within a group either all or none of the entries have a `decode`.
 
 ## Operation groups
 
@@ -94,7 +53,9 @@ A codelist with `values` must also have `label`, `description` and
 from the external codelist.
 
 `values` cannot be combined with `subset` or `restore` on the same
-codelist. `code` must be unique across all groups within a codelist.
+codelist. Codelist `id`s must be unique, and `code` must be unique
+across all groups within a codelist (compared as text, so `1` and `"1"`
+are duplicates).
 
 ## Example
 
@@ -137,7 +98,10 @@ columns:
 Codelists do not have to be referenced by a column, e.g. when they are
 added before the columns that use them. Use
 [`check_codelist_references()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
-to check that every codelist in a study is referenced.
+to check that every codelist in a study is referenced by at least one
+column (including columns within parameters). It does not check the
+opposite direction: a column referring to a codelist that is not defined
+in `_codelists.yml` is not reported.
 
 `code` can be a string or a number. Since yaml infers types, unquoted
 values that look like numbers (e.g. `code: 1`) are read as numbers.
