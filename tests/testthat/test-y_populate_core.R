@@ -131,7 +131,7 @@ test_that("populate_core() validates each domain once, not once per column", {
   expect_equal(res$n, 1L) # only ADAE has `usecore`
 })
 
-test_that("populate_core_domain() returns early without validating when `usecore` is not set", {
+test_that("populate_core_domain() skips validation if `usecore` is not set", {
   study <- test_path("test_study") |>
     mighty_study()
 
@@ -145,7 +145,7 @@ test_that("populate_core_domain() returns early without validating when `usecore
   expect_identical(res$value, study$ADSL)
 })
 
-test_that("populate_core_domain() returns early without validating when there are no core variables", {
+test_that("populate_core_domain() skips validation if no core variables", {
   study <- test_path("test_study") |>
     mighty_study()
 
