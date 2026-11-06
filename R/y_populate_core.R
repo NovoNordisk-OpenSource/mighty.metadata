@@ -4,6 +4,9 @@
 #' Adds core variables from supplier datasets as predecessor columns to
 #' datasets that use them (marked with `usecore = TRUE`).
 #'
+#' Core variables already added as predecessors are skipped, so running it
+#' again returns the same result.
+#'
 #' Note: Currently only accepts core variables from ADSL.
 #'
 #' @param x A [mighty_study] or [mighty_domain] object.
@@ -83,6 +86,23 @@ populate_core_domain <- function(domain, study) {
       "Only ADSL is allowed to have core columns.
       Found: {.code {names(core_vars)[non_adsl_core_vars]}}"
     )
+  }
+
+  is_populated <- mapply(
+    FUN = \(id, method) {
+      id %in% list_columns(domain) &&
+        identical(
+          select_column(domain, id)[c("origin", "method")],
+          list(origin = "Predecessor", method = method)
+        )
+    },
+    id = core_vars,
+    method = names(core_vars)
+  )
+  core_vars <- core_vars[!is_populated]
+
+  if (!length(core_vars)) {
+    return(domain)
   }
 
   dup_vars <- which(core_vars %in% list_columns(domain))
