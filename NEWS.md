@@ -2,6 +2,8 @@
 
 * `populate_core()` can run again on its own output without errors, and errors
   when an existing core column differs from its ADSL predecessor (#84).
+* `populate_sparse()` resolves predecessor chains in one run and errors on
+  circular references (#86).
 
 # mighty.metadata 0.2.0
 
