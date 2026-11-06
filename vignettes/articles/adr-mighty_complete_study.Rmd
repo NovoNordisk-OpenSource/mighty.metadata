@@ -153,6 +153,10 @@ Every helper, and the full pipeline, must give the same result when run again on
 This is needed because the `generate_*(<mighty_study>)` wrappers always call `mighty_complete_study()`,
 and a resolved `mighty_study()` cannot be distinguished from a raw one.
 
+`populate_core()` skips a core variable if the domain already has it with
+`origin: Predecessor` and `method: ADSL.<VAR>`, and errors for any other
+column with the same name.
+
 ### `mighty_complete_study()`
 
 Proposed structure, all properties read-only:
