@@ -1,5 +1,7 @@
 # mighty.metadata (development version)
 
+* `populate_core()` can run again on its own output without errors (#84).
+
 # mighty.metadata 0.2.0
 
 * Added `mighty_codelists()` class for study-level codelist metadata in
