@@ -45,11 +45,13 @@ columns:
     label: Age Units
     method: DM.AGEU
     core: Req
+    codelist: AGEU
 
   - id: SEX
     label: Sex
     method: DM.SEX
     core: Req
+    codelist: SEX
 
   - id: RACE
     label: Race
