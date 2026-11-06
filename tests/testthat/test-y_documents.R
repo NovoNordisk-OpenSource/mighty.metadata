@@ -128,7 +128,7 @@ test_that("remove_documents() works on mighty_study", {
   expect_false("EXTRA001" %in% list_documents(study))
 })
 
-test_that("removing a referenced document is caught by check_document_references()", {
+test_that("check_document_references() catches removed referenced document", {
   study <- mighty_study(test_path("test_study"))
   study <- expect_no_error(remove_documents(study, id = "COMMENT001"))
 
@@ -171,9 +171,10 @@ test_that("mighty_study() reads _documents.yml", {
   )
 })
 
-test_that("check_document_references() returns study when no refs and no docs", {
+test_that("check_document_references() returns study if no refs and no docs", {
   tmpdir <- withr::local_tempdir()
-  file.copy(test_path("test_study/adsl.yml"), tmpdir) # adsl.yml has no document references
+  # adsl.yml has no document references
+  file.copy(test_path("test_study/adsl.yml"), tmpdir)
   study <- mighty_study(tmpdir)
 
   check_document_references(study) |>
@@ -181,9 +182,10 @@ test_that("check_document_references() returns study when no refs and no docs", 
     expect_equal(study)
 })
 
-test_that("check_document_references() returns study when no refs but docs exist", {
+test_that("check_document_references() returns study if docs but no refs", {
   tmpdir <- withr::local_tempdir()
-  file.copy(test_path("test_study/adsl.yml"), tmpdir) # adsl.yml has no document references
+  # adsl.yml has no document references
+  file.copy(test_path("test_study/adsl.yml"), tmpdir)
   file.copy(test_path("test_study/_documents.yml"), tmpdir)
   study <- mighty_study(tmpdir)
 
@@ -192,7 +194,7 @@ test_that("check_document_references() returns study when no refs but docs exist
     expect_equal(study)
 })
 
-test_that("check_document_references() errors when domains reference document ids but no docs in _documents.yml", {
+test_that("check_document_references() errors on refs with empty documents", {
   study <- mighty_study(test_path("test_study"))
 
   study@documents <- mighty_documents(.data = list())
@@ -200,7 +202,7 @@ test_that("check_document_references() errors when domains reference document id
   expect_snapshot(check_document_references(study), error = TRUE)
 })
 
-test_that("check_document_references() errors when domains reference document ids not defined in _documents.yml", {
+test_that("check_document_references() errors on undefined document refs", {
   study <- mighty_study(test_path("test_study"))
   study$ADVS$documents <- list(list(id = "UNKNOWN"), list(id = "NEXT"))
 
@@ -261,7 +263,7 @@ test_that("build_document_refs() builds normalized references", {
   expect_equal(build_document_refs(list(), "x"), list())
 })
 
-test_that("collect_*_document_refs() collects references from each metadata level", {
+test_that("collect_*_document_refs() collects refs from each metadata level", {
   domain <- list(
     id = "ADSL",
     comment = "Domain comment",
@@ -319,7 +321,7 @@ test_that("collect_*_document_refs() collects references from each metadata leve
   )
 })
 
-test_that("find_invalid_method_refs() flags METHOD refs with non-Derived origin", {
+test_that("find_invalid_method_refs() flags METHOD on non-Derived origin", {
   refs <- list(
     list(id = "METHOD001", level = "x", origin = "Assigned"),
     list(id = "METHOD001", level = "y", origin = "Derived"),
