@@ -26,6 +26,24 @@ test_that("mighty_study(populate = TRUE) populates core and sparse", {
   )
 })
 
+test_that("helper pipeline is idempotent", {
+  pipeline <- function(x) {
+    x |>
+      resolve_includes() |>
+      resolve_subsets() |>
+      populate_core() |>
+      populate_sparse()
+  }
+
+  test_path("test_study") |>
+    mighty_study() |>
+    expect_idempotent(fun = pipeline)
+
+  system.file("examples", package = "mighty.metadata") |>
+    mighty_study() |>
+    expect_idempotent(fun = pipeline)
+})
+
 test_that("mighty_study()", {
   study <- test_path("test_study") |>
     mighty_study() |>

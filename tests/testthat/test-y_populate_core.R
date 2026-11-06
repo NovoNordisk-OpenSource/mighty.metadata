@@ -49,13 +49,9 @@ test_that("populate_core() throws error when column already exists", {
 })
 
 test_that("populate_core() is idempotent", {
-  study <- test_path("test_study") |>
+  test_path("test_study") |>
     mighty_study() |>
-    populate_core()
-
-  study |>
-    populate_core() |>
-    expect_identical(study)
+    expect_idempotent(fun = populate_core)
 })
 
 test_that("populate_core() is idempotent after populate_sparse()", {
