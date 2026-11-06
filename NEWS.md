@@ -1,6 +1,8 @@
 # mighty.metadata (development version)
 
 * `populate_core()` can run again on its own output without errors (#84).
+* `populate_sparse()` resolves predecessor chains in one run and errors on
+  circular references (#86).
 
 # mighty.metadata 0.2.0
 
