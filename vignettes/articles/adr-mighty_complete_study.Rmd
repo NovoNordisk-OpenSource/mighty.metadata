@@ -120,7 +120,7 @@ continuously remain compatible with {mighty} and {mighty.toolbox}.
 Proposed implementation order:
 
 1. Make `populate_core()` and `populate_sparse()` idempotent, and add the double-run tests from the Testing Strategy for all existing helpers.
-1. Update `populate_sparse()` to support component predecessor mapping. Extend the predecessor regex in `populate_sparse()` and `is_predecessor()` to accept the three-part shorthand and the expanded `where` form.
+1. Update `populate_sparse()` to support component predecessor mapping. Extend the predecessor regex in `populate_sparse()` and `is_predecessor()` to accept the three-part shorthand and the expanded `where` form (the define.xml notation, e.g. `SUPPDM.QVAL where QNAM="EFFICACY"`; see [Predecessor mapping and components]).
 1. First version of `resolve_components()`.
 1. Add any new special `mighty_*` components to {mighty.standards}.
 1. First version of `mighty_complete_study()`, only implementing component metadata re-use. Note that this means {mighty} will temporarily fetch the components a second time.
