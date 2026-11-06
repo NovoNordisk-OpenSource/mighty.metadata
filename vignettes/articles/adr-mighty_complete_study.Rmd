@@ -1,0 +1,358 @@
+---
+title: "ADR: mighty_complete_study() class"
+date: "2026-11-02"
+author:
+  - "Aksel Thomsen"
+---
+
+## Status
+
+|             |                                                    |
+|-------------|----------------------------------------------------|
+| Package     | mighty.metadata                                    |
+| Version     | 0.1.0                                              |
+| Description | New complete metadata class to ease downstream use |
+
+## Success criteria
+
+1. Users can specify predecessors with shorthand: columns (`ADXX.MYVAR`, already supported), SUPP-- qualifiers, BDS parameters and SDTM findings.
+   Users never have to refer to the internal `mighty_*` components directly.
+1. Metadata is used consistently for code generation and documentation, in {mighty} and {mighty.toolbox} respectively, without any further processing inside the two packages.
+1. Information from components is re-used as much as possible, so users do not have to create redundant specifications.
+
+## Context
+
+Currently, the main export of {mighty.metadata} is the `mighty_study()` class that defines all ADaM metadata for a study.
+It is sparsely defined so that users do not have to specify redundant information, which makes the current class
+suitable for CRUD updates, but not suitable for downstream use.
+
+It has the helpers `resolve_includes()`, `resolve_subsets()`, `populate_core()` and `populate_sparse()`, which every integration must call correctly.
+
+To make this easier, this ADR proposes a new class that handles this consistently,
+and also adds functionality to inherit metadata from the referenced components.
+
+## Decisions
+
+`mighty_complete_study()` is a new S7 class (parent `S7_object`) that stores the resolved `mighty_study()` as a read-only property.
+It does not inherit from `mighty_study()`, because read-only cannot be enforced on the `<list>` parent of `mighty_study()`.
+It populates and resolves all information, so all metadata and components are directly available for downstream use.
+
+The new flow in the packages becomes:
+
+```
+mighty_study()
+└─> mighty_complete_study()
+    ├─> mighty::generate_adam_code()
+    └─> mighty.toolbox::generate_define_xml()
+```
+
+Add new downstream methods for both generics, and keep existing `mighty_study()` methods as wrappers:
+
+```
+generate_adam_code(<mighty_study>)
+└─> mighty_complete_study()
+    └─> generate_adam_code(<mighty_complete_study>)
+
+generate_define_xml(<mighty_study>)
+└─> mighty_complete_study()
+    └─> generate_define_xml(<mighty_complete_study>)
+```
+
+The new `resolve_components()` helper is exported alongside the existing helpers.
+All helper functions consistently return a `mighty_study()` object.
+
+`mighty_study()` remains the class for CRUD updates of the sparse specification.
+`mighty_complete_study()` is the read-only, resolved study for downstream use.
+
+The `populate` argument of `mighty_study()` is soft-deprecated in favor of `mighty_complete_study()`.
+It only runs `populate_core()` and `populate_sparse()`, and skips includes and subsets.
+
+## Consequences
+
+Downstream use in {mighty} and {mighty.toolbox} has to be updated after this feature is released.
+
+The components that `populate_sparse()` maps shorthand predecessors to (see Predecessor mapping) must exist in {mighty.standards}, as {mighty.metadata} now refers to them by id. This includes the new `mighty_merge_supp` and `mighty_merge_param`.
+
+All components must have correct `@method` and `@origin` tags; existing components do not.
+
+{mighty.metadata} adds {mighty.component} to `Imports`.
+There is no circular dependency, since {mighty.component} does not depend on {mighty.metadata}.
+{mighty.standards} is not a package dependency but a GitHub repository of components, found through the `repos` field in `_mighty.yml`.
+
+## Alternatives Considered
+
+### 1. Only add a new helper function to resolve components and inherit component metadata
+
+Not chosen, because a separate class guarantees that downstream code receives a fully resolved object,
+and lets {mighty} and {mighty.toolbox} dispatch on it.
+With only a helper, every integration must call it, and nothing ensures that it was called.
+
+### 2. Handle supplementary data as part of the base domain specification
+
+Proposed as Option A in [mighty#95](https://github.com/NovoNordisk-OpenSource/mighty/issues/95).
+The base domain gets a flag, and columns refer to `SUPP` only.
+The SUPP-- data set is derived from the base domain (e.g. `AE` --> `SUPPAE`):
+
+```yaml
+population:
+  base:
+    - domain: AE
+      include_supp: TRUE
+
+columns:
+  - id: AETECH1
+    method: SUPP.AETECH1
+```
+
+This keeps the two-part `DOMAIN.COLUMN` notation, and with multiple base domains
+(e.g. LB and XL) one column entry can get values from both SUPPLB and SUPPXL.
+
+Not chosen, because it requires changes to `population`, makes `SUPP` a reserved domain name,
+and only supports SUPP-- data sets of the base domain. Instead, we use the explicit
+`SUPPDM.EFFICACY.QVAL` notation, which maps directly to the predecessor `SUPPDM.QVAL where QNAM="EFFICACY"`
+(see [Predecessor mapping and components]) and needs no flag on the base domain.
+
+## Implementation Details
+
+In general, this change should be implemented in many smaller increments to ensure we
+continuously remain compatible with {mighty} and {mighty.toolbox}.
+
+Proposed implementation order:
+
+1. Make `populate_core()` and `populate_sparse()` idempotent, and add the double-run tests from the Testing Strategy for all existing helpers.
+1. Update `populate_sparse()` to support component predecessor mapping. Extend the predecessor regex in `populate_sparse()` and `is_predecessor()` to accept the three-part shorthand and the expanded `where` form (the define.xml notation, e.g. `SUPPDM.QVAL where QNAM="EFFICACY"`; see [Predecessor mapping and components]).
+1. First version of `resolve_components()`.
+1. Add any new special `mighty_*` components to {mighty.standards}.
+1. First version of `mighty_complete_study()`, only implementing component metadata re-use. Note that this means {mighty} will temporarily fetch the components a second time.
+1. Implement the new method dispatch in {mighty} and {mighty.toolbox} to ensure compatibility. Steps 1–6 give the first complete implementation; steps 7 and 8 are optimization.
+1. Remove now-redundant logic around predecessors in {mighty}.
+1. In several steps refactor {mighty} to use the new `@nodes` property effectively.
+
+### Component metadata retrieval
+
+The component metadata is added in the following steps:
+
+1. A new `resolve_components()` function populates component tags back to the `column` entries in the `mighty_study()` object:
+   1. `@origin` --> `column.origin`
+   1. `@method` --> `column.method`
+1. The rendered component objects are stored in `@nodes` of `mighty_complete_study()` (see below).
+
+`resolve_components()` uses the `repos` field of `_mighty.yml` (`@mighty`) to find standard and local components.
+If `@mighty` is `NULL`, it returns the study unchanged. This supports documentation-only use.
+
+`populate_sparse()` keeps a user-set `component` but still runs metadata inheritance for it, so the parser accepts both the shorthand and the expanded form.
+
+`origin` and `component` are only filled when missing.
+Precedence per field:
+
+1. `origin`: user, else the origin set by the predecessor mapping (`"Predecessor"` or `"Derived"`), else component `@origin`.
+1. `method`: the expanded form if the user's `method` is a predecessor reference, else the user's `method`, else the base-domain reference for case 1, else component `@method`.
+1. `component`: user, else the shorthand mapping.
+
+Every helper, and the full pipeline, must give the same result when run again on its own output.
+This is needed because the `generate_*(<mighty_study>)` wrappers always call `mighty_complete_study()`,
+and a resolved `mighty_study()` cannot be distinguished from a raw one.
+
+`populate_core()` skips a core variable if the domain already has it with
+`origin: Predecessor` and `method: ADSL.<VAR>`, and errors for any other
+column with the same name.
+
+`populate_sparse()` resolves predecessor chains (e.g. `ADVS.AGE -> ADAE.AGE -> ADSL.AGE`)
+in one run; the nearest ancestor wins per field.
+Circular predecessor references (e.g. `ADAE.XVAR -> ADVS.XVAR -> ADAE.XVAR`)
+give an error.
+
+### `mighty_complete_study()`
+
+Proposed structure, all properties read-only:
+
+```
+<mighty_complete_study>
+@ properties :
+  $ spec       : <mighty_study>  # The resolved and populated study specification
+  $ components : <list>          # Named list with all components used in the study
+  $ nodes      : <list>          # Nested list of nodes, see below
+```
+
+Read-only is enforced with set-once setters.
+Each setter only allows the assignment at construction, and errors afterwards:
+
+```r
+spec = S7::new_property(
+  class = S7::new_union(NULL, mighty_study),
+  default = NULL,
+  setter = function(self, value) {
+    if (!is.null(self@spec)) {
+      cli::cli_abort("{.field @spec} is read-only")
+    }
+    self@spec <- value
+    self
+  }
+)
+```
+
+Rendered components are R6 objects and are not protected from in-place modification.
+The guarantee is that `@spec`, `@components` and `@nodes` are consistent with each other at construction.
+
+`mighty_complete_study(x, ...)` passes `...` on to the helpers (e.g. `info` to `resolve_includes()`).
+`@spec` is built with:
+
+```r
+x |>
+  resolve_includes(...) |>
+  resolve_subsets() |>
+  populate_core() |>
+  populate_sparse() |>
+  resolve_components()
+```
+
+`@nodes` has a package-neutral structure owned by {mighty.metadata}; downstream packages adapt to it.
+Each node has `type` (column, row, or parameter, matching the `columns`, `rows` and `parameters` entries of the domain), `id`, and `component` (the rendered component object):
+
+```
+@nodes$ADSL$AGE
+  $ type      : "column"
+  $ id        : "AGE"
+  $ component : <mighty_component_rendered>
+```
+
+### Predecessor mapping and components
+
+Shorthand predecessor mapping, with current domain `ADSL` and base domain `DM`:
+
+| # | Case                                          | Input `id` | Input `method`         | Output `method`                      | Component            | Origin      | Inherits from                 |
+|---|-----------------------------------------------|------------|------------------------|--------------------------------------|----------------------|-------------|-------------------------------|
+| 1 | Keep column from the base domain              | `MYVAR`    | none                   | `DM.MYVAR`                           | `mighty_init_domain` | Predecessor | Source column, if in study    |
+| 2 | Rename column from the base domain            | `SRCSEQ`   | `DM.DMSEQ`             | unchanged                            | `mighty_col_rename`  | Predecessor | Source column, if in study    |
+| 3 | Copy existing column into new column          | `NEWVAR`   | `ADSL.MYVAR`           | unchanged                            | `mighty_col_mutate`  | Predecessor | Source column, if in study    |
+| 4 | Join predecessor from other domain            | `VAR2`     | `ADXX.VAR2`            | unchanged                            | `mighty_col_echo`    | Predecessor | Source column, if in study    |
+| 5 | Join predecessor from supplementary SDTM data | `EFFICACY` | `SUPPDM.EFFICACY.QVAL` | `SUPPDM.QVAL where QNAM="EFFICACY"`  | `mighty_merge_supp`  | Predecessor | None                          |
+| 6 | Join predecessor from ADaM BDS data set       | `BMIGRP`   | `ADVS.BMIGRP.AVALC`    | `ADVS.AVALC where PARAMCD="BMIGRP"`  | `mighty_merge_param` | Derived     | `AVALC` of parameter `BMIGRP` |
+| 7 | Join predecessor from SDTM findings data      | `SYSBP`    | `VS.SYSBP.VSSTRESN`    | `VS.VSSTRESN where VSTESTCD="SYSBP"` | `mighty_merge_param` | Derived     | None                          |
+
+In case 1, a column with no `method` and no `component` is taken from the base domain(s).
+Several base domains are row-bound, and all must have the column.
+With several base domains (e.g. LB and XL), `method` is `LB.MYVAR, XL.MYVAR` and `origin` is `Derived`.
+
+Filtered references other than SUPP-- (cases 6 and 7) get `origin: Derived`, since they are not valid define.xml predecessors.
+
+Cases 1–4 inherit label and type from the source column only if the source domain is in the study; case 6 inherits from the parameter column.
+Cases 5 and 7 inherit nothing, since SUPP-- and SDTM sources are not in the study.
+Where no metadata is inherited, users must specify label and type.
+
+`populate_sparse()` sets or rewrites `method` to the expanded form used in define.xml, and writes `component.id` and, if needed, `component.with` (`domain`, `column`, optional `filter`) for code generation.
+Example for a column in `ADAE` (case 4):
+
+```yaml
+# input
+- id: AGE
+  method: ADSL.AGE
+
+# after populate_sparse()
+- id: AGE
+  method: ADSL.AGE
+  origin: Predecessor
+  component:
+    id: mighty_col_echo
+    with:
+      domain: ADSL
+      column: AGE
+```
+
+The three-part notation `DOMAIN.VALUE.COLUMN` filters the predecessor domain on `VALUE`.
+The filter key is derived from the domain prefix:
+
+1. `SUPP--`: `QNAM`
+1. Domain in the study (ADaM BDS): `PARAMCD`
+1. Any other domain (SDTM findings): `<DOMAIN>TESTCD`
+
+The filter is stored in `component.with`, e.g. for SUPP--:
+
+```yaml
+method: 'SUPPDM.QVAL where QNAM="EFFICACY"'
+origin: Predecessor
+component:
+  id: mighty_merge_supp
+  with:
+    domain: SUPPDM
+    column: QVAL
+    filter:
+      QNAM: EFFICACY
+```
+
+{mighty.metadata} only passes domain, column and filter in `component.with`.
+Components choose their own join keys (e.g. `USUBJID`, or `IDVAR`/`IDVARVAL` for SUPP--).
+
+The first four components are already implemented in {mighty}, and the standard components exist in {mighty.standards}.
+`mighty_merge_supp` and `mighty_merge_param` are new and have to be written; whether they become one component is decided during implementation.
+
+## Testing Strategy
+
+1. Keep all tests for exported functions in downstream packages the same, ensuring a consistent user experience.
+1. Only remove internal tests when the functionality is made redundant by this new class.
+1. Integration tests: {mighty} in the {mighty.metadata} CI; {mighty.toolbox} in its own CI, since it is an internal repository.
+1. Add unit tests in {mighty.metadata} for:
+   1. Parsing of the two- and three-part predecessor notation, including the filter key rules.
+   1. The expanded form parses to the same `component.with` as the shorthand.
+   1. Field precedence for `origin`, `method` and `component`.
+   1. Each helper and `mighty_complete_study()` give the same result when run again on their own output.
+   1. Predecessor chains resolve in one run.
+   1. Circular predecessor references give an error.
+   1. Read-only properties of `mighty_complete_study()`.
+   1. `resolve_components()` returns the study unchanged when `@mighty` is `NULL`.
+
+## Risks
+
+Internally, {mighty} handles a lot of the logic that is now pushed forward into the component helpers.
+Depending on how large the required changes are, we may have to plan them separately from this document.
+
+Open question: whether the case 1 mapping stays inside {mighty} for performance.
+If so, this is an exception to success criterion 2.
+
+### Repeated method and origin tags for multi column components
+
+The `@origin` and `@method` tags can only be supplied once, and not per output column for a component.
+Right now that means they will be repeated for each column. For `@origin` this could be a problem, since two columns created by the same component could be `Derived` and `Assigned` respectively.
+
+This requires a later update in {mighty.component} to support definitions like:
+
+```r
+#' @title Double a column
+#' @description
+#' Creates a new column as two times an existing column.
+#'
+#' @param domain `character` Name of the domain
+#' @param output `character` Name of the new column
+#' @param input `character` Name of the existing column
+#' @type column
+#' @origin {{{output}}} Derived
+#' @origin Y Assigned
+#' @method {{{output}}} Two times the input column
+#' @method Y Hardcoded to "Hello"
+#' @depends {{{domain}}} {{{input}}}
+#' @outputs {{{output}}} Y # Possibly outdated
+#' @code
+{{{domain}}} <- {{{domain}}} |>
+  dplyr::mutate(
+    {{{output}}} = 2 * {{{input}}},
+   Y = "Hello"
+  )
+```
+
+This implementation is pushed to the next iteration of the suggested implementation.
+
+## Compliance Considerations
+
+None.
+
+## References
+
+* [ADR: Package design and scope](adr.html)
+* [ADR: mighty.toolbox integration](adr-mighty_toolbox_integration.html)
+* [ADR: Specifying pooled specifications](adr-pooling.html)
+* [mighty.metadata milestone: 0.3.0 integration with mighty.component](https://github.com/NovoNordisk-OpenSource/mighty.metadata/milestone/4)
+* [mighty.metadata#23: Integrate component metadata](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/23)
+* [mighty.component milestone: 0.1.1 integration with mighty.metadata](https://github.com/NovoNordisk-OpenSource/mighty.component/milestone/8)
+* [mighty.standards milestone: initial release with internal components](https://github.com/NovoNordisk-OpenSource/mighty.standards/milestone/5)
+* [mighty.standards#72: supp: add supplemental qualifiers](https://github.com/NovoNordisk-OpenSource/mighty.standards/issues/72)
+* [mighty#95: Reference SUPP-- qualifiers directly from the domain specification](https://github.com/NovoNordisk-OpenSource/mighty/issues/95)
