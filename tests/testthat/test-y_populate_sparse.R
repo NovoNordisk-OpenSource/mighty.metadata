@@ -11,9 +11,7 @@ test_that("populate_sparse() - works with intended input", {
     select_column(study$ADSL, "SEX")[["label"]]
   )
 
-  study |>
-    populate_sparse() |>
-    expect_equal(study)
+  expect_idempotent(study, populate_sparse)
 })
 
 test_that("populate_sparse() - works on a single mighty_domain", {

@@ -283,3 +283,26 @@ test_that("resolve_includes() - removes include field from kept parameter column
     names() |>
     expect_no_match("^include$")
 })
+
+test_that("resolve_includes() is idempotent", {
+  build <- function(cond) {
+    study <- test_path("test_study") |>
+      mighty_study()
+
+    study$ADSL[["include"]] <- cond
+    study$ADAE <- update_column(study$ADAE, id = "TRTEMFL", include = cond)
+    study$ADVS <- study$ADVS |>
+      update_row(id = "BASELINE", include = cond) |>
+      update_parameter(
+        id = "BMI",
+        columns = list(list(id = "AVISITN", include = cond))
+      )
+    study
+  }
+
+  for (cond in c("{study_id == 'test_study'}", "{study_id == 'other_study'}")) {
+    for (info in list(list(), list(study_id = "other_study"))) {
+      expect_idempotent(build(cond), resolve_includes, info = info)
+    }
+  }
+})
