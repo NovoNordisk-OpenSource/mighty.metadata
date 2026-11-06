@@ -48,6 +48,53 @@ test_that("populate_core() throws error when column already exists", {
     )
 })
 
+test_that("populate_core() is idempotent", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  study |>
+    populate_core() |>
+    expect_identical(study)
+})
+
+test_that("populate_core() is idempotent after populate_sparse()", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core() |>
+    populate_sparse()
+
+  study |>
+    populate_core() |>
+    expect_identical(study)
+})
+
+test_that("populate_core() errors on same-name column with other method", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  study$ADAE <- update_column(study$ADAE, id = "SEX", method = "ADSL.OTHER")
+
+  populate_core(study) |>
+    expect_error(
+      "ADAE - Variable\\(s\\) with same name already exists: `ADSL.SEX`"
+    )
+})
+
+test_that("populate_core() errors on same-name column with other origin", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  study$ADAE <- update_column(study$ADAE, id = "SEX", origin = "Derived")
+
+  populate_core(study) |>
+    expect_error(
+      "ADAE - Variable\\(s\\) with same name already exists: `ADSL.SEX`"
+    )
+})
+
 test_that("populate_core() throws error with duplicate core variables", {
   study <- test_path("test_study") |>
     mighty_study()
@@ -109,6 +156,19 @@ test_that("populate_core_domain() returns early without validating when there ar
   for (i in seq_along(study$ADSL$columns)) {
     study$ADSL$columns[[i]][["is_core"]] <- NULL
   }
+
+  count_validations(
+    result <- populate_core_domain(domain = study$ADAE, study = study)
+  ) |>
+    expect_equal(0L)
+
+  expect_identical(result, study$ADAE)
+})
+
+test_that("populate_core_domain() skips validation when already populated", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
 
   count_validations(
     result <- populate_core_domain(domain = study$ADAE, study = study)
