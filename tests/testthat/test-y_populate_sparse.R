@@ -92,3 +92,60 @@ test_that("populate_sparse_domain() skips validation if no predecessors", {
   expect_equal(res$n, 0L)
   expect_identical(res$value, domain)
 })
+
+test_that("populate_sparse() resolves chains across domains in one run", {
+  study <- test_path("test_study") |>
+    mighty_study()
+  study$ADAE <- add_column(
+    study$ADAE,
+    id = "AGE",
+    method = "ADSL.AGE",
+    label = "AE age"
+  )
+  study$ADVS <- add_column(study$ADVS, id = "AGE", method = "ADAE.AGE")
+
+  age <- populate_sparse(study)$ADVS |>
+    select_column("AGE")
+
+  expect_identical(age$label, "AE age")
+  expect_identical(age$core, "Req")
+  expect_idempotent(study, populate_sparse)
+})
+
+test_that("populate_sparse() resolves chains within one domain", {
+  study <- test_path("test_study") |>
+    mighty_study()
+  study$ADSL <- study$ADSL |>
+    add_column(id = "NEWVAR", method = "ADSL.AGE") |>
+    add_column(id = "NEWVAR2", method = "ADSL.NEWVAR")
+
+  newvar2 <- populate_sparse(study)$ADSL |>
+    select_column("NEWVAR2")
+
+  expect_identical(
+    newvar2[c("label", "core")],
+    list(label = "Age", core = "Req")
+  )
+})
+
+test_that("populate_sparse() errors on circular predecessor references", {
+  study <- test_path("test_study") |>
+    mighty_study()
+  cyclic <- study
+  cyclic$ADAE <- add_column(cyclic$ADAE, id = "XVAR", method = "ADVS.XVAR")
+  cyclic$ADVS <- add_column(cyclic$ADVS, id = "XVAR", method = "ADAE.XVAR")
+
+  populate_sparse(cyclic) |>
+    expect_error(
+      paste(
+        "Circular predecessor reference:",
+        "`ADAE.XVAR` -> `ADVS.XVAR` -> `ADAE.XVAR`"
+      ),
+      fixed = TRUE
+    )
+
+  study$ADSL <- add_column(study$ADSL, id = "SELF", method = "ADSL.SELF")
+
+  populate_sparse(study) |>
+    expect_error("`ADSL.SELF` -> `ADSL.SELF`", fixed = TRUE)
+})
