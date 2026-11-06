@@ -61,6 +61,9 @@ generate_define_xml(<mighty_study>)
 The new `resolve_components()` helper is exported alongside the existing helpers.
 All helper functions consistently return a `mighty_study()` object.
 
+`mighty_study()` remains the class for CRUD updates of the sparse specification.
+`mighty_complete_study()` is the read-only, resolved study for downstream use.
+
 The `populate` argument of `mighty_study()` is soft-deprecated in favor of `mighty_complete_study()`.
 It only runs `populate_core()` and `populate_sparse()`, and skips includes and subsets.
 
