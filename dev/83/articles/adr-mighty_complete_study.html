@@ -111,7 +111,8 @@ Thomsen</h4>
 <ol style="list-style-type: decimal">
 <li>Users can specify predecessors with shorthand: columns
 (<code>ADXX.MYVAR</code>, already supported), SUPP– qualifiers, BDS
-parameters and SDTM findings.</li>
+parameters and SDTM findings. Users never have to refer to the internal
+<code>mighty_*</code> components directly.</li>
 <li>Metadata is used consistently for code generation and documentation,
 in {mighty} and {mighty.toolbox} respectively, without any further
 processing inside the two packages.</li>
@@ -162,6 +163,9 @@ generate_define_xml(&lt;mighty_study&gt;)
 <p>The new <code>resolve_components()</code> helper is exported
 alongside the existing helpers. All helper functions consistently return
 a <code><a href="../reference/mighty_study.html">mighty_study()</a></code> object.</p>
+<p><code><a href="../reference/mighty_study.html">mighty_study()</a></code> remains the class for CRUD updates of the
+sparse specification. <code>mighty_complete_study()</code> is the
+read-only, resolved study for downstream use.</p>
 <p>The <code>populate</code> argument of <code><a href="../reference/mighty_study.html">mighty_study()</a></code> is
 soft-deprecated in favor of <code>mighty_complete_study()</code>. It
 only runs <code><a href="../reference/populate_core.html">populate_core()</a></code> and
@@ -238,8 +242,10 @@ all existing helpers.</li>
 <li>Update <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code> to support component
 predecessor mapping. Extend the predecessor regex in
 <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code> and <code>is_predecessor()</code> to
-accept the three-part shorthand and the expanded <code>where</code>
-form.</li>
+accept the three-part shorthand and the expanded <code>where</code> form
+(the define.xml notation,
+e.g. <code>SUPPDM.QVAL where QNAM="EFFICACY"</code>; see <a href="#predecessor-mapping-and-components">Predecessor mapping and
+components</a>).</li>
 <li>First version of <code>resolve_components()</code>.</li>
 <li>Add any new special <code>mighty_*</code> components to
 {mighty.standards}.</li>
@@ -300,6 +306,15 @@ run again on its own output. This is needed because the
 <code>generate_*(&lt;mighty_study&gt;)</code> wrappers always call
 <code>mighty_complete_study()</code>, and a resolved
 <code><a href="../reference/mighty_study.html">mighty_study()</a></code> cannot be distinguished from a raw one.</p>
+<p><code><a href="../reference/populate_core.html">populate_core()</a></code> skips a core variable if the domain
+already has it with <code>origin: Predecessor</code> and
+<code>method: ADSL.&lt;VAR&gt;</code>, and errors for any other column
+with the same name.</p>
+<p><code><a href="../reference/populate_sparse.html">populate_sparse()</a></code> resolves predecessor chains
+(e.g. <code>ADVS.AGE -&gt; ADAE.AGE -&gt; ADSL.AGE</code>) in one run;
+the nearest ancestor wins per field. Circular predecessor references
+(e.g. <code>ADAE.XVAR -&gt; ADVS.XVAR -&gt; ADAE.XVAR</code>) give an
+error.</p>
 </div>
 <div class="section level3">
 <h3 id="mighty_complete_study">
@@ -355,23 +370,25 @@ rendered component object):</p>
 </h3>
 <p>Shorthand predecessor mapping, with current domain <code>ADSL</code>
 and base domain <code>DM</code>:</p>
-<table style="width:100%;" class="table">
+<table class="table">
 <colgroup>
 <col width="1%">
-<col width="26%">
-<col width="13%">
-<col width="21%">
+<col width="24%">
+<col width="6%">
 <col width="12%">
-<col width="7%">
-<col width="17%">
+<col width="20%">
+<col width="11%">
+<col width="6%">
+<col width="16%">
 </colgroup>
 <thead><tr class="header">
 <th>#</th>
 <th>Case</th>
+<th>Input <code>id</code>
+</th>
 <th>Input <code>method</code>
 </th>
-<th>
-<code>method</code> after <code><a href="../reference/populate_sparse.html">populate_sparse()</a></code>
+<th>Output <code>method</code>
 </th>
 <th>Component</th>
 <th>Origin</th>
@@ -381,7 +398,8 @@ and base domain <code>DM</code>:</p>
 <tr class="odd">
 <td>1</td>
 <td>Keep column from the base domain</td>
-<td>none (<code>id: MYVAR</code>)</td>
+<td><code>MYVAR</code></td>
+<td>none</td>
 <td><code>DM.MYVAR</code></td>
 <td><code>mighty_init_domain</code></td>
 <td>Predecessor</td>
@@ -390,6 +408,7 @@ and base domain <code>DM</code>:</p>
 <tr class="even">
 <td>2</td>
 <td>Rename column from the base domain</td>
+<td><code>SRCSEQ</code></td>
 <td><code>DM.DMSEQ</code></td>
 <td>unchanged</td>
 <td><code>mighty_col_rename</code></td>
@@ -399,6 +418,7 @@ and base domain <code>DM</code>:</p>
 <tr class="odd">
 <td>3</td>
 <td>Copy existing column into new column</td>
+<td><code>NEWVAR</code></td>
 <td><code>ADSL.MYVAR</code></td>
 <td>unchanged</td>
 <td><code>mighty_col_mutate</code></td>
@@ -408,6 +428,7 @@ and base domain <code>DM</code>:</p>
 <tr class="even">
 <td>4</td>
 <td>Join predecessor from other domain</td>
+<td><code>VAR2</code></td>
 <td><code>ADXX.VAR2</code></td>
 <td>unchanged</td>
 <td><code>mighty_col_echo</code></td>
@@ -417,6 +438,7 @@ and base domain <code>DM</code>:</p>
 <tr class="odd">
 <td>5</td>
 <td>Join predecessor from supplementary SDTM data</td>
+<td><code>EFFICACY</code></td>
 <td><code>SUPPDM.EFFICACY.QVAL</code></td>
 <td><code>SUPPDM.QVAL where QNAM="EFFICACY"</code></td>
 <td><code>mighty_merge_supp</code></td>
@@ -426,6 +448,7 @@ and base domain <code>DM</code>:</p>
 <tr class="even">
 <td>6</td>
 <td>Join predecessor from ADaM BDS data set</td>
+<td><code>BMIGRP</code></td>
 <td><code>ADVS.BMIGRP.AVALC</code></td>
 <td><code>ADVS.AVALC where PARAMCD="BMIGRP"</code></td>
 <td><code>mighty_merge_param</code></td>
@@ -437,6 +460,7 @@ and base domain <code>DM</code>:</p>
 <tr class="odd">
 <td>7</td>
 <td>Join predecessor from SDTM findings data</td>
+<td><code>SYSBP</code></td>
 <td><code>VS.SYSBP.VSSTRESN</code></td>
 <td><code>VS.VSSTRESN where VSTESTCD="SYSBP"</code></td>
 <td><code>mighty_merge_param</code></td>
@@ -533,6 +557,8 @@ the shorthand.</li>
 <code>component</code>.</li>
 <li>Each helper and <code>mighty_complete_study()</code> give the same
 result when run again on their own output.</li>
+<li>Predecessor chains resolve in one run.</li>
+<li>Circular predecessor references give an error.</li>
 <li>Read-only properties of <code>mighty_complete_study()</code>.</li>
 <li>
 <code>resolve_components()</code> returns the study unchanged when
@@ -548,8 +574,10 @@ result when run again on their own output.</li>
 forward into the component helpers. Depending on how large the required
 changes are, we may have to plan them separately from this document.</p>
 <p>Open question: whether the case 1 mapping stays inside {mighty} for
-performance. If so, this is an exception to success criterion 2. ###
-Repeated method and origin tags for multi column components</p>
+performance. If so, this is an exception to success criterion 2.</p>
+<div class="section level3">
+<h3 id="repeated-method-and-origin-tags-for-multi-column-components">Repeated method and origin tags for multi column components<a class="anchor" aria-label="anchor" href="#repeated-method-and-origin-tags-for-multi-column-components"></a>
+</h3>
 <p>The <code>@origin</code> and <code>@method</code> tags can only be
 supplied once, and not per output column for a component. Right now that
 means they will be repeated for each column. For <code>@origin</code>
@@ -558,6 +586,29 @@ could be <code>Derived</code> and <code>Assigned</code>
 respectively.</p>
 <p>This requires a later update in {mighty.component} to support
 definitions like:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#' @title Double a column</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#' @description</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#' Creates a new column as two times an existing column.</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#' @param domain `character` Name of the domain</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#' @param output `character` Name of the new column</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#' @param input `character` Name of the existing column</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#' @type column</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#' @origin </span><span class="re">{{{</span><span class="co">output</span><span class="re">}}}</span><span class="co"> Derived</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#' @origin Y Assigned</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#' @method </span><span class="re">{{{</span><span class="co">output</span><span class="re">}}}</span><span class="co"> Two times the input column</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#' @method Y Hardcoded to "Hello"</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#' @depends </span><span class="re">{{{</span><span class="co">domain</span><span class="re">}}}</span><span class="co"> </span><span class="re">{{{</span><span class="co">input</span><span class="re">}}}</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#' @outputs </span><span class="re">{{{</span><span class="co">output</span><span class="re">}}}</span><span class="co"> Y # Possibly outdated</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#' @code</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>{{{domain}}} <span class="ot">&lt;-</span> {{{domain}}} <span class="sc">|&gt;</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>    {{{output}}} <span class="ot">=</span> <span class="dv">2</span> <span class="sc">*</span> {{{input}}},</span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a>   <span class="at">Y =</span> <span class="st">"Hello"</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a>  )</span></code></pre></div>
+<p>This implementation is pushed to the next iteration of the suggested
+implementation.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="compliance-considerations">Compliance Considerations<a class="anchor" aria-label="anchor" href="#compliance-considerations"></a>

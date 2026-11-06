@@ -12,7 +12,8 @@
 
 1.  Users can specify predecessors with shorthand: columns
     (`ADXX.MYVAR`, already supported), SUPP– qualifiers, BDS parameters
-    and SDTM findings.
+    and SDTM findings. Users never have to refer to the internal
+    `mighty_*` components directly.
 2.  Metadata is used consistently for code generation and documentation,
     in {mighty} and {mighty.toolbox} respectively, without any further
     processing inside the two packages.
@@ -75,6 +76,11 @@ The new `resolve_components()` helper is exported alongside the existing
 helpers. All helper functions consistently return a
 [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
 object.
+
+[`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
+remains the class for CRUD updates of the sparse specification.
+`mighty_complete_study()` is the read-only, resolved study for
+downstream use.
 
 The `populate` argument of
 [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
@@ -163,7 +169,9 @@ Proposed implementation order:
     regex in
     [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
     and `is_predecessor()` to accept the three-part shorthand and the
-    expanded `where` form.
+    expanded `where` form (the define.xml notation,
+    e.g. `SUPPDM.QVAL where QNAM="EFFICACY"`; see [Predecessor mapping
+    and components](#predecessor-mapping-and-components)).
 3.  First version of `resolve_components()`.
 4.  Add any new special `mighty_*` components to {mighty.standards}.
 5.  First version of `mighty_complete_study()`, only implementing
@@ -214,6 +222,16 @@ again on its own output. This is needed because the
 `mighty_complete_study()`, and a resolved
 [`mighty_study()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty_study.md)
 cannot be distinguished from a raw one.
+
+[`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)
+skips a core variable if the domain already has it with
+`origin: Predecessor` and `method: ADSL.<VAR>`, and errors for any other
+column with the same name.
+
+[`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
+resolves predecessor chains (e.g. `ADVS.AGE -> ADAE.AGE -> ADSL.AGE`) in
+one run; the nearest ancestor wins per field. Circular predecessor
+references (e.g. `ADAE.XVAR -> ADVS.XVAR -> ADAE.XVAR`) give an error.
 
 ### `mighty_complete_study()`
 
@@ -277,15 +295,15 @@ the domain), `id`, and `component` (the rendered component object):
 Shorthand predecessor mapping, with current domain `ADSL` and base
 domain `DM`:
 
-| \# | Case | Input `method` | `method` after [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md) | Component | Origin | Inherits from |
-|----|----|----|----|----|----|----|
-| 1 | Keep column from the base domain | none (`id: MYVAR`) | `DM.MYVAR` | `mighty_init_domain` | Predecessor | Source column, if in study |
-| 2 | Rename column from the base domain | `DM.DMSEQ` | unchanged | `mighty_col_rename` | Predecessor | Source column, if in study |
-| 3 | Copy existing column into new column | `ADSL.MYVAR` | unchanged | `mighty_col_mutate` | Predecessor | Source column, if in study |
-| 4 | Join predecessor from other domain | `ADXX.VAR2` | unchanged | `mighty_col_echo` | Predecessor | Source column, if in study |
-| 5 | Join predecessor from supplementary SDTM data | `SUPPDM.EFFICACY.QVAL` | `SUPPDM.QVAL where QNAM="EFFICACY"` | `mighty_merge_supp` | Predecessor | None |
-| 6 | Join predecessor from ADaM BDS data set | `ADVS.BMIGRP.AVALC` | `ADVS.AVALC where PARAMCD="BMIGRP"` | `mighty_merge_param` | Derived | `AVALC` of parameter `BMIGRP` |
-| 7 | Join predecessor from SDTM findings data | `VS.SYSBP.VSSTRESN` | `VS.VSSTRESN where VSTESTCD="SYSBP"` | `mighty_merge_param` | Derived | None |
+| \# | Case | Input `id` | Input `method` | Output `method` | Component | Origin | Inherits from |
+|----|----|----|----|----|----|----|----|
+| 1 | Keep column from the base domain | `MYVAR` | none | `DM.MYVAR` | `mighty_init_domain` | Predecessor | Source column, if in study |
+| 2 | Rename column from the base domain | `SRCSEQ` | `DM.DMSEQ` | unchanged | `mighty_col_rename` | Predecessor | Source column, if in study |
+| 3 | Copy existing column into new column | `NEWVAR` | `ADSL.MYVAR` | unchanged | `mighty_col_mutate` | Predecessor | Source column, if in study |
+| 4 | Join predecessor from other domain | `VAR2` | `ADXX.VAR2` | unchanged | `mighty_col_echo` | Predecessor | Source column, if in study |
+| 5 | Join predecessor from supplementary SDTM data | `EFFICACY` | `SUPPDM.EFFICACY.QVAL` | `SUPPDM.QVAL where QNAM="EFFICACY"` | `mighty_merge_supp` | Predecessor | None |
+| 6 | Join predecessor from ADaM BDS data set | `BMIGRP` | `ADVS.BMIGRP.AVALC` | `ADVS.AVALC where PARAMCD="BMIGRP"` | `mighty_merge_param` | Derived | `AVALC` of parameter `BMIGRP` |
+| 7 | Join predecessor from SDTM findings data | `SYSBP` | `VS.SYSBP.VSSTRESN` | `VS.VSSTRESN where VSTESTCD="SYSBP"` | `mighty_merge_param` | Derived | None |
 
 In case 1, a column with no `method` and no `component` is taken from
 the base domain(s). Several base domains are row-bound, and all must
@@ -369,8 +387,10 @@ one component is decided during implementation.
     3.  Field precedence for `origin`, `method` and `component`.
     4.  Each helper and `mighty_complete_study()` give the same result
         when run again on their own output.
-    5.  Read-only properties of `mighty_complete_study()`.
-    6.  `resolve_components()` returns the study unchanged when
+    5.  Predecessor chains resolve in one run.
+    6.  Circular predecessor references give an error.
+    7.  Read-only properties of `mighty_complete_study()`.
+    8.  `resolve_components()` returns the study unchanged when
         `@mighty` is `NULL`.
 
 ## Risks
@@ -380,8 +400,9 @@ forward into the component helpers. Depending on how large the required
 changes are, we may have to plan them separately from this document.
 
 Open question: whether the case 1 mapping stays inside {mighty} for
-performance. If so, this is an exception to success criterion 2. \###
-Repeated method and origin tags for multi column components
+performance. If so, this is an exception to success criterion 2.
+
+### Repeated method and origin tags for multi column components
 
 The `@origin` and `@method` tags can only be supplied once, and not per
 output column for a component. Right now that means they will be
@@ -391,6 +412,32 @@ two columns created by the same component could be `Derived` and
 
 This requires a later update in {mighty.component} to support
 definitions like:
+
+``` r
+#' @title Double a column
+#' @description
+#' Creates a new column as two times an existing column.
+#'
+#' @param domain `character` Name of the domain
+#' @param output `character` Name of the new column
+#' @param input `character` Name of the existing column
+#' @type column
+#' @origin {{{output}}} Derived
+#' @origin Y Assigned
+#' @method {{{output}}} Two times the input column
+#' @method Y Hardcoded to "Hello"
+#' @depends {{{domain}}} {{{input}}}
+#' @outputs {{{output}}} Y # Possibly outdated
+#' @code
+{{{domain}}} <- {{{domain}}} |>
+  dplyr::mutate(
+    {{{output}}} = 2 * {{{input}}},
+   Y = "Hello"
+  )
+```
+
+This implementation is pushed to the next iteration of the suggested
+implementation.
 
 ## Compliance Considerations
 
