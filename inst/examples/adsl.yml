@@ -45,7 +45,6 @@ columns:
     label: Age Units
     method: DM.AGEU
     core: Req
-    codelist: AGEU
 
   - id: SEX
     label: Sex

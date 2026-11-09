@@ -600,13 +600,11 @@ check_document_references(study)
 ## Codelists
 
 Codelists are stored in `_codelists.yml` and available as `@codelists`. A
-codelist is either sponsor-defined (`values`) or records changes to an external
-codelist, such as CDISC CT, through `subset`, `restore` and `extend`. The
-bundled `_codelists.yml` contains one sponsor-defined codelist (`SEX`) and one
-that modifies an external codelist (`AGEU`, via `subset` and `restore`):
+codelist is either sponsor-defined (`values`) or extends an external codelist,
+such as CDISC CT (`extend`). The bundled `_codelists.yml` contains one
+sponsor-defined codelist:
 
 ```yaml
-# Sponsor-defined codelist
 - id: SEX
   label: Sex
   description: Sex of the subject
@@ -616,13 +614,6 @@ that modifies an external codelist (`AGEU`, via `subset` and `restore`):
       decode: Female
     - code: M
       decode: Male
-
-# Keep only some values of an external codelist and restore one more
-- id: AGEU
-  subset:
-    - code: YEARS
-  restore:
-    - code: MONTHS
 ```
 
 ```{r}
@@ -632,7 +623,7 @@ select_codelist(study, id = "SEX") |>
 ```
 
 Columns refer to a codelist by its `id` in their `codelist` field, as `SEX`
-and `AGEU` do in the bundled `adsl.yml`:
+does in the bundled `adsl.yml`:
 
 ```yaml
 columns:
