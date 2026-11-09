@@ -336,14 +336,7 @@ their structure.
 
 Loading messages, such as the ones printed for missing study-level files, can
 be silenced with the `mighty.metadata.verbosity_level` option (see
-`?"mighty.metadata-options"`):
-
-```{r}
-withr::with_options(
-  list(mighty.metadata.verbosity_level = "quiet"),
-  mighty_study(study_path)
-)
-```
+`?"mighty.metadata-options"`).
 
 `filter_domains()` keeps only domains whose names start with given prefixes,
 e.g. to drop `MD*` domains:
