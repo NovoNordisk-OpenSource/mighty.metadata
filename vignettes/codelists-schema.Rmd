@@ -24,26 +24,6 @@ by its `id` in their `codelist` field. The file structure is defined by a
 system.file("schema", "codelists.json", package = "mighty.metadata")
 ```
 
-# Structure
-
-The file is a list of codelists. Each codelist has the following fields:
-
-| Field         | Type   | Description |
-|---------------|--------|-------------|
-| `id`          | string | Unique id used to reference the codelist from column metadata (required) |
-| `label`       | string | Codelist label |
-| `description` | string | Codelist description |
-| `datatype`    | string | Data type of the coded values: `text`, `integer` or `float` |
-| `values`      | list   | Values of a sponsor-defined codelist |
-| `subset`      | list   | Values to keep from an external codelist |
-| `restore`     | list   | SDTM CT values to include even when not used in the SDTM define.xml |
-| `extend`      | list   | Values extending an extensible external codelist |
-
-Entries in `values` and `extend` have a `code` and an optional `decode`
-(intended for `TranslatedText` in define.xml); entries in `subset` and
-`restore` have only a `code`. Each group must have at least one entry, and
-within a group either all or none of the entries have a `decode`.
-
 # Operation groups
 
 Each codelist has an `id` and at least one of four operation groups. The groups
@@ -64,6 +44,9 @@ codelist.
 `values` cannot be combined with `subset` or `restore` on the same codelist.
 Codelist `id`s must be unique, and `code` must be unique across all groups
 within a codelist (compared as text, so `1` and `"1"` are duplicates).
+Each group must have at least one entry, and within a group either all or none
+of the entries have a `decode`, which is written to `TranslatedText` in
+define.xml. Entries in `subset` and `restore` have only a `code`.
 
 # Example
 
@@ -112,3 +95,14 @@ reported.
 
 `code` can be a string or a number. Since yaml infers types, unquoted values
 that look like numbers (e.g. `code: 1`) are read as numbers.
+
+# Schema reference
+
+The full schema definition, generated from `codelists.json`:
+
+```{r echo=FALSE}
+S7schema::document_schema(
+  x = system.file("schema", "codelists.json", package = "mighty.metadata"),
+  header_start_level = 2
+)
+```
