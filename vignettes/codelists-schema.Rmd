@@ -24,6 +24,16 @@ by its `id` in their `codelist` field. The file structure is defined by a
 system.file("schema", "codelists.json", package = "mighty.metadata")
 ```
 
+Below you can find a detailed description of the structure, generated from the
+schema. Rules that span fields are described in the sections that follow.
+
+```{r echo=FALSE}
+S7schema::document_schema(
+  x = system.file("schema", "codelists.json", package = "mighty.metadata"),
+  header_start_level = 1
+)
+```
+
 # Operation groups
 
 Each codelist has an `id` and at least one of four operation groups. The groups
@@ -95,14 +105,3 @@ reported.
 
 `code` can be a string or a number. Since yaml infers types, unquoted values
 that look like numbers (e.g. `code: 1`) are read as numbers.
-
-# Schema reference
-
-The full schema definition, generated from `codelists.json`:
-
-```{r echo=FALSE}
-S7schema::document_schema(
-  x = system.file("schema", "codelists.json", package = "mighty.metadata"),
-  header_start_level = 2
-)
-```
