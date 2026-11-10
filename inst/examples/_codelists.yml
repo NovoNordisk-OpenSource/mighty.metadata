@@ -1,0 +1,9 @@
+- id: SEX
+  label: Sex
+  description: Sex of the subject
+  datatype: text
+  values:
+    - code: F
+      decode: Female
+    - code: M
+      decode: Male

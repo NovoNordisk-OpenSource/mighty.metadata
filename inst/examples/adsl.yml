@@ -50,6 +50,7 @@ columns:
     label: Sex
     method: DM.SEX
     core: Req
+    codelist: SEX
 
   - id: RACE
     label: Race

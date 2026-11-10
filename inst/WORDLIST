@@ -21,10 +21,10 @@ AVALC
 AVISIT
 AVISITN
 Aksel
+Bakalo
 BDS
 BMIDER
 BMIGRP
-Bakalo
 CDISC
 CDS
 CMD
@@ -48,6 +48,7 @@ IG
 Katarzyna
 Knoph
 LOC
+LOCF
 MEDDRA
 MYVAR
 MedDRA
@@ -97,6 +98,7 @@ Thomsen
 USUBJID
 UX
 VISITNUM
+VSLOC
 VSSTRESN
 VSTEST
 VSTESTCD
@@ -125,6 +127,7 @@ json
 jsonvalidate
 jsonvalidator
 knitr
+locf
 mapequal
 md
 mdcol

@@ -115,26 +115,26 @@ s <- mighty_study(
 # Add a document
 s <- s |>
   add_document(
-    id = "SAP",
-    title = "Statistical Analysis Plan",
+    id = "PROTOCOL",
+    title = "Study Protocol",
     doctype = "suppdoc",
-    href = "./docs/sap.pdf"
+    href = "./docs/protocol.pdf"
   )
 
 # List and select documents
 list_documents(s)
-select_document(s, id = "SAP")
+select_document(s, id = "PROTOCOL")
 
 # Update existing document
 s <- s |>
   update_document(
-    id = "SAP",
-    title = "Statistical Analysis Plan v2"
+    id = "PROTOCOL",
+    title = "Study Protocol v2"
   )
 
 # Remove one or more documents
 s <- s |>
-  remove_documents(id = "SAP")
+  remove_documents(id = "PROTOCOL")
 
 # Work directly on mighty_documents
 docs <- mighty_documents()
