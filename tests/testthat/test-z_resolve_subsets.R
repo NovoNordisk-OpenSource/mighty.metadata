@@ -21,6 +21,8 @@ test_that("resolve_subsets() - subsetting works", {
       subset = "STUDYID == 'STUDY1'"
     )
 
+  expect_idempotent(study, resolve_subsets)
+
   study <- study |>
     resolve_subsets() |>
     expect_no_condition()

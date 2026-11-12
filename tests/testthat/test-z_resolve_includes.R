@@ -81,11 +81,10 @@ test_that("resolve_includes() - study - complex", {
       include = "{study_id == 'test_study'}"
     )
 
-  study_resolved <- resolve_includes(
-    x = study,
-    info = list(
-      impute_baseline_row = FALSE
-    )
+  study_resolved <- expect_idempotent(
+    study,
+    resolve_includes,
+    info = list(impute_baseline_row = FALSE)
   )
 
   expect_equal(
@@ -180,8 +179,7 @@ test_that("resolve_includes() - drops domains if not included", {
   validate(study) |>
     expect_no_condition()
 
-  result <- study |>
-    resolve_includes()
+  result <- expect_idempotent(study, resolve_includes)
 
   result |>
     getElement("ADVS") |>
