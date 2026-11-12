@@ -40,7 +40,7 @@ study |>
 #> @ mighty: <mighty.metadata::mighty_config>
 #> @ study: <mighty.metadata::study_config>
 #> @ documents: 2 entries
-#> @ codelists: 2 entries
+#> @ codelists: 1 entries
 #> $ ADAE: <mighty.metadata::mighty_domain>
 #> $ ADSL: <mighty.metadata::mighty_domain>
 #> $ ADVS: <mighty.metadata::mighty_domain>
