@@ -11,8 +11,7 @@ read or create ADaM datasets.
 
 All examples use the specifications bundled with the package in
 `system.file("examples", package = "mighty.metadata")`, so every code
-chunk can be run as-is. One chunk also uses the withr package, which can
-be installed with `install.packages("withr")`.
+chunk can be run as-is.
 
 To start your own study, copy the bundled examples to a new directory
 and edit the YAML files there:
@@ -382,7 +381,7 @@ study
 #> @ mighty: <mighty.metadata::mighty_config>
 #> @ study: <mighty.metadata::study_config>
 #> @ documents: 2 entries
-#> @ codelists: 2 entries
+#> @ codelists: 1 entries
 #> $ ADAE: <mighty.metadata::mighty_domain>
 #> $ ADSL: <mighty.metadata::mighty_domain>
 #> $ ADVS: <mighty.metadata::mighty_domain>
@@ -419,23 +418,7 @@ for their structure.
 Loading messages, such as the ones printed for missing study-level
 files, can be silenced with the `mighty.metadata.verbosity_level` option
 (see
-[`?"mighty.metadata-options"`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty.metadata-options.md)):
-
-``` r
-
-withr::with_options(
-  list(mighty.metadata.verbosity_level = "quiet"),
-  mighty_study(study_path)
-)
-#> <mighty.metadata::mighty_study/list/S7_object>
-#> @ mighty: <mighty.metadata::mighty_config>
-#> @ study: <mighty.metadata::study_config>
-#> @ documents: 2 entries
-#> @ codelists: 2 entries
-#> $ ADAE: <mighty.metadata::mighty_domain>
-#> $ ADSL: <mighty.metadata::mighty_domain>
-#> $ ADVS: <mighty.metadata::mighty_domain>
-```
+[`?"mighty.metadata-options"`](https://novonordisk-opensource.github.io/mighty.metadata/reference/mighty.metadata-options.md)).
 
 [`filter_domains()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/filter_domains.md)
 keeps only domains whose names start with given prefixes, e.g. to drop
@@ -760,14 +743,11 @@ check_document_references(study)
 ## Codelists
 
 Codelists are stored in `_codelists.yml` and available as `@codelists`.
-A codelist is either sponsor-defined (`values`) or records changes to an
-external codelist, such as CDISC CT, through `subset`, `restore` and
-`extend`. The bundled `_codelists.yml` contains one sponsor-defined
-codelist (`SEX`) and one that modifies an external codelist (`AGEU`, via
-`subset` and `restore`):
+A codelist is either sponsor-defined (`values`) or extends an external
+codelist, such as CDISC CT (`extend`). The bundled `_codelists.yml`
+contains one sponsor-defined codelist:
 
 ``` yaml
-# Sponsor-defined codelist
 - id: SEX
   label: Sex
   description: Sex of the subject
@@ -777,19 +757,12 @@ codelist (`SEX`) and one that modifies an external codelist (`AGEU`, via
       decode: Female
     - code: M
       decode: Male
-
-# Keep only some values of an external codelist and restore one more
-- id: AGEU
-  subset:
-    - code: YEARS
-  restore:
-    - code: MONTHS
 ```
 
 ``` r
 
 list_codelists(study)
-#> [1] "SEX"  "AGEU"
+#> [1] "SEX"
 select_codelist(study, id = "SEX") |>
   str()
 #> List of 5
@@ -807,7 +780,7 @@ select_codelist(study, id = "SEX") |>
 ```
 
 Columns refer to a codelist by its `id` in their `codelist` field, as
-`SEX` and `AGEU` do in the bundled `adsl.yml`:
+`SEX` does in the bundled `adsl.yml`:
 
 ``` yaml
 columns:
@@ -829,7 +802,7 @@ study <- study |>
   )
 
 list_codelists(study)
-#> [1] "SEX"  "AGEU" "LOC"
+#> [1] "SEX" "LOC"
 ```
 
 Codelists can be added before any column uses them. Use
