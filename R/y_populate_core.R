@@ -85,6 +85,23 @@ populate_core_domain <- function(domain, study) {
     )
   }
 
+  is_populated <- mapply(
+    FUN = \(id, method) {
+      id %in% list_columns(domain) &&
+        identical(
+          select_column(domain, id)[c("origin", "method")],
+          list(origin = "Predecessor", method = method)
+        )
+    },
+    id = core_vars,
+    method = names(core_vars)
+  )
+  core_vars <- core_vars[!is_populated]
+
+  if (!length(core_vars)) {
+    return(domain)
+  }
+
   dup_vars <- which(core_vars %in% list_columns(domain))
   if (length(dup_vars)) {
     cli::cli_abort(
