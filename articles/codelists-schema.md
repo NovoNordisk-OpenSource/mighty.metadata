@@ -14,7 +14,9 @@ accessible with:
 system.file("schema", "codelists.json", package = "mighty.metadata")
 ```
 
-Below you can find a detailed description of the structure.
+Below you can find a detailed description of the structure, generated
+from the schema. Rules that span fields are described in the sections
+that follow.
 
 ## Mighty Metadata Codelists Specification
 
@@ -94,7 +96,12 @@ A codelist with `values` must also have `label`, `description` and
 from the external codelist.
 
 `values` cannot be combined with `subset` or `restore` on the same
-codelist. `code` must be unique across all groups within a codelist.
+codelist. Codelist `id`s must be unique, and `code` must be unique
+across all groups within a codelist (compared as text, so `1` and `"1"`
+are duplicates). Each group must have at least one entry, and within a
+group either all or none of the entries have a `decode`, which is
+written to `TranslatedText` in define.xml. Entries in `subset` and
+`restore` have only a `code`.
 
 ## Example
 
@@ -137,7 +144,10 @@ columns:
 Codelists do not have to be referenced by a column, e.g. when they are
 added before the columns that use them. Use
 [`check_codelist_references()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/codelists.md)
-to check that every codelist in a study is referenced.
+to check that every codelist in a study is referenced by at least one
+column (including columns within parameters). It does not check the
+opposite direction: a column referring to a codelist that is not defined
+in `_codelists.yml` is not reported.
 
 `code` can be a string or a number. Since yaml infers types, unquoted
 values that look like numbers (e.g. `code: 1`) are read as numbers.

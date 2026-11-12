@@ -32,8 +32,6 @@ A `mighty_study` object.
 study <- mighty_study(
   path = system.file("examples", package = "mighty.metadata")
 )
-#> → No `_documents.yml` file found
-#> → No `_codelists.yml` file found
 
 # Keep only ADaM domains (default)
 study |>
@@ -41,6 +39,8 @@ study |>
 #> <mighty.metadata::mighty_study/list/S7_object>
 #> @ mighty: <mighty.metadata::mighty_config>
 #> @ study: <mighty.metadata::study_config>
+#> @ documents: 2 entries
+#> @ codelists: 1 entries
 #> $ ADAE: <mighty.metadata::mighty_domain>
 #> $ ADSL: <mighty.metadata::mighty_domain>
 #> $ ADVS: <mighty.metadata::mighty_domain>
