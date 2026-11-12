@@ -1,10 +1,10 @@
-test_that("construct_s7schema() returns empty object when neither file nor .data is supplied", {
+test_that("construct_s7schema() returns empty object without file or .data", {
   x <- construct_s7schema(schema_name = "codelists.json")
   expect_s7_class(x, S7schema::S7schema)
   expect_length(x, 0)
 })
 
-test_that("construct_s7schema() returns populated object when .data is supplied", {
+test_that("construct_s7schema() returns populated object from .data", {
   x <- construct_s7schema(
     .data = list(list(id = "AGEU", subset = list(list(code = "YEARS")))),
     schema_name = "codelists.json"
@@ -14,7 +14,7 @@ test_that("construct_s7schema() returns populated object when .data is supplied"
   expect_identical(x[[1]]$id, "AGEU")
 })
 
-test_that("construct_s7schema() returns populated object when file is supplied", {
+test_that("construct_s7schema() returns populated object from file", {
   x <- construct_s7schema(
     file = test_path("test_study/_codelists.yml"),
     schema_name = "codelists.json"
