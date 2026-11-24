@@ -39,7 +39,8 @@ test_that("populate_sparse() - errors when predecessor does not exist", {
 
   populate_sparse(study) |>
     expect_error(
-      "RACE: Predecessor `ADSL.RACE` not found in study"
+      "`ADAE.RACE`: Predecessor `ADSL.RACE` not found in study",
+      fixed = TRUE
     )
 })
 
@@ -68,6 +69,35 @@ test_that("populate_sparse() - errors on non-standard predecessor method", {
 
   populate_sparse(study) |>
     expect_error("Non standard predecessor method")
+})
+
+test_that("populate_sparse() - errors name the full predecessor chain", {
+  study <- test_path("test_study") |>
+    mighty_study()
+  study$ADSL <- add_column(
+    study$ADSL,
+    id = "BMIBL",
+    label = "Baseline BMI",
+    origin = "Predecessor",
+    method = "ADVS.AVAL where ABLFL = 'Y' and PARAMCD = 'BMI'"
+  )
+  study$ADAE <- add_column(study$ADAE, id = "BMIBL", method = "ADSL.BMIBL")
+  study$ADVS <- add_column(study$ADVS, id = "BMIBL", method = "ADAE.BMIBL")
+
+  populate_sparse(study) |>
+    expect_error(
+      "`ADAE.BMIBL` -> `ADSL.BMIBL`: Non standard predecessor method",
+      fixed = TRUE
+    )
+
+  populate_sparse(study$ADVS, study = study) |>
+    expect_error(
+      paste(
+        "`ADVS.BMIBL` -> `ADAE.BMIBL` -> `ADSL.BMIBL`:",
+        "Non standard predecessor method"
+      ),
+      fixed = TRUE
+    )
 })
 
 test_that("populate_sparse() validates each domain once, not once per column", {

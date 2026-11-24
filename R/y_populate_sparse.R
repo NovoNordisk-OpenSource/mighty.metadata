@@ -108,17 +108,18 @@ update_predecessor <- function(
 #' `path` holds the visited `domain.column` references to detect cycles.
 #' @noRd
 resolve_predecessor <- function(column, study, path, discard) {
+  chain <- format_chain(path) # nolint: object_usage_linter. Used in cli glue.
   predecessor_pattern <- "^[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$"
   if (!isTRUE(grepl(pattern = predecessor_pattern, x = column$method))) {
     cli::cli_abort(
-      "{column$id}: Non standard predecessor method {.code {column$method}}.
+      "{chain}: Non standard predecessor method {.code {column$method}}.
       Must be in the {.code {{domain}}.{{column}}} format."
     )
   }
 
   if (column$method %in% path) {
     cycle <- c(path[match(column$method, path):length(path)], column$method)
-    cycle <- paste0("`", cycle, "`", collapse = " -> ")
+    cycle <- format_chain(cycle)
     cli::cli_abort("Circular predecessor reference: {cycle}")
   }
 
@@ -127,14 +128,14 @@ resolve_predecessor <- function(column, study, path, discard) {
 
   if (!pred_table %in% names(study)) {
     zephyr::msg_debug(
-      "{column$id}: Predecessor domain {.code {pred_table}} not found in study"
+      "{chain}: Predecessor domain {.code {pred_table}} not found in study"
     )
     return(list())
   }
 
   if (!pred_column %in% list_columns(x = study[[pred_table]])) {
     cli::cli_abort(
-      "{column$id}: Predecessor {.code {column$method}} not found in study"
+      "{chain}: Predecessor {.code {column$method}} not found in study"
     )
   }
 
@@ -154,3 +155,7 @@ resolve_predecessor <- function(column, study, path, discard) {
 
   c(pred, ancestor[setdiff(names(ancestor), c(discard, names(pred)))])
 }
+
+#' Helper function to format a chain of `domain.column` references.
+#' @noRd
+format_chain <- function(x) paste0("`", x, "`", collapse = " -> ")
