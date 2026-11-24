@@ -122,7 +122,7 @@ str(x)
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/study.json"
 #>  @ validator: <S7schema::validator>
 #>  .. @ context:List of 6
-#>  .. .. $ context :<pointer: 0x639c1d1d04d0> 
+#>  .. .. $ context :<pointer: 0x6198acb56b00> 
 #>  .. .. $ validate:function (code_string)  
 #>  .. .. $ source  :function (file = NULL, code = NULL)  
 #>  .. .. $ call    :function (function_name, ...)  
