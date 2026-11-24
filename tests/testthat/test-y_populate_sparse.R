@@ -117,6 +117,29 @@ test_that("populate_sparse() resolves chains across domains in one run", {
   expect_idempotent(study, populate_sparse)
 })
 
+test_that("populate_sparse() resolves chains for a single mighty_domain", {
+  study <- test_path("test_study") |>
+    mighty_study()
+  study$ADAE <- add_column(
+    study$ADAE,
+    id = "AGE",
+    method = "ADSL.AGE",
+    label = "AE age"
+  )
+  study$ADVS <- add_column(
+    study$ADVS,
+    id = "AGE",
+    method = "ADAE.AGE",
+    label = "VS age"
+  )
+
+  age <- populate_sparse(study$ADVS, study = study) |>
+    select_column("AGE")
+
+  expect_identical(age$label, "VS age")
+  expect_identical(age$core, "Req")
+})
+
 test_that("populate_sparse() resolves chains within one domain", {
   study <- test_path("test_study") |>
     mighty_study()
@@ -153,4 +176,25 @@ test_that("populate_sparse() errors on circular predecessor references", {
 
   populate_sparse(study) |>
     expect_error("`ADSL.SELF` -> `ADSL.SELF`", fixed = TRUE)
+})
+
+test_that("populate_sparse() stops chains at component columns", {
+  study <- test_path("test_study") |>
+    mighty_study()
+  study$ADSL <- add_column(
+    study$ADSL,
+    id = "BMIBL",
+    label = "Baseline BMI",
+    component = list(id = "bmibl_01.R")
+  )
+  study$ADAE <- add_column(study$ADAE, id = "BMIBL", method = "ADSL.BMIBL")
+
+  bmibl <- populate_sparse(study)$ADAE |>
+    select_column("BMIBL")
+
+  expect_identical(bmibl$label, "Baseline BMI")
+  expect_identical(bmibl$method, "ADSL.BMIBL")
+  expect_identical(bmibl$origin, "Predecessor")
+  expect_null(bmibl$component)
+  expect_idempotent(study, populate_sparse)
 })
