@@ -69,6 +69,31 @@ test_that("populate_core() is idempotent after populate_sparse()", {
     expect_identical(study)
 })
 
+test_that("populate_core() adds new core variables on re-run", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  sex <- select_column(study$ADAE, "SEX")
+
+  study$ADSL <- update_column(study$ADSL, id = "SUBJID", is_core = TRUE)
+
+  study <- populate_core(study) |>
+    expect_no_condition()
+
+  select_column(study$ADAE, "SUBJID") |>
+    expect_mapequal(
+      list(
+        id = "SUBJID",
+        method = "ADSL.SUBJID",
+        origin = "Predecessor"
+      )
+    )
+
+  select_column(study$ADAE, "SEX") |>
+    expect_identical(sex)
+})
+
 test_that("populate_core() errors when core column differs from predecessor", {
   study <- test_path("test_study") |>
     mighty_study() |>
