@@ -53,6 +53,17 @@ list_cores <- function(x) {
     unlist()
 }
 
+#' Column fields never copied from or compared with a predecessor
+#' @noRd
+predecessor_discard <- c(
+  "id",
+  "is_core",
+  "method",
+  "origin",
+  "component",
+  "depends"
+)
+
 # Helper to check if a columns is a predecessor
 #' @noRd
 is_predecessor <- function(col) {

@@ -69,6 +69,30 @@ test_that("populate_core() is idempotent after populate_sparse()", {
     expect_identical(study)
 })
 
+test_that("populate_core() errors when core column differs from predecessor", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  study$ADAE <- update_column(study$ADAE, id = "SEX", label = "Other")
+
+  populate_core(study) |>
+    expect_error(
+      "ADAE - Core variable\\(s\\) differ from predecessor: `SEX` \\(label\\)"
+    )
+})
+
+test_that("populate_core() accepts fields only present on core column", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  study$ADAE <- update_column(study$ADAE, id = "SEX", comment = "Extra")
+
+  populate_core(study) |>
+    expect_no_error()
+})
+
 test_that("populate_core() errors on same-name column with other method", {
   study <- test_path("test_study") |>
     mighty_study() |>
