@@ -10,8 +10,13 @@ test_that("populate_sparse() - works with intended input", {
     select_column(study$ADAE, "SEX")[["label"]],
     select_column(study$ADSL, "SEX")[["label"]]
   )
+})
 
-  expect_idempotent(study, populate_sparse)
+test_that("populate_sparse() is idempotent", {
+  test_path("test_study") |>
+    mighty_study() |>
+    populate_core() |>
+    expect_idempotent(fun = populate_sparse)
 })
 
 test_that("populate_sparse() - works on a single mighty_domain", {
