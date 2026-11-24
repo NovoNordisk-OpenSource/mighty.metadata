@@ -3,7 +3,8 @@
 ## mighty.metadata (development version)
 
 - [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)
-  can run again on its own output without errors
+  can run again on its own output without errors, and errors when an
+  existing core column differs from its ADSL predecessor
   ([\#84](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/84)).
 
 ## mighty.metadata 0.2.0
