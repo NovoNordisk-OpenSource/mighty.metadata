@@ -2,6 +2,14 @@
 
 ## mighty.metadata (development version)
 
+- [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)
+  can run again on its own output without errors
+  ([\#84](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/84)).
+- [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
+  resolves predecessor chains in one run and errors on circular
+  references
+  ([\#86](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/86)).
+
 ## mighty.metadata 0.2.0
 
 CRAN release: 2026-10-29
