@@ -164,7 +164,7 @@ str(x)
 #>  @ schema   : chr "/home/runner/work/_temp/Library/mighty.metadata/schema/adam.json"
 #>  @ validator: <S7schema::validator>
 #>  .. @ context:List of 6
-#>  .. .. $ context :<pointer: 0x5a9fa9d8f430> 
+#>  .. .. $ context :<pointer: 0x5db0c4b543f0> 
 #>  .. .. $ validate:function (code_string)  
 #>  .. .. $ source  :function (file = NULL, code = NULL)  
 #>  .. .. $ call    :function (function_name, ...)  
