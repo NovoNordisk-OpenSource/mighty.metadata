@@ -23,8 +23,8 @@ test_that("schema accepts any string id", {
 })
 
 test_that("schema requires at least one operation group", {
-  # anyOf reports only its first branch, hence the `values` message
-  expect_error(new_cl(list(id = "A")), "missingProperty: values")
+  skip_if_not_installed("S7schema", "0.2.2")
+  expect_error(new_cl(list(id = "A")), "/1 must match a schema in anyOf")
 })
 
 test_that("schema accepts each operation group on its own", {
