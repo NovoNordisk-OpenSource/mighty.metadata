@@ -103,8 +103,36 @@ test_that("populate_core() errors when core column differs from predecessor", {
 
   populate_core(study) |>
     expect_error(
-      "ADAE - Core variable\\(s\\) differ from predecessor: `SEX` \\(label\\)"
-    )
+      "ADAE - Core variable\\(s\\) differ from predecessor:"
+    ) |>
+    conditionMessage() |>
+    expect_match("`SEX` \\(label\\)")
+})
+
+test_that("populate_core() lists each differing core column", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  study$ADAE <- update_column(study$ADAE, id = "SEX", label = "Other")
+  study$ADAE <- update_column(
+    study$ADAE,
+    id = "RACE",
+    label = "Other",
+    core = "Perm"
+  )
+
+  msg <- populate_core(study) |>
+    expect_error(
+      "ADAE - Core variable\\(s\\) differ from predecessor:"
+    ) |>
+    conditionMessage()
+
+  expect_match(msg, "`SEX` \\(label\\)")
+  expect_match(msg, "`RACE` \\(label, core\\)")
+  gregexpr("`(SEX|RACE)` \\(", msg)[[1L]] |>
+    length() |>
+    expect_identical(2L)
 })
 
 test_that("populate_core() accepts fields only present on core column", {

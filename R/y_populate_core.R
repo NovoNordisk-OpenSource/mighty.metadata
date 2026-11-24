@@ -98,32 +98,11 @@ populate_core_domain <- function(domain, study) {
     method = names(core_vars)
   )
 
-  differs <- mapply(
-    FUN = \(id, method) {
-      column <- select_column(domain, id)
-      pred <- select_column(study[["ADSL"]], sub("^.*\\.", "", method))
-      fields <- intersect(names(column), names(pred)) |>
-        setdiff(y = predecessor_discard)
-      is_same <- vapply(
-        X = fields,
-        FUN = \(f) identical(column[[f]], pred[[f]]),
-        FUN.VALUE = logical(1)
-      )
-      fields[!is_same]
-    },
-    id = unname(core_vars[is_populated]),
-    method = names(core_vars)[is_populated],
-    SIMPLIFY = FALSE
+  check_core_matches(
+    domain = domain,
+    adsl = study[["ADSL"]],
+    core_vars = core_vars[is_populated]
   )
-  differs <- Filter(f = length, x = differs)
-  if (length(differs)) {
-    details <- paste0(
-      "`", names(differs), "` (", vapply(differs, toString, character(1)), ")"
-    )
-    cli::cli_abort(
-      "{domain$id} - Core variable(s) differ from predecessor: {details}"
-    )
-  }
 
   core_vars <- core_vars[!is_populated]
 
@@ -152,4 +131,35 @@ populate_core_domain <- function(domain, study) {
 
     domain
   })
+}
+
+#' Abort if populated core columns differ from their ADSL predecessor
+#' @noRd
+check_core_matches <- function(domain, adsl, core_vars) {
+  differs <- mapply(
+    FUN = \(id, ref) {
+      differing_fields(
+        column = select_column(domain, id),
+        pred = select_column(adsl, sub("^ADSL\\.", "", ref))
+      )
+    },
+    id = unname(core_vars),
+    ref = names(core_vars),
+    SIMPLIFY = FALSE
+  ) |>
+    Filter(f = length)
+
+  if (!length(differs)) {
+    return(invisible())
+  }
+
+  details <- sprintf(
+    "`%s` (%s)",
+    names(differs),
+    vapply(X = differs, FUN = toString, FUN.VALUE = character(1))
+  )
+  cli::cli_abort(c(
+    "{domain$id} - Core variable(s) differ from predecessor:",
+    stats::setNames(details, rep("*", length(details)))
+  ))
 }

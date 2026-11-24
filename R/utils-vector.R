@@ -64,6 +64,21 @@ predecessor_discard <- c(
   "depends"
 )
 
+#' Fields shared by a column and its predecessor that have different values
+#' @noRd
+differing_fields <- function(column, pred, discard = predecessor_discard) {
+  fields <- intersect(names(column), names(pred)) |>
+    setdiff(y = discard)
+
+  is_same <- vapply(
+    X = fields,
+    FUN = \(f) identical(column[[f]], pred[[f]]),
+    FUN.VALUE = logical(1)
+  )
+
+  fields[!is_same]
+}
+
 # Helper to check if a columns is a predecessor
 #' @noRd
 is_predecessor <- function(col) {
