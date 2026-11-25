@@ -152,22 +152,22 @@ test_that("populate_sparse() resolves chains for a single mighty_domain", {
     mighty_study()
   study$ADAE <- add_column(
     study$ADAE,
-    id = "AGE",
-    method = "ADSL.AGE",
-    label = "AE age"
+    id = "SITEID",
+    method = "ADSL.SITEID",
+    label = "AE site"
   )
   study$ADVS <- add_column(
     study$ADVS,
-    id = "AGE",
-    method = "ADAE.AGE",
-    label = "VS age"
+    id = "SITEID",
+    method = "ADAE.SITEID",
+    label = "VS site"
   )
 
-  age <- populate_sparse(study$ADVS, study = study) |>
-    select_column("AGE")
+  siteid <- populate_sparse(study$ADVS, study = study) |>
+    select_column("SITEID")
 
-  expect_identical(age$label, "VS age")
-  expect_identical(age$core, "Req")
+  expect_identical(siteid$label, "VS site")
+  expect_identical(siteid$core, "Req")
 })
 
 test_that("populate_sparse() resolves chains within one domain", {
