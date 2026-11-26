@@ -111,15 +111,17 @@ test_that("populate_core() errors when core column differs from predecessor", {
 
 test_that("populate_core() lists each differing core column", {
   study <- test_path("test_study") |>
-    mighty_study() |>
-    populate_core()
+    mighty_study()
+
+  study$ADSL <- update_column(study$ADSL, id = "RACE", codelist = "REGION")
+  study <- populate_core(study)
 
   study$ADAE <- update_column(study$ADAE, id = "SEX", label = "Other")
   study$ADAE <- update_column(
     study$ADAE,
     id = "RACE",
     label = "Other",
-    core = "Perm"
+    codelist = "LOC"
   )
 
   msg <- populate_core(study) |>
@@ -129,7 +131,7 @@ test_that("populate_core() lists each differing core column", {
     conditionMessage()
 
   expect_match(msg, "`SEX` \\(label\\)")
-  expect_match(msg, "`RACE` \\(label, core\\)")
+  expect_match(msg, "`RACE` \\(label, codelist\\)")
   gregexpr("`(SEX|RACE)` \\(", msg)[[1L]] |>
     length() |>
     expect_identical(2L)

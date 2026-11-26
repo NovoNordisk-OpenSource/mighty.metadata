@@ -60,6 +60,8 @@ predecessor_discard <- c(
   "is_core",
   "method",
   "origin",
+  "core",
+  "comment",
   "component",
   "depends"
 )

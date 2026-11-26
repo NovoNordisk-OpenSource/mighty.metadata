@@ -8,15 +8,15 @@
           "attributes": {},
           "value": ["table_id", "table_label", "order", "id", "label", "origin", "key", "is_core", "core", "method", "codelist", "format_type", "format_length", "format_display", "comment"]
         },
-        "row.names": {
-          "type": "integer",
-          "attributes": {},
-          "value": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
-        },
         "class": {
           "type": "character",
           "attributes": {},
           "value": ["tbl_df", "tbl", "data.frame"]
+        },
+        "row.names": {
+          "type": "integer",
+          "attributes": {},
+          "value": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
         }
       },
       "value": [
@@ -63,7 +63,7 @@
         {
           "type": "character",
           "attributes": {},
-          "value": ["Req", "Req", "Cond", "Req", "Cond", "Cond", "Cond", "Cond", "Cond", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req"]
+          "value": ["Req", "Req", "Cond", "Req", "Cond", "Cond", "Cond", "Cond", "Cond", null, null, "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req", "Req"]
         },
         {
           "type": "character",
