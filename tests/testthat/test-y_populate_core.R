@@ -144,6 +144,32 @@ test_that("populate_core() accepts fields only present on core column", {
     expect_no_error()
 })
 
+test_that("populate_core() ignores core and comment vs predecessor", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  study$ADSL <- update_column(study$ADSL, id = "RACE", comment = "Collected")
+  study$ADAE <- study$ADAE |>
+    add_column(
+      id = "RACE",
+      method = "ADSL.RACE",
+      origin = "Predecessor",
+      core = "Perm",
+      comment = "Copied from ADSL"
+    )
+
+  select_column(study$ADSL, id = "RACE")[["core"]] |>
+    expect_identical("Req")
+
+  race <- populate_core(study) |>
+    expect_no_condition() |>
+    getElement("ADAE") |>
+    select_column(id = "RACE")
+
+  expect_identical(race[["core"]], "Perm")
+  expect_identical(race[["comment"]], "Copied from ADSL")
+})
+
 test_that("populate_core() errors on same-name column with other method", {
   study <- test_path("test_study") |>
     mighty_study() |>
