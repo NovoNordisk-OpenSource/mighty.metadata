@@ -251,7 +251,7 @@ Values outside the controlled terminology are rejected as well:
 ``` r
 
 advs |> update_column(id = "AVAL", origin = "Calculated")
-#> Error in `validate_S7schema()`:
+#> Error in `validate()`:
 #> ! /columns/11/origin must be equal to one of the allowed values
 #> ✖ allowedValues: list("Assigned", "Collected", "Derived", "Not Available",
 #>   "Other", "Predecessor", "Protocol")
