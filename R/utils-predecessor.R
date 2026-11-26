@@ -2,7 +2,8 @@
 #'
 #' Accepts `DOMAIN.COLUMN`, `DOMAIN.VALUE.COLUMN` and
 #' `DOMAIN.COLUMN where KEY="VALUE"`. The filter key is derived from the
-#' domain, see `predecessor_filter_key()`.
+#' domain, see `predecessor_filter_key()`. Domain and column must be
+#' uppercase names starting with a letter.
 #' @param method `character(1)` method to parse.
 #' @param study_domains `character()` domain ids in the study.
 #' @returns `list(domain, column, filter)` with `filter` either `NULL` or a
@@ -16,7 +17,7 @@ parse_predecessor <- function(method, study_domains) {
   short <- regmatches(
     method,
     regexec(
-      "^([A-Za-z0-9]+)\\.(?:([A-Za-z0-9_]+)\\.)?([A-Za-z0-9]+)$",
+      "^([A-Z][A-Z0-9]*)\\.(?:([A-Za-z0-9_]+)\\.)?([A-Z][A-Z0-9]*)$",
       method,
       perl = TRUE
     )
@@ -31,7 +32,7 @@ parse_predecessor <- function(method, study_domains) {
     return(list(domain = short[[2]], column = short[[4]], filter = filter))
   }
 
-  reference <- "^([A-Za-z0-9]+)\\.([A-Za-z0-9]+) (?i:where) "
+  reference <- "^([A-Z][A-Z0-9]*)\\.([A-Z][A-Z0-9]*) (?i:where) "
   expanded <- regmatches(
     method,
     regexec(
@@ -57,7 +58,7 @@ parse_predecessor <- function(method, study_domains) {
   }
 
   is_malformed <- grepl("^[A-Za-z0-9_.]*\\.[A-Za-z0-9_.]*$", method) ||
-    grepl(reference, method, perl = TRUE)
+    grepl(reference, method, ignore.case = TRUE, perl = TRUE)
 
   if (is_malformed) {
     cli::cli_abort(c(

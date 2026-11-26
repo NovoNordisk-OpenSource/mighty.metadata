@@ -40,7 +40,11 @@ test_that("parse_predecessor() returns NULL for free text", {
 })
 
 test_that("parse_predecessor() errors on malformed references", {
-  for (method in c("A.B.C.D", "A..B", "ADSL.", "ADSL.AGE where available")) {
+  malformed <- c(
+    "A.B.C.D", "A..B", "ADSL.", "ADSL.AGE where available",
+    "adsl.age", "ADSL.age", "1.5", "ADSL.1X", 'advs.AVALC where PARAMCD="X"'
+  )
+  for (method in malformed) {
     parse_predecessor(method, study_domains) |>
       expect_error("Malformed predecessor")
   }
