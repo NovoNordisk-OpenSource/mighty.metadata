@@ -6,6 +6,12 @@
   can run again on its own output without errors, and errors when an
   existing core column differs from its ADSL predecessor
   ([\#84](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/84)).
+- [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)
+  and
+  [`populate_sparse()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_sparse.md)
+  no longer copy `core` and `comment` from the predecessor column, since
+  both are set per dataset
+  ([\#84](https://github.com/NovoNordisk-OpenSource/mighty.metadata/issues/84)).
 
 ## mighty.metadata 0.2.0
 
