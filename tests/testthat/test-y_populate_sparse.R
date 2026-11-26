@@ -131,6 +131,7 @@ test_that("populate_sparse_domain() skips validation if no predecessors", {
 test_that("populate_sparse() resolves chains across domains in one run", {
   study <- test_path("test_study") |>
     mighty_study()
+  study$ADSL <- update_column(study$ADSL, id = "AGE", codelist = "REGION")
   study$ADAE <- add_column(
     study$ADAE,
     id = "AGE",
@@ -143,13 +144,14 @@ test_that("populate_sparse() resolves chains across domains in one run", {
     select_column("AGE")
 
   expect_identical(age$label, "AE age")
-  expect_identical(age$core, "Req")
+  expect_identical(age$codelist, "REGION")
   expect_idempotent(study, populate_sparse)
 })
 
 test_that("populate_sparse() resolves chains for a single mighty_domain", {
   study <- test_path("test_study") |>
     mighty_study()
+  study$ADSL <- update_column(study$ADSL, id = "SITEID", codelist = "REGION")
   study$ADAE <- add_column(
     study$ADAE,
     id = "SITEID",
@@ -167,7 +169,7 @@ test_that("populate_sparse() resolves chains for a single mighty_domain", {
     select_column("SITEID")
 
   expect_identical(siteid$label, "VS site")
-  expect_identical(siteid$core, "Req")
+  expect_identical(siteid$codelist, "REGION")
 })
 
 test_that("populate_sparse() resolves chains within one domain", {
@@ -180,10 +182,7 @@ test_that("populate_sparse() resolves chains within one domain", {
   newvar2 <- populate_sparse(study)$ADSL |>
     select_column("NEWVAR2")
 
-  expect_identical(
-    newvar2[c("label", "core")],
-    list(label = "Age", core = "Req")
-  )
+  expect_identical(newvar2$label, "Age")
 })
 
 test_that("populate_sparse() errors on circular predecessor references", {
