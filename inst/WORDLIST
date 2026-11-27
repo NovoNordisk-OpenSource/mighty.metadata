@@ -161,6 +161,7 @@ suppdoc
 testthat
 tibble
 tibbles
+tidyr
 usecore
 usethis
 validator
