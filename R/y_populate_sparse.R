@@ -75,7 +75,7 @@ update_predecessor <- function(
   x,
   id,
   study,
-  discard = c("id", "is_core", "method", "origin", "component", "depends")
+  discard = predecessor_discard
 ) {
   column <- select_column(x = x, id = id)
 

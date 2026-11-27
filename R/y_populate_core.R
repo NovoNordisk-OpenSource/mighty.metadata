@@ -49,6 +49,7 @@ populate_core_study <- function(study) {
 
 #' Adds core variables from ADSL
 #' and checks for duplicate column specifications.
+#' Already populated core variables must match their ADSL predecessor.
 #' Note: If we later want to allow non-ADSL core variables
 #' just remove the check.
 #' @noRd
@@ -85,6 +86,30 @@ populate_core_domain <- function(domain, study) {
     )
   }
 
+  is_populated <- mapply(
+    FUN = \(id, method) {
+      id %in% list_columns(domain) &&
+        identical(
+          select_column(domain, id)[c("origin", "method")],
+          list(origin = "Predecessor", method = method)
+        )
+    },
+    id = core_vars,
+    method = names(core_vars)
+  )
+
+  check_core_matches(
+    domain = domain,
+    adsl = study[["ADSL"]],
+    core_vars = core_vars[is_populated]
+  )
+
+  core_vars <- core_vars[!is_populated]
+
+  if (!length(core_vars)) {
+    return(domain)
+  }
+
   dup_vars <- which(core_vars %in% list_columns(domain))
   if (length(dup_vars)) {
     cli::cli_abort(
@@ -106,4 +131,35 @@ populate_core_domain <- function(domain, study) {
 
     domain
   })
+}
+
+#' Abort if populated core columns differ from their ADSL predecessor
+#' @noRd
+check_core_matches <- function(domain, adsl, core_vars) {
+  differs <- mapply(
+    FUN = \(id, ref) {
+      differing_fields(
+        column = select_column(domain, id),
+        pred = select_column(adsl, sub("^ADSL\\.", "", ref))
+      )
+    },
+    id = unname(core_vars),
+    ref = names(core_vars),
+    SIMPLIFY = FALSE
+  ) |>
+    Filter(f = length)
+
+  if (!length(differs)) {
+    return(invisible())
+  }
+
+  details <- sprintf(
+    "`%s` (%s)",
+    names(differs),
+    vapply(X = differs, FUN = toString, FUN.VALUE = character(1))
+  )
+  cli::cli_abort(c(
+    "{domain$id} - Core variable(s) differ from predecessor:",
+    stats::setNames(details, rep("*", length(details)))
+  ))
 }

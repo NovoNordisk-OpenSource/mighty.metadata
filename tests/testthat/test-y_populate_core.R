@@ -48,6 +48,158 @@ test_that("populate_core() throws error when column already exists", {
     )
 })
 
+test_that("populate_core() is idempotent", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  study |>
+    populate_core() |>
+    expect_identical(study)
+})
+
+test_that("populate_core() is idempotent after populate_sparse()", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core() |>
+    populate_sparse()
+
+  study |>
+    populate_core() |>
+    expect_identical(study)
+})
+
+test_that("populate_core() adds new core variables on re-run", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  sex <- select_column(study$ADAE, "SEX")
+
+  study$ADSL <- update_column(study$ADSL, id = "SUBJID", is_core = TRUE)
+
+  study <- populate_core(study) |>
+    expect_no_condition()
+
+  select_column(study$ADAE, "SUBJID") |>
+    expect_mapequal(
+      list(
+        id = "SUBJID",
+        method = "ADSL.SUBJID",
+        origin = "Predecessor"
+      )
+    )
+
+  select_column(study$ADAE, "SEX") |>
+    expect_identical(sex)
+})
+
+test_that("populate_core() errors when core column differs from predecessor", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  study$ADAE <- update_column(study$ADAE, id = "SEX", label = "Other")
+
+  populate_core(study) |>
+    expect_error(
+      "ADAE - Core variable\\(s\\) differ from predecessor:"
+    ) |>
+    conditionMessage() |>
+    expect_match("`SEX` \\(label\\)")
+})
+
+test_that("populate_core() lists each differing core column", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  study$ADSL <- update_column(study$ADSL, id = "RACE", codelist = "REGION")
+  study <- populate_core(study)
+
+  study$ADAE <- update_column(study$ADAE, id = "SEX", label = "Other")
+  study$ADAE <- update_column(
+    study$ADAE,
+    id = "RACE",
+    label = "Other",
+    codelist = "LOC"
+  )
+
+  msg <- populate_core(study) |>
+    expect_error(
+      "ADAE - Core variable\\(s\\) differ from predecessor:"
+    ) |>
+    conditionMessage()
+
+  expect_match(msg, "`SEX` \\(label\\)")
+  expect_match(msg, "`RACE` \\(label, codelist\\)")
+  gregexpr("`(SEX|RACE)` \\(", msg)[[1L]] |>
+    length() |>
+    expect_identical(2L)
+})
+
+test_that("populate_core() accepts fields only present on core column", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  study$ADAE <- update_column(study$ADAE, id = "SEX", comment = "Extra")
+
+  populate_core(study) |>
+    expect_no_error()
+})
+
+test_that("populate_core() ignores core and comment vs predecessor", {
+  study <- test_path("test_study") |>
+    mighty_study()
+
+  study$ADSL <- update_column(study$ADSL, id = "RACE", comment = "Collected")
+  study$ADAE <- study$ADAE |>
+    add_column(
+      id = "RACE",
+      method = "ADSL.RACE",
+      origin = "Predecessor",
+      core = "Perm",
+      comment = "Copied from ADSL"
+    )
+
+  select_column(study$ADSL, id = "RACE")[["core"]] |>
+    expect_identical("Req")
+
+  race <- populate_core(study) |>
+    expect_no_condition() |>
+    getElement("ADAE") |>
+    select_column(id = "RACE")
+
+  expect_identical(race[["core"]], "Perm")
+  expect_identical(race[["comment"]], "Copied from ADSL")
+})
+
+test_that("populate_core() errors on same-name column with other method", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  study$ADAE <- update_column(study$ADAE, id = "SEX", method = "ADSL.OTHER")
+
+  populate_core(study) |>
+    expect_error(
+      "ADAE - Variable\\(s\\) with same name already exists: `ADSL.SEX`"
+    )
+})
+
+test_that("populate_core() errors on same-name column with other origin", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
+
+  study$ADAE <- update_column(study$ADAE, id = "SEX", origin = "Derived")
+
+  populate_core(study) |>
+    expect_error(
+      "ADAE - Variable\\(s\\) with same name already exists: `ADSL.SEX`"
+    )
+})
+
 test_that("populate_core() throws error with duplicate core variables", {
   study <- test_path("test_study") |>
     mighty_study()
@@ -109,6 +261,19 @@ test_that("populate_core_domain() returns early without validating when there ar
   for (i in seq_along(study$ADSL$columns)) {
     study$ADSL$columns[[i]][["is_core"]] <- NULL
   }
+
+  count_validations(
+    result <- populate_core_domain(domain = study$ADAE, study = study)
+  ) |>
+    expect_equal(0L)
+
+  expect_identical(result, study$ADAE)
+})
+
+test_that("populate_core_domain() skips validation when already populated", {
+  study <- test_path("test_study") |>
+    mighty_study() |>
+    populate_core()
 
   count_validations(
     result <- populate_core_domain(domain = study$ADAE, study = study)
