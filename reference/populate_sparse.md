@@ -2,7 +2,10 @@
 
 Populates column metadata from predecessor references. Columns with a
 `method` in the format `domain.column` (e.g., `ADSL.USUBJID`) inherit
-metadata from the referenced predecessor.
+metadata from the referenced predecessor. Predecessors that are
+themselves predecessors are resolved along the chain in one run, the
+nearest predecessor wins per field, and circular references give an
+error.
 
 ## Usage
 

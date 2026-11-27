@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mighty.metadata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -325,7 +325,7 @@ For example, adding a column with a duplicate ID fails:</p>
 <p>Values outside the controlled terminology are rejected as well:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">advs</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/columns.html">update_column</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"AVAL"</span>, origin <span class="op">=</span> <span class="st">"Calculated"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `validate_S7schema()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `validate()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> <span style="color: #00BB00;">/columns/11/origin</span> must be equal to one of the allowed values</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> allowedValues: list("Assigned", "Collected", "Derived", "Not Available",</span></span>
 <span><span class="co">#&gt;   "Other", "Predecessor", "Protocol")</span></span>
