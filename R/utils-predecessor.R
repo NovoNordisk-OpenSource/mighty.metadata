@@ -27,14 +27,37 @@ predecessor_regex <- list(
 
 #' Parse a predecessor reference
 #'
-#' Accepts `DOMAIN.COLUMN`, `DOMAIN.VALUE.COLUMN` and
-#' `DOMAIN.COLUMN where KEY="VALUE"`. The filter key is derived from the
-#' domain, see `predecessor_filter_key()`. Domain and column must be
-#' uppercase names starting with a letter.
+#' Maps a `method` to `list(domain, column, filter)`. Shorthand and expanded
+#' forms give the same result:
+#'
+# nolint start: line_length_linter.
+#' | Form     | Shorthand              | Expanded                             | Filter key       |
+#' |----------|------------------------|--------------------------------------|------------------|
+#' | Plain    | `ADSL.AGE`             | `ADSL.AGE`                           | none             |
+#' | SUPP--   | `SUPPDM.EFFICACY.QVAL` | `SUPPDM.QVAL where QNAM="EFFICACY"`  | `QNAM`           |
+#' | BDS      | `ADVS.BMIGRP.AVALC`    | `ADVS.AVALC where PARAMCD="BMIGRP"`  | `PARAMCD`        |
+#' | Findings | `VS.SYSBP.VSSTRESN`    | `VS.VSSTRESN where VSTESTCD="SYSBP"` | `<DOMAIN>TESTCD` |
+# nolint end
+#'
+#' The filter key depends on the domain: `SUPP--` domains use `QNAM`, domains
+#' in `study_domains` use `PARAMCD`, and any other domain uses
+#' `<DOMAIN>TESTCD`. The expanded form must use that key, otherwise it errors.
+#'
+#' Domain and column must be uppercase names starting with a letter. Filter
+#' values may contain letters, digits and `_`. `where` is case-insensitive.
+#'
+#' Other input:
+#' - Free text (e.g. `Derived from AE.AESTDTC`), `NA` or `NULL` returns `NULL`.
+#' - Dotted tokens that don't match a form (e.g. `A.B.C.D`, `ADSL.age`) or
+#'   `DOMAIN.COLUMN where ...` not ending in `KEY="VALUE"` error.
+#'
+#' `format_predecessor()` turns the result back into the expanded form.
+#'
 #' @param method `character(1)` method to parse.
 #' @param study_domains `character()` domain ids in the study.
 #' @returns `list(domain, column, filter)` with `filter` either `NULL` or a
-#'   named list with one element. `NULL` if `method` is not a reference.
+#'   named list with one element, e.g. `list(QNAM = "EFFICACY")`. `NULL` if
+#'   `method` is not a reference.
 #' @noRd
 parse_predecessor <- function(method, study_domains) {
   if (!rlang::is_string(method)) {
@@ -129,8 +152,6 @@ new_predecessor <- function(domain, column, value, study_domains) {
 }
 
 #' Format a parsed predecessor reference in the expanded form
-#' @param x `list(domain, column, filter)` from `parse_predecessor()`.
-#' @returns `character(1)`.
 #' @noRd
 format_predecessor <- function(x) {
   reference <- paste(x[["domain"]], x[["column"]], sep = ".")
@@ -148,10 +169,6 @@ format_predecessor <- function(x) {
 }
 
 #' Filter key for a predecessor domain
-#' @param domain `character(1)` domain id.
-#' @param study_domains `character()` domain ids in the study.
-#' @returns `character(1)`: `QNAM` for `SUPP--` domains, `PARAMCD` for
-#'   domains in the study, otherwise `<DOMAIN>TESTCD`.
 #' @noRd
 predecessor_filter_key <- function(domain, study_domains) {
   if (has_prefix(x = domain, prefix = "SUPP")) {
