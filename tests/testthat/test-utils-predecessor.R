@@ -1,54 +1,98 @@
 study_domains <- c("ADSL", "ADVS")
 
+expect_predecessor <- function(shorthand, expanded, expected) {
+  parse_predecessor(method = shorthand, study_domains = study_domains) |>
+    expect_identical(expected = expected)
+  parse_predecessor(method = expanded, study_domains = study_domains) |>
+    expect_identical(expected = expected)
+  format_predecessor(x = expected) |>
+    expect_identical(expected = expanded)
+}
+
 test_that("parse_predecessor() and format_predecessor() handle all forms", {
-  expect_predecessor <- function(shorthand, expanded, expected) {
-    parse_predecessor(shorthand, study_domains) |> expect_identical(expected)
-    parse_predecessor(expanded, study_domains) |> expect_identical(expected)
-    format_predecessor(expected) |> expect_identical(expanded)
-  }
+  expect_predecessor(
+    shorthand = "ADSL.AGE",
+    expanded = "ADSL.AGE",
+    expected = list(domain = "ADSL", column = "AGE", filter = NULL)
+  )
+  expect_predecessor(
+    shorthand = "SUPPDM.EFFICACY.QVAL",
+    expanded = 'SUPPDM.QVAL where QNAM="EFFICACY"',
+    expected = list(
+      domain = "SUPPDM",
+      column = "QVAL",
+      filter = list(QNAM = "EFFICACY")
+    )
+  )
+  expect_predecessor(
+    shorthand = "ADVS.BMI_GRP.AVALC",
+    expanded = 'ADVS.AVALC where PARAMCD="BMI_GRP"',
+    expected = list(
+      domain = "ADVS",
+      column = "AVALC",
+      filter = list(PARAMCD = "BMI_GRP")
+    )
+  )
+  expect_predecessor(
+    shorthand = "VS.SYSBP.VSSTRESN",
+    expanded = 'VS.VSSTRESN where VSTESTCD="SYSBP"',
+    expected = list(
+      domain = "VS",
+      column = "VSSTRESN",
+      filter = list(VSTESTCD = "SYSBP")
+    )
+  )
+})
 
-  expect_predecessor(
-    "ADSL.AGE",
-    "ADSL.AGE",
-    list(domain = "ADSL", column = "AGE", filter = NULL)
-  )
-  expect_predecessor(
-    "SUPPDM.EFFICACY.QVAL",
-    'SUPPDM.QVAL where QNAM="EFFICACY"',
-    list(domain = "SUPPDM", column = "QVAL", filter = list(QNAM = "EFFICACY"))
-  )
-  expect_predecessor(
-    "ADVS.BMI_GRP.AVALC",
-    'ADVS.AVALC where PARAMCD="BMI_GRP"',
-    list(domain = "ADVS", column = "AVALC", filter = list(PARAMCD = "BMI_GRP"))
-  )
-  expect_predecessor(
-    "VS.SYSBP.VSSTRESN",
-    'VS.VSSTRESN where VSTESTCD="SYSBP"',
-    list(domain = "VS", column = "VSSTRESN", filter = list(VSTESTCD = "SYSBP"))
-  )
-
-  parse_predecessor('ADVS.AVALC WHERE PARAMCD="BMIGRP"', study_domains) |>
-    expect_identical(parse_predecessor("ADVS.BMIGRP.AVALC", study_domains))
+test_that("parse_predecessor() accepts upper case WHERE", {
+  parse_predecessor(
+    method = 'ADVS.AVALC WHERE PARAMCD="BMIGRP"',
+    study_domains = study_domains
+  ) |>
+    expect_identical(
+      expected = parse_predecessor(
+        method = "ADVS.BMIGRP.AVALC",
+        study_domains = study_domains
+      )
+    )
 })
 
 test_that("parse_predecessor() returns NULL for free text", {
-  for (method in c("Derived from AE.AESTDTC", "as.numeric(AVAL)", "AGE", NA)) {
-    parse_predecessor(method, study_domains) |> expect_null()
+  free_text <- list(
+    "Derived from AE.AESTDTC",
+    "as.numeric(AVAL)",
+    "AGE",
+    NA,
+    NULL
+  )
+  for (method in free_text) {
+    parse_predecessor(method = method, study_domains = study_domains) |>
+      expect_null()
   }
-  parse_predecessor(NULL, study_domains) |> expect_null()
 })
 
 test_that("parse_predecessor() errors on malformed references", {
   malformed <- c(
-    "A.B.C.D", "A..B", "ADSL.", "ADSL.AGE where available",
-    "adsl.age", "ADSL.age", "1.5", "ADSL.1X", 'advs.AVALC where PARAMCD="X"'
+    "A.B.C.D",
+    "A..B",
+    "ADSL.",
+    "ADSL.AGE where available",
+    "adsl.age",
+    "ADSL.age",
+    "1.5",
+    "ADSL.1X",
+    'advs.AVALC where PARAMCD="X"'
   )
   for (method in malformed) {
-    parse_predecessor(method, study_domains) |>
-      expect_error("Malformed predecessor")
+    parse_predecessor(method = method, study_domains = study_domains) |>
+      expect_error(regexp = "Malformed predecessor")
   }
+})
 
-  parse_predecessor('ADVS.AVALC where QNAM="BMIGRP"', study_domains) |>
-    expect_error("Expected PARAMCD, got QNAM")
+test_that("parse_predecessor() errors on wrong filter key", {
+  parse_predecessor(
+    method = 'ADVS.AVALC where QNAM="BMIGRP"',
+    study_domains = study_domains
+  ) |>
+    expect_error(regexp = "Expected PARAMCD, got QNAM")
 })
