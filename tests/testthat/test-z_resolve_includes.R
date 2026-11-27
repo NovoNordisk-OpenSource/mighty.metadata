@@ -262,7 +262,7 @@ test_that("resolve_includes() - drops columns inside parameters", {
     expect_no_match("^AVISITN$")
 })
 
-test_that("resolve_includes() - removes include field from kept parameter columns", {
+test_that("resolve_includes() - drops include field from kept param columns", {
   domain <- test_path("test_study", "advs.yml") |>
     mighty_domain() |>
     update_parameter(

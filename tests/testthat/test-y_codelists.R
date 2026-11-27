@@ -305,7 +305,7 @@ test_that("update_codelist_value() rejects subset/restore entries", {
   )
 })
 
-test_that("update_codelist_value() errors when decode and code lengths differ", {
+test_that("update_codelist_value() errors on decode/code length mismatch", {
   cl <- new_cl(region(
     list(code = "EU", decode = "Europe"),
     list(code = "NA", decode = "North America")
@@ -414,7 +414,7 @@ test_that("subset/restore/extend_codelist_values() work on mighty_study", {
   expect_equal(codes(cl, "extend"), "E")
 })
 
-test_that("update_codelist() and update_codelist_value() work on mighty_study", {
+test_that("update_codelist(), update_codelist_value() work on mighty_study", {
   study <- mighty_study(local_study_without_codelists()) |>
     add_codelist(
       id = "FANCY_CDISC_CODELIST",
@@ -448,7 +448,7 @@ test_that("remove_codelist() on mighty_study removes the codelist", {
   expect_identical(list_codelists(study), character(0))
 })
 
-test_that("select_codelist() on mighty_study returns entry and errors on unknown id", {
+test_that("select_codelist() works on mighty_study, errors on unknown id", {
   study <- mighty_study(local_codelist_study())
   expect_equal(
     select_codelist(study, "FANCY_CDISC_CODELIST")$subset[[1]]$code,
