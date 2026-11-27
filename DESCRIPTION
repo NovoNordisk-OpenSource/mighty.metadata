@@ -25,7 +25,6 @@ Depends:
     R (>= 4.1)
 Imports:
     cli,
-    dplyr,
     glue,
     purrr,
     rlang,
@@ -38,7 +37,6 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    tidyr,
     withr,
     yaml
 VignetteBuilder: 
