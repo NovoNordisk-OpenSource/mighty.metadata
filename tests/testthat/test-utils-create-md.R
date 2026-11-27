@@ -37,14 +37,14 @@ test_that("bind_entries() passes arguments on to fun", {
 })
 
 test_that("bind_entries() drops entries that fun returns NULL for", {
-  bound <- bind_entries(
-    x = c("x", NA, "y"),
-    fun = \(a) if (is.na(a)) NULL else tibble::tibble(a = a),
-    order = TRUE
+  expect_equal(
+    object = bind_entries(
+      x = c("x", NA, "y"),
+      fun = \(a) if (is.na(a)) NULL else tibble::tibble(a = a),
+      order = TRUE
+    ),
+    expected = tibble::tibble(a = c("x", "y"), order = c(1L, 2L))
   )
-
-  expect_equal(object = bound[["a"]], expected = c("x", "y"))
-  expect_equal(object = bound[["order"]], expected = c(1L, 2L))
 })
 
 test_that("copy_columns()", {
