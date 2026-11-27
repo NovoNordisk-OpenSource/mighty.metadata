@@ -1,6 +1,6 @@
 # Changelog
 
-## mighty.metadata (development version)
+## mighty.metadata 0.2.1
 
 - [`populate_core()`](https://novonordisk-opensource.github.io/mighty.metadata/reference/populate_core.md)
   can run again on its own output without errors, and errors when an
