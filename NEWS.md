@@ -2,6 +2,8 @@
 
 * `populate_core()` can run again on its own output without errors, and errors
   when an existing core column differs from its ADSL predecessor (#84).
+* `populate_sparse()` resolves predecessor chains in one run and errors on
+  circular references. Predecessor errors name the full chain (#86).
 * `populate_core()` and `populate_sparse()` no longer copy `core` and
   `comment` from the predecessor column, since both are set per dataset (#84).
 

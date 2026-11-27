@@ -39,7 +39,8 @@ test_that("populate_sparse() - errors when predecessor does not exist", {
 
   populate_sparse(study) |>
     expect_error(
-      "RACE: Predecessor `ADSL.RACE` not found in study"
+      "`ADAE.RACE`: Predecessor `ADSL.RACE` not found in study",
+      fixed = TRUE
     )
 })
 
@@ -70,6 +71,35 @@ test_that("populate_sparse() - errors on non-standard predecessor method", {
     expect_error("Non standard predecessor method")
 })
 
+test_that("populate_sparse() - errors name the full predecessor chain", {
+  study <- test_path("test_study") |>
+    mighty_study()
+  study$ADSL <- add_column(
+    study$ADSL,
+    id = "BMIBL",
+    label = "Baseline BMI",
+    origin = "Predecessor",
+    method = "ADVS.AVAL where ABLFL = 'Y' and PARAMCD = 'BMI'"
+  )
+  study$ADAE <- add_column(study$ADAE, id = "BMIBL", method = "ADSL.BMIBL")
+  study$ADVS <- add_column(study$ADVS, id = "BMIBL", method = "ADAE.BMIBL")
+
+  populate_sparse(study) |>
+    expect_error(
+      "`ADAE.BMIBL` -> `ADSL.BMIBL`: Non standard predecessor method",
+      fixed = TRUE
+    )
+
+  populate_sparse(study$ADVS, study = study) |>
+    expect_error(
+      paste(
+        "`ADVS.BMIBL` -> `ADAE.BMIBL` -> `ADSL.BMIBL`:",
+        "Non standard predecessor method"
+      ),
+      fixed = TRUE
+    )
+})
+
 test_that("populate_sparse() validates each domain once, not once per column", {
   study <- test_path("test_study") |>
     mighty_study() |>
@@ -96,4 +126,104 @@ test_that("populate_sparse_domain() skips validation if no predecessors", {
 
   expect_equal(res$n, 0L)
   expect_identical(res$value, domain)
+})
+
+test_that("populate_sparse() resolves chains across domains in one run", {
+  study <- test_path("test_study") |>
+    mighty_study()
+  study$ADSL <- update_column(study$ADSL, id = "AGE", codelist = "REGION")
+  study$ADAE <- add_column(
+    study$ADAE,
+    id = "AGE",
+    method = "ADSL.AGE",
+    label = "AE age"
+  )
+  study$ADVS <- add_column(study$ADVS, id = "AGE", method = "ADAE.AGE")
+
+  age <- populate_sparse(study)$ADVS |>
+    select_column("AGE")
+
+  expect_identical(age$label, "AE age")
+  expect_identical(age$codelist, "REGION")
+  expect_idempotent(study, populate_sparse)
+})
+
+test_that("populate_sparse() resolves chains for a single mighty_domain", {
+  study <- test_path("test_study") |>
+    mighty_study()
+  study$ADSL <- update_column(study$ADSL, id = "SITEID", codelist = "REGION")
+  study$ADAE <- add_column(
+    study$ADAE,
+    id = "SITEID",
+    method = "ADSL.SITEID",
+    label = "AE site"
+  )
+  study$ADVS <- add_column(
+    study$ADVS,
+    id = "SITEID",
+    method = "ADAE.SITEID",
+    label = "VS site"
+  )
+
+  siteid <- populate_sparse(study$ADVS, study = study) |>
+    select_column("SITEID")
+
+  expect_identical(siteid$label, "VS site")
+  expect_identical(siteid$codelist, "REGION")
+})
+
+test_that("populate_sparse() resolves chains within one domain", {
+  study <- test_path("test_study") |>
+    mighty_study()
+  study$ADSL <- study$ADSL |>
+    add_column(id = "NEWVAR", method = "ADSL.AGE") |>
+    add_column(id = "NEWVAR2", method = "ADSL.NEWVAR")
+
+  newvar2 <- populate_sparse(study)$ADSL |>
+    select_column("NEWVAR2")
+
+  expect_identical(newvar2$label, "Age")
+})
+
+test_that("populate_sparse() errors on circular predecessor references", {
+  study <- test_path("test_study") |>
+    mighty_study()
+  cyclic <- study
+  cyclic$ADAE <- add_column(cyclic$ADAE, id = "XVAR", method = "ADVS.XVAR")
+  cyclic$ADVS <- add_column(cyclic$ADVS, id = "XVAR", method = "ADAE.XVAR")
+
+  populate_sparse(cyclic) |>
+    expect_error(
+      paste(
+        "Circular predecessor reference:",
+        "`ADAE.XVAR` -> `ADVS.XVAR` -> `ADAE.XVAR`"
+      ),
+      fixed = TRUE
+    )
+
+  study$ADSL <- add_column(study$ADSL, id = "SELF", method = "ADSL.SELF")
+
+  populate_sparse(study) |>
+    expect_error("`ADSL.SELF` -> `ADSL.SELF`", fixed = TRUE)
+})
+
+test_that("populate_sparse() stops chains at component columns", {
+  study <- test_path("test_study") |>
+    mighty_study()
+  study$ADSL <- add_column(
+    study$ADSL,
+    id = "BMIBL",
+    label = "Baseline BMI",
+    component = list(id = "bmibl_01.R")
+  )
+  study$ADAE <- add_column(study$ADAE, id = "BMIBL", method = "ADSL.BMIBL")
+
+  bmibl <- populate_sparse(study)$ADAE |>
+    select_column("BMIBL")
+
+  expect_identical(bmibl$label, "Baseline BMI")
+  expect_identical(bmibl$method, "ADSL.BMIBL")
+  expect_identical(bmibl$origin, "Predecessor")
+  expect_null(bmibl$component)
+  expect_idempotent(study, populate_sparse)
 })
