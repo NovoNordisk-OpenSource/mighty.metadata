@@ -1,4 +1,4 @@
-# mighty.metadata (development version)
+# mighty.metadata 0.2.1
 
 * `populate_core()` can run again on its own output without errors, and errors
   when an existing core column differs from its ADSL predecessor (#84).
